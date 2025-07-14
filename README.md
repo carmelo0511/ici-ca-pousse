@@ -189,8 +189,8 @@ npm run build
 # Vérifie les erreurs dans les logs
 ```
 
-**"Deployment failed"**
-- Vérifie que tous les fichiers sont commitéss
+-**"Deployment failed"**
+- Vérifie que tous les fichiers sont commités
 - Assure-toi que `package.json` est correct
 
 ## 🎉 Résultat final

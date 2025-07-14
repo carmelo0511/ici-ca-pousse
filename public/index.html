@@ -132,52 +132,15 @@
         }, 1000);
       });
       
-      // Suppress extension-related console errors
-      const originalError = console.error;
-      const originalWarn = console.warn;
-      const originalLog = console.log;
-      
-      console.error = function(message) {
-        if (typeof message === 'string' && (
-          message.includes('extension') ||
-          message.includes('MetaMask') ||
-          message.includes('ChromeTransport') ||
-          message.includes('runtime.lastError') ||
-          message.includes('Receiving end does not exist') ||
-          message.includes('FrameIsBrowserFrameError') ||
-          message.includes('background.js') ||
-          message.includes('Frame 0 in tab') ||
-          message.includes('setUpContentScript') ||
-          message.includes('Could not establish connection')
-        )) {
-          return; // Ignore extension errors
-        }
-        originalError.apply(console, arguments);
-      };
-      
-      console.warn = function(message) {
-        if (typeof message === 'string' && (
-          message.includes('React DevTools') ||
-          message.includes('better development experience') ||
-          message.includes('extension')
-        )) {
-          return; // Ignore development warnings
-        }
-        originalWarn.apply(console, arguments);
-      };
-      
-      // Suppress network errors from extensions
-      window.addEventListener('error', function(e) {
-        if (e.filename && (
-          e.filename.includes('extension') ||
-          e.filename.includes('utils.js') ||
-          e.filename.includes('extensionState.js') ||
-          e.filename.includes('heuristicsRedefinitions.js')
-        )) {
-          e.preventDefault();
-          return false;
-        }
-      });
+      /*
+        The application previously muted console errors and warnings originating
+        from browser extensions. While this reduced noise in development,
+        overriding `console.error` and `console.warn` can also hide legitimate
+        issues. The suppression logic was removed to ensure errors surface
+        during debugging. If extension-related messages become problematic,
+        consider filtering them directly in your browser devtools instead of
+        altering the global console methods.
+      */
     </script>
   </body>
 </html>
