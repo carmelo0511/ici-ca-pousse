@@ -39,7 +39,15 @@ cd ici-ca-pousse
 npm install
 ```
 
-### 3. Test en local
+### 3. Configuration
+
+Crée un fichier `.env` à la racine et indique l'URL de ton API :
+
+```env
+REACT_APP_API_BASE_URL="http://localhost:3001"
+```
+
+### 4. Test en local
 
 ```bash
 # Lance l'application en développement
@@ -120,6 +128,7 @@ Crée `vercel.json` à la racine :
 Pour des fonctionnalités avancées, crée `.env` :
 
 ```env
+REACT_APP_API_BASE_URL="http://localhost:3001"
 REACT_APP_NAME="Ici Ca Pousse"
 REACT_APP_VERSION="1.0.0"
 GENERATE_SOURCEMAP=false
