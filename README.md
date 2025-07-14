@@ -208,3 +208,8 @@ En cas de problème :
 4. Check que tous les fichiers sont bien présents
 
 **Bonne chance pour ton déploiement ! 💪🚀**
+
+
+## Licence
+
+Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus d'informations.
