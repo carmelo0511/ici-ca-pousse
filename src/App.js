@@ -1,6 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Plus, BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, User, LogOut, LogIn, Edit, Trash2, X, Heart } from 'lucide-react';
+import {
+  Calendar,
+  Plus,
+  BarChart3,
+  Dumbbell,
+  Target,
+  TrendingUp,
+  Clock,
+  Zap,
+  User,
+  LogOut,
+  Edit,
+  Trash2,
+  X,
+  Heart,
+} from 'lucide-react';
 import './App.css';
+import LoginScreen from './components/LoginScreen';
+import { load, save } from './utils/storage';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('workout');
@@ -62,62 +79,27 @@ const App = () => {
   };
 
   useEffect(() => {
-    // Charger les utilisateurs au démarrage
-    try {
-      const savedUsers = localStorage.getItem('iciCaPousse_users');
-      if (savedUsers) {
-        const parsedUsers = JSON.parse(savedUsers);
-        setUsers(parsedUsers);
-        console.log('Utilisateurs chargés:', parsedUsers.length);
-      }
-    } catch (error) {
-      console.error('Erreur chargement utilisateurs:', error);
-      setUsers([]);
-    }
-    
-    // Charger l'utilisateur connecté
-    try {
-      const savedCurrentUser = localStorage.getItem('iciCaPousse_currentUser');
-      if (savedCurrentUser) {
-        const parsedUser = JSON.parse(savedCurrentUser);
-        setCurrentUser(parsedUser);
-        console.log('Utilisateur connecté:', parsedUser.username);
-      }
-    } catch (error) {
-      console.error('Erreur chargement utilisateur connecté:', error);
-      localStorage.removeItem('iciCaPousse_currentUser');
+    setUsers(load('iciCaPousse_users', []));
+    const user = load('iciCaPousse_currentUser', null);
+    if (user) {
+      setCurrentUser(user);
     }
   }, []);
 
   useEffect(() => {
     if (currentUser) {
-      const userWorkouts = localStorage.getItem(`iciCaPousse_workouts_${currentUser.id}`);
-      if (userWorkouts) {
-        setWorkouts(JSON.parse(userWorkouts));
-      } else {
-        setWorkouts([]);
-      }
+      setWorkouts(load(`iciCaPousse_workouts_${currentUser.id}`, []));
     }
   }, [currentUser]);
 
   useEffect(() => {
-    // Sauvegarder les utilisateurs avec une clé unique
-    try {
-      localStorage.setItem('iciCaPousse_users', JSON.stringify(users));
-      console.log('Utilisateurs sauvegardés:', users.length);
-    } catch (error) {
-      console.error('Erreur sauvegarde utilisateurs:', error);
-    }
+    save('iciCaPousse_users', users);
   }, [users]);
 
   useEffect(() => {
     if (currentUser) {
-      try {
-        localStorage.setItem('iciCaPousse_currentUser', JSON.stringify(currentUser));
-        localStorage.setItem(`iciCaPousse_workouts_${currentUser.id}`, JSON.stringify(workouts));
-      } catch (error) {
-        console.error('Erreur sauvegarde données utilisateur:', error);
-      }
+      save('iciCaPousse_currentUser', currentUser);
+      save(`iciCaPousse_workouts_${currentUser.id}`, workouts);
     }
   }, [currentUser, workouts]);
 
@@ -281,134 +263,6 @@ const App = () => {
     localStorage.removeItem('iciCaPousse_currentUser');
     setActiveTab('workout');
   };
-
-  // Écran de connexion modernisé et plus sobre
-  const renderLoginScreen = () => (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border border-gray-200">
-        <div className="text-center mb-8">
-          <div className="bg-blue-500 p-3 rounded-xl inline-block mb-4 shadow-md">
-            <Dumbbell className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Ici Ca Pousse
-          </h1>
-          <p className="text-gray-600">Votre coach musculation personnel</p>
-        </div>
-
-        {!isRegistering ? (
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nom d'utilisateur
-              </label>
-              <input
-                type="text"
-                value={loginForm.username}
-                onChange={(e) => setLoginForm({...loginForm, username: e.target.value})}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Entrez votre nom d'utilisateur"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Mot de passe
-              </label>
-              <input
-                type="password"
-                value={loginForm.password}
-                onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Entrez votre mot de passe"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors duration-200"
-            >
-              <LogIn className="h-5 w-5" />
-              <span>Se connecter</span>
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleRegister} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nom d'utilisateur
-              </label>
-              <input
-                type="text"
-                value={registerForm.username}
-                onChange={(e) => setRegisterForm({...registerForm, username: e.target.value})}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Choisissez un nom d'utilisateur"
-                required
-                minLength="3"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Mot de passe
-              </label>
-              <input
-                type="password"
-                value={registerForm.password}
-                onChange={(e) => setRegisterForm({...registerForm, password: e.target.value})}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Créez un mot de passe"
-                required
-                minLength="4"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Confirmer le mot de passe
-              </label>
-              <input
-                type="password"
-                value={registerForm.confirmPassword}
-                onChange={(e) => setRegisterForm({...registerForm, confirmPassword: e.target.value})}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Confirmez votre mot de passe"
-                required
-                minLength="4"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors duration-200"
-            >
-              <User className="h-5 w-5" />
-              <span>Créer un compte</span>
-            </button>
-          </form>
-        )}
-
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => setIsRegistering(!isRegistering)}
-            className="text-blue-500 hover:text-blue-600 text-sm transition-colors duration-200"
-          >
-            {isRegistering ? 'Déjà un compte ? Se connecter' : 'Pas de compte ? S\'inscrire'}
-          </button>
-        </div>
-        
-        {/* Debug info - à supprimer en production */}
-        {users.length > 0 && (
-          <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-            <p className="text-xs text-gray-600 mb-2">Comptes enregistrés ({users.length}) :</p>
-            {users.map(user => (
-              <div key={user.id} className="text-xs text-gray-500">
-                • {user.username}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
 
   const renderWorkoutTab = () => (
     <div className="p-6 space-y-8">
@@ -1039,7 +893,17 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
       {/* Affichage conditionnel : écran de connexion ou application */}
       {!currentUser ? (
-        renderLoginScreen()
+        <LoginScreen
+          isRegistering={isRegistering}
+          loginForm={loginForm}
+          setLoginForm={setLoginForm}
+          registerForm={registerForm}
+          setRegisterForm={setRegisterForm}
+          handleLogin={handleLogin}
+          handleRegister={handleRegister}
+          toggleRegistering={() => setIsRegistering(!isRegistering)}
+          users={users}
+        />
       ) : (
         <>
           {/* Header modernisé */}
