@@ -18,7 +18,7 @@ import {
 import './App.css';
 import LoginScreen from './components/LoginScreen';
 import { load, save } from './utils/storage';
-import { hashPassword } from './utils/hash';
+
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('workout');
@@ -38,6 +38,7 @@ const App = () => {
   const [registerForm, setRegisterForm] = useState({ username: '', password: '', confirmPassword: '' });
   const [isRegistering, setIsRegistering] = useState(false);
   const [users, setUsers] = useState([]);
+  const [token, setToken] = useState(null);
   const [isEditingWorkout, setIsEditingWorkout] = useState(false);
   const [editingWorkoutId, setEditingWorkoutId] = useState(null);
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
@@ -80,15 +81,32 @@ const App = () => {
   };
 
   useEffect(() => {
-    setUsers(load('iciCaPousse_users', []));
-    const user = load('iciCaPousse_currentUser', null);
-    if (user) {
-      setCurrentUser(user);
-    }
     const lastUsername = load('iciCaPousse_lastUsername', '');
     if (lastUsername) {
       setLoginForm((lf) => ({ ...lf, username: lastUsername }));
     }
+
+    const storedToken = load('iciCaPousse_token', null);
+    if (storedToken) {
+      fetch('http://localhost:3001/api/validate', {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data && data.user) {
+            setCurrentUser(data.user);
+            setToken(storedToken);
+          } else {
+            localStorage.removeItem('iciCaPousse_token');
+          }
+        })
+        .catch(() => {});
+    }
+
+    fetch('http://localhost:3001/api/users')
+      .then((res) => (res.ok ? res.json() : []))
+      .then(setUsers)
+      .catch(() => setUsers([]));
   }, []);
 
   useEffect(() => {
@@ -98,15 +116,16 @@ const App = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    save('iciCaPousse_users', users);
-  }, [users]);
-
-  useEffect(() => {
     if (currentUser) {
-      save('iciCaPousse_currentUser', currentUser);
       save(`iciCaPousse_workouts_${currentUser.id}`, workouts);
     }
   }, [currentUser, workouts]);
+
+  useEffect(() => {
+    if (token) {
+      save('iciCaPousse_token', token);
+    }
+  }, [token]);
 
   // Fonctions utilitaires
   const addExerciseToWorkout = (exercise) => {
@@ -217,15 +236,24 @@ const App = () => {
   // Fonctions d'authentification
   const handleLogin = async (e) => {
     e.preventDefault();
-    const hashed = await hashPassword(loginForm.password);
-    const user = users.find(u => u.username === loginForm.username && u.password === hashed);
-    if (user) {
-      setCurrentUser(user);
-      setShowLogin(false);
-      setLoginForm({ username: '', password: '' });
-      save('iciCaPousse_lastUsername', user.username);
-    } else {
-      alert('Nom d\'utilisateur ou mot de passe incorrect 😕');
+    try {
+      const res = await fetch('http://localhost:3001/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginForm),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUser(data.user);
+        setToken(data.token);
+        setShowLogin(false);
+        setLoginForm({ username: '', password: '' });
+        save('iciCaPousse_lastUsername', data.user.username);
+      } else {
+        alert("Nom d'utilisateur ou mot de passe incorrect 😕");
+      }
+    } catch (err) {
+      alert('Erreur de connexion');
     }
   };
 
@@ -235,33 +263,39 @@ const App = () => {
       alert('Les mots de passe ne correspondent pas 🔒');
       return;
     }
-    if (users.some(u => u.username === registerForm.username)) {
-      alert('Ce nom d\'utilisateur existe déjà 👤');
-      return;
-    }
     if (registerForm.username.length < 3) {
-      alert('Le nom d\'utilisateur doit contenir au moins 3 caractères ✏️');
+      alert("Le nom d'utilisateur doit contenir au moins 3 caractères ✏️");
       return;
     }
     if (registerForm.password.length < 4) {
       alert('Le mot de passe doit contenir au moins 4 caractères 🔐');
       return;
     }
-
-    const hashed = await hashPassword(registerForm.password);
-    const newUser = {
-      id: Date.now(),
-      username: registerForm.username,
-      password: hashed,
-      createdAt: new Date().toISOString()
-    };
-    
-    setUsers([...users, newUser]);
-    setCurrentUser(newUser);
-    setShowLogin(false);
-    setRegisterForm({ username: '', password: '', confirmPassword: '' });
-    setIsRegistering(false);
-    save('iciCaPousse_lastUsername', newUser.username);
+    try {
+      const res = await fetch('http://localhost:3001/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: registerForm.username, password: registerForm.password }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUser(data.user);
+        setToken(data.token);
+        setShowLogin(false);
+        setRegisterForm({ username: '', password: '', confirmPassword: '' });
+        setIsRegistering(false);
+        save('iciCaPousse_lastUsername', data.user.username);
+        fetch('http://localhost:3001/api/users')
+          .then((r) => (r.ok ? r.json() : []))
+          .then(setUsers)
+          .catch(() => {});
+      } else {
+        const err = await res.json();
+        alert(err.error || 'Erreur de création de compte');
+      }
+    } catch (err) {
+      alert('Erreur de création de compte');
+    }
   };
 
   const handleLogout = () => {
@@ -269,7 +303,8 @@ const App = () => {
     setWorkouts([]);
     setExercises([]);
     setSelectedMuscleGroup(null);
-    localStorage.removeItem('iciCaPousse_currentUser');
+    localStorage.removeItem('iciCaPousse_token');
+    setToken(null);
     const lastUsername = load('iciCaPousse_lastUsername', '');
     setLoginForm({ username: lastUsername, password: '' });
     setActiveTab('workout');
