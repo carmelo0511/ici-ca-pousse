@@ -85,6 +85,10 @@ const App = () => {
     if (user) {
       setCurrentUser(user);
     }
+    const lastUsername = load('iciCaPousse_lastUsername', '');
+    if (lastUsername) {
+      setLoginForm((lf) => ({ ...lf, username: lastUsername }));
+    }
   }, []);
 
   useEffect(() => {
@@ -219,6 +223,7 @@ const App = () => {
       setCurrentUser(user);
       setShowLogin(false);
       setLoginForm({ username: '', password: '' });
+      save('iciCaPousse_lastUsername', user.username);
     } else {
       alert('Nom d\'utilisateur ou mot de passe incorrect 😕');
     }
@@ -256,6 +261,7 @@ const App = () => {
     setShowLogin(false);
     setRegisterForm({ username: '', password: '', confirmPassword: '' });
     setIsRegistering(false);
+    save('iciCaPousse_lastUsername', newUser.username);
   };
 
   const handleLogout = () => {
@@ -264,6 +270,8 @@ const App = () => {
     setExercises([]);
     setSelectedMuscleGroup(null);
     localStorage.removeItem('iciCaPousse_currentUser');
+    const lastUsername = load('iciCaPousse_lastUsername', '');
+    setLoginForm({ username: lastUsername, password: '' });
     setActiveTab('workout');
   };
 
