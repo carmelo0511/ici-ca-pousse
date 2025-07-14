@@ -1,8 +1,39 @@
 const http = require('http');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 
-let users = [];
-const tokens = {};
+const storagePath = path.join(__dirname, 'auth_storage.json');
+
+function ensureStorage() {
+  if (!fs.existsSync(storagePath)) {
+    fs.writeFileSync(
+      storagePath,
+      JSON.stringify({ users: [], tokens: {} }, null, 2)
+    );
+  }
+}
+
+function readStorage() {
+  ensureStorage();
+  return JSON.parse(fs.readFileSync(storagePath, 'utf-8'));
+}
+
+function writeStorage(data) {
+  fs.writeFileSync(storagePath, JSON.stringify(data, null, 2));
+}
+
+function loadUsers() {
+  return readStorage().users;
+}
+
+function loadTokens() {
+  return readStorage().tokens;
+}
+
+function saveUsersTokens(users, tokens) {
+  writeStorage({ users, tokens });
+}
 
 const send = (res, status, body) => {
   res.writeHead(status, {
@@ -30,6 +61,8 @@ async function register(req, res) {
   try {
     const { username, password } = await parseBody(req);
     if (!username || !password) return send(res, 400, { error: 'Missing fields' });
+    const users = loadUsers();
+    const tokens = loadTokens();
     if (users.some(u => u.username === username)) return send(res, 400, { error: 'User exists' });
 
     const id = crypto.randomUUID();
@@ -41,6 +74,8 @@ async function register(req, res) {
     const token = crypto.randomBytes(32).toString('hex');
     tokens[token] = id;
 
+    saveUsersTokens(users, tokens);
+
     send(res, 200, { token, user: { id, username } });
   } catch (e) {
     send(res, 400, { error: 'Invalid JSON' });
@@ -50,12 +85,17 @@ async function register(req, res) {
 async function login(req, res) {
   try {
     const { username, password } = await parseBody(req);
+    const users = loadUsers();
+    const tokens = loadTokens();
     const user = users.find(u => u.username === username);
     if (!user) return send(res, 400, { error: 'Invalid credentials' });
     const hash = crypto.pbkdf2Sync(password, user.salt, 10000, 64, 'sha512').toString('hex');
     if (hash !== user.hash) return send(res, 400, { error: 'Invalid credentials' });
     const token = crypto.randomBytes(32).toString('hex');
     tokens[token] = user.id;
+
+    saveUsersTokens(users, tokens);
+
     send(res, 200, { token, user: { id: user.id, username: user.username } });
   } catch (e) {
     send(res, 400, { error: 'Invalid JSON' });
@@ -65,6 +105,8 @@ async function login(req, res) {
 function validate(req, res) {
   const auth = req.headers['authorization'] || '';
   const token = auth.split(' ')[1];
+  const tokens = loadTokens();
+  const users = loadUsers();
   const userId = tokens[token];
   if (userId) {
     const user = users.find(u => u.id === userId);
@@ -74,8 +116,11 @@ function validate(req, res) {
 }
 
 function listUsers(req, res) {
+  const users = loadUsers();
   send(res, 200, users.map(u => ({ id: u.id, username: u.username })));
 }
+
+ensureStorage();
 
 http.createServer((req, res) => {
   if (req.method === 'OPTIONS') {
