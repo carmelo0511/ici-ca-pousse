@@ -18,6 +18,7 @@ import {
 import './App.css';
 import LoginScreen from './components/LoginScreen';
 import { load, save } from './utils/storage';
+import { hashPassword } from './utils/hash';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('workout');
@@ -210,9 +211,10 @@ const App = () => {
   };
 
   // Fonctions d'authentification
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const user = users.find(u => u.username === loginForm.username && u.password === loginForm.password);
+    const hashed = await hashPassword(loginForm.password);
+    const user = users.find(u => u.username === loginForm.username && u.password === hashed);
     if (user) {
       setCurrentUser(user);
       setShowLogin(false);
@@ -222,7 +224,7 @@ const App = () => {
     }
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (registerForm.password !== registerForm.confirmPassword) {
       alert('Les mots de passe ne correspondent pas 🔒');
@@ -241,10 +243,11 @@ const App = () => {
       return;
     }
 
+    const hashed = await hashPassword(registerForm.password);
     const newUser = {
       id: Date.now(),
       username: registerForm.username,
-      password: registerForm.password,
+      password: hashed,
       createdAt: new Date().toISOString()
     };
     
