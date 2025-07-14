@@ -501,7 +501,7 @@ const App = () => {
             <div className="overflow-y-auto flex-1 pr-2">
               {!selectedMuscleGroup ? (
                 // Affichage des groupes musculaires
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                   {Object.entries(exerciseDatabase).map(([muscle, exerciseList]) => (
                     <button
                       key={muscle}
@@ -524,7 +524,7 @@ const App = () => {
                 </div>
               ) : (
                 // Affichage des exercices du groupe sélectionné
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {exerciseDatabase[selectedMuscleGroup].map((exercise) => (
                     <button
                       key={exercise}
