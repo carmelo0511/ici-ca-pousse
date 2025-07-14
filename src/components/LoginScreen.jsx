@@ -124,9 +124,19 @@ const LoginScreen = ({
       {users.length > 0 && (
         <div className="mt-4 p-3 bg-gray-100 rounded-lg">
           <p className="text-xs text-gray-600 mb-2">Comptes enregistrés ({users.length}) :</p>
-          {users.map((user) => (
-            <div key={user.id} className="text-xs text-gray-500">• {user.username}</div>
-          ))}
+          <ul className="space-y-1">
+            {users.map((user) => (
+              <li key={user.id}>
+                <button
+                  type="button"
+                  onClick={() => setLoginForm({ ...loginForm, username: user.username })}
+                  className="text-xs text-gray-500 hover:text-gray-700"
+                >
+                  • {user.username}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
