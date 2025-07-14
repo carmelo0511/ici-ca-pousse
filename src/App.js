@@ -54,7 +54,7 @@ const App = () => {
 
     const storedToken = load('iciCaPousse_token', null);
     if (storedToken) {
-      fetch('http://localhost:3001/api/validate', {
+      fetch('/api/validate', {
         headers: { Authorization: `Bearer ${storedToken}` },
       })
         .then((res) => (res.ok ? res.json() : null))
@@ -69,7 +69,7 @@ const App = () => {
         .catch(() => {});
     }
 
-    fetch('http://localhost:3001/api/users')
+    fetch('/api/users')
       .then((res) => (res.ok ? res.json() : []))
       .then(setUsers)
       .catch(() => setUsers([]));
@@ -203,7 +203,7 @@ const App = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:3001/api/login', {
+      const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginForm),
@@ -238,7 +238,7 @@ const App = () => {
       return;
     }
     try {
-      const res = await fetch('http://localhost:3001/api/register', {
+      const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: registerForm.username, password: registerForm.password }),
@@ -251,7 +251,7 @@ const App = () => {
         setRegisterForm({ username: '', password: '', confirmPassword: '' });
         setIsRegistering(false);
         save('iciCaPousse_lastUsername', data.user.username);
-        fetch('http://localhost:3001/api/users')
+        fetch('/api/users')
           .then((r) => (r.ok ? r.json() : []))
           .then(setUsers)
           .catch(() => {});
