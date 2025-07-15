@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { exerciseDatabase } from '../../utils/exerciseDatabase';
 
-const WorkoutList = memo(({
+function WorkoutList({
   selectedDate,
   setSelectedDate,
   exercises,
@@ -25,7 +25,7 @@ const WorkoutList = memo(({
   selectedMuscleGroup,
   setSelectedMuscleGroup,
   addExerciseToWorkout
-}) => {
+}) {
   // Ajout d'un état local pour le nom de l'exercice personnalisé
   const [customExerciseName, setCustomExerciseName] = useState('');
 
@@ -295,13 +295,13 @@ const WorkoutList = memo(({
                   ))}
                 </div>
                 {/* Champ pour exercice personnalisé */}
-                <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+                <div className="flex flex-col items-center justify-center gap-3 mt-4 w-full">
                   <input
                     type="text"
                     value={customExerciseName}
                     onChange={e => setCustomExerciseName(e.target.value)}
                     placeholder="Nom de l'exercice personnalisé"
-                    className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full sm:w-80 text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200"
+                    className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full max-w-xs text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200"
                   />
                   <button
                     onClick={() => {
@@ -312,7 +312,7 @@ const WorkoutList = memo(({
                         setSelectedMuscleGroup(null);
                       }
                     }}
-                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 w-full max-w-xs"
                   >
                     Ajouter
                   </button>
@@ -325,5 +325,6 @@ const WorkoutList = memo(({
     )}
   </div>
 );
+}
 
-export default WorkoutList;
+export default memo(WorkoutList);
