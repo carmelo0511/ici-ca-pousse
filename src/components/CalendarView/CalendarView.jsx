@@ -124,17 +124,17 @@ const CalendarView = ({
       </div>
 
       {showWorkoutDetail && selectedWorkout && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl border border-gray-200 overflow-hidden">
+            {/* Header sticky */}
+            <div className="sticky top-0 z-10 bg-white rounded-t-3xl px-4 sm:px-6 pt-4 pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100">
+              <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 🏋️ Séance du {new Date(selectedWorkout.date).toLocaleDateString('fr-FR')}
               </h3>
-              <div className="flex flex-wrap gap-2">
-
+              <div className="flex flex-wrap gap-2 ml-auto">
                 <button
                   onClick={() => deleteWorkout(selectedWorkout.id)}
-                  className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-4 py-2 rounded-xl font-medium flex items-center space-x-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                  className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-3 sm:px-4 py-2 rounded-xl font-medium flex items-center space-x-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 text-sm sm:text-base"
                 >
                   <Trash2 className="h-4 w-4" />
                   <span>Supprimer</span>
@@ -142,94 +142,96 @@ const CalendarView = ({
                 <button
                   onClick={() => setShowWorkoutDetail(false)}
                   className="text-gray-500 hover:text-white hover:bg-red-500 p-2 rounded-xl transition-all duration-200 border-2 border-gray-300 hover:border-red-500"
+                  aria-label="Fermer"
                 >
                   <X className="h-6 w-6" />
                 </button>
               </div>
             </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-4 rounded-2xl text-center border border-blue-200">
-                <div className="text-3xl font-bold text-blue-600">{selectedWorkout.duration}</div>
-                <div className="text-sm font-medium text-blue-800">Minutes</div>
+            {/* Contenu scrollable */}
+            <div className="overflow-y-auto px-2 sm:px-6 py-4 flex-1 custom-scrollbar">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-4 rounded-2xl text-center border border-blue-200">
+                  <div className="text-2xl sm:text-3xl font-bold text-blue-600">{selectedWorkout.duration}</div>
+                  <div className="text-xs sm:text-sm font-medium text-blue-800">Minutes</div>
+                </div>
+                <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-4 rounded-2xl text-center border border-green-200">
+                  <div className="text-2xl sm:text-3xl font-bold text-green-600">{selectedWorkout.totalSets}</div>
+                  <div className="text-xs sm:text-sm font-medium text-green-800">Séries</div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-100 to-pink-100 p-4 rounded-2xl text-center border border-purple-200">
+                  <div className="text-2xl sm:text-3xl font-bold text-purple-600">{selectedWorkout.totalReps}</div>
+                  <div className="text-xs sm:text-sm font-medium text-purple-800">Répétitions</div>
+                </div>
+                <div className="bg-gradient-to-br from-orange-100 to-red-100 p-4 rounded-2xl text-center border border-orange-200">
+                  <div className="text-2xl sm:text-3xl font-bold text-orange-600">{selectedWorkout.totalWeight}</div>
+                  <div className="text-xs sm:text-sm font-medium text-orange-800">kg soulevés</div>
+                </div>
               </div>
-              <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-4 rounded-2xl text-center border border-green-200">
-                <div className="text-3xl font-bold text-green-600">{selectedWorkout.totalSets}</div>
-                <div className="text-sm font-medium text-green-800">Séries</div>
-              </div>
-              <div className="bg-gradient-to-br from-purple-100 to-pink-100 p-4 rounded-2xl text-center border border-purple-200">
-                <div className="text-3xl font-bold text-purple-600">{selectedWorkout.totalReps}</div>
-                <div className="text-sm font-medium text-purple-800">Répétitions</div>
-              </div>
-              <div className="bg-gradient-to-br from-orange-100 to-red-100 p-4 rounded-2xl text-center border border-orange-200">
-                <div className="text-3xl font-bold text-orange-600">{selectedWorkout.totalWeight}</div>
-                <div className="text-sm font-medium text-orange-800">kg soulevés</div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-xl font-bold text-gray-800 flex items-center space-x-2">
-                <Dumbbell className="h-5 w-5" />
-                <span>Exercices réalisés</span>
-              </h4>
-              {selectedWorkout.exercises.map((exercise, index) => (
-                <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${exercise.type === 'cardio' ? 'bg-red-500' : 'bg-blue-500'}`}>
-                        {exercise.type === 'cardio' ? <Heart className="h-5 w-5 text-white" /> : <Dumbbell className="h-5 w-5 text-white" />}
+              <div className="space-y-4">
+                <h4 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center space-x-2">
+                  <Dumbbell className="h-5 w-5" />
+                  <span>Exercices réalisés</span>
+                </h4>
+                {selectedWorkout.exercises.map((exercise, index) => (
+                  <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 border border-gray-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className={`p-2 rounded-lg ${exercise.type === 'cardio' ? 'bg-red-500' : 'bg-blue-500'}`}>
+                          {exercise.type === 'cardio' ? <Heart className="h-5 w-5 text-white" /> : <Dumbbell className="h-5 w-5 text-white" />}
+                        </div>
+                        <h5 className="font-bold text-gray-800 text-base sm:text-lg">{exercise.name}</h5>
                       </div>
-                      <h5 className="font-bold text-gray-800 text-lg">{exercise.name}</h5>
+                      <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-bold ${exercise.type === 'cardio' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>
+                        {exercise.type === 'cardio' ? 'Cardio' : 'Musculation'}
+                      </span>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-sm font-bold ${exercise.type === 'cardio' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>
-                      {exercise.type === 'cardio' ? 'Cardio' : 'Musculation'}
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    <div className={`grid gap-3 text-sm font-bold text-gray-600 pb-2 border-b border-gray-300 ${exercise.type === 'cardio' ? 'grid-cols-3' : 'grid-cols-3'}`}>
-                      <span>Série</span>
-                      {exercise.type === 'cardio' ? (
-                        <>
-                          <span>Durée (min)</span>
-                          <span>Intensité</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Répétitions</span>
-                          <span>Poids (kg)</span>
-                        </>
-                      )}
-                    </div>
-                    {exercise.sets.map((set, setIndex) => (
-                      <div key={setIndex} className="grid grid-cols-3 gap-3 text-sm font-medium">
-                        <span className="bg-white rounded-lg px-3 py-2 text-center border border-gray-200">{setIndex + 1}</span>
+                    <div className="space-y-3">
+                      <div className={`grid gap-3 text-xs sm:text-sm font-bold text-gray-600 pb-2 border-b border-gray-300 ${exercise.type === 'cardio' ? 'grid-cols-3' : 'grid-cols-3'}`}> 
+                        <span>Série</span>
                         {exercise.type === 'cardio' ? (
                           <>
-                            <span className="bg-white rounded-lg px-3 py-2 text-center border border-gray-200">{set.duration} min</span>
-                            <span className="bg-white rounded-lg px-3 py-2 text-center border border-gray-200">{set.reps}/10</span>
+                            <span>Durée (min)</span>
+                            <span>Intensité</span>
                           </>
                         ) : (
                           <>
-                            <span className="bg-white rounded-lg px-3 py-2 text-center border border-gray-200">{set.reps}</span>
-                            <span className="bg-white rounded-lg px-3 py-2 text-center border border-gray-200">{set.weight}</span>
+                            <span>Répétitions</span>
+                            <span>Poids (kg)</span>
                           </>
                         )}
                       </div>
-                    ))}
+                      {exercise.sets.map((set, setIndex) => (
+                        <div key={setIndex} className="grid grid-cols-3 gap-3 text-xs sm:text-sm font-medium">
+                          <span className="bg-white rounded-lg px-2 sm:px-3 py-2 text-center border border-gray-200">{setIndex + 1}</span>
+                          {exercise.type === 'cardio' ? (
+                            <>
+                              <span className="bg-white rounded-lg px-2 sm:px-3 py-2 text-center border border-gray-200">{set.duration} min</span>
+                              <span className="bg-white rounded-lg px-2 sm:px-3 py-2 text-center border border-gray-200">{set.reps}/10</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="bg-white rounded-lg px-2 sm:px-3 py-2 text-center border border-gray-200">{set.reps}</span>
+                              <span className="bg-white rounded-lg px-2 sm:px-3 py-2 text-center border border-gray-200">{set.weight}</span>
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 p-2 sm:p-3 bg-white rounded-xl border border-gray-200">
+                      <span className="text-xs sm:text-sm font-bold text-gray-600">
+                        {exercise.type === 'cardio' ? (
+                          <>📊 Total: {exercise.sets.reduce((acc, set) => acc + (set.duration || 0), 0)} min,
+                          ~{exercise.sets.reduce((acc, set) => acc + Math.round((set.duration || 0) * (set.reps || 5) * 8), 0)} calories</>
+                        ) : (
+                          <>📊 Total: {exercise.sets.reduce((acc, set) => acc + set.reps, 0)} reps,
+                          {exercise.sets.reduce((acc, set) => acc + (set.weight * set.reps), 0)} kg</>
+                        )}
+                      </span>
+                    </div>
                   </div>
-                  <div className="mt-4 p-3 bg-white rounded-xl border border-gray-200">
-                    <span className="text-sm font-bold text-gray-600">
-                      {exercise.type === 'cardio' ? (
-                        <>📊 Total: {exercise.sets.reduce((acc, set) => acc + (set.duration || 0), 0)} min,
-                        ~{exercise.sets.reduce((acc, set) => acc + Math.round((set.duration || 0) * (set.reps || 5) * 8), 0)} calories</>
-                      ) : (
-                        <>📊 Total: {exercise.sets.reduce((acc, set) => acc + set.reps, 0)} reps,
-                        {exercise.sets.reduce((acc, set) => acc + (set.weight * set.reps), 0)} kg</>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
