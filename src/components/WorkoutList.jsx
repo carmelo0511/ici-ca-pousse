@@ -26,34 +26,34 @@ const WorkoutList = ({
   setSelectedMuscleGroup,
   addExerciseToWorkout
 }) => (
-  <div className="p-6 space-y-8">
-    <div className="flex justify-between items-center">
-      <div>
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          🏋️ Nouvelle séance
-        </h2>
-        <p className="text-gray-600 mt-1">
-          Créez votre programme d'entraînement
-        </p>
+      <div className="p-6 space-y-8">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            🏋️ Nouvelle séance
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Créez votre programme d'entraînement
+          </p>
+        </div>
+        <div className="flex items-center space-x-3 bg-white dark:bg-gray-800 rounded-xl p-3 shadow-md border border-gray-100 dark:border-gray-700">
+          <Calendar className="h-5 w-5 text-indigo-600" />
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="border-0 outline-none font-medium text-gray-700 dark:text-gray-200 bg-transparent"
+          />
+        </div>
       </div>
-      <div className="flex items-center space-x-3 bg-white rounded-xl p-3 shadow-md border border-gray-100">
-        <Calendar className="h-5 w-5 text-indigo-600" />
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="border-0 outline-none font-medium text-gray-700"
-        />
-      </div>
-    </div>
 
     {exercises.length === 0 ? (
-      <div className="text-center py-16 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl border border-indigo-100">
+      <div className="text-center py-16 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-3xl border border-indigo-100 dark:border-indigo-800">
         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 rounded-2xl inline-block mb-6 shadow-lg">
           <Dumbbell className="h-12 w-12 text-white" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-800 mb-3">Prêt à vous entraîner ? 💪</h3>
-        <p className="text-gray-600 mb-8 max-w-md mx-auto">
+        <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-3">Prêt à vous entraîner ? 💪</h3>
+        <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
           Commencez votre séance en ajoutant des exercices de musculation ou de cardio
         </p>
         <button
@@ -67,7 +67,7 @@ const WorkoutList = ({
     ) : (
       <div className="space-y-6">
         {exercises.map((exercise) => (
-          <div key={exercise.id} className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-200">
+          <div key={exercise.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow duration-200">
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center space-x-3">
                 <div className={`p-2 rounded-lg ${
@@ -76,9 +76,9 @@ const WorkoutList = ({
                   {exercise.type === 'cardio' ? <Heart className="h-5 w-5" /> : <Dumbbell className="h-5 w-5" />}
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800">{exercise.name}</h3>
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">{exercise.name}</h3>
                   <span className={`text-sm font-medium px-3 py-1 rounded-full ${
-                    exercise.type === 'cardio' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                    exercise.type === 'cardio' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
                   }`}>
                     {exercise.type === 'cardio' ? 'Cardio' : 'Musculation'}
                   </span>
@@ -225,16 +225,16 @@ const WorkoutList = ({
 
     {showAddExercise && (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-3xl p-6 w-full max-w-4xl h-[85vh] shadow-2xl border border-gray-200 flex flex-col">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 w-full max-w-4xl h-[85vh] shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col">
           <div className="flex justify-between items-center mb-6 flex-shrink-0">
             <div className="flex items-center space-x-3">
               {selectedMuscleGroup && (
-                <button
-                  onClick={() => setSelectedMuscleGroup(null)}
-                  className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-lg transition-all duration-200"
-                >
-                  ← Retour
-                </button>
+                                  <button
+                    onClick={() => setSelectedMuscleGroup(null)}
+                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg transition-all duration-200"
+                  >
+                    ← Retour
+                  </button>
               )}
               <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 {selectedMuscleGroup ? `💪 ${selectedMuscleGroup.charAt(0).toUpperCase() + selectedMuscleGroup.slice(1)}` : '🏃‍♂️ Choisir un groupe musculaire'}
@@ -245,7 +245,7 @@ const WorkoutList = ({
                 setShowAddExercise(false);
                 setSelectedMuscleGroup(null);
               }}
-              className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-lg transition-all duration-200"
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg transition-all duration-200"
             >
               <X className="h-6 w-6" />
             </button>
@@ -258,15 +258,15 @@ const WorkoutList = ({
                   <button
                     key={muscle}
                     onClick={() => setSelectedMuscleGroup(muscle)}
-                    className="bg-gradient-to-br from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-2xl p-6 border border-gray-200 hover:border-indigo-300 transition-all duration-200 hover:shadow-lg transform hover:scale-105"
+                    className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 hover:from-white hover:to-gray-50 dark:hover:from-gray-600 dark:hover:to-gray-700 rounded-2xl p-6 border border-gray-200 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-500 transition-all duration-200 hover:shadow-lg transform hover:scale-105"
                   >
                     <div className="flex flex-col items-center space-y-4">
                       <div className={`p-4 rounded-2xl ${muscle === 'cardio' ? 'bg-red-500' : 'bg-indigo-500'} shadow-lg`}>
                         {muscle === 'cardio' ? <Heart className="h-8 w-8 text-white" /> : <Dumbbell className="h-8 w-8 text-white" />}
                       </div>
                       <div className="text-center">
-                        <h4 className="font-bold text-gray-800 capitalize text-xl mb-2">{muscle}</h4>
-                        <p className="text-sm text-gray-600">{exerciseList.length} exercices</p>
+                        <h4 className="font-bold text-gray-800 dark:text-gray-200 capitalize text-xl mb-2">{muscle}</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{exerciseList.length} exercices</p>
                       </div>
                     </div>
                   </button>
@@ -278,14 +278,14 @@ const WorkoutList = ({
                   <button
                     key={exercise}
                     onClick={() => addExerciseToWorkout(exercise)}
-                    className="text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
+                    className="text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 hover:from-white hover:to-gray-50 dark:hover:from-gray-600 dark:hover:to-gray-700 rounded-xl font-medium text-gray-700 dark:text-gray-200 transition-all duration-200 border border-gray-200 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-md transform hover:scale-[1.02]"
                   >
                     <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}>
+                      <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-300' : 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300'}`}>
                         {selectedMuscleGroup === 'cardio' ? <Heart className="h-4 w-4" /> : <Dumbbell className="h-4 w-4" />}
                       </div>
                       <span className="flex-1">{exercise}</span>
-                      <span className="text-gray-400">→</span>
+                      <span className="text-gray-400 dark:text-gray-500">→</span>
                     </div>
                   </button>
                 ))}

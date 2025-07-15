@@ -2,7 +2,8 @@
 
 export const APP_NAME = 'Ici Ca Pousse';
 export const STORAGE_KEYS = {
-  WORKOUTS: 'iciCaPousse_workouts'
+  WORKOUTS: 'iciCaPousse_workouts',
+  THEME: 'iciCaPousse_theme'
 };
 
 export const TABS = {
