@@ -1,5 +1,33 @@
 import React from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+
+function getWeeklyWorkoutData(workouts) {
+  // Regroupe les séances par semaine (année + numéro de semaine)
+  const weekMap = {};
+  workouts.forEach(w => {
+    const d = new Date(w.date);
+    const year = d.getFullYear();
+    // Numéro de semaine ISO
+    const week = Math.ceil((((d - new Date(year,0,1)) / 86400000) + new Date(year,0,1).getDay()+1)/7);
+    const key = `${year}-S${week}`;
+    weekMap[key] = (weekMap[key] || 0) + 1;
+  });
+  return Object.entries(weekMap).map(([week, count]) => ({ week, count }));
+}
+
+function getMostWorkedMuscleGroup(workouts) {
+  const muscleCount = {};
+  workouts.forEach(w => {
+    w.exercises.forEach(ex => {
+      if (ex.type) {
+        muscleCount[ex.type] = (muscleCount[ex.type] || 0) + 1;
+      }
+    });
+  });
+  const sorted = Object.entries(muscleCount).sort((a, b) => b[1] - a[1]);
+  return sorted.length > 0 ? sorted[0][0] : 'Aucun';
+}
 
 const StatsView = ({ stats, workouts }) => (
   <div className="p-6 space-y-8">
@@ -61,6 +89,32 @@ const StatsView = ({ stats, workouts }) => (
           </div>
           <Zap className="h-12 w-12 text-indigo-200" />
         </div>
+      </div>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+          <BarChart3 className="h-6 w-6" />
+          <span>Évolution hebdomadaire</span>
+        </h3>
+        <ResponsiveContainer width="100%" height={220}>
+          <BarChart data={getWeeklyWorkoutData(workouts)} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="week" fontSize={12} />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="count" fill="#6366f1" radius={[8,8,0,0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 flex flex-col justify-center items-center">
+        <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+          <Dumbbell className="h-6 w-6" />
+          <span>Groupe musculaire le plus travaillé</span>
+        </h3>
+        <div className="text-4xl font-bold text-indigo-600 mb-2">{getMostWorkedMuscleGroup(workouts) === 'cardio' ? 'Cardio' : getMostWorkedMuscleGroup(workouts).charAt(0).toUpperCase() + getMostWorkedMuscleGroup(workouts).slice(1)}</div>
+        <div className="text-gray-500">(sur toutes les séances)</div>
       </div>
     </div>
 
