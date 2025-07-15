@@ -108,20 +108,18 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <Header workoutCount={workouts.length} />
-      <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main className="w-full max-w-4xl mx-auto px-2 sm:px-6 py-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+      <div className="w-full max-w-4xl mx-auto px-2 sm:px-6 py-4">
+        <Header workoutCount={workouts.length} />
+        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
         {renderActiveTab()}
-      </main>
-      <PWAInstallButton />
-      <PWAStatus />
-      {showToast && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 bg-white border border-green-200 text-green-700 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg">
-          <CheckCircle className="h-6 w-6 text-green-500" />
-          <span>Séance sauvegardée ! Bien joué ! 🎉</span>
-        </div>
-      )}
+        {showToast && (
+          <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 bg-white border border-green-200 text-green-700 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg">
+            <CheckCircle className="h-6 w-6 text-green-500" />
+            <span>Séance sauvegardée ! Bien joué ! 🎉</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
