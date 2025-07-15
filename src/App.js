@@ -17,7 +17,6 @@ import CalendarView from './components/CalendarView';
 import StatsView from './components/StatsView';
 import { useWorkouts } from './hooks/useWorkouts';
 import { useExercises } from './hooks/useExercises';
-import { useTheme } from './hooks/useTheme';
 import { createWorkout } from './utils/workoutUtils';
 import { exerciseDatabase } from './utils/exerciseDatabase';
 
@@ -41,7 +40,6 @@ const App = () => {
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
   const { exercises, addExercise, updateExercise, removeExercise, addSet, updateSet, removeSet, clearExercises } = useExercises();
-  const { isDarkMode, toggleTheme } = useTheme();
 
   // Fonctions utilitaires
   const addExerciseToWorkout = (exerciseName) => {
@@ -135,8 +133,8 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <Header workoutCount={workouts.length} isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <Header workoutCount={workouts.length} />
       
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
       

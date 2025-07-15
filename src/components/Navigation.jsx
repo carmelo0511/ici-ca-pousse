@@ -9,7 +9,7 @@ const Navigation = ({ activeTab, setActiveTab }) => {
   ];
 
   return (
-    <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+    <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200">
       <div className="px-6">
         <div className="flex space-x-8">
           {navItems.map(({ id, icon: Icon, label }) => (
@@ -18,8 +18,8 @@ const Navigation = ({ activeTab, setActiveTab }) => {
               onClick={() => setActiveTab(id)}
               className={`py-4 px-4 border-b-3 font-bold text-sm transition-all duration-200 ${
                 activeTab === id
-                  ? 'border-indigo-500 text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20'
-                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  ? 'border-indigo-500 text-indigo-600 bg-indigo-50'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
               } rounded-t-lg`}
             >
               <div className="flex items-center space-x-2">
