@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Calendar,
   Plus,
@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { exerciseDatabase } from '../utils/exerciseDatabase';
 
-const WorkoutList = ({
+const WorkoutList = memo(({
   selectedDate,
   setSelectedDate,
   exercises,
@@ -296,6 +296,6 @@ const WorkoutList = ({
       </div>
     )}
   </div>
-);
+));
 
 export default WorkoutList;

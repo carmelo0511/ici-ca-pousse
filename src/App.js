@@ -1,14 +1,4 @@
 import React, { useState } from 'react';
-import {
-  Plus,
-  Calendar,
-  BarChart3,
-  Dumbbell,
-  Edit,
-  Trash2,
-  X,
-  Heart,
-} from 'lucide-react';
 import './App.css';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
@@ -39,7 +29,7 @@ const App = () => {
 
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
-  const { exercises, addExercise, updateExercise, removeExercise, addSet, updateSet, removeSet, clearExercises } = useExercises();
+  const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises } = useExercises();
 
   // Fonctions utilitaires
   const addExerciseToWorkout = (exerciseName) => {
