@@ -125,7 +125,7 @@ const CalendarView = ({
 
       {showWorkoutDetail && selectedWorkout && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 p-2 sm:p-4 overflow-y-auto">
-          <div className="animate-zoom-in bg-white rounded-3xl w-full max-w-3xl max-h-screen flex flex-col shadow-2xl border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-3xl w-full max-w-3xl max-h-screen flex flex-col shadow-2xl border border-gray-200 overflow-hidden">
             {/* Header sticky */}
             <div className="sticky top-0 z-10 bg-white rounded-t-3xl px-4 sm:px-6 pt-4 pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100">
               <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
