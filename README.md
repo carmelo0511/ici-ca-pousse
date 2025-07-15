@@ -1,6 +1,6 @@
 # 🏋️ Ici Ca Pousse - Application de Musculation
 
-Application complète de suivi de musculation avec authentification et interface moderne.
+Application de suivi de musculation **100% locale** - données sauvegardées sur votre appareil.
 
 ## 📁 Structure du projet
 
@@ -10,37 +10,22 @@ ici-ca-pousse/
 │   ├── src/          # Code source React
 │   ├── public/       # Fichiers statiques
 │   └── README.md     # Instructions frontend
-├── auth-backend/     # Serveur d'authentification (déployé sur Render/Railway)
-│   ├── server.js     # Serveur Node.js
-│   └── README.md     # Instructions backend
 └── README.md         # Ce fichier
 ```
 
 ## 🚀 Déploiement rapide
 
-### 1. Backend d'authentification
-```bash
-cd auth-backend
-# Suivez les instructions dans auth-backend/README.md
-# Déployez sur Render ou Railway
-```
-
-### 2. Frontend React
+### Déploiement sur Vercel
 ```bash
 cd frontend
-# Créez .env avec REACT_APP_API_URL=URL_DE_VOTRE_BACKEND
-# Déployez sur Vercel
+# Déployez directement sur Vercel
+# Aucune configuration spéciale nécessaire !
 ```
 
 ## 🔧 Développement local
 
 ```bash
-# Terminal 1 - Backend
-cd auth-backend
-npm install
-node server.js
-
-# Terminal 2 - Frontend
+# Terminal unique
 cd frontend
 npm install
 npm start
@@ -48,12 +33,12 @@ npm start
 
 ## 📱 Fonctionnalités
 
-- ✅ **Authentification complète** : Inscription, connexion, sessions
-- ✅ **Gestion des séances** : Créer, modifier, supprimer des workouts
+- ✅ **Séances de musculation** : Créer, modifier, supprimer des workouts
 - ✅ **Calendrier interactif** : Visualiser les séances par date
 - ✅ **Statistiques** : Suivi des progrès et performances
 - ✅ **Interface moderne** : Design responsive avec Tailwind CSS
-- ✅ **Stockage local** : Données persistantes par utilisateur
+- ✅ **Stockage local** : Données persistantes sur l'appareil
+- ✅ **Pas de connexion** : Utilisation immédiate
 
 ## 🛠️ Technologies
 
@@ -61,18 +46,20 @@ npm start
 - React 18
 - Tailwind CSS
 - Lucide React (icônes)
+- LocalStorage pour la persistance
 
-**Backend :**
-- Node.js
-- Crypto (hashage sécurisé)
-- CORS configuré
+## 💾 Stockage des données
+
+- **LocalStorage** : Toutes les séances sont sauvegardées localement
+- **Pas de serveur** : Fonctionne entièrement hors ligne
+- **Données privées** : Restent sur votre appareil uniquement
+- **Pas de backend** : Application 100% frontend
 
 ## 📞 Support
 
 - **Frontend** : Voir `frontend/README.md`
-- **Backend** : Voir `auth-backend/README.md`
-- **Problèmes** : Vérifiez les logs de déploiement
+- **Problèmes** : Vérifiez les logs de déploiement Vercel
 
 ---
 
-**🎯 Objectif :** Application de musculation fonctionnelle et prête pour la production ! 
+**🎯 Application simple, rapide et efficace pour votre suivi de musculation !** 

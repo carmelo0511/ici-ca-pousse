@@ -1,6 +1,6 @@
-# 🚀 Ici Ca Pousse - Frontend React
+# 🚀 Ici Ca Pousse - Application de Musculation
 
-Application de suivi de musculation avec authentification.
+Application de suivi de musculation **100% locale** - données sauvegardées sur votre appareil.
 
 ## 🏗️ Structure du projet
 
@@ -9,37 +9,24 @@ frontend/
 ├── public/           # Fichiers statiques
 ├── src/
 │   ├── components/   # Composants React
-│   ├── utils/        # Utilitaires (API, storage, etc.)
+│   ├── utils/        # Utilitaires (storage, exercices)
 │   └── ...
-├── .env.example      # Configuration d'exemple
 └── package.json
 ```
 
 ## 🚀 Déploiement sur Vercel
 
-### 1. Prérequis
-- Backend d'authentification déployé (voir dossier `../auth-backend/`)
-- URL publique du backend (ex: `https://icicapousse-auth.onrender.com`)
+### Déploiement simple
+```bash
+# Via Vercel CLI
+npm i -g vercel
+vercel --prod
 
-### 2. Configuration
-1. **Créez un fichier `.env` à la racine du frontend** :
-   ```bash
-   REACT_APP_API_URL=https://votre-backend-url.com/api
-   ```
+# Ou via l'interface web Vercel
+# Connectez votre repo GitHub et déployez
+```
 
-2. **Déployez sur Vercel** :
-   ```bash
-   # Via Vercel CLI
-   npm i -g vercel
-   vercel --prod
-   
-   # Ou via l'interface web Vercel
-   # Connectez votre repo GitHub et déployez
-   ```
-
-### 3. Variables d'environnement Vercel
-Dans les paramètres Vercel, ajoutez :
-- `REACT_APP_API_URL` = URL de votre backend
+**✅ Aucune configuration spéciale nécessaire !**
 
 ## 🔧 Développement local
 
@@ -49,26 +36,16 @@ npm install
 
 # Démarrer le serveur de développement
 npm start
-
-# Le backend doit tourner sur localhost:3001
-# node ../auth-backend/server.js
 ```
-
-## 🔑 Authentification
-
-L'app utilise un système d'authentification complet :
-- ✅ Inscription/Connexion
-- ✅ Validation de token
-- ✅ Stockage local sécurisé
-- ✅ Gestion d'erreurs
-- ✅ Interface utilisateur moderne
 
 ## 📱 Fonctionnalités
 
-- **Séances de musculation** : Créer, modifier, supprimer
-- **Calendrier** : Visualiser les séances par date
-- **Statistiques** : Suivi des progrès
-- **Authentification** : Comptes utilisateurs sécurisés
+- ✅ **Séances de musculation** : Créer, modifier, supprimer
+- ✅ **Calendrier** : Visualiser les séances par date
+- ✅ **Statistiques** : Suivi des progrès
+- ✅ **Stockage local** : Données sauvegardées sur l'appareil
+- ✅ **Interface moderne** : Design responsive avec Tailwind CSS
+- ✅ **Pas de connexion** : Utilisation immédiate
 
 ## 🛠️ Technologies
 
@@ -77,9 +54,19 @@ L'app utilise un système d'authentification complet :
 - Lucide React (icônes)
 - LocalStorage pour la persistance
 
+## 💾 Stockage des données
+
+- **LocalStorage** : Toutes les séances sont sauvegardées localement
+- **Pas de serveur** : Fonctionne entièrement hors ligne
+- **Données privées** : Restent sur votre appareil uniquement
+
 ## 📞 Support
 
 En cas de problème :
-1. Vérifiez que le backend est déployé et accessible
-2. Contrôlez les variables d'environnement
-3. Consultez les logs Vercel
+1. Vérifiez que le build se fait correctement
+2. Consultez les logs Vercel
+3. Testez en local avec `npm start`
+
+---
+
+**🎯 Application simple, rapide et efficace pour votre suivi de musculation !**
