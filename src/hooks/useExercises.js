@@ -5,7 +5,7 @@ export const useExercises = () => {
   const [exercises, setExercises] = useState([]);
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
 
-  const addExerciseToWorkout = (exercise) => {
+  const addExercise = (exercise) => {
     const newExercise = {
       id: Date.now(),
       name: exercise,
@@ -59,7 +59,7 @@ export const useExercises = () => {
     exercises,
     selectedMuscleGroup,
     setSelectedMuscleGroup,
-    addExerciseToWorkout,
+    addExercise,
     addSet,
     updateSet,
     removeSet,

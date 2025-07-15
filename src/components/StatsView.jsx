@@ -11,7 +11,7 @@ const StatsView = ({ stats, workouts }) => (
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white p-8 rounded-3xl shadow-xl">
+      <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-blue-100 text-sm font-medium">Séances totales</p>
@@ -21,7 +21,7 @@ const StatsView = ({ stats, workouts }) => (
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-8 rounded-3xl shadow-xl">
+      <div className="bg-green-600 text-white p-8 rounded-3xl shadow-xl">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-green-100 text-sm font-medium">Séries totales</p>
@@ -31,7 +31,7 @@ const StatsView = ({ stats, workouts }) => (
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-purple-500 to-pink-600 text-white p-8 rounded-3xl shadow-xl">
+      <div className="bg-purple-600 text-white p-8 rounded-3xl shadow-xl">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-purple-100 text-sm font-medium">Répétitions totales</p>
@@ -41,7 +41,7 @@ const StatsView = ({ stats, workouts }) => (
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-8 rounded-3xl shadow-xl">
+      <div className="bg-orange-500 text-white p-8 rounded-3xl shadow-xl">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-orange-100 text-sm font-medium">Poids total soulevé</p>
@@ -51,7 +51,7 @@ const StatsView = ({ stats, workouts }) => (
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-red-500 to-pink-600 text-white p-8 rounded-3xl shadow-xl">
+      <div className="bg-red-600 text-white p-8 rounded-3xl shadow-xl">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-red-100 text-sm font-medium">Durée moyenne</p>
@@ -61,7 +61,7 @@ const StatsView = ({ stats, workouts }) => (
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-8 rounded-3xl shadow-xl">
+      <div className="bg-indigo-600 text-white p-8 rounded-3xl shadow-xl">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-indigo-100 text-sm font-medium">Régularité</p>
@@ -80,7 +80,7 @@ const StatsView = ({ stats, workouts }) => (
         </h3>
         <div className="space-y-4">
           {workouts.slice(-5).reverse().map((workout) => (
-            <div key={workout.id} className="flex justify-between items-center py-4 px-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow duration-200">
+            <div key={workout.id} className="flex justify-between items-center py-4 px-6 bg-gray-100 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow duration-200">
               <div>
                 <p className="font-bold text-gray-800">{new Date(workout.date).toLocaleDateString('fr-FR')}</p>
                 <p className="text-sm text-gray-600">{workout.exercises.length} exercices • {workout.totalSets} séries</p>
