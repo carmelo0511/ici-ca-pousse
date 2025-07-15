@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, Zap, Dumbbell, Heart, Edit, Trash2, X } from 'lucide-react';
+import { Clock, Zap, Dumbbell, Heart, Trash2, X } from 'lucide-react';
 
 const CalendarView = ({
   workouts,
@@ -7,7 +7,6 @@ const CalendarView = ({
   openWorkoutDetail,
   showWorkoutDetail,
   selectedWorkout,
-  editWorkout,
   deleteWorkout,
   setShowWorkoutDetail
 }) => {
@@ -101,9 +100,14 @@ const CalendarView = ({
           <p className="text-3xl font-bold text-blue-900">
             {workouts.filter(w => {
               const workoutDate = new Date(w.date);
+              const today = new Date();
               const weekStart = new Date(today);
               weekStart.setDate(today.getDate() - today.getDay());
-              return workoutDate >= weekStart;
+              weekStart.setHours(0, 0, 0, 0);
+              const weekEnd = new Date(weekStart);
+              weekEnd.setDate(weekStart.getDate() + 6);
+              weekEnd.setHours(23, 59, 59, 999);
+              return workoutDate >= weekStart && workoutDate <= weekEnd;
             }).length}
           </p>
         </div>
@@ -127,13 +131,7 @@ const CalendarView = ({
                 🏋️ Séance du {new Date(selectedWorkout.date).toLocaleDateString('fr-FR')}
               </h3>
               <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => editWorkout(selectedWorkout)}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-4 py-2 rounded-xl font-medium flex items-center space-x-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
-                >
-                  <Edit className="h-4 w-4" />
-                  <span>Modifier</span>
-                </button>
+
                 <button
                   onClick={() => deleteWorkout(selectedWorkout.id)}
                   className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-4 py-2 rounded-xl font-medium flex items-center space-x-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"

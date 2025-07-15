@@ -23,12 +23,10 @@ const App = () => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutDetail, setShowWorkoutDetail] = useState(false);
   const [workoutDuration, setWorkoutDuration] = useState('');
-  const [isEditingWorkout, setIsEditingWorkout] = useState(false);
-  const [editingWorkoutId, setEditingWorkoutId] = useState(null);
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
 
   // Hooks personnalisés
-  const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
+  const { workouts, addWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
   const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises } = useExercises();
 
   // Fonctions utilitaires
@@ -41,17 +39,10 @@ const App = () => {
   const saveWorkout = () => {
     if (exercises.length === 0) return;
     
-    const workout = createWorkout(exercises, selectedDate, workoutDuration, isEditingWorkout ? editingWorkoutId : null);
+    const workout = createWorkout(exercises, selectedDate, workoutDuration);
     
-    if (isEditingWorkout) {
-      updateWorkout(editingWorkoutId, workout);
-      setIsEditingWorkout(false);
-      setEditingWorkoutId(null);
-      alert('Séance modifiée avec succès ! 💪');
-    } else {
-      addWorkout(workout);
-      alert('Séance sauvegardée ! Bien joué ! 🎉');
-    }
+    addWorkout(workout);
+    alert('Séance sauvegardée ! Bien joué ! 🎉');
     
     clearExercises();
     setWorkoutDuration('');
@@ -62,15 +53,7 @@ const App = () => {
     setShowWorkoutDetail(true);
   };
 
-  const editWorkout = (workout) => {
-    setIsEditingWorkout(true);
-    setEditingWorkoutId(workout.id);
-    setSelectedDate(workout.date);
-    workout.exercises.forEach(ex => addExercise(ex));
-    setWorkoutDuration(workout.duration.toString());
-    setActiveTab('workout');
-    setShowWorkoutDetail(false);
-  };
+
 
   const handleDeleteWorkout = (workoutId) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cette séance ? 🗑️')) {
@@ -110,7 +93,7 @@ const App = () => {
             openWorkoutDetail={openWorkoutDetail}
             showWorkoutDetail={showWorkoutDetail}
             selectedWorkout={selectedWorkout}
-            editWorkout={editWorkout}
+
             deleteWorkout={handleDeleteWorkout}
             setShowWorkoutDetail={setShowWorkoutDetail}
           />
