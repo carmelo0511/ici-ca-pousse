@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import {
   Calendar,
   Plus,
@@ -25,7 +25,11 @@ const WorkoutList = memo(({
   selectedMuscleGroup,
   setSelectedMuscleGroup,
   addExerciseToWorkout
-}) => (
+}) => {
+  // Ajout d'un état local pour le nom de l'exercice personnalisé
+  const [customExerciseName, setCustomExerciseName] = useState('');
+
+  return (
       <div className="p-6 space-y-8">
       <div className="flex justify-between items-center">
         <div>
@@ -272,29 +276,54 @@ const WorkoutList = memo(({
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {exerciseDatabase[selectedMuscleGroup].map((exercise) => (
-                  <button
-                    key={exercise}
-                    onClick={() => addExerciseToWorkout(exercise)}
-                    className="text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}>
-                        {selectedMuscleGroup === 'cardio' ? <Heart className="h-4 w-4" /> : <Dumbbell className="h-4 w-4" />}
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+                  {exerciseDatabase[selectedMuscleGroup].map((exercise) => (
+                    <button
+                      key={exercise}
+                      onClick={() => addExerciseToWorkout(exercise)}
+                      className="text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}>
+                          {selectedMuscleGroup === 'cardio' ? <Heart className="h-4 w-4" /> : <Dumbbell className="h-4 w-4" />}
+                        </div>
+                        <span className="flex-1">{exercise}</span>
+                        <span className="text-gray-400">→</span>
                       </div>
-                      <span className="flex-1">{exercise}</span>
-                      <span className="text-gray-400">→</span>
-                    </div>
+                    </button>
+                  ))}
+                </div>
+                {/* Champ pour exercice personnalisé */}
+                <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+                  <input
+                    type="text"
+                    value={customExerciseName}
+                    onChange={e => setCustomExerciseName(e.target.value)}
+                    placeholder="Nom de l'exercice personnalisé"
+                    className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full sm:w-80 text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200"
+                  />
+                  <button
+                    onClick={() => {
+                      if (customExerciseName.trim()) {
+                        addExerciseToWorkout(customExerciseName.trim());
+                        setCustomExerciseName('');
+                        setShowAddExercise(false);
+                        setSelectedMuscleGroup(null);
+                      }
+                    }}
+                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
+                    Ajouter
                   </button>
-                ))}
-              </div>
+                </div>
+              </>
             )}
           </div>
         </div>
       </div>
     )}
   </div>
-));
+);
 
 export default WorkoutList;
