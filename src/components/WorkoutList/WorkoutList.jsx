@@ -179,18 +179,17 @@ const WorkoutList = memo(({
           </div>
         ))}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-row gap-4 justify-center items-center mt-4">
           <button
             onClick={() => setShowAddExercise(true)}
-            className="bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 px-6 py-4 rounded-xl flex items-center justify-center space-x-3 font-semibold border border-gray-200 transition-all duration-200 hover:shadow-lg"
+            className="bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 px-6 py-4 rounded-xl flex items-center space-x-3 font-semibold border border-gray-200 transition-all duration-200 hover:shadow-lg"
           >
             <Plus className="h-5 w-5" />
             <span>Ajouter un exercice</span>
           </button>
-
           <button
             onClick={saveWorkout}
-            className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-4 rounded-xl flex items-center justify-center space-x-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
+            className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-4 rounded-xl flex items-center space-x-3 font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <Target className="h-5 w-5" />
             <span>Terminer la séance</span>

@@ -117,8 +117,8 @@ const App = () => {
       <PWAInstallButton />
       <PWAStatus />
       {showToast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-4 rounded-2xl shadow-2xl animate-zoom-in font-semibold text-lg">
-          <CheckCircle className="h-6 w-6 text-white animate-pulse" />
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 bg-white border border-green-200 text-green-700 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg">
+          <CheckCircle className="h-6 w-6 text-green-500" />
           <span>Séance sauvegardée ! Bien joué ! 🎉</span>
         </div>
       )}

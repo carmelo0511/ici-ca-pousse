@@ -356,9 +356,23 @@ button:focus {
 
 /* Accentuer le hover sur les boutons principaux */
 .btn-gradient, .bg-gradient-to-r, .bg-gradient-to-br {
-  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  transition: background 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s cubic-bezier(0.4,0,0.2,1);
 }
 .btn-gradient:hover, .bg-gradient-to-r:hover, .bg-gradient-to-br:hover {
-  transform: scale(1.05) translateY(-2px);
+  /* Suppression du scale et translateY */
   box-shadow: 0 12px 32px rgba(99,102,241,0.10), 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card-hover {
+  transition: box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  /* Suppression du translateY */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-card:hover {
+  /* Suppression du translateY */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 100%);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
 }
