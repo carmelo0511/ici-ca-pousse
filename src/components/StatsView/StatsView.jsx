@@ -93,7 +93,7 @@ const StatsView = ({ stats, workouts }) => (
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up">
         <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
           <BarChart3 className="h-6 w-6" />
           <span>Évolution hebdomadaire</span>
@@ -108,7 +108,7 @@ const StatsView = ({ stats, workouts }) => (
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 flex flex-col justify-center items-center">
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 flex flex-col justify-center items-center fade-in-up">
         <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
           <Dumbbell className="h-6 w-6" />
           <span>Groupe musculaire le plus travaillé</span>

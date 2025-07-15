@@ -42,7 +42,7 @@ const CalendarView = ({
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up">
         <div className="text-center text-2xl font-bold text-gray-800 mb-8">
           {monthNames[currentMonth]} {currentYear}
         </div>
@@ -84,7 +84,7 @@ const CalendarView = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-green-200 rounded-2xl p-6">
+        <div className="bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-green-200 rounded-2xl p-6 fade-in-up">
           <div className="flex items-center space-x-3 mb-3">
             <div className="w-4 h-4 bg-green-500 rounded-full"></div>
             <span className="text-sm font-bold text-green-800">Séances effectuées</span>
@@ -92,7 +92,7 @@ const CalendarView = ({
           <p className="text-3xl font-bold text-green-900">{workouts.length}</p>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-100 to-indigo-100 border-2 border-blue-200 rounded-2xl p-6">
+        <div className="bg-gradient-to-br from-blue-100 to-indigo-100 border-2 border-blue-200 rounded-2xl p-6 fade-in-up">
           <div className="flex items-center space-x-3 mb-3">
             <Clock className="h-5 w-5 text-blue-600" />
             <span className="text-sm font-bold text-blue-800">Cette semaine</span>
@@ -112,7 +112,7 @@ const CalendarView = ({
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200 rounded-2xl p-6">
+        <div className="bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200 rounded-2xl p-6 fade-in-up">
           <div className="flex items-center space-x-3 mb-3">
             <Zap className="h-5 w-5 text-purple-600" />
             <span className="text-sm font-bold text-purple-800">Motivation</span>
@@ -124,8 +124,8 @@ const CalendarView = ({
       </div>
 
       {showWorkoutDetail && selectedWorkout && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl w-full h-full sm:h-auto max-w-3xl max-h-[90vh] flex flex-col shadow-2xl border border-gray-200 overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 p-2 sm:p-4 overflow-y-auto">
+          <div className="animate-zoom-in bg-white rounded-3xl w-full max-w-3xl max-h-screen flex flex-col shadow-2xl border border-gray-200 overflow-hidden">
             {/* Header sticky */}
             <div className="sticky top-0 z-10 bg-white rounded-t-3xl px-4 sm:px-6 pt-4 pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100">
               <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -174,7 +174,7 @@ const CalendarView = ({
                   <span>Exercices réalisés</span>
                 </h4>
                 {selectedWorkout.exercises.map((exercise, index) => (
-                  <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 border border-gray-200">
+                  <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 border border-gray-200 fade-in-up">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
                         <div className={`p-2 rounded-lg ${exercise.type === 'cardio' ? 'bg-red-500' : 'bg-blue-500'}`}>

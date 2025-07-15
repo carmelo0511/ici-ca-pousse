@@ -337,3 +337,28 @@ button:focus {
     border-radius: 9999px !important;
   }
 }
+
+/* Animation zoom-in pour modale */
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-zoom-in {
+  animation: zoomIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Accentuer le hover sur les boutons principaux */
+.btn-gradient, .bg-gradient-to-r, .bg-gradient-to-br {
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.btn-gradient:hover, .bg-gradient-to-r:hover, .bg-gradient-to-br:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 12px 32px rgba(99,102,241,0.10), 0 2px 8px rgba(0,0,0,0.08);
+}
