@@ -11,7 +11,6 @@ import {
 import { exerciseDatabase } from '../utils/exerciseDatabase';
 
 const WorkoutList = ({
-  isEditingWorkout,
   selectedDate,
   setSelectedDate,
   exercises,
@@ -31,10 +30,10 @@ const WorkoutList = ({
     <div className="flex justify-between items-center">
       <div>
         <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          {isEditingWorkout ? '✏️ Modifier la séance' : '🏋️ Nouvelle séance'}
+          🏋️ Nouvelle séance
         </h2>
         <p className="text-gray-600 mt-1">
-          {isEditingWorkout ? 'Modifiez votre séance existante' : "Créez votre programme d'entraînement"}
+          Créez votre programme d'entraînement
         </p>
       </div>
       <div className="flex items-center space-x-3 bg-white rounded-xl p-3 shadow-md border border-gray-100">
@@ -194,7 +193,7 @@ const WorkoutList = ({
             className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-4 rounded-xl flex items-center justify-center space-x-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
           >
             <Target className="h-5 w-5" />
-            <span>{isEditingWorkout ? 'Sauvegarder les modifications' : 'Terminer la séance'}</span>
+            <span>Terminer la séance</span>
           </button>
         </div>
 

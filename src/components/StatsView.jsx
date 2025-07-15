@@ -41,15 +41,7 @@ const StatsView = ({ stats, workouts }) => (
         </div>
       </div>
 
-      <div className="bg-orange-500 text-white p-8 rounded-3xl shadow-xl">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-orange-100 text-sm font-medium">Poids total soulevé</p>
-            <p className="text-4xl font-bold">{stats.totalWeight} kg</p>
-          </div>
-          <Dumbbell className="h-12 w-12 text-orange-200" />
-        </div>
-      </div>
+
 
       <div className="bg-red-600 text-white p-8 rounded-3xl shadow-xl">
         <div className="flex items-center justify-between">
