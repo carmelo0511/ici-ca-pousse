@@ -44,6 +44,8 @@ npm install
 ```bash
 # Lance l'application en développement
 npm start
+# Démarre le serveur d'authentification
+node server.js
 ```
 
 L'app sera accessible sur http://localhost:3000
