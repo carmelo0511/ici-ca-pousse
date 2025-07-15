@@ -6,8 +6,6 @@ import Navigation from './components/Navigation/Navigation';
 import WorkoutList from './components/WorkoutList/WorkoutList';
 import CalendarView from './components/CalendarView/CalendarView';
 import StatsView from './components/StatsView/StatsView';
-import PWAInstallButton from './components/PWAInstallButton/PWAInstallButton';
-import PWAStatus from './components/PWAStatus/PWAStatus';
 import { useWorkouts } from './hooks/useWorkouts';
 import { useExercises } from './hooks/useExercises';
 import { createWorkout } from './utils/workoutUtils';

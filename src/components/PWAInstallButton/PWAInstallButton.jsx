@@ -1,20 +1,6 @@
 import React from 'react';
-import { Download, Check, Info } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { usePWA } from '../../hooks/usePWA';
-
-function isIOS() {
-  return (
-    /iphone|ipad|ipod/i.test(window.navigator.userAgent) &&
-    !window.MSStream
-  );
-}
-
-function isInStandaloneMode() {
-  return (
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true
-  );
-}
 
 const PWAInstallButton = () => {
   const { isInstallable, isInstalled, installApp } = usePWA();
