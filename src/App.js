@@ -5,6 +5,8 @@ import Navigation from './components/Navigation';
 import WorkoutList from './components/WorkoutList';
 import CalendarView from './components/CalendarView';
 import StatsView from './components/StatsView';
+import PWAInstallButton from './components/PWAInstallButton';
+import PWAStatus from './components/PWAStatus';
 import { useWorkouts } from './hooks/useWorkouts';
 import { useExercises } from './hooks/useExercises';
 import { createWorkout } from './utils/workoutUtils';
@@ -114,6 +116,9 @@ const App = () => {
       <main className="container mx-auto px-4 py-6">
         {renderActiveTab()}
       </main>
+      
+      <PWAInstallButton />
+      <PWAStatus />
     </div>
   );
 };
