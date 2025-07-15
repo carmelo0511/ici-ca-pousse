@@ -5,17 +5,27 @@ export const useExercises = () => {
   const [exercises, setExercises] = useState([]);
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
 
-  const addExercise = (exercise) => {
+  const addExercise = (exerciseName) => {
     const newExercise = {
       id: Date.now(),
-      name: exercise,
+      name: exerciseName,
       sets: [{ reps: 0, weight: 0, duration: 0 }],
       type: Object.keys(exerciseDatabase).find(key => 
-        exerciseDatabase[key].includes(exercise)
+        exerciseDatabase[key].includes(exerciseName)
       )
     };
     setExercises(prev => [...prev, newExercise]);
     setSelectedMuscleGroup(null);
+  };
+
+  const updateExercise = (exerciseId, updatedExercise) => {
+    setExercises(prev => prev.map(ex => 
+      ex.id === exerciseId ? updatedExercise : ex
+    ));
+  };
+
+  const removeExercise = (exerciseId) => {
+    setExercises(prev => prev.filter(ex => ex.id !== exerciseId));
   };
 
   const addSet = (exerciseId) => {
@@ -60,6 +70,8 @@ export const useExercises = () => {
     selectedMuscleGroup,
     setSelectedMuscleGroup,
     addExercise,
+    updateExercise,
+    removeExercise,
     addSet,
     updateSet,
     removeSet,

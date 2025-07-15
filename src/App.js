@@ -42,14 +42,8 @@ const App = () => {
   const { exercises, addExercise, updateExercise, removeExercise, addSet, updateSet, removeSet, clearExercises } = useExercises();
 
   // Fonctions utilitaires
-  const addExerciseToWorkout = (exercise) => {
-    const newExercise = {
-      id: Date.now(),
-      name: exercise,
-      sets: [{ reps: 0, weight: 0, duration: 0 }],
-      type: Object.keys(exerciseDatabase).find(key => exerciseDatabase[key].includes(exercise))
-    };
-    addExercise(newExercise);
+  const addExerciseToWorkout = (exerciseName) => {
+    addExercise(exerciseName);
     setShowAddExercise(false);
     setSelectedMuscleGroup(null);
   };
