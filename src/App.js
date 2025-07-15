@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CheckCircle } from 'lucide-react';
 import './App.css';
 import Header from './components/Header/Header';
 import Navigation from './components/Navigation/Navigation';
@@ -14,6 +15,7 @@ import { exerciseDatabase } from './utils/exerciseDatabase';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('workout');
+  const [showToast, setShowToast] = useState(false);
   const [selectedDate, setSelectedDate] = useState(() => {
     const now = new Date();
     const year = now.getFullYear();
@@ -40,12 +42,10 @@ const App = () => {
 
   const saveWorkout = () => {
     if (exercises.length === 0) return;
-    
     const workout = createWorkout(exercises, selectedDate, workoutDuration);
-    
     addWorkout(workout);
-    alert('Séance sauvegardée ! Bien joué ! 🎉');
-    
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2500);
     clearExercises();
     setWorkoutDuration('');
   };
@@ -110,15 +110,18 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header workoutCount={workouts.length} />
-      
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
-      
       <main className="container mx-auto px-4 py-6">
         {renderActiveTab()}
       </main>
-      
       <PWAInstallButton />
       <PWAStatus />
+      {showToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-4 rounded-2xl shadow-2xl animate-zoom-in font-semibold text-lg">
+          <CheckCircle className="h-6 w-6 text-white animate-pulse" />
+          <span>Séance sauvegardée ! Bien joué ! 🎉</span>
+        </div>
+      )}
     </div>
   );
 };
