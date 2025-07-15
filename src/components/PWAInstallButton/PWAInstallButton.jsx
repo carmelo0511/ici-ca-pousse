@@ -1,6 +1,6 @@
 import React from 'react';
 import { Download, Check, Info } from 'lucide-react';
-import { usePWA } from '../hooks/usePWA';
+import { usePWA } from '../../hooks/usePWA';
 
 function isIOS() {
   return (

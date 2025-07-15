@@ -8,7 +8,7 @@ import {
   Clock,
   X
 } from 'lucide-react';
-import { exerciseDatabase } from '../utils/exerciseDatabase';
+import { exerciseDatabase } from '../../utils/exerciseDatabase';
 
 const WorkoutList = memo(({
   selectedDate,
