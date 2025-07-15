@@ -1,48 +1,54 @@
-# 🏋️ Ici Ca Pousse - Application de Musculation
+# 🚀 Ici Ca Pousse - Application de Musculation
 
 Application de suivi de musculation **100% locale** - données sauvegardées sur votre appareil.
 
-## 📁 Structure du projet
+## 🏗️ Structure du projet
 
 ```
-ici-ca-pousse/
-├── frontend/          # Application React (déployée sur Vercel)
-│   ├── src/          # Code source React
-│   ├── public/       # Fichiers statiques
-│   └── README.md     # Instructions frontend
-└── README.md         # Ce fichier
+frontend/
+├── public/           # Fichiers statiques
+├── src/
+│   ├── components/   # Composants React
+│   ├── utils/        # Utilitaires (storage, exercices)
+│   └── ...
+└── package.json
 ```
 
-## 🚀 Déploiement rapide
+## 🚀 Déploiement sur Vercel
 
-### Déploiement sur Vercel
+### Déploiement simple
 ```bash
-cd frontend
-# Déployez directement sur Vercel
-# Aucune configuration spéciale nécessaire !
+# Via Vercel CLI
+npm i -g vercel
+vercel --prod
+
+# Ou via l'interface web Vercel
+# Connectez votre repo GitHub et déployez
 ```
+
+**✅ Aucune configuration spéciale nécessaire !**
 
 ## 🔧 Développement local
 
 ```bash
-# Terminal unique
-cd frontend
+# Installer les dépendances
 npm install
+
+# Démarrer le serveur de développement
 npm start
 ```
 
 ## 📱 Fonctionnalités
 
-- ✅ **Séances de musculation** : Créer, modifier, supprimer des workouts
-- ✅ **Calendrier interactif** : Visualiser les séances par date
-- ✅ **Statistiques** : Suivi des progrès et performances
+- ✅ **Séances de musculation** : Créer, modifier, supprimer
+- ✅ **Calendrier** : Visualiser les séances par date
+- ✅ **Statistiques** : Suivi des progrès
+- ✅ **Stockage local** : Données sauvegardées sur l'appareil
 - ✅ **Interface moderne** : Design responsive avec Tailwind CSS
-- ✅ **Stockage local** : Données persistantes sur l'appareil
 - ✅ **Pas de connexion** : Utilisation immédiate
 
 ## 🛠️ Technologies
 
-**Frontend :**
 - React 18
 - Tailwind CSS
 - Lucide React (icônes)
@@ -53,13 +59,14 @@ npm start
 - **LocalStorage** : Toutes les séances sont sauvegardées localement
 - **Pas de serveur** : Fonctionne entièrement hors ligne
 - **Données privées** : Restent sur votre appareil uniquement
-- **Pas de backend** : Application 100% frontend
 
 ## 📞 Support
 
-- **Frontend** : Voir `frontend/README.md`
-- **Problèmes** : Vérifiez les logs de déploiement Vercel
+En cas de problème :
+1. Vérifiez que le build se fait correctement
+2. Consultez les logs Vercel
+3. Testez en local avec `npm start`
 
 ---
 
-**🎯 Application simple, rapide et efficace pour votre suivi de musculation !** 
+**🎯 Application simple, rapide et efficace pour votre suivi de musculation !**
