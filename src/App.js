@@ -13,6 +13,7 @@ import { exerciseDatabase } from './utils/exerciseDatabase';
 import { auth } from './utils/firebase';
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
+import PWAInstallButton from './components/PWAInstallButton/PWAInstallButton';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -210,6 +211,8 @@ function App() {
         <Header workoutCount={workouts.length} />
         <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
         {renderActiveTab()}
+        {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
+        <PWAInstallButton />
         {toast.show && (
           <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg
             ${toast.type === 'success' ? 'bg-white border border-green-200 text-green-700' : 'bg-white border border-red-200 text-red-700'}`}
@@ -220,6 +223,6 @@ function App() {
       </div>
     </div>
   );
-};
+}
 
 export default App;
