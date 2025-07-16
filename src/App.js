@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { CheckCircle } from 'lucide-react';
 import './App.css';
 import Header from './components/Header/Header';
 import Navigation from './components/Navigation/Navigation';

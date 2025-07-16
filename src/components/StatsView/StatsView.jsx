@@ -2,7 +2,6 @@ import React from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, Calendar, Copy, Edit3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { formatDate } from '../../utils/workoutUtils';
-import { useWorkouts } from '../../hooks/useWorkouts';
 import { useExercises } from '../../hooks/useExercises';
 
 function getWeeklyWorkoutData(workouts) {
