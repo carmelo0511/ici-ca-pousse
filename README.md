@@ -1,6 +1,6 @@
 # 🏋️‍♂️ Ici Ca Pousse - Application de Suivi d'Entraînement
 
-Une application React moderne pour suivre vos séances d'entraînement avec une interface intuitive et des fonctionnalités complètes.
+Une application React moderne pour suivre vos séances d'entraînement avec une interface intuitive, des fonctionnalités cloud, et une synchronisation multi-appareils.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![React](https://img.shields.io/badge/React-18.2.0-61dafb.svg)
@@ -11,11 +11,15 @@ Une application React moderne pour suivre vos séances d'entraînement avec une 
 ## ✨ Fonctionnalités
 
 - 🏋️ **Gestion complète des séances** : Ajout, modification, suppression
+- ☁️ **Synchronisation cloud (Firestore)** : Vos séances et favoris sont liés à votre compte Google et accessibles sur tous vos appareils
+- 🔄 **Migration automatique** : Vos anciennes données locales sont importées dans le cloud à la première connexion
+- ⭐ **Favoris synchronisés** : Vos exercices favoris sont aussi synchronisés avec votre compte
+- 🌍 **Internationalisation (i18n)** : Interface multilingue (français/anglais), sélecteur de langue dans le header
 - 📅 **Vue calendrier interactive** : Visualisation des séances par date
 - 📊 **Statistiques détaillées** : Suivi de vos progrès
-- 💾 **Stockage local** : Données persistantes sans serveur
+- 💾 **Fallback localStorage** : Fonctionne hors connexion, les données sont synchronisées dès que vous vous connectez
 - 📱 **Design responsive** : Optimisé mobile et desktop
-- ⚡ **Performance optimisée** : React.memo et lazy loading
+- ⚡ **Performance optimisée** : React.memo, useCallback, useMemo, lazy loading
 - 🧪 **Tests complets** : Couverture de tests pour les hooks et composants
 
 ## 🚀 Technologies Utilisées
@@ -24,6 +28,7 @@ Une application React moderne pour suivre vos séances d'entraînement avec une 
 - **Styling** : Tailwind CSS
 - **Icônes** : Lucide React
 - **Tests** : Jest, React Testing Library
+- **Cloud** : Firebase Auth & Firestore
 - **Build** : Create React App
 - **CI/CD** : GitHub Actions
 - **Déploiement** : Vercel
@@ -42,17 +47,35 @@ npm install
 npm start
 ```
 
-## 🧪 Tests
+## 🔑 Authentification & Cloud Sync
 
-```bash
-# Lancer tous les tests
-npm test
+- **Connexion Google** : Cliquez sur "Connexion" puis "Continuer avec Google".
+- **Synchronisation automatique** : Vos séances et favoris sont stockés dans Firestore, liés à votre compte Google.
+- **Migration automatique** : Si des données locales sont détectées, l'application vous propose de les migrer dans le cloud à la première connexion.
+- **Compatibilité multi-appareils** : Retrouvez vos données sur tous vos appareils en vous connectant avec le même compte Google.
 
-# Lancer les tests avec couverture
-npm run test:coverage
+## 🌍 Internationalisation
 
-# Lancer le linting
-npm run lint
+- Interface disponible en français et anglais
+- Sélecteur de langue dans le header
+- Facile à étendre pour d'autres langues
+
+## 🛡️ Sécurité Firestore
+
+- Les règles Firestore doivent restreindre l'accès aux documents à l'utilisateur authentifié (`userId == request.auth.uid`)
+- Exemple de règle :
+
+```js
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /workouts/{workoutId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    match /favorites/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
 ```
 
 ## 🏗️ Architecture
@@ -60,24 +83,15 @@ npm run lint
 ```
 src/
 ├── components/          # Composants React réutilisables
-│   ├── Header.jsx      # En-tête de l'application
+│   ├── Header.jsx      # En-tête de l'application (avec sélecteur de langue)
 │   ├── Navigation.jsx  # Navigation entre les onglets
-│   ├── WorkoutList.jsx # Liste des exercices
+│   ├── WorkoutList.jsx # Liste des exercices (synchro Firestore)
 │   ├── CalendarView.jsx # Vue calendrier
 │   └── StatsView.jsx   # Vue statistiques
-├── hooks/              # Hooks personnalisés
-│   ├── useWorkouts.js  # Gestion des séances
-│   └── useExercises.js # Gestion des exercices
-├── utils/              # Utilitaires
-│   ├── storage.js      # Gestion du localStorage
-│   ├── workoutUtils.js # Utilitaires pour les workouts
-│   └── exerciseDatabase.js # Base de données d'exercices
+├── hooks/              # Hooks personnalisés (useWorkouts synchronisé cloud)
+├── utils/              # Utilitaires (Firestore, localStorage, migration)
 ├── constants/          # Constantes de l'application
-│   └── index.js        # Toutes les constantes
-└── __tests__/          # Tests unitaires
-    ├── useWorkouts.test.js
-    ├── useExercises.test.js
-    └── ...
+└── App.js              # Composant principal
 ```
 
 ## 🎯 Fonctionnalités Détaillées
@@ -86,7 +100,7 @@ src/
 - Ajout d'exercices par groupe musculaire
 - Gestion des séries, répétitions et poids
 - Calcul automatique des statistiques
-- Sauvegarde automatique
+- Sauvegarde automatique cloud/local
 
 ### Vue Calendrier
 - Affichage des séances par date
@@ -99,22 +113,26 @@ src/
 - Durée moyenne des séances
 - Historique des dernières séances
 
-## 🔧 Scripts Disponibles
+### Favoris
+- Ajout/suppression d'exercices favoris
+- Favoris synchronisés avec Firestore
+
+### Internationalisation
+- Interface multilingue (fr/en)
+- Sélecteur de langue dans le header
+
+## 🧪 Tests
 
 ```bash
-npm start          # Lancer en mode développement
-npm run build      # Build de production
-npm test           # Lancer les tests
-npm run lint       # Vérifier le code
-npm run format     # Formater le code
+# Lancer tous les tests
+npm test
+
+# Lancer les tests avec couverture
+npm run test:coverage
+
+# Lancer le linting
+npm run lint
 ```
-
-## 📊 Métriques de Qualité
-
-- **Couverture de tests** : >90%
-- **Performance Lighthouse** : 95+
-- **Accessibilité** : WCAG 2.1 AA
-- **SEO** : Optimisé
 
 ## 🚀 Déploiement
 
@@ -148,34 +166,8 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 - [Tailwind CSS](https://tailwindcss.com/) pour le styling
 - [Lucide](https://lucide.dev/) pour les icônes
 - [Vercel](https://vercel.com/) pour l'hébergement
+- [Firebase](https://firebase.google.com/) pour l'authentification et la base de données cloud
 
 ---
 
 ⭐ Si ce projet vous plaît, n'hésitez pas à le star sur GitHub !
-
----
-
-## ⚠️ Note sur la sécurité des dépendances
-
-> Ce projet utilise Create React App (CRA) pour le build et le développement. Certaines vulnérabilités npm signalées par `npm audit` proviennent de dépendances internes à CRA (ex: `react-scripts`, `webpack-dev-server`, etc.). Elles n'affectent pas le code de production livré à l'utilisateur, mais concernent l'environnement de développement. Pour un usage professionnel ou long terme, il est recommandé de migrer vers [Vite](https://vitejs.dev/) ou [Next.js](https://nextjs.org/) afin de bénéficier d'un écosystème plus moderne et sécurisé.
-
----
-
-## 🚀 Axes d'amélioration possibles
-
-Voici quelques idées pour faire évoluer et professionnaliser encore plus l'application :
-
-- **Migration vers Vite ou Next.js** : pour un build/dev plus rapide, moderne et sécurisé
-- **Authentification & Cloud Sync** : permettre la connexion utilisateur et la synchronisation des données (Firebase, Supabase...)
-- **Mode sombre / Thèmes** : personnalisation de l'interface
-- **Notifications push** : rappels d'entraînement
-- **Export/Import de données** : CSV, PDF, partage de séances
-- **Progression visuelle** : graphiques avancés, badges, objectifs
-- **Accessibilité avancée** : navigation clavier, contraste, ARIA
-- **Tests E2E** : Cypress ou Playwright pour tester les parcours utilisateur
-- **Storybook** : documentation interactive des composants UI
-- **Internationalisation (i18n)** : support multilingue
-- **PWA avancée** : installation, offline, synchronisation background
-- **API REST/GraphQL** : ouverture à d'autres apps ou intégrations
-
-N'hésitez pas à forker et proposer vos propres améliorations !
