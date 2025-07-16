@@ -67,23 +67,23 @@ export async function createChallengeInFirebase(challengeData) {
 export async function getChallengesFromFirebase(userId) {
   try {
     const challengesRef = collection(db, 'challenges');
-    const q = query(
-      challengesRef,
-      where('senderId', '==', userId),
-      orderBy('createdAt', 'desc')
-    );
-    const querySnapshot = await getDocs(q);
     
-    const sentChallenges = querySnapshot.docs.map(doc => ({
+    // Récupérer les défis envoyés
+    const sentQuery = query(
+      challengesRef,
+      where('senderId', '==', userId)
+    );
+    const sentSnapshot = await getDocs(sentQuery);
+    
+    const sentChallenges = sentSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
 
-    // Récupérer aussi les défis reçus
+    // Récupérer les défis reçus
     const receivedQuery = query(
       challengesRef,
-      where('receiverId', '==', userId),
-      orderBy('createdAt', 'desc')
+      where('receiverId', '==', userId)
     );
     const receivedSnapshot = await getDocs(receivedQuery);
     
@@ -92,7 +92,13 @@ export async function getChallengesFromFirebase(userId) {
       ...doc.data()
     }));
 
-    return [...sentChallenges, ...receivedChallenges];
+    // Combiner et trier par date de création (plus récent en premier)
+    const allChallenges = [...sentChallenges, ...receivedChallenges];
+    return allChallenges.sort((a, b) => {
+      const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt || 0);
+      const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt || 0);
+      return dateB - dateA;
+    });
   } catch (error) {
     console.error('Erreur lors de la récupération des défis:', error);
     return [];

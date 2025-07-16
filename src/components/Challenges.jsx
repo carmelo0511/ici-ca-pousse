@@ -16,7 +16,6 @@ const Challenges = ({ user }) => {
     getChallengeScore, 
     formatScore, 
     getChallengeStatus,
-    getDetailedStats,
     getSentChallenges,
     getReceivedChallenges,
     getAllUserChallenges,
@@ -103,10 +102,11 @@ const Challenges = ({ user }) => {
     ).length;
     const activeChallenges = totalChallenges - completedChallenges;
     
-    const victories = challenges.filter(challenge => {
-      const status = getChallengeStatus(challenge);
-      return status.status === 'victory';
-    }).length;
+    // Pour l'instant, on compte les défis avec status 'completed' comme victoires
+    // TODO: Implémenter un calcul plus précis des victoires
+    const victories = challenges.filter(challenge => 
+      challenge.status === 'completed'
+    ).length;
     
     const winRate = totalChallenges > 0 ? Math.round((victories / totalChallenges) * 100) : 0;
     
@@ -120,7 +120,6 @@ const Challenges = ({ user }) => {
   };
 
   const stats = getChallengeStats();
-  const detailedStats = getDetailedStats();
   const sentChallenges = getSentChallenges();
   const receivedChallenges = getReceivedChallenges();
   const allUserChallenges = getAllUserChallenges();
@@ -132,8 +131,8 @@ const Challenges = ({ user }) => {
       
       // Notifier le créateur du défi
       const challenge = challenges.find(c => c.id === challengeId);
-      if (challenge && challenge.createdBy) {
-        await createNotification(challenge.createdBy, {
+      if (challenge && challenge.senderId) {
+        await createNotification(challenge.senderId, {
           type: NOTIFICATION_TYPES.CHALLENGE_UPDATE,
           title: 'Défi accepté !',
           message: `${user.displayName || user.email} a accepté ton défi de ${getChallengeTypeLabel(challenge.type)} !`,
@@ -153,8 +152,8 @@ const Challenges = ({ user }) => {
       
       // Notifier le créateur du défi
       const challenge = challenges.find(c => c.id === challengeId);
-      if (challenge && challenge.createdBy) {
-        await createNotification(challenge.createdBy, {
+      if (challenge && challenge.senderId) {
+        await createNotification(challenge.senderId, {
           type: NOTIFICATION_TYPES.CHALLENGE_UPDATE,
           title: 'Défi refusé',
           message: `${user.displayName || user.email} a refusé ton défi de ${getChallengeTypeLabel(challenge.type)}.`,
@@ -174,8 +173,8 @@ const Challenges = ({ user }) => {
       
       // Notifier le destinataire du défi
       const challenge = challenges.find(c => c.id === challengeId);
-      if (challenge && challenge.friend.uid) {
-        await createNotification(challenge.friend.uid, {
+      if (challenge && challenge.receiverId) {
+        await createNotification(challenge.receiverId, {
           type: NOTIFICATION_TYPES.CHALLENGE_UPDATE,
           title: 'Défi annulé',
           message: `${user.displayName || user.email} a annulé le défi de ${getChallengeTypeLabel(challenge.type)}.`,
@@ -280,7 +279,7 @@ const Challenges = ({ user }) => {
       {/* Statistiques détaillées */}
       {challenges.length > 0 && (
         <div className="mb-6">
-          <ChallengeStats stats={detailedStats} />
+          <ChallengeStats stats={stats} />
         </div>
       )}
 
@@ -302,7 +301,7 @@ const Challenges = ({ user }) => {
             {allUserChallenges.map(challenge => {
               const myScore = getChallengeScore(challenge);
               const status = getChallengeStatus(challenge);
-              const isSentByMe = challenge.createdBy === user?.uid;
+              const isSentByMe = challenge.senderId === user?.uid;
               const isPending = challenge.status === 'pending';
               
               return (
@@ -313,7 +312,7 @@ const Challenges = ({ user }) => {
                       <div>
                         <h3 className="font-semibold">
                           {isSentByMe 
-                            ? `Défi vs ${challenge.friend.displayName || challenge.friend.email || 'Utilisateur'}`
+                            ? `Défi vs ${challenge.receiverName || 'Utilisateur'}`
                             : `Défi de ${challenge.senderName || 'Un ami'}`
                           }
                         </h3>
