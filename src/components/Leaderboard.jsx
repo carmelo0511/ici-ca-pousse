@@ -92,29 +92,17 @@ function Leaderboard({ user, onShowComparison }) {
 
   const exerciseRanking = selectedExercise ? getExerciseRanking(selectedExercise) : [];
 
-  // Icônes pour les métriques
-  const getMetricIcon = (metric) => {
-    switch (metric) {
-      case METRICS.WORKOUTS: return <Calendar className="h-4 w-4" />;
-      case METRICS.DURATION: return <Clock className="h-4 w-4" />;
-      case METRICS.TOTAL_WEIGHT: return <Dumbbell className="h-4 w-4" />;
-      case METRICS.TOTAL_REPS: return <Repeat className="h-4 w-4" />;
-      case METRICS.TOTAL_SETS: return <Target className="h-4 w-4" />;
-      default: return <Trophy className="h-4 w-4" />;
-    }
-  };
-
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-lg space-y-6">
+    <div className="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-2xl shadow-lg space-y-4 md:space-y-6">
       {/* En-tête */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+        <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           🏆 Leaderboard
         </h2>
         {friends.length > 0 && (
           <button
             onClick={onShowComparison}
-            className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+            className="flex items-center justify-center space-x-2 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium w-full sm:w-auto"
           >
             <BarChart3 className="h-4 w-4" />
             <span>Comparaison détaillée</span>
@@ -123,14 +111,14 @@ function Leaderboard({ user, onShowComparison }) {
       </div>
 
       {/* Sélecteurs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         {/* Période */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Période</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Période</label>
           <select
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+            className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
           >
             <option value={PERIODS.WEEK}>Cette semaine</option>
             <option value={PERIODS.MONTH}>Ce mois</option>
@@ -141,11 +129,11 @@ function Leaderboard({ user, onShowComparison }) {
 
         {/* Métrique */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Métrique</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Métrique</label>
           <select
             value={selectedMetric}
             onChange={(e) => setSelectedMetric(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+            className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
           >
             <option value={METRICS.WORKOUTS}>Séances</option>
             <option value={METRICS.DURATION}>Temps total</option>
@@ -156,12 +144,12 @@ function Leaderboard({ user, onShowComparison }) {
         </div>
 
         {/* Exercice spécifique */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Exercice spécifique</label>
+        <div className="sm:col-span-2 lg:col-span-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Exercice spécifique</label>
           <select
             value={selectedExercise || ''}
             onChange={(e) => setSelectedExercise(e.target.value || null)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+            className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
           >
             <option value="">Tous les exercices</option>
             {getAvailableExercises().map(exercise => (
@@ -173,53 +161,53 @@ function Leaderboard({ user, onShowComparison }) {
 
       {/* Affichage du classement */}
       {loading ? (
-        <div className="text-center py-8">
+        <div className="text-center py-6 md:py-8">
           <div className="text-gray-400 text-sm">Chargement du classement...</div>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           {/* Titre du classement */}
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-800">
+            <h3 className="text-base md:text-lg font-semibold text-gray-800 px-2">
               {getPeriodLabel(selectedPeriod)} - {getMetricLabel(selectedMetric)}
               {selectedExercise && ` - ${selectedExercise}`}
             </h3>
           </div>
 
           {/* Classement principal */}
-          <div className="bg-gray-50 rounded-xl p-4">
-            <div className="space-y-3">
+          <div className="bg-gray-50 rounded-xl p-3 md:p-4">
+            <div className="space-y-2 md:space-y-3">
               {selectedExercise ? (
                 // Classement par exercice spécifique
                 exerciseRanking.length > 0 ? (
                   exerciseRanking.map((user, idx) => (
                     <div
                       key={user.uid}
-                      className={`flex items-center justify-between p-4 rounded-lg ${
+                      className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 ${
                         user.uid === user?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
                       }`}
                     >
-                      <div className="flex items-center space-x-3">
-                        <div className="text-2xl">{user.medal || `#${user.rank}`}</div>
-                        <div>
-                          <div className="font-semibold">{user.displayName}</div>
-                          <div className="text-sm text-gray-600">
+                      <div className="flex items-center space-x-2 md:space-x-3">
+                        <div className="text-xl md:text-2xl">{user.medal || `#${user.rank}`}</div>
+                        <div className="min-w-0 flex-1">
+                          <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
+                          <div className="text-xs md:text-sm text-gray-600">
                             {user.stats?.count || 0} fois • Meilleur: {user.stats?.bestWeight || 0}kg
                           </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="font-bold text-lg text-indigo-600">
+                      <div className="text-right sm:text-right">
+                        <div className="font-bold text-base md:text-lg text-indigo-600">
                           {formatMetricValue(user.value, METRICS.EXERCISE_SPECIFIC)}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-xs md:text-sm text-gray-500">
                           {user.stats?.totalReps || 0} reps total
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-6 md:py-8 text-gray-500 text-sm">
                     Aucune donnée pour cet exercice sur cette période
                   </div>
                 )
@@ -229,31 +217,31 @@ function Leaderboard({ user, onShowComparison }) {
                   currentRanking.map((user, idx) => (
                     <div
                       key={user.uid}
-                      className={`flex items-center justify-between p-4 rounded-lg ${
+                      className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 ${
                         user.uid === user?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
                       }`}
                     >
-                      <div className="flex items-center space-x-3">
-                        <div className="text-2xl">{user.medal || `#${user.rank}`}</div>
-                        <div>
-                          <div className="font-semibold">{user.displayName}</div>
-                          <div className="text-sm text-gray-600">
+                      <div className="flex items-center space-x-2 md:space-x-3">
+                        <div className="text-xl md:text-2xl">{user.medal || `#${user.rank}`}</div>
+                        <div className="min-w-0 flex-1">
+                          <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
+                          <div className="text-xs md:text-sm text-gray-600">
                             {user.stats.totalWorkouts} séances • {user.stats.averageWorkoutDuration}min/séance
                           </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="font-bold text-lg text-indigo-600">
+                      <div className="text-right sm:text-right">
+                        <div className="font-bold text-base md:text-lg text-indigo-600">
                           {formatMetricValue(user.value, selectedMetric)}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-xs md:text-sm text-gray-500">
                           {user.stats.workoutFrequency} séances/semaine
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-6 md:py-8 text-gray-500 text-sm">
                     Aucune donnée sur cette période
                   </div>
                 )
@@ -263,42 +251,42 @@ function Leaderboard({ user, onShowComparison }) {
 
           {/* Statistiques supplémentaires */}
           {!selectedExercise && currentRanking.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 md:p-4 rounded-xl border border-green-200">
                 <div className="flex items-center space-x-2 mb-2">
-                  <Trophy className="h-5 w-5 text-green-600" />
-                  <span className="font-semibold text-green-800">Champion</span>
+                  <Trophy className="h-4 w-4 md:h-5 md:w-5 text-green-600" />
+                  <span className="font-semibold text-green-800 text-sm md:text-base">Champion</span>
                 </div>
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-lg md:text-2xl font-bold text-green-600 truncate">
                   {currentRanking[0]?.displayName}
                 </div>
-                <div className="text-sm text-green-600">
+                <div className="text-xs md:text-sm text-green-600">
                   {formatMetricValue(currentRanking[0]?.value, selectedMetric)}
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 md:p-4 rounded-xl border border-blue-200">
                 <div className="flex items-center space-x-2 mb-2">
-                  <Target className="h-5 w-5 text-blue-600" />
-                  <span className="font-semibold text-blue-800">Ton rang</span>
+                  <Target className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
+                  <span className="font-semibold text-blue-800 text-sm md:text-base">Ton rang</span>
                 </div>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-lg md:text-2xl font-bold text-blue-600">
                   #{currentRanking.find(u => u.uid === user?.uid)?.rank || 'N/A'}
                 </div>
-                <div className="text-sm text-blue-600">
+                <div className="text-xs md:text-sm text-blue-600">
                   {formatMetricValue(currentRanking.find(u => u.uid === user?.uid)?.value || 0, selectedMetric)}
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200">
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-3 md:p-4 rounded-xl border border-purple-200 sm:col-span-2 lg:col-span-1">
                 <div className="flex items-center space-x-2 mb-2">
-                  <BarChart3 className="h-5 w-5 text-purple-600" />
-                  <span className="font-semibold text-purple-800">Participants</span>
+                  <BarChart3 className="h-4 w-4 md:h-5 md:w-5 text-purple-600" />
+                  <span className="font-semibold text-purple-800 text-sm md:text-base">Participants</span>
                 </div>
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-lg md:text-2xl font-bold text-purple-600">
                   {currentRanking.length}
                 </div>
-                <div className="text-sm text-purple-600">
+                <div className="text-xs md:text-sm text-purple-600">
                   actifs sur cette période
                 </div>
               </div>
