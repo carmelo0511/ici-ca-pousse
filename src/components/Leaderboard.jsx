@@ -16,7 +16,7 @@ import {
 import BadgeList from './Badges';
 import ProfilePicture from './ProfilePicture';
 
-function Leaderboard({ user, onShowComparison }) {
+function Leaderboard({ user, onShowComparison, onShowTeam }) {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState(PERIODS.WEEK);
@@ -199,6 +199,8 @@ function Leaderboard({ user, onShowComparison }) {
                           size="sm" 
                           useBadgeAsProfile={!!user.selectedBadge}
                           selectedBadge={user.selectedBadge}
+                          showTeamButton={true}
+                          onTeamClick={() => onShowTeam && onShowTeam(user)}
                         />
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
@@ -242,6 +244,8 @@ function Leaderboard({ user, onShowComparison }) {
                           size="sm" 
                           useBadgeAsProfile={!!user.selectedBadge}
                           selectedBadge={user.selectedBadge}
+                          showTeamButton={true}
+                          onTeamClick={() => onShowTeam && onShowTeam(user)}
                         />
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
