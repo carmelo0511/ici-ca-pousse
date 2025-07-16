@@ -19,6 +19,7 @@ import FriendsList from './components/FriendsList';
 import LeaderboardView from './components/LeaderboardView';
 import Challenges from './components/Challenges';
 import Badges from './components/Badges';
+import Notifications from './components/Notifications';
 import { useChallenges } from './hooks/useChallenges';
 import { useFriends } from './hooks/useFriends';
 
@@ -219,6 +220,8 @@ function App() {
         return <Challenges user={user} />;
       case 'badges':
         return <Badges workouts={workouts} challenges={challenges} friends={friends} />;
+      case 'notifications':
+        return <Notifications user={user} />;
       default:
         return null;
     }

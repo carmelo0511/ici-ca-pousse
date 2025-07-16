@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award } from 'lucide-react';
+import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, Bell } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
@@ -12,7 +12,8 @@ const Navigation = ({ activeTab, setActiveTab, className = '' }) => {
     { id: 'friends', icon: User, label: 'Amis' },
     { id: 'leaderboard', icon: Trophy, label: 'Classement' },
     { id: 'challenges', icon: Zap, label: 'Défis' },
-    { id: 'badges', icon: Award, label: 'Badges' }
+    { id: 'badges', icon: Award, label: 'Badges' },
+    { id: 'notifications', icon: Bell, label: 'Notifications' }
   ];
 
   return (

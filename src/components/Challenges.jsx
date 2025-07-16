@@ -6,6 +6,7 @@ import GradientButton from './GradientButton';
 import Modal from './Modal';
 import Toast from './Toast';
 import ChallengeStats from './ChallengeStats';
+import { sendChallengeNotification } from '../utils/notifications';
 
 const Challenges = ({ user }) => {
   const { friends } = useFriends(user);
@@ -39,7 +40,7 @@ const Challenges = ({ user }) => {
     { value: 30, label: '1 mois' }
   ];
 
-  const handleCreateChallenge = () => {
+  const handleCreateChallenge = async () => {
     if (!selectedFriend) {
       setToast({ message: 'Sélectionne un ami', type: 'error' });
       return;
@@ -51,10 +52,19 @@ const Challenges = ({ user }) => {
       friend: selectedFriend
     };
 
-    createChallenge(challengeData);
+    const newChallenge = createChallenge(challengeData);
+    
+    // Envoyer une notification à l'ami
+    try {
+      await sendChallengeNotification(newChallenge, user, selectedFriend.uid);
+      setToast({ message: 'Défi créé et notification envoyée !', type: 'success' });
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi de la notification:', error);
+      setToast({ message: 'Défi créé mais erreur de notification', type: 'warning' });
+    }
+    
     setShowCreateModal(false);
     setSelectedFriend(null);
-    setToast({ message: 'Défi créé avec succès !', type: 'success' });
   };
 
   const getChallengeTypeLabel = (type) => {
@@ -173,7 +183,7 @@ const Challenges = ({ user }) => {
                   <div className="flex items-center space-x-3">
                     <div className="text-2xl">{getChallengeIcon(challenge.type)}</div>
                     <div>
-                      <h3 className="font-semibold">Défi vs {challenge.friend.name}</h3>
+                      <h3 className="font-semibold">Défi vs {challenge.friend.displayName || challenge.friend.email || 'Utilisateur'}</h3>
                       <p className="text-sm text-gray-600">
                         {getChallengeTypeLabel(challenge.type)} • {challenge.duration} jours
                       </p>
@@ -217,7 +227,7 @@ const Challenges = ({ user }) => {
                 <option value="">Sélectionner un ami</option>
                 {friends.map(friend => (
                   <option key={friend.uid} value={friend.uid}>
-                    {friend.name}
+                    {friend.displayName || friend.email || 'Utilisateur'}
                   </option>
                 ))}
               </select>
