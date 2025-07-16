@@ -3,12 +3,14 @@ import Card from './Card';
 import { Trophy, Lock, TrendingUp } from 'lucide-react';
 import Toast from './Toast';
 import { useBadges } from '../hooks/useBadges';
-import { BADGE_CONFIG, BADGE_TYPES } from './Badges';
+import { BADGE_CONFIG } from './Badges';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../utils/firebase';
 
 const BadgesPage = ({ workouts, challenges, friends, user }) => {
   const [showLocked, setShowLocked] = useState(false);
   const [toast, setToast] = useState(null);
-  const { badges, badgeCount } = useBadges(workouts, challenges, user);
+  const { badges, badgeCount, selectedBadge } = useBadges(workouts, challenges, user);
 
   // Tous les badges disponibles
   const allBadges = Object.keys(BADGE_CONFIG).map(type => ({
@@ -31,9 +33,43 @@ const BadgesPage = ({ workouts, challenges, friends, user }) => {
     }
   }, [badgeCount, unlockedBadges]);
 
+  const handleBadgeSelect = async (badgeId) => {
+    try {
+      // Mettre à jour le badge sélectionné dans Firebase
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, {
+        selectedBadge: badgeId
+      });
+      
+      if (badgeId) {
+        setToast({ 
+          message: `Badge "${BADGE_CONFIG[badgeId]?.name}" sélectionné comme photo de profil !`, 
+          type: 'success' 
+        });
+      } else {
+        setToast({ 
+          message: 'Badge retiré du profil', 
+          type: 'success' 
+        });
+      }
+    } catch (error) {
+      console.error('Erreur lors de la sélection du badge:', error);
+      setToast({ 
+        message: 'Erreur lors de la sélection du badge', 
+        type: 'error' 
+      });
+    }
+  };
+
   const renderBadge = (badge, isUnlocked = true) => {
+    const isSelected = selectedBadge === badge.id;
+    
     return (
-      <Card key={badge.id} className={`relative overflow-hidden ${!isUnlocked ? 'opacity-60' : ''}`}>
+      <Card 
+        key={badge.id} 
+        className={`relative overflow-hidden ${!isUnlocked ? 'opacity-60' : ''} ${isSelected ? 'ring-2 ring-indigo-500' : ''}`}
+        onClick={isUnlocked ? () => handleBadgeSelect(badge.id) : undefined}
+      >
         <div className="flex items-center space-x-4">
           <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl ${badge.color} ${!isUnlocked ? 'bg-gray-400' : ''}`}>
             {isUnlocked ? badge.icon : <Lock className="w-8 h-8 text-white" />}
@@ -41,10 +77,21 @@ const BadgesPage = ({ workouts, challenges, friends, user }) => {
           <div className="flex-1">
             <h3 className="font-semibold text-lg">{badge.name}</h3>
             <p className="text-sm text-gray-600 mb-2">{badge.description}</p>
+            {isSelected && (
+              <div className="text-indigo-600 text-sm font-medium">✓ Photo de profil active</div>
+            )}
           </div>
           {isUnlocked && (
-            <div className="text-green-500">
-              <Trophy className="w-6 h-6" />
+            <div className="flex items-center space-x-2">
+              {isSelected ? (
+                <div className="text-indigo-500">
+                  <Trophy className="w-6 h-6" />
+                </div>
+              ) : (
+                <div className="text-green-500">
+                  <Trophy className="w-6 h-6" />
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -87,34 +134,45 @@ const BadgesPage = ({ workouts, challenges, friends, user }) => {
         </Card>
       </div>
 
-      {/* Onglets */}
-      <div className="flex space-x-1 mb-6 bg-gray-100 p-1 rounded-lg">
-        <button
-          onClick={() => setShowLocked(false)}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-            !showLocked
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
-          }`}
-        >
-          <div className="flex items-center justify-center space-x-2">
-            <Trophy className="h-4 w-4" />
-            <span>Débloqués ({unlockedBadges.length})</span>
-          </div>
-        </button>
-        <button
-          onClick={() => setShowLocked(true)}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-            showLocked
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
-          }`}
-        >
-          <div className="flex items-center justify-center space-x-2">
-            <Lock className="h-4 w-4" />
-            <span>À débloquer ({lockedBadges.length})</span>
-          </div>
-        </button>
+      {/* Onglets et sélection de badge */}
+      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-6">
+        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg flex-1">
+          <button
+            onClick={() => setShowLocked(false)}
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+              !showLocked
+                ? 'bg-white text-indigo-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-800'
+            }`}
+          >
+            <div className="flex items-center justify-center space-x-2">
+              <Trophy className="h-4 w-4" />
+              <span>Débloqués ({unlockedBadges.length})</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setShowLocked(true)}
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+              showLocked
+                ? 'bg-white text-indigo-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-800'
+            }`}
+          >
+            <div className="flex items-center justify-center space-x-2">
+              <Lock className="h-4 w-4" />
+              <span>À débloquer ({lockedBadges.length})</span>
+            </div>
+          </button>
+        </div>
+        
+        {selectedBadge && (
+          <button
+            onClick={() => handleBadgeSelect(null)}
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+          >
+            Retirer le badge de profil
+          </button>
+        )}
       </div>
 
       {/* Liste des badges */}

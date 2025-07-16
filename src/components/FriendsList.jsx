@@ -3,6 +3,7 @@ import { useFriends } from '../hooks/useFriends';
 import GradientButton from './GradientButton';
 import FriendProfile from './FriendProfile';
 import BadgeList from './Badges';
+import ProfilePicture from './ProfilePicture';
 
 function FriendsList({ user }) {
   const {
@@ -70,6 +71,12 @@ function FriendsList({ user }) {
             {pendingInvites.map(invite => (
               <li key={invite.uid} className="flex items-center justify-between bg-indigo-50 rounded-lg px-4 py-2">
                 <div className="flex items-center space-x-3">
+                  <ProfilePicture 
+                    user={invite} 
+                    size="sm" 
+                    useBadgeAsProfile={!!invite.selectedBadge}
+                    selectedBadge={invite.selectedBadge}
+                  />
                   <span className="font-medium">{invite.displayName || invite.email}</span>
                   {invite.badges && invite.badges.length > 0 && (
                     <BadgeList badges={invite.badges} size="xs" maxDisplay={2} />
@@ -98,6 +105,12 @@ function FriendsList({ user }) {
                   onClick={() => setSelectedFriend(friend)}
                   title="Voir le profil"
                 >
+                  <ProfilePicture 
+                    user={friend} 
+                    size="sm" 
+                    useBadgeAsProfile={!!friend.selectedBadge}
+                    selectedBadge={friend.selectedBadge}
+                  />
                   <div className="min-w-0 flex-1">
                     <div className="font-semibold text-indigo-700 group-hover:underline truncate">
                       {friend.displayName || friend.email}

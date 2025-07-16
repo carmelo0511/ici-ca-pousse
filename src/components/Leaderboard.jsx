@@ -14,6 +14,7 @@ import {
   getAllowedExercises
 } from '../utils/leaderboardUtils';
 import BadgeList from './Badges';
+import ProfilePicture from './ProfilePicture';
 
 function Leaderboard({ user, onShowComparison }) {
   const [stats, setStats] = useState([]);
@@ -46,6 +47,7 @@ function Leaderboard({ user, onShowComparison }) {
             uid: u.uid,
             displayName: u.displayName || u.email,
             badges: u.badges || [],
+            selectedBadge: u.selectedBadge || null,
             stats: userStats,
             workouts: workouts
           });
@@ -82,6 +84,7 @@ function Leaderboard({ user, onShowComparison }) {
           uid: user.uid,
           displayName: user.displayName,
           badges: user.badges,
+          selectedBadge: user.selectedBadge,
           value: value,
           stats: exerciseStats || null
         };
@@ -191,6 +194,12 @@ function Leaderboard({ user, onShowComparison }) {
                     >
                       <div className="flex items-center space-x-3 md:space-x-4">
                         <div className="text-xl md:text-2xl">{user.medal || `#${user.rank}`}</div>
+                        <ProfilePicture 
+                          user={user} 
+                          size="sm" 
+                          useBadgeAsProfile={!!user.selectedBadge}
+                          selectedBadge={user.selectedBadge}
+                        />
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
                           <div className="text-xs md:text-sm text-gray-600">
@@ -228,6 +237,12 @@ function Leaderboard({ user, onShowComparison }) {
                     >
                       <div className="flex items-center space-x-3 md:space-x-4">
                         <div className="text-xl md:text-2xl">{user.medal || `#${user.rank}`}</div>
+                        <ProfilePicture 
+                          user={user} 
+                          size="sm" 
+                          useBadgeAsProfile={!!user.selectedBadge}
+                          selectedBadge={user.selectedBadge}
+                        />
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
                           <div className="text-xs md:text-sm text-gray-600">

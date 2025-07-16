@@ -115,6 +115,7 @@ export function useBadges(workouts, challenges, user) {
   return {
     badges,
     badgeCount,
-    hasBadge: (badgeType) => badges.includes(badgeType)
+    hasBadge: (badgeType) => badges.includes(badgeType),
+    selectedBadge: user?.selectedBadge || null
   };
 } 

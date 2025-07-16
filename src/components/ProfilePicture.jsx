@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, User } from 'lucide-react';
+import { BADGE_CONFIG } from './Badges';
 
 // Composant pour afficher une photo de profil
 function ProfilePicture({ 
@@ -8,7 +9,9 @@ function ProfilePicture({
   showBadges = false, 
   badges = [], 
   onClick = null,
-  className = '' 
+  className = '',
+  useBadgeAsProfile = false,
+  selectedBadge = null
 }) {
   const [imageError, setImageError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +36,9 @@ function ProfilePicture({
 
   const hasProfilePicture = user?.photoURL && !imageError;
   const displayName = user?.displayName || user?.email || 'Utilisateur';
-  const initials = displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  
+  // Vérifier si on utilise un badge comme photo de profil
+  const badgeConfig = selectedBadge && BADGE_CONFIG[selectedBadge];
 
   const handleImageError = () => {
     console.warn('Erreur lors du chargement de la photo de profil:', user?.photoURL);
@@ -55,17 +60,20 @@ function ProfilePicture({
         className={`
           ${sizeClasses[size]} 
           ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}
-          rounded-full overflow-hidden border-2 border-gray-200 bg-gradient-to-br from-indigo-100 to-purple-100
+          rounded-full overflow-hidden border-2 border-gray-200 
+          ${useBadgeAsProfile && badgeConfig ? badgeConfig.color.replace('text-', 'bg-').replace('border-', 'bg-') : 'bg-gradient-to-br from-indigo-100 to-purple-100'}
           flex items-center justify-center font-semibold text-gray-700
           ${isLoading ? 'animate-pulse' : ''}
         `}
         onClick={onClick}
       >
-        {hasProfilePicture ? (
+        {useBadgeAsProfile && badgeConfig ? (
+          <div className="text-2xl">{badgeConfig.icon}</div>
+        ) : hasProfilePicture ? (
           <>
             <img
               src={user.photoURL}
-              alt={`Photo de ${displayName}`}
+              alt={displayName}
               className="w-full h-full object-cover"
               onError={handleImageError}
               onLoad={handleImageLoad}
