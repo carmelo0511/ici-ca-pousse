@@ -1,4 +1,8 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { db, auth } from '../../utils/firebase';
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import {
   Calendar,
   Plus,
@@ -31,57 +35,98 @@ function WorkoutList({
   setSelectedMuscleGroup,
   addExerciseToWorkout
 }) {
+  const { t } = useTranslation();
+  const [user] = useAuthState(auth);
   // Ajout d'un état local pour le nom de l'exercice personnalisé
   const [customExerciseName, setCustomExerciseName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [favoriteExercises, setFavoriteExercises] = useState(() => {
-    // On peut stocker les favoris dans le localStorage pour persistance
-    try {
-      return JSON.parse(localStorage.getItem('favoriteExercises') || '[]');
-    } catch {
-      return [];
-    }
-  });
+  const [favoriteExercises, setFavoriteExercises] = useState([]);
 
-  // Sauvegarde des favoris à chaque changement
+  // Synchro favoris Firestore <-> localStorage
   useEffect(() => {
-    localStorage.setItem('favoriteExercises', JSON.stringify(favoriteExercises));
-  }, [favoriteExercises]);
+    if (user) {
+      const favRef = doc(db, 'favorites', user.uid);
+      // Ecoute temps réel
+      const unsubscribe = onSnapshot(favRef, (docSnap) => {
+        if (docSnap.exists()) {
+          setFavoriteExercises(docSnap.data().exercises || []);
+        } else {
+          setFavoriteExercises([]);
+        }
+      });
+      return unsubscribe;
+    } else {
+      // Fallback localStorage
+      try {
+        setFavoriteExercises(JSON.parse(localStorage.getItem('favoriteExercises') || '[]'));
+      } catch {
+        setFavoriteExercises([]);
+      }
+    }
+  }, [user]);
 
-  const toggleFavorite = (exercise) => {
+  // Sauvegarde favoris Firestore ou localStorage
+  useEffect(() => {
+    if (user) {
+      const favRef = doc(db, 'favorites', user.uid);
+      setDoc(favRef, { exercises: favoriteExercises }, { merge: true });
+    } else {
+      localStorage.setItem('favoriteExercises', JSON.stringify(favoriteExercises));
+    }
+  }, [favoriteExercises, user]);
+
+  // Migration favoris locaux -> cloud
+  useEffect(() => {
+    if (user) {
+      const localFavs = JSON.parse(localStorage.getItem('favoriteExercises') || '[]');
+      if (localFavs.length > 0) {
+        const favRef = doc(db, 'favorites', user.uid);
+        setDoc(favRef, { exercises: localFavs }, { merge: true });
+        localStorage.setItem('favoriteExercises', '[]');
+      }
+    }
+  }, [user]);
+
+  const toggleFavorite = useCallback((exercise) => {
     setFavoriteExercises((prev) =>
       prev.includes(exercise)
         ? prev.filter((e) => e !== exercise)
         : [...prev, exercise]
     );
-  };
+  }, []);
 
   // Filtrage dynamique des exercices selon la recherche
-  const filteredExercises = selectedMuscleGroup && searchTerm.trim()
-    ? exerciseDatabase[selectedMuscleGroup].filter(ex =>
-        ex.toLowerCase().includes(searchTerm.trim().toLowerCase())
-      )
-    : selectedMuscleGroup
-      ? exerciseDatabase[selectedMuscleGroup]
-      : [];
+  const filteredExercises = useMemo(() => (
+    selectedMuscleGroup && searchTerm.trim()
+      ? exerciseDatabase[selectedMuscleGroup].filter(ex =>
+          ex.toLowerCase().includes(searchTerm.trim().toLowerCase())
+        )
+      : selectedMuscleGroup
+        ? exerciseDatabase[selectedMuscleGroup]
+        : []
+  ), [selectedMuscleGroup, searchTerm]);
 
   // Exercices favoris du groupe sélectionné (filtrés)
-  const favoriteInGroup = selectedMuscleGroup
-    ? filteredExercises.filter(ex => favoriteExercises.includes(ex))
-    : [];
-  const nonFavoriteInGroup = selectedMuscleGroup
-    ? filteredExercises.filter(ex => !favoriteExercises.includes(ex))
-    : [];
+  const favoriteInGroup = useMemo(() => (
+    selectedMuscleGroup
+      ? filteredExercises.filter(ex => favoriteExercises.includes(ex))
+      : []
+  ), [selectedMuscleGroup, filteredExercises, favoriteExercises]);
+  const nonFavoriteInGroup = useMemo(() => (
+    selectedMuscleGroup
+      ? filteredExercises.filter(ex => !favoriteExercises.includes(ex))
+      : []
+  ), [selectedMuscleGroup, filteredExercises, favoriteExercises]);
 
   return (
     <div className="p-6 space-y-8">
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            🏋️ Nouvelle séance
+            {t('new_workout')}
           </h2>
           <p className="text-gray-600 mt-1">
-            Créez votre programme d'entraînement
+            {t('create_program')}
           </p>
         </div>
         <div className="flex items-center space-x-3 bg-white rounded-xl p-3 shadow-md border border-gray-100">
@@ -100,12 +145,12 @@ function WorkoutList({
           <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 rounded-2xl inline-block mb-6 shadow-lg">
             <Dumbbell className="h-12 w-12 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-3">Prêt à vous entraîner ? 💪</h3>
+          <h3 className="text-2xl font-bold text-gray-800 mb-3">{t('ready_to_train')}</h3>
           <p className="text-gray-600 mb-8 max-w-md mx-auto">
-            Commencez votre séance en ajoutant des exercices de musculation ou de cardio
+            {t('start_workout')}
           </p>
           <GradientButton icon={Plus} onClick={() => setShowAddExercise(true)}>
-            Ajouter un exercice
+            {t('add_exercise')}
           </GradientButton>
         </Card>
       ) : (
@@ -220,10 +265,10 @@ function WorkoutList({
 
           <div className="flex flex-row gap-4 justify-center items-center mt-4">
             <GradientButton icon={Plus} from="gray-100" to="gray-200" className="text-gray-700 border border-gray-200" onClick={() => setShowAddExercise(true)}>
-              Ajouter un exercice
+              {t('add_exercise')}
             </GradientButton>
             <GradientButton icon={Target} from="green-500" to="emerald-600" onClick={saveWorkout}>
-              Terminer la séance
+              {t('finish_workout')}
             </GradientButton>
           </div>
 
@@ -232,7 +277,7 @@ function WorkoutList({
               <div className="bg-blue-500 p-2 rounded-lg">
                 <Clock className="h-5 w-5 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-gray-800">Durée de la séance</h3>
+              <h3 className="text-lg font-bold text-gray-800">{t('workout_duration')}</h3>
             </div>
             <div className="flex items-center space-x-4">
               <input
@@ -244,10 +289,10 @@ function WorkoutList({
                 min="1"
                 max="300"
               />
-              <span className="text-gray-700 font-medium">minutes</span>
+              <span className="text-gray-700 font-medium">{t('minutes')}</span>
             </div>
             <p className="text-sm text-blue-600 mt-3 font-medium">
-              💡 Laissez vide pour une durée par défaut de 30 minutes
+              {t('default_duration_hint')}
             </p>
           </Card>
         </div>
@@ -265,7 +310,7 @@ function WorkoutList({
               </button>
             )}
             <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              {selectedMuscleGroup ? `💪 ${selectedMuscleGroup.charAt(0).toUpperCase() + selectedMuscleGroup.slice(1)}` : '🏃‍♂️ Choisir un groupe musculaire'}
+              {selectedMuscleGroup ? `💪 ${selectedMuscleGroup.charAt(0).toUpperCase() + selectedMuscleGroup.slice(1)}` : t('choose_muscle_group')}
             </h3>
           </div>
           <button
@@ -308,14 +353,14 @@ function WorkoutList({
                   type="text"
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
-                  placeholder="Rechercher un exercice..."
+                  placeholder={t('search_exercise')}
                   className="border-2 border-gray-200 rounded-xl px-4 py-2 w-full max-w-md text-center font-medium focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
                   autoFocus
                 />
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
                 {filteredExercises.length === 0 ? (
-                  <div className="col-span-2 sm:col-span-3 text-center text-gray-400 py-8">Aucun exercice trouvé</div>
+                  <div className="col-span-2 sm:col-span-3 text-center text-gray-400 py-8">{t('no_exercise_found')}</div>
                 ) : (
                   <>
                     {/* Affichage des favoris en haut */}
@@ -380,7 +425,7 @@ function WorkoutList({
                   type="text"
                   value={customExerciseName}
                   onChange={e => setCustomExerciseName(e.target.value)}
-                  placeholder="Nom de l'exercice personnalisé"
+                  placeholder={t('custom_exercise_name')}
                   className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full max-w-md text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
                 />
                 <button
@@ -394,7 +439,7 @@ function WorkoutList({
                   }}
                   className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 w-full max-w-md"
                 >
-                  Ajouter
+                  {t('add')}
                 </button>
               </div>
             </>

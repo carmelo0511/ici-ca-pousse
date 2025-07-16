@@ -11,6 +11,7 @@ import { useExercises } from './hooks/useExercises';
 import { createWorkout } from './utils/workoutUtils';
 import { exerciseDatabase } from './utils/exerciseDatabase';
 import { auth } from './utils/firebase';
+import { migrateLocalWorkoutsToCloud } from './utils/storage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -29,9 +30,10 @@ function App() {
   const [showWorkoutDetail, setShowWorkoutDetail] = useState(false);
   const [workoutDuration, setWorkoutDuration] = useState('');
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
+  const [showMigratePrompt, setShowMigratePrompt] = useState(false);
 
   // Hooks personnalisés
-  const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
+  const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
   const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
 
   useEffect(() => {
@@ -42,12 +44,46 @@ function App() {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      // Vérifier s'il y a des données locales à migrer
+      const localWorkouts = JSON.parse(localStorage.getItem('iciCaPousse_workouts') || '[]');
+      if (localWorkouts.length > 0) {
+        setShowMigratePrompt(true);
+      }
+    }
+  }, [user]);
+
   if (!authChecked) {
     return <div className="flex items-center justify-center min-h-screen">Chargement...</div>;
   }
 
   if (!user) {
     return <Auth />;
+  }
+
+  // Afficher la proposition de migration si besoin
+  if (showMigratePrompt) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-6">
+        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md text-center">
+          <h2 className="text-2xl font-bold mb-4">Migration des données</h2>
+          <p className="mb-6">Des séances locales ont été détectées. Voulez-vous les transférer sur votre compte cloud pour les retrouver sur tous vos appareils ?</p>
+          <button
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 mb-2"
+            onClick={handleMigrate}
+          >
+            Migrer mes séances locales vers le cloud
+          </button>
+          <button
+            className="text-gray-500 underline mt-2"
+            onClick={() => setShowMigratePrompt(false)}
+          >
+            Ignorer
+          </button>
+        </div>
+      </div>
+    );
   }
 
   // Fonctions utilitaires
@@ -98,6 +134,12 @@ function App() {
       setShowWorkoutDetail(false);
       showToastMsg('Séance supprimée !', 'error');
     }
+  };
+
+  const handleMigrate = async () => {
+    await migrateLocalWorkoutsToCloud(user, addWorkout);
+    setShowMigratePrompt(false);
+    showToastMsg('Migration des séances locales vers le cloud réussie !');
   };
 
   const renderActiveTab = () => {
