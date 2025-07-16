@@ -96,7 +96,7 @@ export const useChallenges = (user) => {
     }
   };
 
-  const getChallengeScore = async (challenge, userId) => {
+  const getChallengeScore = (challenge) => {
     try {
       const filteredWorkouts = getWorkoutsForDateRange(workouts, new Date(challenge.startDate), new Date(challenge.endDate));
 
@@ -163,12 +163,12 @@ export const useChallenges = (user) => {
     }
   };
 
-  const getChallengeStatus = async (challenge) => {
+  const getChallengeStatus = (challenge) => {
     const now = new Date();
     const endDate = new Date(challenge.endDate);
     
     if (now > endDate) {
-      const myScore = await getChallengeScore(challenge, user.uid);
+      const myScore = getChallengeScore(challenge);
       const friendScore = challenge.friendScore || 0;
       
       if (myScore > friendScore) return { status: 'victory', text: 'Victoire ! 🎉' };
