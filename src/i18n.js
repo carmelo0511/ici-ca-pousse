@@ -169,7 +169,16 @@ const resources = {
       "september": "Septembre",
       "october": "Octobre",
       "november": "Novembre",
-      "december": "Décembre"
+      "december": "Décembre",
+      "pectoraux": "Pectoraux",
+      "dos": "Dos",
+      "jambes": "Jambes",
+      "abdos": "Abdos",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "épaules": "Épaules",
+      "cardio": "Cardio",
+      "calendar": "Calendrier"
     }
   },
   en: {
@@ -338,7 +347,16 @@ const resources = {
       "september": "September",
       "october": "October",
       "november": "November",
-      "december": "December"
+      "december": "December",
+      "pectoraux": "Chest",
+      "dos": "Back",
+      "jambes": "Legs",
+      "abdos": "Abs",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "épaules": "Shoulders",
+      "cardio": "Cardio",
+      "calendar": "Calendar"
     }
   }
 };
