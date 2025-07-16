@@ -7,8 +7,8 @@ import Modal from './Modal';
 import Toast from './Toast';
 import ChallengeStats from './ChallengeStats';
 
-const Challenges = () => {
-  const { friends } = useFriends();
+const Challenges = ({ user }) => {
+  const { friends } = useFriends(user);
   const { 
     challenges, 
     createChallenge, 
@@ -16,7 +16,7 @@ const Challenges = () => {
     formatScore, 
     getChallengeStatus,
     getDetailedStats
-  } = useChallenges();
+  } = useChallenges(user);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [challengeType, setChallengeType] = useState('workouts');
@@ -201,21 +201,30 @@ const Challenges = () => {
           
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Choisir un ami</label>
-            <select 
-              className="w-full p-3 border border-gray-300 rounded-lg"
-              value={selectedFriend?.id || ''}
-              onChange={(e) => {
-                const friend = friends.find(f => f.id === e.target.value);
+            {friends.length === 0 ? (
+              <div className="p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                Aucun ami trouvé. Ajoute des amis depuis l'onglet "Amis" d'abord !
+              </div>
+            ) : (
+              <select 
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                value={selectedFriend?.uid || ''}
+                              onChange={(e) => {
+                const friend = friends.find(f => f.uid === e.target.value);
                 setSelectedFriend(friend);
               }}
-            >
-              <option value="">Sélectionner un ami</option>
-              {friends.map(friend => (
-                <option key={friend.id} value={friend.id}>
-                  {friend.name}
-                </option>
-              ))}
-            </select>
+              >
+                <option value="">Sélectionner un ami</option>
+                {friends.map(friend => (
+                  <option key={friend.uid} value={friend.uid}>
+                    {friend.name}
+                  </option>
+                ))}
+              </select>
+            )}
+            <div className="text-xs text-gray-500 mt-1">
+              {friends.length} ami(s) trouvé(s)
+            </div>
           </div>
 
           <div className="mb-4">

@@ -216,7 +216,7 @@ function App() {
       case 'leaderboard':
         return <LeaderboardView user={user} />;
       case 'challenges':
-        return <Challenges />;
+        return <Challenges user={user} />;
       case 'badges':
         return <Badges workouts={workouts} challenges={challenges} friends={friends} />;
       default:
