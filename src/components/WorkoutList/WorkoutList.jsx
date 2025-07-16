@@ -30,7 +30,7 @@ function getMuscleIcon(muscle) {
     case 'dos': return <Target className="h-8 w-8 text-white" />;
     case 'jambes': return <Shield className="h-8 w-8 text-white" />;
     case 'abdos': return <Apple className="h-8 w-8 text-white" />;
-    case 'biceps': return <Barbell className="h-8 w-8 text-white" />;
+    case 'biceps': return <Dumbbell className="h-8 w-8 text-white" />;
     case 'triceps': return <Zap className="h-8 w-8 text-white" />;
     case 'épaules': return <Activity className="h-8 w-8 text-white" />;
     case 'cardio': return <Heart className="h-8 w-8 text-white" />;
