@@ -36,7 +36,9 @@ export const useChallenges = (user) => {
   };
 
   useEffect(() => {
-    loadChallenges();
+    if (user) {
+      loadChallenges();
+    }
   }, [user]);
 
   const createChallenge = async (challengeData) => {
@@ -50,7 +52,6 @@ export const useChallenges = (user) => {
       receiverId: challengeData.friend.uid,
       receiverName: challengeData.friend.displayName || challengeData.friend.email,
       type: challengeData.type,
-      target: challengeData.target,
       duration: challengeData.duration,
       startDate: new Date().toISOString(),
       endDate: new Date(Date.now() + challengeData.duration * 24 * 60 * 60 * 1000).toISOString(),

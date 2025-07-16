@@ -12,7 +12,6 @@ import {
   query, 
   where, 
   getDocs,
-  orderBy,
   serverTimestamp 
 } from "firebase/firestore";
 
