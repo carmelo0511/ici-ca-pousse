@@ -15,6 +15,7 @@ import { ensureUserProfile } from './utils/firebase';
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
 import PWAInstallButton from './components/PWAInstallButton';
+import FriendsList from './components/FriendsList';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -197,13 +198,14 @@ function App() {
             openWorkoutDetail={openWorkoutDetail}
             showWorkoutDetail={showWorkoutDetail}
             selectedWorkout={selectedWorkout}
-
             deleteWorkout={handleDeleteWorkout}
             setShowWorkoutDetail={setShowWorkoutDetail}
           />
         );
       case 'stats':
         return <StatsView stats={getStats()} workouts={workouts} onEditWorkout={handleEditWorkout} />;
+      case 'friends':
+        return <FriendsList user={user} />;
       default:
         return null;
     }
@@ -213,7 +215,7 @@ function App() {
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
         <Header workoutCount={workouts.length} />
-        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} tabs={[{id:'workout',label:'Séance'},{id:'calendar',label:'Calendrier'},{id:'stats',label:'Statistiques'},{id:'friends',label:'Amis'}]} />
         {renderActiveTab()}
         {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
         <PWAInstallButton />
