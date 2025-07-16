@@ -17,6 +17,10 @@ import { useTranslation } from 'react-i18next';
 import PWAInstallButton from './components/PWAInstallButton';
 import FriendsList from './components/FriendsList';
 import LeaderboardView from './components/LeaderboardView';
+import Challenges from './components/Challenges';
+import Badges from './components/Badges';
+import { useChallenges } from './hooks/useChallenges';
+import { useFriends } from './hooks/useFriends';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -40,6 +44,8 @@ function App() {
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
   const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
+  const { challenges } = useChallenges(user);
+  const { friends } = useFriends();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -209,6 +215,10 @@ function App() {
         return <FriendsList user={user} />;
       case 'leaderboard':
         return <LeaderboardView user={user} />;
+      case 'challenges':
+        return <Challenges />;
+      case 'badges':
+        return <Badges workouts={workouts} challenges={challenges} friends={friends} />;
       default:
         return null;
     }
