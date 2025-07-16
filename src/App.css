@@ -385,3 +385,26 @@ button:focus {
   background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 100%);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
 }
+
+.compact h1, .compact h2, .compact h3, .compact h4 {
+  font-size: 90%;
+  margin-bottom: 0.5em;
+}
+.compact p, .compact span, .compact label {
+  font-size: 92%;
+}
+.compact .px-6 { padding-left: 1rem !important; padding-right: 1rem !important; }
+.compact .py-4 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+.compact .py-3 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+.compact .rounded-2xl { border-radius: 1rem !important; }
+.compact .rounded-xl { border-radius: 0.75rem !important; }
+.compact .text-3xl { font-size: 1.6rem !important; }
+.compact .text-2xl { font-size: 1.3rem !important; }
+.compact .text-xl { font-size: 1.1rem !important; }
+.compact .text-lg { font-size: 1rem !important; }
+.compact .text-base { font-size: 0.95rem !important; }
+.compact .text-sm { font-size: 0.85rem !important; }
+.compact .max-w-4xl { max-width: 90vw !important; }
+.compact .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem !important; }
+.compact .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem !important; }
+.compact .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.7rem !important; }
