@@ -29,7 +29,7 @@ const App = () => {
 
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
-  const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises } = useExercises();
+  const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
 
   // Fonctions utilitaires
   const showToastMsg = (message, type = 'success') => {
@@ -64,6 +64,13 @@ const App = () => {
     setShowWorkoutDetail(true);
   };
 
+  const handleEditWorkout = (workout) => {
+    setSelectedWorkout(workout);
+    setSelectedDate(workout.date);
+    setWorkoutDuration(workout.duration);
+    setExercisesFromWorkout(workout.exercises);
+    setActiveTab('workout');
+  };
 
 
   const handleDeleteWorkout = (workoutId) => {
@@ -111,7 +118,7 @@ const App = () => {
           />
         );
       case 'stats':
-        return <StatsView stats={getStats()} workouts={workouts} />;
+        return <StatsView stats={getStats()} workouts={workouts} onEditWorkout={handleEditWorkout} />;
       default:
         return null;
     }

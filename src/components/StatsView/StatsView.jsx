@@ -44,7 +44,7 @@ const groupWorkoutsByWeek = (workouts) => {
   return weeks;
 };
 
-const StatsView = ({ stats, workouts }) => {
+const StatsView = ({ stats, workouts, onEditWorkout }) => {
   const { setExercisesFromWorkout } = useExercises();
   const weeks = groupWorkoutsByWeek(workouts);
 
@@ -184,7 +184,7 @@ const StatsView = ({ stats, workouts }) => {
                         Dupliquer
                       </button>
                       <button
-                        onClick={() => setExercisesFromWorkout(w.exercises)}
+                        onClick={() => onEditWorkout(w)}
                         className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all"
                       >
                         <Edit3 className="h-4 w-4" />
