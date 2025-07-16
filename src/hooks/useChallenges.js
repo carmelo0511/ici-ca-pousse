@@ -39,7 +39,7 @@ export const useChallenges = (user) => {
     if (user) {
       loadChallenges();
     }
-  }, [user]);
+  }, [user, loadChallenges]);
 
   const createChallenge = async (challengeData) => {
     if (!user) return null;

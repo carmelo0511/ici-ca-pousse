@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useFriends } from '../hooks/useFriends';
-import { BarChart3, Trophy, Target, Clock, Dumbbell, Repeat, Calendar } from 'lucide-react';
+import { BarChart3, Trophy } from 'lucide-react';
 import { 
   PERIODS, 
   METRICS, 
@@ -10,7 +10,8 @@ import {
   getLeaderboardRanking, 
   formatMetricValue, 
   getPeriodLabel, 
-  getMetricLabel 
+  getMetricLabel,
+  getAllowedExercises
 } from '../utils/leaderboardUtils';
 
 function Leaderboard({ user, onShowComparison }) {
@@ -61,24 +62,13 @@ function Leaderboard({ user, onShowComparison }) {
   // Obtenir le classement actuel
   const currentRanking = getLeaderboardRanking(stats, selectedMetric);
 
-  // Obtenir la liste des exercices disponibles
-  const getAvailableExercises = () => {
-    const exercises = new Set();
-    stats.forEach(user => {
-      Object.keys(user.stats.exerciseStats || {}).forEach(exerciseName => {
-        exercises.add(exerciseName);
-      });
-    });
-    return Array.from(exercises).sort();
-  };
-
   // Obtenir le classement pour un exercice spécifique
   const getExerciseRanking = (exerciseName) => {
     return stats
       .map(user => ({
         uid: user.uid,
         displayName: user.displayName,
-        value: user.stats.exerciseStats?.[exerciseName]?.totalWeight || 0,
+        value: user.stats.exerciseStats?.[exerciseName]?.maxWeight || 0,
         stats: user.stats.exerciseStats?.[exerciseName] || null
       }))
       .filter(user => user.value > 0)
@@ -136,10 +126,7 @@ function Leaderboard({ user, onShowComparison }) {
             className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
           >
             <option value={METRICS.WORKOUTS}>Séances</option>
-            <option value={METRICS.DURATION}>Temps total</option>
-            <option value={METRICS.TOTAL_WEIGHT}>Poids total</option>
-            <option value={METRICS.TOTAL_REPS}>Répétitions</option>
-            <option value={METRICS.TOTAL_SETS}>Séries</option>
+            <option value={METRICS.MAX_WEIGHT}>Poids max</option>
           </select>
         </div>
 
@@ -152,7 +139,7 @@ function Leaderboard({ user, onShowComparison }) {
             className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
           >
             <option value="">Tous les exercices</option>
-            {getAvailableExercises().map(exercise => (
+            {getAllowedExercises().map(exercise => (
               <option key={exercise} value={exercise}>{exercise}</option>
             ))}
           </select>
@@ -192,23 +179,20 @@ function Leaderboard({ user, onShowComparison }) {
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
                           <div className="text-xs md:text-sm text-gray-600">
-                            {user.stats?.count || 0} fois • Meilleur: {user.stats?.bestWeight || 0}kg
+                            {user.stats?.count || 0} fois
                           </div>
                         </div>
                       </div>
                       <div className="text-right sm:text-right">
                         <div className="font-bold text-base md:text-lg text-indigo-600">
-                          {formatMetricValue(user.value, METRICS.EXERCISE_SPECIFIC)}
-                        </div>
-                        <div className="text-xs md:text-sm text-gray-500">
-                          {user.stats?.totalReps || 0} reps total
+                          {formatMetricValue(user.value, METRICS.MAX_WEIGHT)}
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-6 md:py-8 text-gray-500 text-sm">
-                    Aucune donnée pour cet exercice sur cette période
+                  <div className="text-center py-6 text-gray-500">
+                    Aucun classement disponible pour cet exercice
                   </div>
                 )
               ) : (
@@ -226,7 +210,7 @@ function Leaderboard({ user, onShowComparison }) {
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
                           <div className="text-xs md:text-sm text-gray-600">
-                            {user.stats.totalWorkouts} séances • {user.stats.averageWorkoutDuration}min/séance
+                            {user.stats.workouts || 0} séances • Poids max: {user.stats.maxWeight || 0}kg
                           </div>
                         </div>
                       </div>
@@ -234,62 +218,48 @@ function Leaderboard({ user, onShowComparison }) {
                         <div className="font-bold text-base md:text-lg text-indigo-600">
                           {formatMetricValue(user.value, selectedMetric)}
                         </div>
-                        <div className="text-xs md:text-sm text-gray-500">
-                          {user.stats.workoutFrequency} séances/semaine
-                        </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-6 md:py-8 text-gray-500 text-sm">
-                    Aucune donnée sur cette période
+                  <div className="text-center py-6 text-gray-500">
+                    Aucun classement disponible
                   </div>
                 )
               )}
             </div>
           </div>
 
-          {/* Statistiques supplémentaires */}
+          {/* Statistiques rapides */}
           {!selectedExercise && currentRanking.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 md:p-4 rounded-xl border border-green-200">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Trophy className="h-4 w-4 md:h-5 md:w-5 text-green-600" />
-                  <span className="font-semibold text-green-800 text-sm md:text-base">Champion</span>
-                </div>
-                <div className="text-lg md:text-2xl font-bold text-green-600 truncate">
-                  {currentRanking[0]?.displayName}
-                </div>
-                <div className="text-xs md:text-sm text-green-600">
-                  {formatMetricValue(currentRanking[0]?.value, selectedMetric)}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+              <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-3 md:p-4 rounded-lg text-center">
+                <div className="text-2xl md:text-3xl font-bold">🥇</div>
+                <div className="text-sm md:text-base font-semibold">{currentRanking[0]?.displayName}</div>
+                <div className="text-xs md:text-sm opacity-90">
+                  {formatMetricValue(currentRanking[0]?.value || 0, selectedMetric)}
                 </div>
               </div>
-
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 md:p-4 rounded-xl border border-blue-200">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Target className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
-                  <span className="font-semibold text-blue-800 text-sm md:text-base">Ton rang</span>
+              
+              {currentRanking[1] && (
+                <div className="bg-gradient-to-r from-gray-400 to-gray-500 text-white p-3 md:p-4 rounded-lg text-center">
+                  <div className="text-2xl md:text-3xl font-bold">🥈</div>
+                  <div className="text-sm md:text-base font-semibold">{currentRanking[1]?.displayName}</div>
+                  <div className="text-xs md:text-sm opacity-90">
+                    {formatMetricValue(currentRanking[1]?.value || 0, selectedMetric)}
+                  </div>
                 </div>
-                <div className="text-lg md:text-2xl font-bold text-blue-600">
-                  #{currentRanking.find(u => u.uid === user?.uid)?.rank || 'N/A'}
+              )}
+              
+              {currentRanking[2] && (
+                <div className="bg-gradient-to-r from-orange-400 to-orange-500 text-white p-3 md:p-4 rounded-lg text-center">
+                  <div className="text-2xl md:text-3xl font-bold">🥉</div>
+                  <div className="text-sm md:text-base font-semibold">{currentRanking[2]?.displayName}</div>
+                  <div className="text-xs md:text-sm opacity-90">
+                    {formatMetricValue(currentRanking[2]?.value || 0, selectedMetric)}
+                  </div>
                 </div>
-                <div className="text-xs md:text-sm text-blue-600">
-                  {formatMetricValue(currentRanking.find(u => u.uid === user?.uid)?.value || 0, selectedMetric)}
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-3 md:p-4 rounded-xl border border-purple-200 sm:col-span-2 lg:col-span-1">
-                <div className="flex items-center space-x-2 mb-2">
-                  <BarChart3 className="h-4 w-4 md:h-5 md:w-5 text-purple-600" />
-                  <span className="font-semibold text-purple-800 text-sm md:text-base">Participants</span>
-                </div>
-                <div className="text-lg md:text-2xl font-bold text-purple-600">
-                  {currentRanking.length}
-                </div>
-                <div className="text-xs md:text-sm text-purple-600">
-                  actifs sur cette période
-                </div>
-              </div>
+              )}
             </div>
           )}
         </div>

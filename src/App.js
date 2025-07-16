@@ -8,8 +8,11 @@ import CalendarView from './components/CalendarView/CalendarView';
 import StatsView from './components/StatsView/StatsView';
 import { useWorkouts } from './hooks/useWorkouts';
 import { useExercises } from './hooks/useExercises';
+import { useFriends } from './hooks/useFriends';
+import { useChallenges } from './hooks/useChallenges';
+import { usePWA } from './hooks/usePWA';
 import { createWorkout } from './utils/workoutUtils';
-import { exerciseDatabase } from './utils/exerciseDatabase';
+
 import { auth } from './utils/firebase';
 import { ensureUserProfile } from './utils/firebase';
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
@@ -20,8 +23,6 @@ import LeaderboardView from './components/LeaderboardView';
 import Challenges from './components/Challenges';
 import Badges from './components/Badges';
 import Notifications from './components/Notifications';
-import { useChallenges } from './hooks/useChallenges';
-import { useFriends } from './hooks/useFriends';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -45,7 +46,7 @@ function App() {
 
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
-  const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
+  const { exercises, addExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
   const { challenges } = useChallenges(user);
   const { friends } = useFriends();
   const { t } = useTranslation();

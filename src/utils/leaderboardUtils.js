@@ -8,15 +8,18 @@ export const PERIODS = {
   ALL_TIME: 'all_time'
 };
 
-// Types de métriques
+// Types de métriques simplifiées
 export const METRICS = {
   WORKOUTS: 'workouts',
-  DURATION: 'duration',
-  TOTAL_WEIGHT: 'total_weight',
-  TOTAL_REPS: 'total_reps',
-  TOTAL_SETS: 'total_sets',
-  EXERCISE_SPECIFIC: 'exercise_specific'
+  MAX_WEIGHT: 'max_weight'
 };
+
+// Exercices spécifiques autorisés
+export const ALLOWED_EXERCISES = [
+  'Développé couché',
+  'Squat',
+  'Soulevé de terre'
+];
 
 // Obtenir la date de début selon la période
 export function getStartDate(period) {
@@ -56,75 +59,35 @@ export function calculateUserStats(workouts, period = PERIODS.ALL_TIME) {
   const filteredWorkouts = filterWorkoutsByPeriod(workouts, period);
   
   const stats = {
-    totalWorkouts: filteredWorkouts.length,
-    totalDuration: 0,
-    totalWeight: 0,
-    totalReps: 0,
-    totalSets: 0,
-    exerciseStats: {},
-    averageWorkoutDuration: 0,
-    workoutFrequency: 0, // séances par semaine
-    bestExercise: null,
-    mostFrequentExercise: null
+    workouts: filteredWorkouts.length,
+    maxWeight: 0,
+    exerciseStats: {}
   };
 
   // Calculer les totaux
   filteredWorkouts.forEach(workout => {
-    stats.totalDuration += workout.duration || 0;
-    stats.totalWeight += workout.totalWeight || 0;
-    stats.totalReps += workout.totalReps || 0;
-    stats.totalSets += workout.totalSets || 0;
-
-    // Statistiques par exercice
+    // Statistiques par exercice (seulement les exercices autorisés)
     workout.exercises?.forEach(exercise => {
+      if (!ALLOWED_EXERCISES.includes(exercise.name)) return;
+      
       if (!stats.exerciseStats[exercise.name]) {
         stats.exerciseStats[exercise.name] = {
           name: exercise.name,
           count: 0,
-          totalWeight: 0,
-          totalReps: 0,
-          totalSets: 0,
-          bestWeight: 0,
-          bestReps: 0
+          maxWeight: 0
         };
       }
 
       const exerciseStat = stats.exerciseStats[exercise.name];
       exerciseStat.count++;
-      exerciseStat.totalSets += exercise.sets.length;
 
       exercise.sets.forEach(set => {
-        exerciseStat.totalWeight += (set.weight || 0) * (set.reps || 0);
-        exerciseStat.totalReps += set.reps || 0;
-        exerciseStat.bestWeight = Math.max(exerciseStat.bestWeight, set.weight || 0);
-        exerciseStat.bestReps = Math.max(exerciseStat.bestReps, set.reps || 0);
+        const weight = set.weight || 0;
+        exerciseStat.maxWeight = Math.max(exerciseStat.maxWeight, weight);
+        stats.maxWeight = Math.max(stats.maxWeight, weight);
       });
     });
   });
-
-  // Calculer les moyennes
-  if (stats.totalWorkouts > 0) {
-    stats.averageWorkoutDuration = Math.round(stats.totalDuration / stats.totalWorkouts);
-  }
-
-  // Calculer la fréquence (séances par semaine)
-  const daysDiff = period === PERIODS.WEEK ? 7 : 
-                   period === PERIODS.MONTH ? 30 : 
-                   period === PERIODS.YEAR ? 365 : 
-                   Math.max(1, (new Date() - getStartDate(period)) / (1000 * 60 * 60 * 24));
-  stats.workoutFrequency = Math.round((stats.totalWorkouts / daysDiff) * 7 * 10) / 10;
-
-  // Trouver le meilleur exercice (plus de poids total)
-  const exerciseEntries = Object.entries(stats.exerciseStats);
-  if (exerciseEntries.length > 0) {
-    stats.bestExercise = exerciseEntries.reduce((best, [name, stat]) => 
-      stat.totalWeight > best.totalWeight ? { name, ...stat } : best
-    )[1];
-
-    stats.mostFrequentExercise = exerciseEntries.reduce((most, [name, stat]) => 
-      stat.count > most.count ? { name, ...stat } : most
-    )[1];
-  }
 
   return stats;
 }
@@ -151,15 +114,7 @@ export function formatMetricValue(value, metric) {
   switch (metric) {
     case METRICS.WORKOUTS:
       return `${value} séances`;
-    case METRICS.DURATION:
-      return `${value} min`;
-    case METRICS.TOTAL_WEIGHT:
-      return `${value} kg`;
-    case METRICS.TOTAL_REPS:
-      return `${value} reps`;
-    case METRICS.TOTAL_SETS:
-      return `${value} séries`;
-    case METRICS.EXERCISE_SPECIFIC:
+    case METRICS.MAX_WEIGHT:
       return `${value} kg`;
     default:
       return value;
@@ -187,17 +142,14 @@ export function getMetricLabel(metric) {
   switch (metric) {
     case METRICS.WORKOUTS:
       return 'Séances';
-    case METRICS.DURATION:
-      return 'Temps total';
-    case METRICS.TOTAL_WEIGHT:
-      return 'Poids total';
-    case METRICS.TOTAL_REPS:
-      return 'Répétitions';
-    case METRICS.TOTAL_SETS:
-      return 'Séries';
-    case METRICS.EXERCISE_SPECIFIC:
-      return 'Exercice spécifique';
+    case METRICS.MAX_WEIGHT:
+      return 'Poids max';
     default:
-      return metric;
+      return 'Métrique';
   }
+}
+
+// Obtenir la liste des exercices autorisés
+export function getAllowedExercises() {
+  return ALLOWED_EXERCISES;
 } 
