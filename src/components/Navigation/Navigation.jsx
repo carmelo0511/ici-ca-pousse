@@ -1,11 +1,13 @@
 import React from 'react';
 import { Calendar, BarChart3, Dumbbell } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Navigation = ({ activeTab, setActiveTab }) => {
+  const { t } = useTranslation();
   const navItems = [
-    { id: 'workout', icon: Dumbbell, label: 'Séance' },
-    { id: 'calendar', icon: Calendar, label: 'Calendrier' },
-    { id: 'stats', icon: BarChart3, label: 'Statistiques' }
+    { id: 'workout', icon: Dumbbell, label: t('workout_tab') },
+    { id: 'calendar', icon: Calendar, label: t('calendar_tab') },
+    { id: 'stats', icon: BarChart3, label: t('stats_tab') }
   ];
 
   return (

@@ -115,7 +115,21 @@ const resources = {
       "Natation": "Natation",
       "Aquabike": "Aquabike",
       "HIIT": "HIIT",
-      "Tabata": "Tabata"
+      "Tabata": "Tabata",
+      "workout_tab": "Séance",
+      "calendar_tab": "Calendrier",
+      "stats_tab": "Statistiques",
+      "back": "Retour",
+      "stats_title": "📊 Statistiques",
+      "stats_subtitle": "Analysez vos performances et progression",
+      "total_workouts": "Séances totales",
+      "total_sets": "Séries totales",
+      "total_reps": "Répétitions totales",
+      "weekly_progress": "Évolution hebdomadaire",
+      "most_worked_muscle_group": "Groupe musculaire le plus travaillé",
+      "all_sessions": "sur toutes les séances",
+      "duplicate": "Dupliquer",
+      "edit": "Modifier"
     }
   },
   en: {
@@ -230,7 +244,21 @@ const resources = {
       "Natation": "Swimming",
       "Aquabike": "Aquabike",
       "HIIT": "HIIT",
-      "Tabata": "Tabata"
+      "Tabata": "Tabata",
+      "workout_tab": "Workout",
+      "calendar_tab": "Calendar",
+      "stats_tab": "Statistics",
+      "back": "Back",
+      "stats_title": "📊 Statistics",
+      "stats_subtitle": "Analyze your performance and progress",
+      "total_workouts": "Total workouts",
+      "total_sets": "Total sets",
+      "total_reps": "Total reps",
+      "weekly_progress": "Weekly progress",
+      "most_worked_muscle_group": "Most worked muscle group",
+      "all_sessions": "across all sessions",
+      "duplicate": "Duplicate",
+      "edit": "Edit"
     }
   }
 };

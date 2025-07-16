@@ -3,6 +3,7 @@ import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, Calendar, Copy, Ed
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { formatDate } from '../../utils/workoutUtils';
 import { useExercises } from '../../hooks/useExercises';
+import { useTranslation } from 'react-i18next';
 
 function getWeeklyWorkoutData(workouts) {
   // Regroupe les séances par semaine (année + numéro de semaine)
@@ -45,22 +46,23 @@ const groupWorkoutsByWeek = (workouts) => {
 
 const StatsView = ({ stats, workouts, onEditWorkout }) => {
   const { setExercisesFromWorkout } = useExercises();
+  const { t } = useTranslation();
   const weeks = groupWorkoutsByWeek(workouts);
 
   return (
     <div className="p-6 space-y-8">
       <div>
         <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          📊 Statistiques
+          {t('stats_title')}
         </h2>
-        <p className="text-gray-600 mt-1">Analysez vos performances et progression</p>
+        <p className="text-gray-600 mt-1">{t('stats_subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">Séances totales</p>
+              <p className="text-blue-100 text-sm font-medium">{t('total_workouts')}</p>
               <p className="text-4xl font-bold">{stats.totalWorkouts}</p>
             </div>
             <Target className="h-12 w-12 text-blue-200" />
@@ -70,7 +72,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
         <div className="bg-green-600 text-white p-8 rounded-3xl shadow-xl">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-100 text-sm font-medium">Séries totales</p>
+              <p className="text-green-100 text-sm font-medium">{t('total_sets')}</p>
               <p className="text-4xl font-bold">{stats.totalSets}</p>
             </div>
             <Dumbbell className="h-12 w-12 text-green-200" />
@@ -80,7 +82,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
         <div className="bg-purple-600 text-white p-8 rounded-3xl shadow-xl">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-purple-100 text-sm font-medium">Répétitions totales</p>
+              <p className="text-purple-100 text-sm font-medium">{t('total_reps')}</p>
               <p className="text-4xl font-bold">{stats.totalReps}</p>
             </div>
             <TrendingUp className="h-12 w-12 text-purple-200" />
@@ -92,7 +94,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
         <div className="bg-red-600 text-white p-8 rounded-3xl shadow-xl">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-red-100 text-sm font-medium">Durée moyenne</p>
+              <p className="text-red-100 text-sm font-medium">{t('avg_duration')}</p>
               <p className="text-4xl font-bold">{stats.avgDuration} min</p>
             </div>
             <Clock className="h-12 w-12 text-red-200" />
@@ -102,7 +104,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
         <div className="bg-indigo-600 text-white p-8 rounded-3xl shadow-xl">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-indigo-100 text-sm font-medium">Régularité</p>
+              <p className="text-indigo-100 text-sm font-medium">{t('regularity')}</p>
               <p className="text-4xl font-bold">{workouts.length > 0 ? '💪' : '🔥'}</p>
             </div>
             <Zap className="h-12 w-12 text-indigo-200" />
@@ -114,7 +116,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
         <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up">
           <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
             <BarChart3 className="h-6 w-6" />
-            <span>Évolution hebdomadaire</span>
+            <span>{t('weekly_progress')}</span>
           </h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={getWeeklyWorkoutData(workouts)} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
@@ -129,10 +131,10 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
         <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 flex flex-col justify-center items-center fade-in-up">
           <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
             <Dumbbell className="h-6 w-6" />
-            <span>Groupe musculaire le plus travaillé</span>
+            <span>{t('most_worked_muscle_group')}</span>
           </h3>
-          <div className="text-4xl font-bold text-indigo-600 mb-2">{getMostWorkedMuscleGroup(workouts) === 'cardio' ? 'Cardio' : getMostWorkedMuscleGroup(workouts).charAt(0).toUpperCase() + getMostWorkedMuscleGroup(workouts).slice(1)}</div>
-          <div className="text-gray-500">(sur toutes les séances)</div>
+          <div className="text-4xl font-bold text-indigo-600 mb-2">{t(getMostWorkedMuscleGroup(workouts))}</div>
+          <div className="text-gray-500">({t('all_sessions')})</div>
         </div>
       </div>
 
@@ -140,7 +142,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
         <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
           <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
             <BarChart3 className="h-6 w-6" />
-            <span>Dernières séances</span>
+            <span>{t('last_sessions')}</span>
           </h3>
           <div className="space-y-4">
             {workouts.slice(-5).reverse().map((workout) => (
@@ -160,13 +162,13 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
       )}
 
       <div className="mt-10">
-        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><Calendar className="h-5 w-5" /> Historique des séances par semaine</h2>
+        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><Calendar className="h-5 w-5" /> {t('history_by_week')}</h2>
         {Object.keys(weeks).length === 0 ? (
-          <div className="text-gray-400">Aucune séance enregistrée.</div>
+          <div className="text-gray-400">{t('no_sessions_recorded')}</div>
         ) : (
           Object.entries(weeks).sort(([a], [b]) => b.localeCompare(a)).map(([week, weekWorkouts]) => (
             <div key={week} className="mb-8">
-              <div className="font-semibold text-indigo-700 mb-2">Semaine {week}</div>
+              <div className="font-semibold text-indigo-700 mb-2">{t('week')}</div>
               <div className="space-y-3">
                 {weekWorkouts.map((w) => (
                   <div key={w.id} className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100">
@@ -180,14 +182,14 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
                         className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-indigo-600 hover:to-purple-700 transition-all"
                       >
                         <Copy className="h-4 w-4" />
-                        Dupliquer
+                        {t('duplicate')}
                       </button>
                       <button
                         onClick={() => onEditWorkout(w)}
                         className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all"
                       >
                         <Edit3 className="h-4 w-4" />
-                        Modifier
+                        {t('edit')}
                       </button>
                     </div>
                   </div>
