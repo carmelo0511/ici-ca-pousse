@@ -6,9 +6,15 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
 import ProfileSettings from '../ProfileSettings';
 
-const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [] }) => {
+const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], onUserUpdate }) => {
   const { t, i18n } = useTranslation();
   const [showProfile, setShowProfile] = React.useState(false);
+  const [localUser, setLocalUser] = React.useState(user);
+
+  // Mettre à jour l'utilisateur local quand user change
+  React.useEffect(() => {
+    setLocalUser(user);
+  }, [user]);
   const changeLanguage = (lng) => i18n.changeLanguage(lng);
 
   const handleSignOut = async () => {
@@ -49,13 +55,18 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
               EN
             </button>
             {/* Avatar utilisateur pour ouvrir la modale de profil */}
-            {user && (
+            {localUser && (
               <button
                 onClick={() => setShowProfile(true)}
                 className="ml-2 flex items-center justify-center w-10 h-10 rounded-full border-2 border-indigo-400 bg-white hover:bg-indigo-50 transition-all"
                 aria-label="Modifier le profil"
               >
-                <span role="img" aria-label="avatar">👤</span>
+                <ProfilePicture 
+                  user={localUser} 
+                  size="sm" 
+                  useBadgeAsProfile={!!localUser.selectedBadge}
+                  selectedBadge={localUser.selectedBadge}
+                />
               </button>
             )}
             {/* Bouton Sign Out */}
@@ -72,13 +83,19 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
         </div>
       </div>
       {/* Modale de profil */}
-      {user && (
+      {localUser && (
         <ProfileSettings 
-          user={user} 
+          user={localUser} 
           workouts={workouts} 
           challenges={challenges} 
           isOpen={showProfile} 
-          onClose={() => setShowProfile(false)} 
+          onClose={() => setShowProfile(false)}
+          onUserUpdate={(updatedUser) => {
+            setLocalUser(updatedUser);
+            if (onUserUpdate) {
+              onUserUpdate(updatedUser);
+            }
+          }}
         />
       )}
     </header>
@@ -91,6 +108,7 @@ Header.propTypes = {
   user: PropTypes.object,
   workouts: PropTypes.array,
   challenges: PropTypes.array,
+  onUserUpdate: PropTypes.func,
 };
 
 export default Header; 

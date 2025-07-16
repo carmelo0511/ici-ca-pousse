@@ -6,7 +6,7 @@ import ProfilePicture from './ProfilePicture';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../utils/firebase';
 
-const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose }) => {
+const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose, onUserUpdate }) => {
   const { badges, selectedBadge } = useBadges(workouts, challenges, user);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -29,6 +29,11 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
       
       // Mettre à jour l'état local immédiatement
       setLocalSelectedBadge(badgeId);
+      
+      // Mettre à jour l'utilisateur localement
+      if (onUserUpdate) {
+        onUserUpdate({ ...user, selectedBadge: badgeId });
+      }
       
       // Afficher un message de succès
       if (badgeId) {
