@@ -3,11 +3,11 @@
 // Valeur par défaut pour la durée d'une séance (en minutes)
 const DEFAULT_WORKOUT_DURATION = 30;
 
-export const createWorkout = (exercises, date, duration, workoutId = null) => {
+export const createWorkout = (exercises, date, duration, workoutId = undefined) => {
   if (exercises.length === 0) return null;
   
   return {
-    id: workoutId || Date.now(),
+    ...(workoutId ? { id: workoutId } : {}),
     date,
     exercises,
     duration: parseInt(duration) || DEFAULT_WORKOUT_DURATION,

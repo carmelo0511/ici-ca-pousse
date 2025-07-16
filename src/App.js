@@ -77,12 +77,22 @@ function App() {
     showToastMsg(t('exercise_added'));
   };
 
-  const saveWorkout = () => {
+  const saveWorkout = async () => {
     if (exercises.length === 0) return;
-    const workout = createWorkout(exercises, selectedDate, workoutDuration, selectedWorkout ? selectedWorkout.id : null);
-    if (selectedWorkout) {
-      updateWorkout(selectedWorkout.id, workout);
-      showToastMsg(t('workout_updated'));
+    // On ne passe l'id que s'il s'agit d'une édition et que l'id est une chaîne (Firestore)
+    const workout = createWorkout(
+      exercises,
+      selectedDate,
+      workoutDuration,
+      selectedWorkout && typeof selectedWorkout.id === 'string' ? selectedWorkout.id : undefined
+    );
+    if (selectedWorkout && typeof selectedWorkout.id === 'string') {
+      try {
+        await updateWorkout(selectedWorkout.id, workout);
+        showToastMsg(t('workout_updated'));
+      } catch (e) {
+        showToastMsg(t('error_update'), 'error');
+      }
     } else {
       addWorkout(workout);
       showToastMsg(t('workout_saved'));
@@ -106,11 +116,18 @@ function App() {
   };
 
 
-  const handleDeleteWorkout = (workoutId) => {
-    if (window.confirm(t('confirm_delete_workout'))) {
-      deleteWorkout(workoutId);
-      setShowWorkoutDetail(false);
-      showToastMsg(t('workout_deleted'), 'error');
+  const handleDeleteWorkout = async (workoutId) => {
+    // On ne supprime que si l'id est une chaîne (Firestore)
+    if (typeof workoutId === 'string' && window.confirm(t('confirm_delete_workout'))) {
+      try {
+        await deleteWorkout(workoutId);
+        setShowWorkoutDetail(false);
+        showToastMsg(t('workout_deleted'), 'error');
+      } catch (e) {
+        showToastMsg(t('error_delete'), 'error');
+      }
+    } else {
+      showToastMsg('Suppression impossible : id de séance invalide.', 'error');
     }
   };
 
