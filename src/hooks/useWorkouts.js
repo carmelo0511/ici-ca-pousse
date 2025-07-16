@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
 import { load, save } from '../utils/storage';
-import { STORAGE_KEYS } from '../constants';
 
 export const useWorkouts = () => {
   const [workouts, setWorkouts] = useState([]);
 
   // Charger les workouts au démarrage
   useEffect(() => {
-    const savedWorkouts = load(STORAGE_KEYS.WORKOUTS, []);
+    const savedWorkouts = load('iciCaPousse_workouts', []);
     setWorkouts(savedWorkouts);
   }, []);
 
   // Sauvegarder les workouts quand ils changent
   useEffect(() => {
-    save(STORAGE_KEYS.WORKOUTS, workouts);
+    save('iciCaPousse_workouts', workouts);
   }, [workouts]);
 
   const addWorkout = (workout) => {
