@@ -189,7 +189,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
                     <div className="flex gap-2 mt-2 sm:mt-0">
                       <button
                         onClick={() => onEditWorkout(w)}
-                        className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all"
+                        className={`flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap`}
                       >
                         <Edit3 className="h-4 w-4" />
                         {t('edit')}
