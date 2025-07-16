@@ -13,7 +13,7 @@ import { exerciseDatabase } from './utils/exerciseDatabase';
 import { auth } from './utils/firebase';
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
-import PWAInstallButton from './components/PWAInstallButton/PWAInstallButton';
+import PWAInstallButton from './components/PWAInstallButton';
 
 function App() {
   const [user, setUser] = useState(null);

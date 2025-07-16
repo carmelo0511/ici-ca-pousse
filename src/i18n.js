@@ -189,7 +189,8 @@ const resources = {
       "month_9": "Septembre",
       "month_10": "Octobre",
       "month_11": "Novembre",
-      "month_12": "Décembre"
+      "month_12": "Décembre",
+      "install_app": "Installer l'app"
     }
   },
   en: {
@@ -378,7 +379,8 @@ const resources = {
       "month_9": "September",
       "month_10": "October",
       "month_11": "November",
-      "month_12": "December"
+      "month_12": "December",
+      "install_app": "Install app"
     }
   }
 };
