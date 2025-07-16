@@ -45,3 +45,17 @@ export const getCurrentDate = () => {
   const day = String(now.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }; 
+
+// Gamification: retourne les badges débloqués selon les stats
+export function getBadges(stats) {
+  const badges = [];
+  if (stats.totalWorkouts >= 1) badges.push({ key: 'badge_first_workout', label: 'Première séance', icon: '🏅' });
+  if (stats.totalWorkouts >= 5) badges.push({ key: 'badge_5_workouts', label: '5 séances', icon: '🥉' });
+  if (stats.totalWorkouts >= 10) badges.push({ key: 'badge_10_workouts', label: '10 séances', icon: '🥈' });
+  if (stats.totalWorkouts >= 20) badges.push({ key: 'badge_20_workouts', label: '20 séances', icon: '🥇' });
+  if (stats.totalSets >= 100) badges.push({ key: 'badge_100_sets', label: '100 séries', icon: '💪' });
+  if (stats.totalReps >= 1000) badges.push({ key: 'badge_1000_reps', label: '1000 reps', icon: '🔥' });
+  if (stats.totalWeight >= 10000) badges.push({ key: 'badge_10k_weight', label: '10 000 kg soulevés', icon: '🏋️' });
+  if (stats.avgDuration >= 60) badges.push({ key: 'badge_long_workout', label: 'Séances longues', icon: '⏱️' });
+  return badges;
+} 

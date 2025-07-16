@@ -129,7 +129,15 @@ const resources = {
       "most_worked_muscle_group": "Groupe musculaire le plus travaillé",
       "all_sessions": "sur toutes les séances",
       "duplicate": "Dupliquer",
-      "edit": "Modifier"
+      "edit": "Modifier",
+      "badge_first_workout": "Première séance",
+      "badge_5_workouts": "5 séances",
+      "badge_10_workouts": "10 séances",
+      "badge_20_workouts": "20 séances",
+      "badge_100_sets": "100 séries",
+      "badge_1000_reps": "1000 répétitions",
+      "badge_10k_weight": "10 000 kg soulevés",
+      "badge_long_workout": "Séances longues"
     }
   },
   en: {
@@ -258,7 +266,15 @@ const resources = {
       "most_worked_muscle_group": "Most worked muscle group",
       "all_sessions": "across all sessions",
       "duplicate": "Duplicate",
-      "edit": "Edit"
+      "edit": "Edit",
+      "badge_first_workout": "First workout",
+      "badge_5_workouts": "5 workouts",
+      "badge_10_workouts": "10 workouts",
+      "badge_20_workouts": "20 workouts",
+      "badge_100_sets": "100 sets",
+      "badge_1000_reps": "1000 reps",
+      "badge_10k_weight": "10,000 kg lifted",
+      "badge_long_workout": "Long sessions"
     }
   }
 };

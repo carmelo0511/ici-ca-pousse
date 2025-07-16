@@ -4,6 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { formatDate } from '../../utils/workoutUtils';
 import { useExercises } from '../../hooks/useExercises';
 import { useTranslation } from 'react-i18next';
+import { getBadges } from '../../utils/workoutUtils';
 
 function getWeeklyWorkoutData(workouts) {
   // Regroupe les séances par semaine (année + numéro de semaine)
@@ -48,6 +49,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
   const { setExercisesFromWorkout } = useExercises();
   const { t } = useTranslation();
   const weeks = groupWorkoutsByWeek(workouts);
+  const badges = getBadges(stats);
 
   return (
     <div className="p-6 space-y-8">
@@ -111,6 +113,16 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
           </div>
         </div>
       </div>
+      {badges.length > 0 && (
+        <div className="flex flex-wrap gap-3 mt-6">
+          {badges.map(badge => (
+            <div key={badge.key} className="badge bg-gradient-to-r from-yellow-100 to-yellow-300 border border-yellow-300 shadow text-yellow-800 flex items-center gap-2">
+              <span className="text-xl">{badge.icon}</span>
+              <span>{t(badge.key, { defaultValue: badge.label })}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up">
