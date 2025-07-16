@@ -30,7 +30,7 @@ export const useWorkouts = (user) => {
 
   const addWorkout = useCallback(async (workout) => {
     if (user) {
-      const docRef = await addDoc(collection(db, 'workouts'), { ...workout, userId: user.uid });
+      await addDoc(collection(db, 'workouts'), { ...workout, userId: user.uid });
       // On ne met pas à jour localement, la synchro temps réel s'en charge
     } else {
       setWorkouts(prev => [...prev, { ...workout, id: workout.id || Date.now() }]);
@@ -39,7 +39,12 @@ export const useWorkouts = (user) => {
 
   const updateWorkout = useCallback(async (workoutId, updatedWorkout) => {
     if (user) {
-      await updateDoc(doc(db, 'workouts', workoutId), updatedWorkout);
+      try {
+        await updateDoc(doc(db, 'workouts', workoutId), updatedWorkout);
+      } catch (error) {
+        console.error('Erreur update Firestore:', error);
+        throw error;
+      }
     } else {
       setWorkouts(prev => prev.map(w => w.id === workoutId ? updatedWorkout : w));
     }
@@ -47,7 +52,12 @@ export const useWorkouts = (user) => {
 
   const deleteWorkout = useCallback(async (workoutId) => {
     if (user) {
-      await deleteDoc(doc(db, 'workouts', workoutId));
+      try {
+        await deleteDoc(doc(db, 'workouts', workoutId));
+      } catch (error) {
+        console.error('Erreur suppression Firestore:', error);
+        throw error;
+      }
     } else {
       setWorkouts(prev => prev.filter(w => w.id !== workoutId));
     }
