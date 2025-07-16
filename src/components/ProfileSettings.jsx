@@ -10,14 +10,38 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
   const { badges, selectedBadge } = useBadges(workouts, challenges, user);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
+  const [localSelectedBadge, setLocalSelectedBadge] = React.useState(selectedBadge);
+  const [successMessage, setSuccessMessage] = React.useState('');
+
+  // Mettre à jour l'état local quand selectedBadge change
+  React.useEffect(() => {
+    setLocalSelectedBadge(selectedBadge);
+  }, [selectedBadge]);
 
   const handleBadgeSelect = async (badgeId) => {
     setLoading(true);
     setError('');
+    setSuccessMessage('');
+    
     try {
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, { selectedBadge: badgeId });
+      
+      // Mettre à jour l'état local immédiatement
+      setLocalSelectedBadge(badgeId);
+      
+      // Afficher un message de succès
+      if (badgeId) {
+        setSuccessMessage(`Badge "${BADGE_CONFIG[badgeId]?.name}" sélectionné !`);
+      } else {
+        setSuccessMessage('Badge retiré du profil');
+      }
+      
+      // Effacer le message après 3 secondes
+      setTimeout(() => setSuccessMessage(''), 3000);
+      
     } catch (e) {
+      console.error('Erreur lors de la sélection du badge:', e);
       setError("Erreur lors de la sélection du badge");
     } finally {
       setLoading(false);
@@ -31,8 +55,8 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
         <ProfilePicture
           user={user}
           size="xl"
-          useBadgeAsProfile={!!selectedBadge}
-          selectedBadge={selectedBadge}
+          useBadgeAsProfile={!!localSelectedBadge}
+          selectedBadge={localSelectedBadge}
         />
         <div className="mt-2 text-lg font-semibold">{user.displayName || user.email}</div>
         <div className="text-sm text-gray-500">{user.email}</div>
@@ -51,14 +75,14 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
               <button
                 key={badge}
                 onClick={() => handleBadgeSelect(badge)}
-                className={`flex flex-col items-center p-2 rounded-lg border-2 transition-all ${selectedBadge === badge ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 bg-white'} hover:border-indigo-400`}
+                className={`flex flex-col items-center p-2 rounded-lg border-2 transition-all ${localSelectedBadge === badge ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 bg-white'} hover:border-indigo-400`}
                 disabled={loading}
               >
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${BADGE_CONFIG[badge].color}`}>
                   {BADGE_CONFIG[badge].icon}
                 </div>
                 <span className="text-xs text-gray-700 text-center mt-1">{BADGE_CONFIG[badge].name}</span>
-                {selectedBadge === badge && <span className="text-indigo-500 text-xs mt-1">✓ Sélectionné</span>}
+                {localSelectedBadge === badge && <span className="text-indigo-500 text-xs mt-1">✓ Sélectionné</span>}
               </button>
             ))}
           </div>
@@ -72,6 +96,7 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
         </button>
       </div>
       {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
+      {successMessage && <div className="text-green-600 text-sm mb-2 bg-green-50 p-2 rounded-lg">{successMessage}</div>}
     </Modal>
   );
 };
