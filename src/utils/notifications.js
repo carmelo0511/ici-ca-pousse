@@ -19,8 +19,6 @@ export const createNotification = async (userId, notification) => {
   
   if (!userSnap.exists()) return;
   
-  const userData = userSnap.data();
-  
   const newNotification = {
     id: Date.now().toString(),
     timestamp: new Date().toISOString(),
