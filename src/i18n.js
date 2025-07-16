@@ -176,7 +176,20 @@ const resources = {
       "biceps": "Biceps",
       "triceps": "Triceps",
       "épaules": "Épaules",
-      "calendar": "Calendrier"
+      "calendar": "Calendrier",
+      "calendar_subtitle": "Suivez votre régularité d'entraînement",
+      "month_1": "Janvier",
+      "month_2": "Février",
+      "month_3": "Mars",
+      "month_4": "Avril",
+      "month_5": "Mai",
+      "month_6": "Juin",
+      "month_7": "Juillet",
+      "month_8": "Août",
+      "month_9": "Septembre",
+      "month_10": "Octobre",
+      "month_11": "Novembre",
+      "month_12": "Décembre"
     }
   },
   en: {
@@ -352,7 +365,20 @@ const resources = {
       "biceps": "Biceps",
       "triceps": "Triceps",
       "épaules": "Shoulders",
-      "calendar": "Calendar"
+      "calendar": "Calendar",
+      "calendar_subtitle": "Track your training regularity",
+      "month_1": "January",
+      "month_2": "February",
+      "month_3": "March",
+      "month_4": "April",
+      "month_5": "May",
+      "month_6": "June",
+      "month_7": "July",
+      "month_8": "August",
+      "month_9": "September",
+      "month_10": "October",
+      "month_11": "November",
+      "month_12": "December"
     }
   }
 };

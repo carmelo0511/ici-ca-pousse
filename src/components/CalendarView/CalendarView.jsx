@@ -39,15 +39,15 @@ const CalendarView = ({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            📅 Calendrier
+            📅 {t('calendar')}
           </h2>
-          <p className="text-gray-600 mt-1">Suivez votre régularité d'entraînement</p>
+          <p className="text-gray-600 mt-1">{t('calendar_subtitle')}</p>
         </div>
       </div>
 
       <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up">
         <div className="text-center text-2xl font-bold text-gray-800 mb-8">
-          {monthNames[currentMonth]} {currentYear}
+          {t(`month_${currentMonth + 1}`)} {currentYear}
         </div>
 
         <div className="grid grid-cols-7 gap-2 mb-4">
