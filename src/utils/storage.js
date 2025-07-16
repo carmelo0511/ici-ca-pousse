@@ -20,7 +20,8 @@ export const migrateLocalWorkoutsToCloud = async (user, addWorkoutCloud) => {
   const localWorkouts = load('iciCaPousse_workouts', []);
   if (user && localWorkouts.length > 0) {
     for (const workout of localWorkouts) {
-      await addWorkoutCloud({ ...workout, userId: user.uid });
+      const { id, ...workoutWithoutId } = workout;
+      await addWorkoutCloud({ ...workoutWithoutId, userId: user.uid });
     }
     // Optionnel : vider le localStorage après migration
     save('iciCaPousse_workouts', []);
