@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFriends } from '../hooks/useFriends';
 import GradientButton from './GradientButton';
+import FriendProfile from './FriendProfile';
 
 function FriendsList({ user }) {
   const {
@@ -16,6 +17,7 @@ function FriendsList({ user }) {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteError, setInviteError] = useState('');
   const [inviteSuccess, setInviteSuccess] = useState('');
+  const [selectedFriend, setSelectedFriend] = useState(null);
 
   const handleSendInvite = async (e) => {
     e.preventDefault();
@@ -36,6 +38,10 @@ function FriendsList({ user }) {
       setTimeout(() => setInviteError(''), 3000);
     }
   };
+
+  if (selectedFriend) {
+    return <FriendProfile friend={selectedFriend} onBack={() => setSelectedFriend(null)} />;
+  }
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow-lg space-y-8">
@@ -81,7 +87,13 @@ function FriendsList({ user }) {
           <ul className="space-y-2">
             {friends.map(friend => (
               <li key={friend.uid} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-2">
-                <span>{friend.displayName || friend.email}</span>
+                <button
+                  className="text-indigo-700 font-semibold hover:underline text-left flex-1"
+                  onClick={() => setSelectedFriend(friend)}
+                  title="Voir le profil"
+                >
+                  {friend.displayName || friend.email}
+                </button>
                 <button onClick={() => removeFriend(friend.uid)} className="bg-red-100 text-red-700 px-3 py-1 rounded-lg font-semibold hover:bg-red-200">Supprimer</button>
               </li>
             ))}

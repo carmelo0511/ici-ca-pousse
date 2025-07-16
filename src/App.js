@@ -16,6 +16,7 @@ import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
 import PWAInstallButton from './components/PWAInstallButton';
 import FriendsList from './components/FriendsList';
+import LeaderboardView from './components/LeaderboardView';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -206,6 +207,8 @@ function App() {
         return <StatsView stats={getStats()} workouts={workouts} onEditWorkout={handleEditWorkout} />;
       case 'friends':
         return <FriendsList user={user} />;
+      case 'leaderboard':
+        return <LeaderboardView user={user} />;
       default:
         return null;
     }

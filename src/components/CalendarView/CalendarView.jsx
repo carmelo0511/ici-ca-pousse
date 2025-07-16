@@ -153,7 +153,7 @@ const CalendarView = ({
             {/* Header sticky */}
             <div className="sticky top-0 z-10 bg-white rounded-t-3xl px-4 sm:px-6 pt-4 pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100">
               <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                🏋️ Séance du {new Date(selectedWorkout.date).toLocaleDateString('fr-FR')}
+                🏋️ Séance du {selectedWorkout.date ? parseLocalDate(selectedWorkout.date).toLocaleDateString('fr-FR') : ''}
               </h3>
               <div className="flex flex-wrap gap-2 ml-auto">
                 <button
