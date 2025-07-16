@@ -345,6 +345,32 @@ button:focus {
   .rounded-full {
     border-radius: 9999px !important;
   }
+  h1, h2, h3, h4 {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.4em;
+  }
+  .text-3xl { font-size: 1.3rem !important; }
+  .text-2xl { font-size: 1.1rem !important; }
+  .text-xl { font-size: 1rem !important; }
+  .text-lg { font-size: 0.95rem !important; }
+  .text-base, .text-sm { font-size: 0.85rem !important; }
+  .rounded-2xl { border-radius: 0.8rem !important; }
+  .rounded-xl { border-radius: 0.6rem !important; }
+  .px-6 { padding-left: 0.7rem !important; padding-right: 0.7rem !important; }
+  .py-4 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+  .py-3 { padding-top: 0.3rem !important; padding-bottom: 0.3rem !important; }
+  .card, .rounded-2xl, .rounded-xl {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  /* Calendrier : scroll horizontal si besoin */
+  .calendar-scrollable {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .calendar-scrollable .grid-cols-7 {
+    min-width: 600px;
+  }
 }
 
 /* Animation zoom-in pour modale */
@@ -408,3 +434,9 @@ button:focus {
 .compact .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem !important; }
 .compact .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem !important; }
 .compact .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.7rem !important; }
+
+/* Empêcher le chevauchement des textes dans les cartes */
+.card, .rounded-2xl, .rounded-xl {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}

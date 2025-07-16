@@ -40,7 +40,7 @@ const CalendarView = ({
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up">
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up calendar-scrollable">
         <div className="text-center text-2xl font-bold text-gray-800 mb-8">
           {t(`month_${currentMonth + 1}`)} {currentYear}
         </div>
