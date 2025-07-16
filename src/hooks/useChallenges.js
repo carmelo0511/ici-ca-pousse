@@ -6,10 +6,12 @@ import {
   deleteChallengeFromFirebase 
 } from '../utils/firebase';
 import { getWorkoutsForDateRange } from '../utils/workoutUtils';
+import { useWorkouts } from './useWorkouts';
 
 export const useChallenges = (user) => {
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { workouts } = useWorkouts(user);
 
   // Types de défis disponibles
   const challengeTypes = [
@@ -90,16 +92,16 @@ export const useChallenges = (user) => {
 
   const getChallengeScore = async (challenge, userId) => {
     try {
-      const workouts = await getWorkoutsForDateRange(userId, new Date(challenge.startDate), new Date(challenge.endDate));
+      const filteredWorkouts = getWorkoutsForDateRange(workouts, new Date(challenge.startDate), new Date(challenge.endDate));
 
       switch (challenge.type) {
         case 'workouts':
-          return workouts.length;
+          return filteredWorkouts.length;
         case 'duration':
-          return workouts.reduce((total, workout) => total + (workout.duration || 0), 0);
+          return filteredWorkouts.reduce((total, workout) => total + (workout.duration || 0), 0);
         case 'streak':
           // Calcul de la série consécutive
-          const sortedDates = workouts
+          const sortedDates = filteredWorkouts
             .map(w => new Date(w.date))
             .sort((a, b) => a - b);
           
@@ -119,7 +121,7 @@ export const useChallenges = (user) => {
 
           return maxStreak;
         case 'calories':
-          return workouts.reduce((total, workout) => total + (workout.calories || 0), 0);
+          return filteredWorkouts.reduce((total, workout) => total + (workout.calories || 0), 0);
         default:
           return 0;
       }

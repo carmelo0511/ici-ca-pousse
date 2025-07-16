@@ -157,4 +157,14 @@ export function getAverageDurationByTime(workouts) {
     evening: timeSlots.evening.workouts.length > 0 ? Math.round(timeSlots.evening.total / timeSlots.evening.workouts.length) : 0,
     night: timeSlots.night.workouts.length > 0 ? Math.round(timeSlots.night.total / timeSlots.night.workouts.length) : 0
   };
+}
+
+// Filtre les workouts par plage de dates
+export function getWorkoutsForDateRange(workouts, startDate, endDate) {
+  if (!workouts || !Array.isArray(workouts)) return [];
+  
+  return workouts.filter(workout => {
+    const workoutDate = new Date(workout.date);
+    return workoutDate >= startDate && workoutDate <= endDate;
+  });
 } 
