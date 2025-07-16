@@ -194,10 +194,10 @@ export const useChallenges = (user) => {
     // Ami le plus challengé
     const friendStats = {};
     challenges.forEach(challenge => {
-      const friendId = challenge.friend.id;
+      const friendId = challenge.friend.uid || challenge.friend.id;
       if (!friendStats[friendId]) {
         friendStats[friendId] = {
-          name: challenge.friend.name,
+          name: challenge.friend.displayName || challenge.friend.name,
           total: 0,
           victories: 0,
           defeats: 0
@@ -231,6 +231,58 @@ export const useChallenges = (user) => {
     };
   };
 
+  // Obtenir les défis envoyés par l'utilisateur
+  const getSentChallenges = () => {
+    return challenges.filter(challenge => challenge.createdBy === user?.uid);
+  };
+
+  // Obtenir les défis reçus par l'utilisateur
+  const getReceivedChallenges = () => {
+    return challenges.filter(challenge => 
+      (challenge.friend.uid === user?.uid || challenge.friend.id === user?.uid) && 
+      challenge.createdBy !== user?.uid
+    );
+  };
+
+  // Obtenir tous les défis actifs de l'utilisateur (envoyés + reçus)
+  const getAllUserChallenges = () => {
+    return challenges.filter(challenge => 
+      challenge.createdBy === user?.uid || 
+      challenge.friend.uid === user?.uid || 
+      challenge.friend.id === user?.uid
+    );
+  };
+
+  // Accepter un défi reçu
+  const acceptChallenge = async (challengeId) => {
+    const updatedChallenges = challenges.map(challenge => 
+      challenge.id === challengeId 
+        ? { ...challenge, status: 'accepted', acceptedAt: new Date().toISOString() }
+        : challenge
+    );
+    saveChallenges(updatedChallenges);
+  };
+
+  // Refuser un défi reçu
+  const declineChallenge = async (challengeId) => {
+    const updatedChallenges = challenges.map(challenge => 
+      challenge.id === challengeId 
+        ? { ...challenge, status: 'declined', declinedAt: new Date().toISOString() }
+        : challenge
+    );
+    saveChallenges(updatedChallenges);
+  };
+
+  // Annuler un défi (par le créateur)
+  const cancelChallenge = async (challengeId) => {
+    const updatedChallenges = challenges.map(challenge => 
+      challenge.id === challengeId 
+        ? { ...challenge, status: 'cancelled', cancelledAt: new Date().toISOString() }
+        : challenge
+    );
+    saveChallenges(updatedChallenges);
+  };
+
   return {
     challenges,
     createChallenge,
@@ -239,6 +291,12 @@ export const useChallenges = (user) => {
     getChallengeScore,
     getActiveChallenges,
     getCompletedChallenges,
+    getSentChallenges,
+    getReceivedChallenges,
+    getAllUserChallenges,
+    acceptChallenge,
+    declineChallenge,
+    cancelChallenge,
     formatScore,
     getChallengeStatus,
     getDetailedStats,

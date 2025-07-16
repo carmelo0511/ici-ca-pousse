@@ -6,7 +6,7 @@ import GradientButton from './GradientButton';
 import Modal from './Modal';
 import Toast from './Toast';
 import ChallengeStats from './ChallengeStats';
-import { sendChallengeNotification } from '../utils/notifications';
+import { sendChallengeNotification, createNotification, NOTIFICATION_TYPES } from '../utils/notifications';
 
 const Challenges = ({ user }) => {
   const { friends } = useFriends(user);
@@ -16,13 +16,20 @@ const Challenges = ({ user }) => {
     getChallengeScore, 
     formatScore, 
     getChallengeStatus,
-    getDetailedStats
+    getDetailedStats,
+    getSentChallenges,
+    getReceivedChallenges,
+    getAllUserChallenges,
+    acceptChallenge,
+    declineChallenge,
+    cancelChallenge
   } = useChallenges(user);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [challengeType, setChallengeType] = useState('workouts');
   const [challengeDuration, setChallengeDuration] = useState(7);
   const [toast, setToast] = useState(null);
+  const [activeTab, setActiveTab] = useState('all'); // 'all', 'sent' ou 'received'
 
   // Types de défis disponibles
   const challengeTypes = [
@@ -49,7 +56,10 @@ const Challenges = ({ user }) => {
     const challengeData = {
       type: challengeType,
       duration: challengeDuration,
-      friend: selectedFriend
+      friend: selectedFriend,
+      createdBy: user.uid,
+      senderName: user.displayName || user.email,
+      status: 'pending'
     };
 
     const newChallenge = createChallenge(challengeData);
@@ -110,6 +120,73 @@ const Challenges = ({ user }) => {
 
   const stats = getChallengeStats();
   const detailedStats = getDetailedStats();
+  const sentChallenges = getSentChallenges();
+  const receivedChallenges = getReceivedChallenges();
+  const allUserChallenges = getAllUserChallenges();
+
+  // Handlers pour les actions sur les défis
+  const handleAcceptChallenge = async (challengeId) => {
+    try {
+      await acceptChallenge(challengeId);
+      
+      // Notifier le créateur du défi
+      const challenge = challenges.find(c => c.id === challengeId);
+      if (challenge && challenge.createdBy) {
+        await createNotification(challenge.createdBy, {
+          type: NOTIFICATION_TYPES.CHALLENGE_UPDATE,
+          title: 'Défi accepté !',
+          message: `${user.displayName || user.email} a accepté ton défi de ${getChallengeTypeLabel(challenge.type)} !`,
+          challengeId: challenge.id
+        });
+      }
+      
+      setToast({ message: 'Défi accepté !', type: 'success' });
+    } catch (error) {
+      setToast({ message: 'Erreur lors de l\'acceptation', type: 'error' });
+    }
+  };
+
+  const handleDeclineChallenge = async (challengeId) => {
+    try {
+      await declineChallenge(challengeId);
+      
+      // Notifier le créateur du défi
+      const challenge = challenges.find(c => c.id === challengeId);
+      if (challenge && challenge.createdBy) {
+        await createNotification(challenge.createdBy, {
+          type: NOTIFICATION_TYPES.CHALLENGE_UPDATE,
+          title: 'Défi refusé',
+          message: `${user.displayName || user.email} a refusé ton défi de ${getChallengeTypeLabel(challenge.type)}.`,
+          challengeId: challenge.id
+        });
+      }
+      
+      setToast({ message: 'Défi refusé', type: 'info' });
+    } catch (error) {
+      setToast({ message: 'Erreur lors du refus', type: 'error' });
+    }
+  };
+
+  const handleCancelChallenge = async (challengeId) => {
+    try {
+      await cancelChallenge(challengeId);
+      
+      // Notifier le destinataire du défi
+      const challenge = challenges.find(c => c.id === challengeId);
+      if (challenge && challenge.friend.uid) {
+        await createNotification(challenge.friend.uid, {
+          type: NOTIFICATION_TYPES.CHALLENGE_UPDATE,
+          title: 'Défi annulé',
+          message: `${user.displayName || user.email} a annulé le défi de ${getChallengeTypeLabel(challenge.type)}.`,
+          challengeId: challenge.id
+        });
+      }
+      
+      setToast({ message: 'Défi annulé', type: 'info' });
+    } catch (error) {
+      setToast({ message: 'Erreur lors de l\'annulation', type: 'error' });
+    }
+  };
 
   return (
     <div className="p-4">
@@ -118,6 +195,40 @@ const Challenges = ({ user }) => {
         <GradientButton onClick={() => setShowCreateModal(true)}>
           Créer un défi
         </GradientButton>
+      </div>
+
+      {/* Onglets */}
+      <div className="flex space-x-1 mb-6 bg-gray-100 p-1 rounded-lg">
+        <button
+          onClick={() => setActiveTab('all')}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+            activeTab === 'all'
+              ? 'bg-white text-indigo-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-800'
+          }`}
+        >
+          Tous mes défis ({allUserChallenges.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('sent')}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+            activeTab === 'sent'
+              ? 'bg-white text-indigo-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-800'
+          }`}
+        >
+          Envoyés ({sentChallenges.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('received')}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+            activeTab === 'received'
+              ? 'bg-white text-indigo-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-800'
+          }`}
+        >
+          Reçus ({receivedChallenges.length})
+        </button>
       </div>
 
       {/* Statistiques des défis */}
@@ -161,47 +272,214 @@ const Challenges = ({ user }) => {
         </div>
       )}
 
-      {challenges.length === 0 ? (
-        <Card>
-          <div className="text-center py-8">
-            <div className="text-4xl mb-4">🏆</div>
-            <h3 className="text-lg font-semibold mb-2">Aucun défi en cours</h3>
-            <p className="text-gray-600 mb-4">Crée ton premier défi avec un ami !</p>
-            <GradientButton onClick={() => setShowCreateModal(true)}>
-              Créer un défi
-            </GradientButton>
+      {activeTab === 'all' ? (
+        // Tous les défis
+        allUserChallenges.length === 0 ? (
+          <Card>
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">🏆</div>
+              <h3 className="text-lg font-semibold mb-2">Aucun défi</h3>
+              <p className="text-gray-600 mb-4">Crée ton premier défi ou attends d'en recevoir un !</p>
+              <GradientButton onClick={() => setShowCreateModal(true)}>
+                Créer un défi
+              </GradientButton>
+            </div>
+          </Card>
+        ) : (
+          <div className="space-y-4">
+            {allUserChallenges.map(challenge => {
+              const myScore = getChallengeScore(challenge);
+              const status = getChallengeStatus(challenge);
+              const isSentByMe = challenge.createdBy === user?.uid;
+              const isPending = challenge.status === 'pending';
+              
+              return (
+                <Card key={challenge.id}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="text-2xl">{getChallengeIcon(challenge.type)}</div>
+                      <div>
+                        <h3 className="font-semibold">
+                          {isSentByMe 
+                            ? `Défi vs ${challenge.friend.displayName || challenge.friend.email || 'Utilisateur'}`
+                            : `Défi de ${challenge.senderName || 'Un ami'}`
+                          }
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          {getChallengeTypeLabel(challenge.type)} • {challenge.duration} jours
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {isSentByMe ? 'Envoyé par toi' : 'Reçu de ' + (challenge.senderName || 'un ami')} • Statut: {challenge.status || 'en attente'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      {isPending && !isSentByMe ? (
+                        <div className="flex flex-col space-y-2">
+                          <div className="text-sm text-gray-600">En attente de réponse</div>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => handleAcceptChallenge(challenge.id)}
+                              className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600"
+                            >
+                              Accepter
+                            </button>
+                            <button
+                              onClick={() => handleDeclineChallenge(challenge.id)}
+                              className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                            >
+                              Refuser
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className={`font-bold ${getStatusColor(status.status)}`}>
+                            {status.text}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
+                          </div>
+                          {isPending && isSentByMe && (
+                            <button
+                              onClick={() => handleCancelChallenge(challenge.id)}
+                              className="mt-2 text-xs text-red-600 hover:text-red-800"
+                            >
+                              Annuler le défi
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
-        </Card>
+        )
+      ) : activeTab === 'sent' ? (
+        // Défis envoyés
+        sentChallenges.length === 0 ? (
+          <Card>
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">🏆</div>
+              <h3 className="text-lg font-semibold mb-2">Aucun défi envoyé</h3>
+              <p className="text-gray-600 mb-4">Crée ton premier défi avec un ami !</p>
+              <GradientButton onClick={() => setShowCreateModal(true)}>
+                Créer un défi
+              </GradientButton>
+            </div>
+          </Card>
+        ) : (
+          <div className="space-y-4">
+            {sentChallenges.map(challenge => {
+              const myScore = getChallengeScore(challenge);
+              const status = getChallengeStatus(challenge);
+              return (
+                <Card key={challenge.id}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="text-2xl">{getChallengeIcon(challenge.type)}</div>
+                      <div>
+                        <h3 className="font-semibold">Défi vs {challenge.friend.displayName || challenge.friend.email || 'Utilisateur'}</h3>
+                        <p className="text-sm text-gray-600">
+                          {getChallengeTypeLabel(challenge.type)} • {challenge.duration} jours
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Statut: {challenge.status || 'en attente'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`font-bold ${getStatusColor(status.status)}`}>
+                        {status.text}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
+                      </div>
+                      {challenge.status === 'pending' && (
+                        <button
+                          onClick={() => handleCancelChallenge(challenge.id)}
+                          className="mt-2 text-xs text-red-600 hover:text-red-800"
+                        >
+                          Annuler le défi
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        )
       ) : (
-        <div className="space-y-4">
-          {challenges.map(challenge => {
-            const myScore = getChallengeScore(challenge);
-            const status = getChallengeStatus(challenge);
-            return (
-              <Card key={challenge.id}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="text-2xl">{getChallengeIcon(challenge.type)}</div>
-                    <div>
-                      <h3 className="font-semibold">Défi vs {challenge.friend.displayName || challenge.friend.email || 'Utilisateur'}</h3>
-                      <p className="text-sm text-gray-600">
-                        {getChallengeTypeLabel(challenge.type)} • {challenge.duration} jours
-                      </p>
+        // Défis reçus
+        receivedChallenges.length === 0 ? (
+          <Card>
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">📨</div>
+              <h3 className="text-lg font-semibold mb-2">Aucun défi reçu</h3>
+              <p className="text-gray-600 mb-4">Tes amis peuvent t'envoyer des défis !</p>
+            </div>
+          </Card>
+        ) : (
+          <div className="space-y-4">
+            {receivedChallenges.map(challenge => {
+              const myScore = getChallengeScore(challenge);
+              const status = getChallengeStatus(challenge);
+              const isPending = challenge.status === 'pending';
+              
+              return (
+                <Card key={challenge.id}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="text-2xl">{getChallengeIcon(challenge.type)}</div>
+                      <div>
+                        <h3 className="font-semibold">Défi de {challenge.createdBy === user?.uid ? 'toi' : (challenge.senderName || 'Un ami')}</h3>
+                        <p className="text-sm text-gray-600">
+                          {getChallengeTypeLabel(challenge.type)} • {challenge.duration} jours
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Statut: {challenge.status || 'en attente'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      {isPending ? (
+                        <div className="flex flex-col space-y-2">
+                          <div className="text-sm text-gray-600">En attente de réponse</div>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => handleAcceptChallenge(challenge.id)}
+                              className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600"
+                            >
+                              Accepter
+                            </button>
+                            <button
+                              onClick={() => handleDeclineChallenge(challenge.id)}
+                              className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                            >
+                              Refuser
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className={`font-bold ${getStatusColor(status.status)}`}>
+                            {status.text}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className={`font-bold ${getStatusColor(status.status)}`}>
-                      {status.text}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+                </Card>
+              );
+            })}
+          </div>
+        )
       )}
 
       {/* Modal de création de défi */}
