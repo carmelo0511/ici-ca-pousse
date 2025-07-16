@@ -2,6 +2,7 @@ import React from 'react';
 import { Clock, Zap, Dumbbell, Heart, Trash2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 const CalendarView = ({
   workouts,
@@ -13,14 +14,15 @@ const CalendarView = ({
   setShowWorkoutDetail,
   className = '',
 }) => {
+  const { t } = useTranslation();
+  // Ajout navigation mois
   const today = new Date();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
-  const firstDay = new Date(currentYear, currentMonth, 1);
-  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+  const [month, setMonth] = useState(today.getMonth());
+  const [year, setYear] = useState(today.getFullYear());
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
   const daysInMonth = lastDay.getDate();
   const startingDayOfWeek = firstDay.getDay();
-
   const days = [];
   for (let i = 0; i < startingDayOfWeek; i++) {
     days.push(null);
@@ -28,8 +30,6 @@ const CalendarView = ({
   for (let day = 1; day <= daysInMonth; day++) {
     days.push(day);
   }
-
-  const { t } = useTranslation();
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
@@ -42,28 +42,46 @@ const CalendarView = ({
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-8 border border-gray-100 fade-in-up calendar-scrollable">
-        <div className="text-center text-2xl font-bold text-gray-800 mb-8">
-          {t(`month_${currentMonth + 1}`)} {currentYear}
+      <div className="bg-white rounded-3xl shadow-xl p-2 sm:p-4 border border-gray-100 fade-in-up calendar-scrollable w-full max-w-xs sm:max-w-md mx-auto">
+        <div className="flex items-center justify-between mb-4">
+          <button
+            className="p-2 rounded-full hover:bg-gray-100 transition"
+            onClick={() => {
+              if (month === 0) {
+                setMonth(11);
+                setYear(year - 1);
+              } else {
+                setMonth(month - 1);
+              }
+            }}
+            aria-label="Mois précédent"
+          >
+            <span className="text-xl">←</span>
+          </button>
+          <div className="text-center text-lg sm:text-2xl font-bold text-gray-800">
+            {t(`month_${month + 1}`)} {year}
+          </div>
+          <button
+            className="p-2 rounded-full hover:bg-gray-100 transition"
+            onClick={() => {
+              if (month === 11) {
+                setMonth(0);
+                setYear(year + 1);
+              } else {
+                setMonth(month + 1);
+              }
+            }}
+            aria-label="Mois suivant"
+          >
+            <span className="text-xl">→</span>
+          </button>
         </div>
-
-        {/* Ligne des jours de la semaine supprimée */}
-        {/* <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
-          {['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map((day) => (
-            <div key={day} className="text-center text-xs sm:text-sm font-bold text-gray-600 py-2 sm:py-3">
-              {t(day)}
-            </div>
-          ))}
-        </div> */}
-
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {days.map((day, index) => {
             if (day === null) return <div key={index} className="h-10 sm:h-12"></div>;
-
-            const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const hasWorkout = getWorkoutForDate(dateString);
-            const isToday = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
-
+            const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
             return (
               <div
                 key={day}
