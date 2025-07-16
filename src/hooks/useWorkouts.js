@@ -11,7 +11,7 @@ export const useWorkouts = (user) => {
     if (user) {
       const q = query(collection(db, 'workouts'), where('userId', '==', user.uid));
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        setWorkouts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        setWorkouts(querySnapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() })));
       });
       return unsubscribe;
     } else {
@@ -30,9 +30,10 @@ export const useWorkouts = (user) => {
 
   const addWorkout = useCallback(async (workout) => {
     if (user) {
-      await addDoc(collection(db, 'workouts'), { ...workout, userId: user.uid });
+      const docRef = await addDoc(collection(db, 'workouts'), { ...workout, userId: user.uid });
+      // On ne met pas à jour localement, la synchro temps réel s'en charge
     } else {
-      setWorkouts(prev => [...prev, workout]);
+      setWorkouts(prev => [...prev, { ...workout, id: workout.id || Date.now() }]);
     }
   }, [user]);
 

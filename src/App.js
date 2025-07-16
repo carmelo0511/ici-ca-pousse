@@ -12,6 +12,7 @@ import { createWorkout } from './utils/workoutUtils';
 import { exerciseDatabase } from './utils/exerciseDatabase';
 import { auth } from './utils/firebase';
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
+import { useTranslation } from 'react-i18next';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -35,6 +36,7 @@ function App() {
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
   const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
@@ -72,7 +74,7 @@ function App() {
     addExercise(exerciseName);
     setShowAddExercise(false);
     setSelectedMuscleGroup(null);
-    showToastMsg('Exercice ajouté à la séance !');
+    showToastMsg(t('exercise_added'));
   };
 
   const saveWorkout = () => {
@@ -80,10 +82,10 @@ function App() {
     const workout = createWorkout(exercises, selectedDate, workoutDuration, selectedWorkout ? selectedWorkout.id : null);
     if (selectedWorkout) {
       updateWorkout(selectedWorkout.id, workout);
-      showToastMsg('Séance modifiée avec succès ! 💪');
+      showToastMsg(t('workout_updated'));
     } else {
       addWorkout(workout);
-      showToastMsg('Séance sauvegardée ! Bien joué ! 🎉');
+      showToastMsg(t('workout_saved'));
     }
     clearExercises();
     setWorkoutDuration('');
@@ -105,10 +107,10 @@ function App() {
 
 
   const handleDeleteWorkout = (workoutId) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette séance ? 🗑️')) {
+    if (window.confirm(t('confirm_delete_workout'))) {
       deleteWorkout(workoutId);
       setShowWorkoutDetail(false);
-      showToastMsg('Séance supprimée !', 'error');
+      showToastMsg(t('workout_deleted'), 'error');
     }
   };
 

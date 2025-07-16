@@ -28,7 +28,24 @@ const resources = {
       "repetitions": "Répétitions",
       "weight_kg": "Poids (kg)",
       "total": "Total",
-      "workout_done": "{{count}} séance effectuée{{count > 1 ? 's' : ''}}"
+      "workout_done": "{{count}} séance effectuée{{count > 1 ? 's' : ''}}",
+      "workout_saved": "Séance sauvegardée ! Bien joué ! 🎉",
+      "workout_updated": "Séance modifiée avec succès ! 💪",
+      "workout_deleted": "Séance supprimée !",
+      "exercise_added": "Exercice ajouté à la séance !",
+      "confirm_delete_workout": "Êtes-vous sûr de vouloir supprimer cette séance ? 🗑️",
+      // Exercices anglais (exemple)
+      "Développé couché": "Bench Press",
+      "Développé incliné": "Incline Press",
+      "Développé décliné": "Decline Press",
+      "Pompes": "Push-ups",
+      "Écarté couché": "Flat Flyes",
+      "Écarté incliné": "Incline Flyes",
+      "Développé haltères": "Dumbbell Press",
+      "Dips": "Dips",
+      "Pull-over": "Pull-over",
+      "Pec deck": "Pec Deck",
+      // ... (ajouter les autres exercices ici)
     }
   },
   en: {
@@ -56,7 +73,24 @@ const resources = {
       "repetitions": "Repetitions",
       "weight_kg": "Weight (kg)",
       "total": "Total",
-      "workout_done": "{{count}} workout done{{count > 1 ? 's' : ''}}"
+      "workout_done": "{{count}} workout done{{count > 1 ? 's' : ''}}",
+      "workout_saved": "Workout saved! Well done! 🎉",
+      "workout_updated": "Workout updated successfully! 💪",
+      "workout_deleted": "Workout deleted!",
+      "exercise_added": "Exercise added to the workout!",
+      "confirm_delete_workout": "Are you sure you want to delete this workout? 🗑️",
+      // Exercices anglais (exemple)
+      "Développé couché": "Bench Press",
+      "Développé incliné": "Incline Press",
+      "Développé décliné": "Decline Press",
+      "Pompes": "Push-ups",
+      "Écarté couché": "Flat Flyes",
+      "Écarté incliné": "Incline Flyes",
+      "Développé haltères": "Dumbbell Press",
+      "Dips": "Dips",
+      "Pull-over": "Pull-over",
+      "Pec deck": "Pec Deck",
+      // ... (ajouter les autres exercices ici)
     }
   }
 };
