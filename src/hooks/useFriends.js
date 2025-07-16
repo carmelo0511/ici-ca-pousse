@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { db } from '../utils/firebase';
 import { collection, doc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove, query, where } from 'firebase/firestore';
+import { getUserProfile as getUserProfileFromFirebase } from '../utils/firebase';
 
 export function useFriends(currentUser) {
   const [friends, setFriends] = useState([]);
@@ -9,9 +10,13 @@ export function useFriends(currentUser) {
 
   // Récupère le profil complet d'un user par UID
   const getUserProfile = async (uid) => {
-    const userRef = doc(db, 'users', uid);
-    const snap = await getDoc(userRef);
-    return snap.exists() ? { uid, ...snap.data() } : null;
+    try {
+      const profile = await getUserProfileFromFirebase(uid);
+      return profile;
+    } catch (error) {
+      console.error('Erreur lors de la récupération du profil:', error);
+      return null;
+    }
   };
 
   // Rafraîchit la liste d'amis et d'invitations
@@ -22,12 +27,14 @@ export function useFriends(currentUser) {
     const userSnap = await getDoc(userRef);
     if (!userSnap.exists()) return;
     const data = userSnap.data();
-    // Amis
+    
+    // Amis avec profils complets (photos et badges)
     const friendsProfiles = await Promise.all(
       (data.friends || []).map(getUserProfile)
     );
     setFriends(friendsProfiles.filter(Boolean));
-    // Invitations reçues (UIDs)
+    
+    // Invitations reçues avec profils complets
     const invitesProfiles = await Promise.all(
       (data.pendingInvites || []).map(getUserProfile)
     );

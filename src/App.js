@@ -20,7 +20,7 @@ import PWAInstallButton from './components/PWAInstallButton';
 import FriendsList from './components/FriendsList';
 import LeaderboardView from './components/LeaderboardView';
 import Challenges from './components/Challenges';
-import Badges from './components/Badges';
+import BadgesPage from './components/BadgesPage';
 import Notifications from './components/Notifications';
 import ProfilePicture, { ProfilePictureEditor } from './components/ProfilePicture';
 
@@ -234,7 +234,7 @@ function App() {
       case 'challenges':
         return <Challenges user={user} />;
       case 'badges':
-        return <Badges workouts={workouts} challenges={challenges} friends={friends} />;
+        return <BadgesPage workouts={workouts} challenges={challenges} friends={friends} user={user} />;
       case 'notifications':
         return <Notifications user={user} />;
       default:

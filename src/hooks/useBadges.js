@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { BADGE_TYPES } from '../components/Badges';
+import { saveUserBadges } from '../utils/firebase';
 
 // Fonction pour calculer les badges d'un utilisateur
 export function calculateUserBadges(workouts = [], challenges = [], user) {
@@ -94,6 +95,22 @@ export function useBadges(workouts, challenges, user) {
   }, [workouts, challenges, user]);
 
   const badgeCount = badges.length;
+
+  // Sauvegarder automatiquement les badges dans Firebase quand ils changent
+  useEffect(() => {
+    if (user && user.uid && badges.length > 0) {
+      // Vérifier si les badges ont changé par rapport à ceux stockés
+      const currentBadges = user.badges || [];
+      const hasChanged = badges.length !== currentBadges.length || 
+                        !badges.every(badge => currentBadges.includes(badge));
+      
+      if (hasChanged) {
+        saveUserBadges(user.uid, badges).catch(error => {
+          console.error('Erreur lors de la sauvegarde des badges:', error);
+        });
+      }
+    }
+  }, [badges, user]);
 
   return {
     badges,
