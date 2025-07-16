@@ -2,7 +2,6 @@ import React from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, Calendar, Edit3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { formatDate } from '../../utils/workoutUtils';
-import { useExercises } from '../../hooks/useExercises';
 import { useTranslation } from 'react-i18next';
 import { getBadges } from '../../utils/workoutUtils';
 

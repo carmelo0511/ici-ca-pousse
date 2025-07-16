@@ -27,11 +27,6 @@ const CalendarView = ({
     days.push(day);
   }
 
-  const monthNames = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-  ];
-
   const { t } = useTranslation();
 
   return (
