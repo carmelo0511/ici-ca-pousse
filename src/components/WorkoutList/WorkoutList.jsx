@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import {
   Calendar,
   Plus,
@@ -6,7 +6,8 @@ import {
   Heart,
   Target,
   Clock,
-  X
+  X,
+  Star
 } from 'lucide-react';
 import { exerciseDatabase } from '../../utils/exerciseDatabase';
 
@@ -28,6 +29,45 @@ function WorkoutList({
 }) {
   // Ajout d'un état local pour le nom de l'exercice personnalisé
   const [customExerciseName, setCustomExerciseName] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [favoriteExercises, setFavoriteExercises] = useState(() => {
+    // On peut stocker les favoris dans le localStorage pour persistance
+    try {
+      return JSON.parse(localStorage.getItem('favoriteExercises') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  // Sauvegarde des favoris à chaque changement
+  useEffect(() => {
+    localStorage.setItem('favoriteExercises', JSON.stringify(favoriteExercises));
+  }, [favoriteExercises]);
+
+  const toggleFavorite = (exercise) => {
+    setFavoriteExercises((prev) =>
+      prev.includes(exercise)
+        ? prev.filter((e) => e !== exercise)
+        : [...prev, exercise]
+    );
+  };
+
+  // Filtrage dynamique des exercices selon la recherche
+  const filteredExercises = selectedMuscleGroup && searchTerm.trim()
+    ? exerciseDatabase[selectedMuscleGroup].filter(ex =>
+        ex.toLowerCase().includes(searchTerm.trim().toLowerCase())
+      )
+    : selectedMuscleGroup
+      ? exerciseDatabase[selectedMuscleGroup]
+      : [];
+
+  // Exercices favoris du groupe sélectionné (filtrés)
+  const favoriteInGroup = selectedMuscleGroup
+    ? filteredExercises.filter(ex => favoriteExercises.includes(ex))
+    : [];
+  const nonFavoriteInGroup = selectedMuscleGroup
+    ? filteredExercises.filter(ex => !favoriteExercises.includes(ex))
+    : [];
 
   return (
       <div className="p-6 space-y-8">
@@ -228,7 +268,7 @@ function WorkoutList({
 
     {showAddExercise && (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-3xl p-6 w-full max-w-4xl h-[85vh] shadow-2xl border border-gray-200 flex flex-col">
+        <div className="bg-white rounded-3xl p-6 w-full max-w-lg sm:max-w-2xl md:max-w-3xl h-auto max-h-[90vh] shadow-2xl border border-gray-200 flex flex-col items-center justify-center mx-auto">
           <div className="flex justify-between items-center mb-6 flex-shrink-0">
             <div className="flex items-center space-x-3">
               {selectedMuscleGroup && (
@@ -277,22 +317,77 @@ function WorkoutList({
               </div>
             ) : (
               <>
+                {/* Champ de recherche d'exercice */}
+                <div className="flex flex-col items-center mb-4 w-full">
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    placeholder="Rechercher un exercice..."
+                    className="border-2 border-gray-200 rounded-xl px-4 py-2 w-full max-w-md text-center font-medium focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
+                    autoFocus
+                  />
+                </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-                  {exerciseDatabase[selectedMuscleGroup].map((exercise) => (
-                    <button
-                      key={exercise}
-                      onClick={() => addExerciseToWorkout(exercise)}
-                      className="text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}>
-                          {selectedMuscleGroup === 'cardio' ? <Heart className="h-4 w-4" /> : <Dumbbell className="h-4 w-4" />}
+                  {filteredExercises.length === 0 ? (
+                    <div className="col-span-2 sm:col-span-3 text-center text-gray-400 py-8">Aucun exercice trouvé</div>
+                  ) : (
+                    <>
+                      {/* Affichage des favoris en haut */}
+                      {favoriteInGroup.length > 0 && (
+                        <>
+                          {favoriteInGroup.map((exercise) => (
+                            <div key={exercise} className="relative">
+                              <button
+                                onClick={() => addExerciseToWorkout(exercise)}
+                                className="w-full text-left p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 hover:from-yellow-100 hover:to-yellow-200 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-yellow-200 hover:border-yellow-400 hover:shadow-md transform hover:scale-[1.02]"
+                              >
+                                <div className="flex items-center space-x-3">
+                                  <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}>
+                                    {selectedMuscleGroup === 'cardio' ? <Heart className="h-4 w-4" /> : <Dumbbell className="h-4 w-4" />}
+                                  </div>
+                                  <span className="flex-1">{exercise}</span>
+                                  <span className="text-gray-400">→</span>
+                                </div>
+                              </button>
+                              <button
+                                onClick={e => { e.stopPropagation(); toggleFavorite(exercise); }}
+                                className="absolute top-2 right-2 text-yellow-500 hover:text-yellow-600"
+                                title="Retirer des favoris"
+                              >
+                                <Star fill="currentColor" className="h-5 w-5" />
+                              </button>
+                            </div>
+                          ))}
+                          <div className="col-span-2 sm:col-span-3 border-b border-yellow-200 my-2"></div>
+                        </>
+                      )}
+                      {/* Exercices non favoris */}
+                      {nonFavoriteInGroup.map((exercise) => (
+                        <div key={exercise} className="relative">
+                          <button
+                            onClick={() => addExerciseToWorkout(exercise)}
+                            className="w-full text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}>
+                                {selectedMuscleGroup === 'cardio' ? <Heart className="h-4 w-4" /> : <Dumbbell className="h-4 w-4" />}
+                              </div>
+                              <span className="flex-1">{exercise}</span>
+                              <span className="text-gray-400">→</span>
+                            </div>
+                          </button>
+                          <button
+                            onClick={e => { e.stopPropagation(); toggleFavorite(exercise); }}
+                            className="absolute top-2 right-2 text-gray-300 hover:text-yellow-500"
+                            title="Ajouter aux favoris"
+                          >
+                            <Star className="h-5 w-5" />
+                          </button>
                         </div>
-                        <span className="flex-1">{exercise}</span>
-                        <span className="text-gray-400">→</span>
-                      </div>
-                    </button>
-                  ))}
+                      ))}
+                    </>
+                  )}
                 </div>
                 {/* Champ pour exercice personnalisé */}
                 <div className="flex flex-col items-center justify-center gap-3 mt-4 w-full">
@@ -301,7 +396,7 @@ function WorkoutList({
                     value={customExerciseName}
                     onChange={e => setCustomExerciseName(e.target.value)}
                     placeholder="Nom de l'exercice personnalisé"
-                    className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full max-w-xs text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200"
+                    className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full max-w-md text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
                   />
                   <button
                     onClick={() => {
@@ -312,7 +407,7 @@ function WorkoutList({
                         setSelectedMuscleGroup(null);
                       }
                     }}
-                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 w-full max-w-xs"
+                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 w-full max-w-md"
                   >
                     Ajouter
                   </button>

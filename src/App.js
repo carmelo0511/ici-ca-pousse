@@ -13,7 +13,7 @@ import { exerciseDatabase } from './utils/exerciseDatabase';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('workout');
-  const [showToast, setShowToast] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [selectedDate, setSelectedDate] = useState(() => {
     const now = new Date();
     const year = now.getFullYear();
@@ -28,24 +28,35 @@ const App = () => {
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
 
   // Hooks personnalisés
-  const { workouts, addWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
+  const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
   const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises } = useExercises();
 
   // Fonctions utilitaires
+  const showToastMsg = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 2500);
+  };
+
   const addExerciseToWorkout = (exerciseName) => {
     addExercise(exerciseName);
     setShowAddExercise(false);
     setSelectedMuscleGroup(null);
+    showToastMsg('Exercice ajouté à la séance !');
   };
 
   const saveWorkout = () => {
     if (exercises.length === 0) return;
-    const workout = createWorkout(exercises, selectedDate, workoutDuration);
-    addWorkout(workout);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 2500);
+    const workout = createWorkout(exercises, selectedDate, workoutDuration, selectedWorkout ? selectedWorkout.id : null);
+    if (selectedWorkout) {
+      updateWorkout(selectedWorkout.id, workout);
+      showToastMsg('Séance modifiée avec succès ! 💪');
+    } else {
+      addWorkout(workout);
+      showToastMsg('Séance sauvegardée ! Bien joué ! 🎉');
+    }
     clearExercises();
     setWorkoutDuration('');
+    setSelectedWorkout(null);
   };
 
   const openWorkoutDetail = (workout) => {
@@ -59,6 +70,7 @@ const App = () => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cette séance ? 🗑️')) {
       deleteWorkout(workoutId);
       setShowWorkoutDetail(false);
+      showToastMsg('Séance supprimée !', 'error');
     }
   };
 
@@ -111,10 +123,11 @@ const App = () => {
         <Header workoutCount={workouts.length} />
         <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
         {renderActiveTab()}
-        {showToast && (
-          <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 bg-white border border-green-200 text-green-700 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg">
-            <CheckCircle className="h-6 w-6 text-green-500" />
-            <span>Séance sauvegardée ! Bien joué ! 🎉</span>
+        {toast.show && (
+          <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg
+            ${toast.type === 'success' ? 'bg-white border border-green-200 text-green-700' : 'bg-white border border-red-200 text-red-700'}`}
+          >
+            <span>{toast.message}</span>
           </div>
         )}
       </div>
