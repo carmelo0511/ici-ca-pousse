@@ -1,6 +1,7 @@
 // Utilitaires pour la gestion des workouts
 
-import { DEFAULT_WORKOUT_DURATION } from '../constants';
+// Valeur par défaut pour la durée d'une séance (en minutes)
+const DEFAULT_WORKOUT_DURATION = 30;
 
 export const createWorkout = (exercises, date, duration, workoutId = null) => {
   if (exercises.length === 0) return null;
@@ -32,14 +33,9 @@ export const calculateWorkoutStats = (workouts) => {
   return { totalWorkouts, totalSets, totalReps, totalWeight, avgDuration };
 };
 
-export const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+export const formatDate = (dateStr) => {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: 'short' });
 };
 
 export const getCurrentDate = () => {
