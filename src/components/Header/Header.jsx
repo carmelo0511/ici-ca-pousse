@@ -2,10 +2,17 @@ import React, { memo } from 'react';
 import { Dumbbell } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../utils/firebase';
 
-const Header = memo(({ workoutCount, className = '' }) => {
+const Header = memo(({ workoutCount, className = '', user }) => {
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng) => i18n.changeLanguage(lng);
+
+  const handleSignOut = async () => {
+    await signOut(auth);
+    window.location.reload(); // force retour à Auth
+  };
 
   return (
     <header className={`bg-white/90 backdrop-blur-sm shadow-lg border-b border-gray-200 ${className}`}>
@@ -39,6 +46,16 @@ const Header = memo(({ workoutCount, className = '' }) => {
             >
               EN
             </button>
+            {/* Bouton Sign Out */}
+            {user && (
+              <button
+                onClick={handleSignOut}
+                className="ml-2 px-3 py-1 rounded-lg font-semibold border border-red-400 bg-red-50 text-red-600 hover:bg-red-100 transition-all text-sm"
+                aria-label="Déconnexion"
+              >
+                Déconnexion
+              </button>
+            )}
           </div>
         </div>
       </div>

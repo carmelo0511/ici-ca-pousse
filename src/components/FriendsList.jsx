@@ -27,7 +27,11 @@ function FriendsList({ user }) {
       setInviteEmail('');
       refreshFriends();
     } catch (err) {
-      setInviteError(err.message || 'Erreur lors de l’envoi');
+      if (err.message && err.message.toLowerCase().includes('utilisateur introuvable')) {
+        setInviteError("Aucun utilisateur trouvé avec cet email. Demande-lui de se connecter d'abord.");
+      } else {
+        setInviteError(err.message || 'Erreur lors de l’envoi');
+      }
     }
   };
 
