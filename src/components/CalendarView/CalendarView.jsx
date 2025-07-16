@@ -47,13 +47,14 @@ const CalendarView = ({
           {t(`month_${currentMonth + 1}`)} {currentYear}
         </div>
 
-        <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
+        {/* Ligne des jours de la semaine supprimée */}
+        {/* <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
           {['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map((day) => (
             <div key={day} className="text-center text-xs sm:text-sm font-bold text-gray-600 py-2 sm:py-3">
               {t(day)}
             </div>
           ))}
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {days.map((day, index) => {
