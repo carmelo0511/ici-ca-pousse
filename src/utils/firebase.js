@@ -133,14 +133,23 @@ export async function deleteChallengeFromFirebase(challengeId) {
 // Fonction pour uploader une photo de profil
 export async function uploadProfilePicture(userId, file) {
   try {
+    console.log('📸 Début de l\'upload de la photo de profil pour:', userId);
+    
     const storage = getStorage();
-    const fileExtension = file.name.split('.').pop();
+    const fileExtension = file.name.split('.').pop().toLowerCase();
     const fileName = `profile-pictures/${userId}.${fileExtension}`;
     const storageRef = ref(storage, fileName);
     
+    console.log('📸 Nom du fichier:', fileName);
+    console.log('📸 Taille du fichier:', file.size, 'bytes');
+    console.log('📸 Type du fichier:', file.type);
+    
     // Upload du fichier
     const snapshot = await uploadBytes(storageRef, file);
+    console.log('📸 Upload réussi, récupération de l\'URL...');
+    
     const downloadURL = await getDownloadURL(snapshot.ref);
+    console.log('📸 URL de téléchargement obtenue:', downloadURL);
     
     // Mettre à jour le profil utilisateur
     const userRef = doc(db, 'users', userId);
@@ -149,10 +158,25 @@ export async function uploadProfilePicture(userId, file) {
       updatedAt: serverTimestamp()
     });
     
+    console.log('📸 Profil utilisateur mis à jour avec succès');
     return downloadURL;
   } catch (error) {
-    console.error('Erreur lors de l\'upload de la photo de profil:', error);
-    throw error;
+    console.error('❌ Erreur lors de l\'upload de la photo de profil:', error);
+    console.error('❌ Code d\'erreur:', error.code);
+    console.error('❌ Message d\'erreur:', error.message);
+    
+    // Gestion spécifique des erreurs
+    if (error.code === 'storage/unauthorized') {
+      throw new Error('Erreur d\'autorisation. Vérifiez que vous êtes connecté.');
+    } else if (error.code === 'storage/cors') {
+      throw new Error('Erreur CORS. Les règles Firebase Storage doivent être configurées.');
+    } else if (error.code === 'storage/quota-exceeded') {
+      throw new Error('Quota de stockage dépassé.');
+    } else if (error.code === 'storage/invalid-format') {
+      throw new Error('Format de fichier non supporté.');
+    } else {
+      throw new Error(`Erreur lors de l'upload: ${error.message}`);
+    }
   }
 }
 

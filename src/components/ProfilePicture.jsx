@@ -11,6 +11,7 @@ function ProfilePicture({
   className = '' 
 }) {
   const [imageError, setImageError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
   const sizeClasses = {
     xs: 'w-8 h-8 text-xs',
@@ -35,7 +36,16 @@ function ProfilePicture({
   const initials = displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
   const handleImageError = () => {
+    console.warn('Erreur lors du chargement de la photo de profil:', user?.photoURL);
     setImageError(true);
+  };
+
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
+  const handleImageStartLoad = () => {
+    setIsLoading(true);
   };
 
   return (
@@ -47,16 +57,25 @@ function ProfilePicture({
           ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}
           rounded-full overflow-hidden border-2 border-gray-200 bg-gradient-to-br from-indigo-100 to-purple-100
           flex items-center justify-center font-semibold text-gray-700
+          ${isLoading ? 'animate-pulse' : ''}
         `}
         onClick={onClick}
       >
         {hasProfilePicture ? (
-          <img
-            src={user.photoURL}
-            alt={`Photo de ${displayName}`}
-            className="w-full h-full object-cover"
-            onError={handleImageError}
-          />
+          <>
+            <img
+              src={user.photoURL}
+              alt={`Photo de ${displayName}`}
+              className="w-full h-full object-cover"
+              onError={handleImageError}
+              onLoad={handleImageLoad}
+              onLoadStart={handleImageStartLoad}
+              crossOrigin="anonymous"
+            />
+            {isLoading && (
+              <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-full"></div>
+            )}
+          </>
         ) : (
           <User className={`${size === 'xs' ? 'w-4 h-4' : size === 'sm' ? 'w-5 h-5' : size === 'md' ? 'w-6 h-6' : size === 'lg' ? 'w-8 h-8' : size === 'xl' ? 'w-10 h-10' : 'w-12 h-12'} text-gray-500`} />
         )}
@@ -100,7 +119,15 @@ function ProfilePictureEditor({ user, onPhotoChange, className = '' }) {
       await onPhotoChange(file);
     } catch (error) {
       console.error('Erreur lors du changement de photo:', error);
-      alert('Erreur lors du changement de photo');
+      
+      // Messages d'erreur plus spécifiques
+      if (error.code === 'storage/unauthorized') {
+        alert('Erreur d\'autorisation. Vérifiez que vous êtes connecté.');
+      } else if (error.code === 'storage/cors') {
+        alert('Erreur CORS. Les règles Firebase Storage doivent être configurées.');
+      } else {
+        alert(`Erreur lors du changement de photo: ${error.message}`);
+      }
     } finally {
       setIsUploading(false);
     }
