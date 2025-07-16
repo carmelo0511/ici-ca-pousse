@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, BarChart3, Dumbbell } from 'lucide-react';
+import { Calendar, BarChart3, Dumbbell, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
@@ -8,7 +8,8 @@ const Navigation = ({ activeTab, setActiveTab, className = '' }) => {
   const navItems = [
     { id: 'workout', icon: Dumbbell, label: t('workout_tab') },
     { id: 'calendar', icon: Calendar, label: t('calendar_tab') },
-    { id: 'stats', icon: BarChart3, label: t('stats_tab') }
+    { id: 'stats', icon: BarChart3, label: t('stats_tab') },
+    { id: 'friends', icon: User, label: 'Amis' }
   ];
 
   return (
