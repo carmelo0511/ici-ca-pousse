@@ -1,6 +1,7 @@
 import React from 'react';
 import { Clock, Zap, Dumbbell, Heart, Trash2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
 const CalendarView = ({
   workouts,
@@ -9,7 +10,8 @@ const CalendarView = ({
   showWorkoutDetail,
   selectedWorkout,
   deleteWorkout,
-  setShowWorkoutDetail
+  setShowWorkoutDetail,
+  className = '',
 }) => {
   const today = new Date();
   const currentMonth = today.getMonth();
@@ -30,7 +32,7 @@ const CalendarView = ({
   const { t } = useTranslation();
 
   return (
-    <div className="p-6 space-y-8">
+    <div className={`p-6 space-y-8 ${className}`}>
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -236,6 +238,17 @@ const CalendarView = ({
       )}
     </div>
   );
+};
+
+CalendarView.propTypes = {
+  workouts: PropTypes.array.isRequired,
+  getWorkoutForDate: PropTypes.func.isRequired,
+  openWorkoutDetail: PropTypes.func.isRequired,
+  showWorkoutDetail: PropTypes.bool,
+  selectedWorkout: PropTypes.object,
+  deleteWorkout: PropTypes.func,
+  setShowWorkoutDetail: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default CalendarView;

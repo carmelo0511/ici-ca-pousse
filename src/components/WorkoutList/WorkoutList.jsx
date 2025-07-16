@@ -22,6 +22,7 @@ import Modal from '../Modal';
 import GradientButton from '../GradientButton';
 import Card from '../Card';
 import IconButton from '../IconButton';
+import PropTypes from 'prop-types';
 
 function getMuscleIcon(muscle) {
   switch (muscle) {
@@ -51,7 +52,8 @@ function WorkoutList({
   setShowAddExercise,
   selectedMuscleGroup,
   setSelectedMuscleGroup,
-  addExerciseToWorkout
+  addExerciseToWorkout,
+  className = '',
 }) {
   const { t } = useTranslation();
   const [user] = useAuthState(auth);
@@ -137,7 +139,7 @@ function WorkoutList({
   ), [selectedMuscleGroup, filteredExercises, favoriteExercises]);
 
   return (
-    <div className="p-6 space-y-8">
+    <div className={`p-6 space-y-8 ${className}`}>
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -467,5 +469,23 @@ function WorkoutList({
     </div>
   );
 }
+
+WorkoutList.propTypes = {
+  selectedDate: PropTypes.string.isRequired,
+  setSelectedDate: PropTypes.func.isRequired,
+  exercises: PropTypes.array.isRequired,
+  addSet: PropTypes.func.isRequired,
+  updateSet: PropTypes.func.isRequired,
+  removeSet: PropTypes.func,
+  saveWorkout: PropTypes.func,
+  workoutDuration: PropTypes.number,
+  setWorkoutDuration: PropTypes.func,
+  showAddExercise: PropTypes.bool,
+  setShowAddExercise: PropTypes.func,
+  selectedMuscleGroup: PropTypes.string,
+  setSelectedMuscleGroup: PropTypes.func,
+  addExerciseToWorkout: PropTypes.func,
+  className: PropTypes.string,
+};
 
 export default memo(WorkoutList);

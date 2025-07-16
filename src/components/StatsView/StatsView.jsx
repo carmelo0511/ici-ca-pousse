@@ -4,6 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { formatDate } from '../../utils/workoutUtils';
 import { useTranslation } from 'react-i18next';
 import { getBadges } from '../../utils/workoutUtils';
+import PropTypes from 'prop-types';
 
 function getWeeklyWorkoutData(workouts) {
   // Regroupe les séances par semaine (année + numéro de semaine)
@@ -44,13 +45,13 @@ const groupWorkoutsByWeek = (workouts) => {
   return weeks;
 };
 
-const StatsView = ({ stats, workouts, onEditWorkout }) => {
+const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
   const { t } = useTranslation();
   const weeks = groupWorkoutsByWeek(workouts);
   const badges = getBadges(stats);
 
   return (
-    <div className="p-6 space-y-8">
+    <div className={`p-6 space-y-8 ${className}`}>
       <div>
         <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           {t('stats_title')}
@@ -204,6 +205,13 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
       </div>
     </div>
   );
+};
+
+StatsView.propTypes = {
+  stats: PropTypes.object.isRequired,
+  workouts: PropTypes.array.isRequired,
+  onEditWorkout: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default StatsView;
