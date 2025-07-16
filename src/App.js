@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import Auth from './components/Auth';
 import Header from './components/Header/Header';
 import Navigation from './components/Navigation/Navigation';
 import WorkoutList from './components/WorkoutList/WorkoutList';
@@ -9,8 +10,11 @@ import { useWorkouts } from './hooks/useWorkouts';
 import { useExercises } from './hooks/useExercises';
 import { createWorkout } from './utils/workoutUtils';
 import { exerciseDatabase } from './utils/exerciseDatabase';
+import { auth } from './utils/firebase';
 
-const App = () => {
+function App() {
+  const [user, setUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const [activeTab, setActiveTab] = useState('workout');
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -29,6 +33,22 @@ const App = () => {
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts();
   const { exercises, addExercise, removeExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((u) => {
+      setUser(u);
+      setAuthChecked(true);
+    });
+    return unsubscribe;
+  }, []);
+
+  if (!authChecked) {
+    return <div className="flex items-center justify-center min-h-screen">Chargement...</div>;
+  }
+
+  if (!user) {
+    return <Auth />;
+  }
 
   // Fonctions utilitaires
   const showToastMsg = (message, type = 'success') => {
