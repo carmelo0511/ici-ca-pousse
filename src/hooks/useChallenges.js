@@ -42,6 +42,8 @@ export const useChallenges = (user) => {
   const createChallenge = async (challengeData) => {
     if (!user) return null;
 
+    console.log('🔧 Création d\'un défi avec les données:', challengeData);
+
     const newChallenge = {
       senderId: user.uid,
       senderName: user.displayName || user.email,
@@ -58,12 +60,15 @@ export const useChallenges = (user) => {
       winner: null
     };
 
+    console.log('📝 Défi à créer:', newChallenge);
+
     try {
       const createdChallenge = await createChallengeInFirebase(newChallenge);
+      console.log('✅ Défi créé avec succès:', createdChallenge);
       setChallenges(prev => [...prev, createdChallenge]);
       return createdChallenge;
     } catch (error) {
-      console.error('Erreur lors de la création du défi:', error);
+      console.error('❌ Erreur lors de la création du défi:', error);
       throw error;
     }
   };

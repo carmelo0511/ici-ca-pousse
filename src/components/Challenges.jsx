@@ -6,7 +6,7 @@ import GradientButton from './GradientButton';
 import Modal from './Modal';
 import Toast from './Toast';
 import ChallengeStats from './ChallengeStats';
-import { sendChallengeNotification, createNotification, NOTIFICATION_TYPES } from '../utils/notifications';
+import { createNotification, NOTIFICATION_TYPES } from '../utils/notifications';
 
 const Challenges = ({ user }) => {
   const { friends } = useFriends(user);
@@ -53,28 +53,35 @@ const Challenges = ({ user }) => {
       return;
     }
 
-    const challengeData = {
-      type: challengeType,
-      duration: challengeDuration,
-      friend: selectedFriend,
-      createdBy: user.uid,
-      senderName: user.displayName || user.email,
-      status: 'pending'
-    };
-
-    const newChallenge = createChallenge(challengeData);
-    
-    // Envoyer une notification à l'ami
     try {
-      await sendChallengeNotification(newChallenge, user, selectedFriend.uid);
-      setToast({ message: 'Défi créé et notification envoyée !', type: 'success' });
+      const challengeData = {
+        type: challengeType,
+        duration: challengeDuration,
+        friend: selectedFriend
+      };
+
+      const newChallenge = await createChallenge(challengeData);
+      
+      // Envoyer une notification à l'ami
+      try {
+        await createNotification(selectedFriend.uid, {
+          type: NOTIFICATION_TYPES.CHALLENGE_INVITE,
+          title: 'Nouveau défi !',
+          message: `${user.displayName || user.email} t'a envoyé un défi de ${getChallengeTypeLabel(challengeType)} !`,
+          challengeId: newChallenge.id
+        });
+        setToast({ message: 'Défi créé et notification envoyée !', type: 'success' });
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi de la notification:', error);
+        setToast({ message: 'Défi créé mais erreur de notification', type: 'warning' });
+      }
+      
+      setShowCreateModal(false);
+      setSelectedFriend(null);
     } catch (error) {
-      console.error('Erreur lors de l\'envoi de la notification:', error);
-      setToast({ message: 'Défi créé mais erreur de notification', type: 'warning' });
+      console.error('Erreur lors de la création du défi:', error);
+      setToast({ message: 'Erreur lors de la création du défi', type: 'error' });
     }
-    
-    setShowCreateModal(false);
-    setSelectedFriend(null);
   };
 
   const getChallengeTypeLabel = (type) => {

@@ -52,14 +52,16 @@ export async function ensureUserProfile(user) {
 // Fonctions pour gérer les défis dans Firebase
 export async function createChallengeInFirebase(challengeData) {
   try {
+    console.log('🔥 Création du défi dans Firebase:', challengeData);
     const challengeRef = await addDoc(collection(db, 'challenges'), {
       ...challengeData,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
+    console.log('🔥 Défi créé dans Firebase avec ID:', challengeRef.id);
     return { id: challengeRef.id, ...challengeData };
   } catch (error) {
-    console.error('Erreur lors de la création du défi:', error);
+    console.error('🔥 Erreur lors de la création du défi dans Firebase:', error);
     throw error;
   }
 }
