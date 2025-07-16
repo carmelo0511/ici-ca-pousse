@@ -1,7 +1,7 @@
 import React from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, Calendar, Edit3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { formatDate, getBadges, parseLocalDate } from '../../utils/workoutUtils';
+import { formatDate, getBadges, parseLocalDate, analyzeWorkoutHabits, getPreferredWorkoutTime, getAverageDurationByTime } from '../../utils/workoutUtils';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
@@ -67,6 +67,9 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
   const { t } = useTranslation();
   const weeks = groupWorkoutsByWeek(workouts);
   const badges = getBadges(stats);
+  const workoutHabits = analyzeWorkoutHabits(workouts);
+  const preferredTime = getPreferredWorkoutTime(workouts);
+  const avgDurationByTime = getAverageDurationByTime(workouts);
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
@@ -130,6 +133,92 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
           </div>
         </div>
       </div>
+
+      {/* Habitudes d'entraînement */}
+      {workoutHabits.totalWithTime > 0 && (
+        <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
+            <Clock className="h-6 w-6" />
+            <span>Habitudes d'entraînement</span>
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Moment préféré */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6">
+              <h4 className="text-lg font-semibold text-gray-800 mb-3">Moment préféré</h4>
+              <div className="flex items-center space-x-3">
+                <span className="text-3xl">{preferredTime.icon}</span>
+                <div>
+                  <p className="text-xl font-bold text-gray-800">{preferredTime.name}</p>
+                  <p className="text-sm text-gray-600">{preferredTime.count} séances ({preferredTime.percentage}%)</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Répartition par moment */}
+            <div className="space-y-3">
+              <h4 className="text-lg font-semibold text-gray-800">Répartition</h4>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center space-x-2">
+                    <span>🌅</span>
+                    <span>Matin (5h-12h)</span>
+                  </span>
+                  <span className="font-semibold">{workoutHabits.morning.count} ({workoutHabits.morning.percentage}%)</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center space-x-2">
+                    <span>☀️</span>
+                    <span>Après-midi (12h-18h)</span>
+                  </span>
+                  <span className="font-semibold">{workoutHabits.afternoon.count} ({workoutHabits.afternoon.percentage}%)</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center space-x-2">
+                    <span>🌆</span>
+                    <span>Soir (18h-22h)</span>
+                  </span>
+                  <span className="font-semibold">{workoutHabits.evening.count} ({workoutHabits.evening.percentage}%)</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center space-x-2">
+                    <span>🌙</span>
+                    <span>Nuit (22h-5h)</span>
+                  </span>
+                  <span className="font-semibold">{workoutHabits.night.count} ({workoutHabits.night.percentage}%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Durée moyenne par moment */}
+          <div className="mt-6">
+            <h4 className="text-lg font-semibold text-gray-800 mb-3">Durée moyenne par moment</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-blue-100 rounded-xl p-4 text-center">
+                <div className="text-2xl mb-1">🌅</div>
+                <div className="font-bold text-blue-800">{avgDurationByTime.morning} min</div>
+                <div className="text-sm text-blue-600">Matin</div>
+              </div>
+              <div className="bg-yellow-100 rounded-xl p-4 text-center">
+                <div className="text-2xl mb-1">☀️</div>
+                <div className="font-bold text-yellow-800">{avgDurationByTime.afternoon} min</div>
+                <div className="text-sm text-yellow-600">Après-midi</div>
+              </div>
+              <div className="bg-orange-100 rounded-xl p-4 text-center">
+                <div className="text-2xl mb-1">🌆</div>
+                <div className="font-bold text-orange-800">{avgDurationByTime.evening} min</div>
+                <div className="text-sm text-orange-600">Soir</div>
+              </div>
+              <div className="bg-purple-100 rounded-xl p-4 text-center">
+                <div className="text-2xl mb-1">🌙</div>
+                <div className="font-bold text-purple-800">{avgDurationByTime.night} min</div>
+                <div className="text-sm text-purple-600">Nuit</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {badges.length > 0 && (
         <div className="flex flex-wrap gap-3 mt-6">
           {badges.map(badge => (
@@ -178,7 +267,15 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
               <div key={workout.id} className="flex justify-between items-center py-4 px-6 bg-gray-100 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow duration-200">
                 <div>
                   <p className="font-bold text-gray-800">{new Date(workout.date).toLocaleDateString('fr-FR')}</p>
-                  <p className="text-sm text-gray-600">{workout.exercises.length} {t('exercises')} • {workout.totalSets} {t('sets')}</p>
+                  <p className="text-sm text-gray-600">
+                    {workout.exercises.length} {t('exercises')} • {workout.totalSets} {t('sets')}
+                    {workout.startTime && (
+                      <span className="ml-2 text-blue-600">
+                        • {workout.startTime}
+                        {workout.endTime && ` → ${workout.endTime}`}
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="font-bold text-gray-800">{workout.duration} min</p>

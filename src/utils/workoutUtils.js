@@ -11,7 +11,7 @@ export function parseLocalDate(dateStr) {
   return new Date(year, month - 1, day);
 }
 
-export const createWorkout = (exercises, date, duration, workoutId = undefined) => {
+export const createWorkout = (exercises, date, duration, workoutId = undefined, startTime = null, endTime = null) => {
   if (exercises.length === 0) return null;
   
   return {
@@ -19,6 +19,8 @@ export const createWorkout = (exercises, date, duration, workoutId = undefined) 
     date,
     exercises,
     duration: parseInt(duration) || DEFAULT_WORKOUT_DURATION,
+    startTime,
+    endTime,
     totalSets: exercises.reduce((acc, ex) => acc + ex.sets.length, 0),
     totalReps: exercises.reduce((acc, ex) => 
       acc + ex.sets.reduce((setAcc, set) => setAcc + set.reps, 0), 0
@@ -67,4 +69,92 @@ export function getBadges(stats) {
   if (stats.totalWeight >= 10000) badges.push({ key: 'badge_10k_weight', label: '10 000 kg soulevés', icon: '🏋️' });
   if (stats.avgDuration >= 60) badges.push({ key: 'badge_long_workout', label: 'Séances longues', icon: '⏱️' });
   return badges;
+}
+
+// Analyse des habitudes d'entraînement basées sur l'heure
+export function analyzeWorkoutHabits(workouts) {
+  const morningWorkouts = workouts.filter(w => {
+    if (!w.startTime) return false;
+    const hour = parseInt(w.startTime.split(':')[0]);
+    return hour >= 5 && hour < 12;
+  }).length;
+  
+  const afternoonWorkouts = workouts.filter(w => {
+    if (!w.startTime) return false;
+    const hour = parseInt(w.startTime.split(':')[0]);
+    return hour >= 12 && hour < 18;
+  }).length;
+  
+  const eveningWorkouts = workouts.filter(w => {
+    if (!w.startTime) return false;
+    const hour = parseInt(w.startTime.split(':')[0]);
+    return hour >= 18 && hour < 22;
+  }).length;
+  
+  const nightWorkouts = workouts.filter(w => {
+    if (!w.startTime) return false;
+    const hour = parseInt(w.startTime.split(':')[0]);
+    return hour >= 22 || hour < 5;
+  }).length;
+  
+  const totalWorkoutsWithTime = workouts.filter(w => w.startTime).length;
+  
+  return {
+    morning: { count: morningWorkouts, percentage: totalWorkoutsWithTime > 0 ? Math.round((morningWorkouts / totalWorkoutsWithTime) * 100) : 0 },
+    afternoon: { count: afternoonWorkouts, percentage: totalWorkoutsWithTime > 0 ? Math.round((afternoonWorkouts / totalWorkoutsWithTime) * 100) : 0 },
+    evening: { count: eveningWorkouts, percentage: totalWorkoutsWithTime > 0 ? Math.round((eveningWorkouts / totalWorkoutsWithTime) * 100) : 0 },
+    night: { count: nightWorkouts, percentage: totalWorkoutsWithTime > 0 ? Math.round((nightWorkouts / totalWorkoutsWithTime) * 100) : 0 },
+    totalWithTime: totalWorkoutsWithTime
+  };
+}
+
+// Détermine le moment de la journée préféré
+export function getPreferredWorkoutTime(workouts) {
+  const habits = analyzeWorkoutHabits(workouts);
+  const times = [
+    { name: 'matin', ...habits.morning, icon: '🌅' },
+    { name: 'après-midi', ...habits.afternoon, icon: '☀️' },
+    { name: 'soir', ...habits.evening, icon: '🌆' },
+    { name: 'nuit', ...habits.night, icon: '🌙' }
+  ];
+  
+  return times.reduce((prev, current) => 
+    (current.count > prev.count) ? current : prev
+  );
+}
+
+// Calcule la durée moyenne par moment de la journée
+export function getAverageDurationByTime(workouts) {
+  const timeSlots = {
+    morning: { workouts: [], total: 0 },
+    afternoon: { workouts: [], total: 0 },
+    evening: { workouts: [], total: 0 },
+    night: { workouts: [], total: 0 }
+  };
+  
+  workouts.forEach(workout => {
+    if (!workout.startTime || !workout.duration) return;
+    
+    const hour = parseInt(workout.startTime.split(':')[0]);
+    if (hour >= 5 && hour < 12) {
+      timeSlots.morning.workouts.push(workout);
+      timeSlots.morning.total += workout.duration;
+    } else if (hour >= 12 && hour < 18) {
+      timeSlots.afternoon.workouts.push(workout);
+      timeSlots.afternoon.total += workout.duration;
+    } else if (hour >= 18 && hour < 22) {
+      timeSlots.evening.workouts.push(workout);
+      timeSlots.evening.total += workout.duration;
+    } else {
+      timeSlots.night.workouts.push(workout);
+      timeSlots.night.total += workout.duration;
+    }
+  });
+  
+  return {
+    morning: timeSlots.morning.workouts.length > 0 ? Math.round(timeSlots.morning.total / timeSlots.morning.workouts.length) : 0,
+    afternoon: timeSlots.afternoon.workouts.length > 0 ? Math.round(timeSlots.afternoon.total / timeSlots.afternoon.workouts.length) : 0,
+    evening: timeSlots.evening.workouts.length > 0 ? Math.round(timeSlots.evening.total / timeSlots.evening.workouts.length) : 0,
+    night: timeSlots.night.workouts.length > 0 ? Math.round(timeSlots.night.total / timeSlots.night.workouts.length) : 0
+  };
 } 

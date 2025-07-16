@@ -38,7 +38,8 @@ function App() {
   const [showAddExercise, setShowAddExercise] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutDetail, setShowWorkoutDetail] = useState(false);
-  const [workoutDuration, setWorkoutDuration] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
   const [showMigratePrompt, setShowMigratePrompt] = useState(false);
 
@@ -93,12 +94,23 @@ function App() {
 
   const saveWorkout = async () => {
     if (exercises.length === 0) return;
+    
+    // Calculer la durée à partir des heures de début et fin
+    let duration = 30; // durée par défaut
+    if (startTime && endTime) {
+      const start = new Date(`2000-01-01T${startTime}`);
+      const end = new Date(`2000-01-01T${endTime}`);
+      duration = Math.round((end - start) / (1000 * 60)); // durée en minutes
+    }
+    
     // On ne passe l'id que s'il s'agit d'une édition et que l'id est une chaîne (Firestore)
     const workout = createWorkout(
       exercises,
       selectedDate,
-      workoutDuration,
-      selectedWorkout && typeof selectedWorkout.id === 'string' ? selectedWorkout.id : undefined
+      duration,
+      selectedWorkout && typeof selectedWorkout.id === 'string' ? selectedWorkout.id : undefined,
+      startTime,
+      endTime
     );
     if (selectedWorkout && typeof selectedWorkout.id === 'string') {
       try {
@@ -112,7 +124,8 @@ function App() {
       showToastMsg(t('workout_saved'));
     }
     clearExercises();
-    setWorkoutDuration('');
+    setStartTime('');
+    setEndTime('');
     setSelectedWorkout(null);
   };
 
@@ -124,7 +137,8 @@ function App() {
   const handleEditWorkout = (workout) => {
     setSelectedWorkout(workout);
     setSelectedDate(workout.date);
-    setWorkoutDuration(workout.duration);
+    setStartTime(workout.startTime);
+    setEndTime(workout.endTime);
     setExercisesFromWorkout(workout.exercises);
     setActiveTab('workout');
   };
@@ -183,19 +197,19 @@ function App() {
             exercises={exercises}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
-            workoutDuration={workoutDuration}
-            setWorkoutDuration={setWorkoutDuration}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
+            addSet={addSet}
+            updateSet={updateSet}
+            removeSet={removeSet}
+            saveWorkout={saveWorkout}
             showAddExercise={showAddExercise}
             setShowAddExercise={setShowAddExercise}
             selectedMuscleGroup={selectedMuscleGroup}
             setSelectedMuscleGroup={setSelectedMuscleGroup}
             addExerciseToWorkout={addExerciseToWorkout}
-            addSet={addSet}
-            updateSet={updateSet}
-            removeSet={removeSet}
-            removeExercise={removeExercise}
-            saveWorkout={saveWorkout}
-            exerciseDatabase={exerciseDatabase}
           />
         );
       case 'calendar':

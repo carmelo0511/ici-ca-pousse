@@ -46,8 +46,10 @@ function WorkoutList({
   updateSet,
   removeSet,
   saveWorkout,
-  workoutDuration,
-  setWorkoutDuration,
+  startTime,
+  setStartTime,
+  endTime,
+  setEndTime,
   showAddExercise,
   setShowAddExercise,
   selectedMuscleGroup,
@@ -299,22 +301,52 @@ function WorkoutList({
               <div className="bg-blue-500 p-2 rounded-lg">
                 <Clock className="h-5 w-5 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-gray-800">{t('workout_duration')}</h3>
+              <h3 className="text-lg font-bold text-gray-800">Heure de la séance</h3>
             </div>
             <div className="flex items-center space-x-4">
-              <input
-                type="number"
-                value={workoutDuration}
-                onChange={(e) => setWorkoutDuration(e.target.value)}
-                placeholder="45"
-                className="border-2 border-blue-200 rounded-xl px-4 py-3 w-32 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200"
-                min="1"
-                max="300"
-              />
-              <span className="text-gray-700 font-medium">{t('minutes')}</span>
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">Début</label>
+                <input
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="border-2 border-blue-200 rounded-xl px-4 py-3 w-32 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                />
+              </div>
+              <div className="text-gray-700 font-medium text-2xl">→</div>
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">Fin</label>
+                <input
+                  type="time"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                  className="border-2 border-blue-200 rounded-xl px-4 py-3 w-32 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                />
+              </div>
             </div>
+            {startTime && endTime && (
+              <div className="mt-3 p-3 bg-blue-100 rounded-lg">
+                <p className="text-sm text-blue-800 font-medium">
+                  Durée calculée : {(() => {
+                    const start = new Date(`2000-01-01T${startTime}`);
+                    const end = new Date(`2000-01-01T${endTime}`);
+                    const duration = Math.round((end - start) / (1000 * 60));
+                    return duration > 0 ? `${duration} minutes` : 'Heure de fin invalide';
+                  })()}
+                </p>
+                <p className="text-xs text-blue-600 mt-1">
+                  {(() => {
+                    const hour = parseInt(startTime.split(':')[0]);
+                    if (hour >= 5 && hour < 12) return '🌅 Séance du matin';
+                    if (hour >= 12 && hour < 18) return '☀️ Séance de l\'après-midi';
+                    if (hour >= 18 && hour < 22) return '🌆 Séance du soir';
+                    return '🌙 Séance de nuit';
+                  })()}
+                </p>
+              </div>
+            )}
             <p className="text-sm text-blue-600 mt-3 font-medium">
-              {t('default_duration_hint')}
+              💡 Laissez vide pour une durée par défaut de 30 minutes
             </p>
           </Card>
         </div>
@@ -480,8 +512,10 @@ WorkoutList.propTypes = {
   updateSet: PropTypes.func.isRequired,
   removeSet: PropTypes.func,
   saveWorkout: PropTypes.func,
-  workoutDuration: PropTypes.number,
-  setWorkoutDuration: PropTypes.func,
+  startTime: PropTypes.string,
+  setStartTime: PropTypes.func,
+  endTime: PropTypes.string,
+  setEndTime: PropTypes.func,
   showAddExercise: PropTypes.bool,
   setShowAddExercise: PropTypes.func,
   selectedMuscleGroup: PropTypes.string,
