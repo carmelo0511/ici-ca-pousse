@@ -15,7 +15,6 @@ import {
   Activity,
   Shield,
   Zap,
-  Barbell,
   Apple
 } from 'lucide-react';
 import { exerciseDatabase } from '../../utils/exerciseDatabase';

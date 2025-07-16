@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, Calendar, Copy, Edit3 } from 'lucide-react';
+import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, Calendar, Edit3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { formatDate } from '../../utils/workoutUtils';
 import { useExercises } from '../../hooks/useExercises';
@@ -46,7 +46,6 @@ const groupWorkoutsByWeek = (workouts) => {
 };
 
 const StatsView = ({ stats, workouts, onEditWorkout }) => {
-  const { setExercisesFromWorkout } = useExercises();
   const { t } = useTranslation();
   const weeks = groupWorkoutsByWeek(workouts);
   const badges = getBadges(stats);

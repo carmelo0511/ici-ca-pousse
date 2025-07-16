@@ -19,7 +19,6 @@ const resources = {
       "no_exercise_found": "Aucun exercice trouvé",
       "custom_exercise_name": "Nom de l'exercice personnalisé",
       "add": "Ajouter",
-      "cardio": "Cardio",
       "strength": "Musculation",
       "series": "Série",
       "duration_min": "Durée (min)",
@@ -177,7 +176,6 @@ const resources = {
       "biceps": "Biceps",
       "triceps": "Triceps",
       "épaules": "Épaules",
-      "cardio": "Cardio",
       "calendar": "Calendrier"
     }
   },
@@ -197,7 +195,6 @@ const resources = {
       "no_exercise_found": "No exercise found",
       "custom_exercise_name": "Custom exercise name",
       "add": "Add",
-      "cardio": "Cardio",
       "strength": "Strength",
       "series": "Set",
       "duration_min": "Duration (min)",
@@ -355,7 +352,6 @@ const resources = {
       "biceps": "Biceps",
       "triceps": "Triceps",
       "épaules": "Shoulders",
-      "cardio": "Cardio",
       "calendar": "Calendar"
     }
   }
