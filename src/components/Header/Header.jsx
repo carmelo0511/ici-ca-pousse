@@ -6,7 +6,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
 import ProfileSettings from '../ProfileSettings';
 
-const Header = memo(({ workoutCount, className = '', user }) => {
+const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [] }) => {
   const { t, i18n } = useTranslation();
   const [showProfile, setShowProfile] = React.useState(false);
   const changeLanguage = (lng) => i18n.changeLanguage(lng);
@@ -75,8 +75,8 @@ const Header = memo(({ workoutCount, className = '', user }) => {
       {user && (
         <ProfileSettings 
           user={user} 
-          workouts={[]} 
-          challenges={[]} 
+          workouts={workouts} 
+          challenges={challenges} 
           isOpen={showProfile} 
           onClose={() => setShowProfile(false)} 
         />
@@ -89,6 +89,8 @@ Header.propTypes = {
   workoutCount: PropTypes.number,
   className: PropTypes.string,
   user: PropTypes.object,
+  workouts: PropTypes.array,
+  challenges: PropTypes.array,
 };
 
 export default Header; 

@@ -244,7 +244,7 @@ function App() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
-        <Header workoutCount={workouts.length} user={user} />
+        <Header workoutCount={workouts.length} user={user} workouts={workouts} challenges={challenges} />
         <Navigation activeTab={activeTab} setActiveTab={setActiveTab} tabs={[{id:'workout',label:'Séance'},{id:'calendar',label:'Calendrier'},{id:'stats',label:'Statistiques'},{id:'friends',label:'Amis'}]} />
         {renderActiveTab()}
         {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
