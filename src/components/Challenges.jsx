@@ -22,7 +22,8 @@ const Challenges = ({ user }) => {
     getAllUserChallenges,
     acceptChallenge,
     declineChallenge,
-    cancelChallenge
+    cancelChallenge,
+    deleteChallenge
   } = useChallenges(user);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -188,6 +189,17 @@ const Challenges = ({ user }) => {
     }
   };
 
+  const handleDeleteChallenge = async (challengeId) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer définitivement ce défi ?')) {
+      try {
+        deleteChallenge(challengeId);
+        setToast({ message: 'Défi supprimé', type: 'success' });
+      } catch (error) {
+        setToast({ message: 'Erreur lors de la suppression', type: 'error' });
+      }
+    }
+  };
+
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
@@ -348,6 +360,14 @@ const Challenges = ({ user }) => {
                               Annuler le défi
                             </button>
                           )}
+                          {isSentByMe && (
+                            <button
+                              onClick={() => handleDeleteChallenge(challenge.id)}
+                              className="mt-2 text-xs text-red-600 hover:text-red-800"
+                            >
+                              Supprimer le défi
+                            </button>
+                          )}
                         </>
                       )}
                     </div>
@@ -403,6 +423,14 @@ const Challenges = ({ user }) => {
                           className="mt-2 text-xs text-red-600 hover:text-red-800"
                         >
                           Annuler le défi
+                        </button>
+                      )}
+                      {challenge.status === 'pending' && (
+                        <button
+                          onClick={() => handleDeleteChallenge(challenge.id)}
+                          className="mt-2 text-xs text-red-600 hover:text-red-800"
+                        >
+                          Supprimer le défi
                         </button>
                       )}
                     </div>
@@ -472,6 +500,14 @@ const Challenges = ({ user }) => {
                             {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
                           </div>
                         </>
+                      )}
+                      {challenge.status === 'pending' && (
+                        <button
+                          onClick={() => handleDeleteChallenge(challenge.id)}
+                          className="mt-2 text-xs text-red-600 hover:text-red-800"
+                        >
+                          Supprimer le défi
+                        </button>
                       )}
                     </div>
                   </div>

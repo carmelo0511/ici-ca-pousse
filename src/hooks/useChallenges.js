@@ -104,7 +104,8 @@ export const useChallenges = (user) => {
 
   const getActiveChallenges = () => {
     return challenges.filter(challenge => 
-      challenge.status === 'active' && new Date() <= new Date(challenge.endDate)
+      (challenge.status === 'active' || challenge.status === 'pending' || challenge.status === 'accepted') && 
+      new Date() <= new Date(challenge.endDate)
     );
   };
 
