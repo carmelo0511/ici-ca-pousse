@@ -14,6 +14,7 @@ import {
   getDocs,
   serverTimestamp 
 } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDyxtOXHNqly6q5R_P3WY5XJgXZjsPVn5M",
@@ -126,5 +127,116 @@ export async function deleteChallengeFromFirebase(challengeId) {
   } catch (error) {
     console.error('Erreur lors de la suppression du défi:', error);
     throw error;
+  }
+} 
+
+// Fonction pour uploader une photo de profil
+export async function uploadProfilePicture(userId, file) {
+  try {
+    const storage = getStorage();
+    const fileExtension = file.name.split('.').pop();
+    const fileName = `profile-pictures/${userId}.${fileExtension}`;
+    const storageRef = ref(storage, fileName);
+    
+    // Upload du fichier
+    const snapshot = await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    
+    // Mettre à jour le profil utilisateur
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, {
+      photoURL: downloadURL,
+      updatedAt: serverTimestamp()
+    });
+    
+    return downloadURL;
+  } catch (error) {
+    console.error('Erreur lors de l\'upload de la photo de profil:', error);
+    throw error;
+  }
+}
+
+// Fonction pour supprimer une photo de profil
+export async function deleteProfilePicture(userId) {
+  try {
+    const storage = getStorage();
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (userDoc.exists() && userDoc.data().photoURL) {
+      // Supprimer l'ancienne photo du storage
+      const oldPhotoRef = ref(storage, userDoc.data().photoURL);
+      await deleteObject(oldPhotoRef);
+    }
+    
+    // Mettre à jour le profil utilisateur
+    await updateDoc(userRef, {
+      photoURL: null,
+      updatedAt: serverTimestamp()
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Erreur lors de la suppression de la photo de profil:', error);
+    throw error;
+  }
+}
+
+// Fonction pour sauvegarder les badges d'un utilisateur
+export async function saveUserBadges(userId, badges) {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, {
+      badges: badges,
+      updatedAt: serverTimestamp()
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Erreur lors de la sauvegarde des badges:', error);
+    throw error;
+  }
+}
+
+// Fonction pour récupérer les badges d'un utilisateur
+export async function getUserBadges(userId) {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (userDoc.exists()) {
+      return userDoc.data().badges || [];
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('Erreur lors de la récupération des badges:', error);
+    return [];
+  }
+}
+
+// Fonction pour récupérer les informations complètes d'un utilisateur (avec photo et badges)
+export async function getUserProfile(userId) {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      return {
+        uid: userId,
+        displayName: userData.displayName,
+        email: userData.email,
+        photoURL: userData.photoURL,
+        badges: userData.badges || [],
+        createdAt: userData.createdAt,
+        updatedAt: userData.updatedAt
+      };
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Erreur lors de la récupération du profil utilisateur:', error);
+    return null;
   }
 } 
