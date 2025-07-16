@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   createChallengeInFirebase, 
   getChallengesFromFirebase, 
@@ -21,19 +21,19 @@ export const useChallenges = (user) => {
     { id: 'calories', label: 'Calories brûlées', icon: '🔥' }
   ];
 
-  const loadChallenges = async () => {
+  const loadChallenges = useCallback(async () => {
     if (!user) return;
     
-    setLoading(true);
     try {
-      const challenges = await getChallengesFromFirebase(user.uid);
-      setChallenges(challenges);
+      setLoading(true);
+      const challengesData = await getChallengesFromFirebase(user.uid);
+      setChallenges(challengesData);
     } catch (error) {
       console.error('Erreur lors du chargement des défis:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user) {

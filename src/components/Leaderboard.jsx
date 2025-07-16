@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useFriends } from '../hooks/useFriends';
-import { BarChart3, Trophy } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 import { 
   PERIODS, 
   METRICS, 
@@ -59,7 +59,7 @@ function Leaderboard({ user, onShowComparison }) {
     if (user) fetchStats();
   }, [user, friends, selectedPeriod]);
 
-  // Obtenir le classement actuel
+  // Obtenir le classement actuel - par défaut basé sur les séances
   const currentRanking = getLeaderboardRanking(stats, selectedMetric);
 
   // Obtenir le classement pour un exercice spécifique
@@ -196,7 +196,7 @@ function Leaderboard({ user, onShowComparison }) {
                   </div>
                 )
               ) : (
-                // Classement général
+                // Classement général - par défaut basé sur les séances
                 currentRanking.length > 0 ? (
                   currentRanking.map((user, idx) => (
                     <div

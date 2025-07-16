@@ -10,7 +10,6 @@ import { useWorkouts } from './hooks/useWorkouts';
 import { useExercises } from './hooks/useExercises';
 import { useFriends } from './hooks/useFriends';
 import { useChallenges } from './hooks/useChallenges';
-import { usePWA } from './hooks/usePWA';
 import { createWorkout } from './utils/workoutUtils';
 
 import { auth } from './utils/firebase';
