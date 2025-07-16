@@ -19,9 +19,7 @@ const Header = ({ workoutCount }) => {
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-3 bg-gradient-to-r from-green-100 to-emerald-100 px-4 py-2 rounded-xl border border-green-200">
-            <span className="text-sm font-bold text-green-800">📱 Données locales</span>
-          </div>
+          {/* Le bouton Données locales a été supprimé */}
         </div>
       </div>
     </header>
