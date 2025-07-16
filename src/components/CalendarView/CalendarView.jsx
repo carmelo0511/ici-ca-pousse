@@ -42,22 +42,22 @@ const CalendarView = ({
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up calendar-scrollable">
+      <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-8 border border-gray-100 fade-in-up calendar-scrollable">
         <div className="text-center text-2xl font-bold text-gray-800 mb-8">
           {t(`month_${currentMonth + 1}`)} {currentYear}
         </div>
 
-        <div className="grid grid-cols-7 gap-2 mb-4">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
           {['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map((day) => (
-            <div key={day} className="text-center text-sm font-bold text-gray-600 py-3">
+            <div key={day} className="text-center text-xs sm:text-sm font-bold text-gray-600 py-2 sm:py-3">
               {t(day)}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {days.map((day, index) => {
-            if (day === null) return <div key={index} className="h-12"></div>;
+            if (day === null) return <div key={index} className="h-10 sm:h-12"></div>;
 
             const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const hasWorkout = getWorkoutForDate(dateString);
@@ -67,10 +67,11 @@ const CalendarView = ({
               <div
                 key={day}
                 className={`
-                  h-12 flex items-center justify-center text-sm rounded-xl cursor-pointer font-medium transition-all duration-200 relative
+                  h-10 sm:h-12 flex items-center justify-center text-xs sm:text-sm rounded-xl cursor-pointer font-medium transition-all duration-200 relative select-none
                   ${isToday ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg' : 'hover:bg-gray-100'}
                   ${hasWorkout ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white hover:from-green-500 hover:to-emerald-600 shadow-md' : ''}
                 `}
+                style={{ minWidth: '32px', maxWidth: '100%', margin: '0 auto' }}
                 onClick={() => hasWorkout && openWorkoutDetail(hasWorkout)}
               >
                 {day}
