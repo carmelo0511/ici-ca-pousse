@@ -5,7 +5,6 @@ import Card from './Card';
 import GradientButton from './GradientButton';
 import Modal from './Modal';
 import Toast from './Toast';
-import ChallengeStats from './ChallengeStats';
 import { createNotification, NOTIFICATION_TYPES } from '../utils/notifications';
 
 const Challenges = ({ user }) => {
@@ -284,11 +283,7 @@ const Challenges = ({ user }) => {
       </div>
 
       {/* Statistiques détaillées */}
-      {challenges.length > 0 && (
-        <div className="mb-6">
-          <ChallengeStats stats={stats} />
-        </div>
-      )}
+      {/* Temporairement désactivé - ChallengeStats stats={stats} /> */}
 
       {activeTab === 'all' ? (
         // Tous les défis
