@@ -11,6 +11,7 @@ import { useExercises } from './hooks/useExercises';
 import { createWorkout } from './utils/workoutUtils';
 import { exerciseDatabase } from './utils/exerciseDatabase';
 import { auth } from './utils/firebase';
+import { ensureUserProfile } from './utils/firebase';
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
 import PWAInstallButton from './components/PWAInstallButton';
@@ -40,9 +41,12 @@ function App() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((u) => {
+    const unsubscribe = auth.onAuthStateChanged(async (u) => {
       setUser(u);
       setAuthChecked(true);
+      if (u) {
+        await ensureUserProfile(u);
+      }
     });
     return unsubscribe;
   }, []);
