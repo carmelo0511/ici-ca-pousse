@@ -303,48 +303,165 @@ function WorkoutList({
               </div>
               <h3 className="text-lg font-bold text-gray-800">Heure de la séance</h3>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">Début</label>
-                <input
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="border-2 border-blue-200 rounded-xl px-4 py-3 w-32 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200"
-                />
+            
+            {/* Sélecteur d'heure moderne */}
+            <div className="space-y-4">
+              {/* Options rapides */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <button
+                  onClick={() => {
+                    setStartTime('06:00');
+                    setEndTime('07:00');
+                  }}
+                  className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    startTime === '06:00' && endTime === '07:00'
+                      ? 'bg-blue-500 text-white shadow-lg'
+                      : 'bg-white text-gray-700 hover:bg-blue-100 border border-blue-200'
+                  }`}
+                >
+                  🌅 Matin<br/>6h-7h
+                </button>
+                <button
+                  onClick={() => {
+                    setStartTime('12:00');
+                    setEndTime('13:00');
+                  }}
+                  className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    startTime === '12:00' && endTime === '13:00'
+                      ? 'bg-blue-500 text-white shadow-lg'
+                      : 'bg-white text-gray-700 hover:bg-blue-100 border border-blue-200'
+                  }`}
+                >
+                  ☀️ Midi<br/>12h-13h
+                </button>
+                <button
+                  onClick={() => {
+                    setStartTime('18:00');
+                    setEndTime('19:00');
+                  }}
+                  className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    startTime === '18:00' && endTime === '19:00'
+                      ? 'bg-blue-500 text-white shadow-lg'
+                      : 'bg-white text-gray-700 hover:bg-blue-100 border border-blue-200'
+                  }`}
+                >
+                  🌆 Soir<br/>18h-19h
+                </button>
+                <button
+                  onClick={() => {
+                    setStartTime('20:00');
+                    setEndTime('21:00');
+                  }}
+                  className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    startTime === '20:00' && endTime === '21:00'
+                      ? 'bg-blue-500 text-white shadow-lg'
+                      : 'bg-white text-gray-700 hover:bg-blue-100 border border-blue-200'
+                  }`}
+                >
+                  🌙 Soirée<br/>20h-21h
+                </button>
               </div>
-              <div className="text-gray-700 font-medium text-2xl">→</div>
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">Fin</label>
-                <input
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="border-2 border-blue-200 rounded-xl px-4 py-3 w-32 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200"
-                />
+
+              {/* Sélecteur personnalisé */}
+              <div className="flex items-center space-x-4">
+                <div className="flex flex-col flex-1">
+                  <label className="text-sm font-medium text-gray-700 mb-2">Début</label>
+                  <select
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="border-2 border-blue-200 rounded-xl px-4 py-3 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200 bg-white"
+                  >
+                    <option value="">Choisir l'heure</option>
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = i.toString().padStart(2, '0');
+                      return (
+                        <option key={hour} value={`${hour}:00`}>
+                          {hour}:00
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                
+                <div className="text-gray-700 font-medium text-2xl mt-6">→</div>
+                
+                <div className="flex flex-col flex-1">
+                  <label className="text-sm font-medium text-gray-700 mb-2">Fin</label>
+                  <select
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="border-2 border-blue-200 rounded-xl px-4 py-3 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200 bg-white"
+                  >
+                    <option value="">Choisir l'heure</option>
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = i.toString().padStart(2, '0');
+                      return (
+                        <option key={hour} value={`${hour}:00`}>
+                          {hour}:00
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+
+              {/* Durées prédéfinies */}
+              <div className="flex flex-wrap gap-2">
+                <span className="text-sm font-medium text-gray-700 mr-2">Durées rapides:</span>
+                {[30, 45, 60, 90].map((minutes) => (
+                  <button
+                    key={minutes}
+                    onClick={() => {
+                      if (startTime) {
+                        const start = new Date(`2000-01-01T${startTime}`);
+                        const end = new Date(start.getTime() + minutes * 60 * 1000);
+                        setEndTime(end.toTimeString().slice(0, 5));
+                      }
+                    }}
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition-colors duration-200"
+                  >
+                    {minutes} min
+                  </button>
+                ))}
               </div>
             </div>
+
+            {/* Affichage de la durée calculée */}
             {startTime && endTime && (
-              <div className="mt-3 p-3 bg-blue-100 rounded-lg">
-                <p className="text-sm text-blue-800 font-medium">
-                  Durée calculée : {(() => {
-                    const start = new Date(`2000-01-01T${startTime}`);
-                    const end = new Date(`2000-01-01T${endTime}`);
-                    const duration = Math.round((end - start) / (1000 * 60));
-                    return duration > 0 ? `${duration} minutes` : 'Heure de fin invalide';
-                  })()}
-                </p>
-                <p className="text-xs text-blue-600 mt-1">
-                  {(() => {
-                    const hour = parseInt(startTime.split(':')[0]);
-                    if (hour >= 5 && hour < 12) return '🌅 Séance du matin';
-                    if (hour >= 12 && hour < 18) return '☀️ Séance de l\'après-midi';
-                    if (hour >= 18 && hour < 22) return '🌆 Séance du soir';
-                    return '🌙 Séance de nuit';
-                  })()}
-                </p>
+              <div className="mt-4 p-4 bg-blue-100 rounded-xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-blue-800 font-medium">
+                      ⏱️ Durée : {(() => {
+                        const start = new Date(`2000-01-01T${startTime}`);
+                        const end = new Date(`2000-01-01T${endTime}`);
+                        const duration = Math.round((end - start) / (1000 * 60));
+                        return duration > 0 ? `${duration} minutes` : 'Heure de fin invalide';
+                      })()}
+                    </p>
+                    <p className="text-xs text-blue-600 mt-1">
+                      {(() => {
+                        const hour = parseInt(startTime.split(':')[0]);
+                        if (hour >= 5 && hour < 12) return '🌅 Séance du matin';
+                        if (hour >= 12 && hour < 18) return '☀️ Séance de l\'après-midi';
+                        if (hour >= 18 && hour < 22) return '🌆 Séance du soir';
+                        return '🌙 Séance de nuit';
+                      })()}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setStartTime('');
+                      setEndTime('');
+                    }}
+                    className="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             )}
+
             <p className="text-sm text-blue-600 mt-3 font-medium">
               💡 Laissez vide pour une durée par défaut de 30 minutes
             </p>
