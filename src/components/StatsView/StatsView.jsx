@@ -46,6 +46,23 @@ const groupWorkoutsByWeek = (workouts) => {
   return weeks;
 };
 
+// Ajoute une fonction utilitaire pour obtenir les bornes de la semaine à partir d'une date
+function getWeekBounds(date) {
+  // date : objet Date (début de semaine = lundi)
+  const d = new Date(date);
+  const day = d.getDay();
+  // getDay() : 0=dimanche, 1=lundi, ...
+  const diffToMonday = (day === 0 ? -6 : 1) - day;
+  const monday = new Date(d);
+  monday.setDate(d.getDate() + diffToMonday);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  return {
+    monday,
+    sunday
+  };
+}
+
 const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
   const { t } = useTranslation();
   const weeks = groupWorkoutsByWeek(workouts);
@@ -178,30 +195,38 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
         {Object.keys(weeks).length === 0 ? (
           <div className="text-gray-400">{t('no_sessions_recorded')}</div>
         ) : (
-          Object.entries(weeks).sort(([a], [b]) => b.localeCompare(a)).map(([week, weekWorkouts]) => (
-            <div key={week} className="mb-8">
-              <div className="font-semibold text-indigo-700 mb-2">{t('week')}</div>
-              <div className="space-y-3">
-                {weekWorkouts.map((w) => (
-                  <div key={w.id} className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100">
-                    <div>
-                      <div className="font-bold text-lg text-gray-800">{formatDate(w.date)}</div>
-                      <div className="text-sm text-gray-500">{w.exercises.length} {t('exercises')}, {w.totalSets} {t('sets')}, {w.totalReps} {t('reps')}, {w.totalWeight} {t('kg')}</div>
+          Object.entries(weeks).sort(([a], [b]) => b.localeCompare(a)).map(([week, weekWorkouts]) => {
+            // Affichage de l'intervalle de la semaine
+            const firstWorkout = weekWorkouts[0];
+            const d = parseLocalDate(firstWorkout.date);
+            const { monday, sunday } = getWeekBounds(d);
+            return (
+              <div key={week} className="mb-8">
+                <div className="font-semibold text-indigo-700 mb-2">
+                  {t('week')}: {monday.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} - {sunday.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}
+                </div>
+                <div className="space-y-3">
+                  {weekWorkouts.map((w) => (
+                    <div key={w.id} className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100">
+                      <div>
+                        <div className="font-bold text-lg text-gray-800">{formatDate(w.date)}</div>
+                        <div className="text-sm text-gray-500">{w.exercises.length} {t('exercises')}, {w.totalSets} {t('sets')}, {w.totalReps} {t('reps')}, {w.totalWeight} {t('kg')}</div>
+                      </div>
+                      <div className="flex gap-2 mt-2 sm:mt-0">
+                        <button
+                          onClick={() => onEditWorkout(w)}
+                          className={`flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap`}
+                        >
+                          <Edit3 className="h-4 w-4" />
+                          {t('edit')}
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex gap-2 mt-2 sm:mt-0">
-                      <button
-                        onClick={() => onEditWorkout(w)}
-                        className={`flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap`}
-                      >
-                        <Edit3 className="h-4 w-4" />
-                        {t('edit')}
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
