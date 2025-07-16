@@ -161,14 +161,14 @@ function WorkoutList({
       </div>
 
       {exercises.length === 0 ? (
-        <Card className="text-center py-12 sm:py-16 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100 max-w-md mx-auto overflow-hidden">
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 rounded-2xl inline-block mb-6 shadow-lg">
+        <Card className="text-center py-6 sm:py-10 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100 w-full max-w-[340px] sm:max-w-[400px] mx-auto overflow-visible shadow-md rounded-3xl" style={{ boxSizing: 'border-box' }}>
+          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 rounded-2xl inline-block mb-4 shadow-lg">
             <Dumbbell className="h-12 w-12 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-3 break-words overflow-wrap break-word">
+          <h3 className="text-2xl font-bold text-gray-800 mb-2 break-words overflow-wrap break-word truncate max-w-full">
             {t('ready_to_train')}
           </h3>
-          <p className="text-gray-600 mb-8 max-w-xs sm:max-w-md mx-auto break-words overflow-wrap break-word">
+          <p className="text-gray-600 mb-6 max-w-[90%] mx-auto break-words overflow-wrap break-word truncate max-w-full">
             {t('start_workout')}
           </p>
           <GradientButton icon={Plus} onClick={() => setShowAddExercise(true)}>

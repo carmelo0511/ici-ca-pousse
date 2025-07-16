@@ -1,16 +1,16 @@
 import React from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, Calendar, Edit3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { formatDate } from '../../utils/workoutUtils';
+import { formatDate, getBadges, parseLocalDate } from '../../utils/workoutUtils';
 import { useTranslation } from 'react-i18next';
-import { getBadges } from '../../utils/workoutUtils';
 import PropTypes from 'prop-types';
 
 function getWeeklyWorkoutData(workouts) {
   // Regroupe les séances par semaine (année + numéro de semaine)
   const weekMap = {};
   workouts.forEach(w => {
-    const d = new Date(w.date);
+    const d = parseLocalDate(w.date);
+    if (!d) return;
     const year = d.getFullYear();
     // Numéro de semaine ISO
     const week = Math.ceil((((d - new Date(year,0,1)) / 86400000) + new Date(year,0,1).getDay()+1)/7);
@@ -36,7 +36,8 @@ function getMostWorkedMuscleGroup(workouts) {
 const groupWorkoutsByWeek = (workouts) => {
   const weeks = {};
   workouts.forEach((w) => {
-    const date = new Date(w.date);
+    const date = parseLocalDate(w.date);
+    if (!date) return;
     // ISO week string: yyyy-Www
     const week = `${date.getFullYear()}-W${String(Math.ceil(((date - new Date(date.getFullYear(),0,1)) / 86400000 + new Date(date.getFullYear(),0,1).getDay()+1)/7)).padStart(2,'0')}`;
     if (!weeks[week]) weeks[week] = [];

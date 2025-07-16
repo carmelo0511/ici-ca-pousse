@@ -3,6 +3,7 @@ import { Clock, Zap, Dumbbell, Heart, Trash2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { parseLocalDate } from '../../utils/workoutUtils';
 
 const CalendarView = ({
   workouts,
@@ -81,7 +82,10 @@ const CalendarView = ({
             if (day === null) return <div key={index} className="h-10 sm:h-12"></div>;
             const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const hasWorkout = getWorkoutForDate(dateString);
-            const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+            // Correction : comparaison locale
+            const todayLocal = parseLocalDate(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
+            const cellDate = parseLocalDate(dateString);
+            const isToday = cellDate && todayLocal && cellDate.getTime() === todayLocal.getTime();
             return (
               <div
                 key={day}

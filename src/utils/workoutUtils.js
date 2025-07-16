@@ -3,6 +3,14 @@
 // Valeur par défaut pour la durée d'une séance (en minutes)
 const DEFAULT_WORKOUT_DURATION = 30;
 
+// Ajoute une fonction utilitaire pour parser une date YYYY-MM-DD en local sans UTC
+export function parseLocalDate(dateStr) {
+  // dateStr: '2025-07-17' => new Date(year, monthIndex, day)
+  if (!dateStr) return null;
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export const createWorkout = (exercises, date, duration, workoutId = undefined) => {
   if (exercises.length === 0) return null;
   
@@ -33,9 +41,10 @@ export const calculateWorkoutStats = (workouts) => {
   return { totalWorkouts, totalSets, totalReps, totalWeight, avgDuration };
 };
 
+// Modifie formatDate pour utiliser parseLocalDate
 export const formatDate = (dateStr) => {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: 'short' });
+  const d = parseLocalDate(dateStr);
+  return d ? d.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: 'short' }) : '';
 };
 
 export const getCurrentDate = () => {
