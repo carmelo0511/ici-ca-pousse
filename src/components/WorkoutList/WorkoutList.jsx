@@ -11,13 +11,32 @@ import {
   Target,
   Clock,
   X,
-  Star
+  Star,
+  Activity,
+  Shield,
+  Zap,
+  Barbell,
+  Apple
 } from 'lucide-react';
 import { exerciseDatabase } from '../../utils/exerciseDatabase';
 import Modal from '../Modal';
 import GradientButton from '../GradientButton';
 import Card from '../Card';
 import IconButton from '../IconButton';
+
+function getMuscleIcon(muscle) {
+  switch (muscle) {
+    case 'pectoraux': return <Dumbbell className="h-8 w-8 text-white" />;
+    case 'dos': return <Target className="h-8 w-8 text-white" />;
+    case 'jambes': return <Shield className="h-8 w-8 text-white" />;
+    case 'abdos': return <Apple className="h-8 w-8 text-white" />;
+    case 'biceps': return <Barbell className="h-8 w-8 text-white" />;
+    case 'triceps': return <Zap className="h-8 w-8 text-white" />;
+    case 'épaules': return <Activity className="h-8 w-8 text-white" />;
+    case 'cardio': return <Heart className="h-8 w-8 text-white" />;
+    default: return <Dumbbell className="h-8 w-8 text-white" />;
+  }
+}
 
 function WorkoutList({
   selectedDate,
@@ -335,7 +354,7 @@ function WorkoutList({
                 >
                   <div className="flex flex-col items-center space-y-4">
                     <div className={`p-4 rounded-2xl ${muscle === 'cardio' ? 'bg-red-500' : 'bg-indigo-500'} shadow-lg`}>
-                      {muscle === 'cardio' ? <Heart className="h-8 w-8 text-white" /> : <Dumbbell className="h-8 w-8 text-white" />}
+                      {getMuscleIcon(muscle)}
                     </div>
                     <div className="text-center">
                       <h4 className="font-bold text-gray-800 capitalize text-xl mb-2">{t(muscle)}</h4>

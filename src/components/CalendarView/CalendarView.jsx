@@ -51,9 +51,9 @@ const CalendarView = ({
         </div>
 
         <div className="grid grid-cols-7 gap-2 mb-4">
-          {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map((day) => (
+          {['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map((day) => (
             <div key={day} className="text-center text-sm font-bold text-gray-600 py-3">
-              {t(`day_${day}`)}
+              {t(day)}
             </div>
           ))}
         </div>
