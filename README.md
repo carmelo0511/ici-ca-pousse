@@ -152,3 +152,30 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 ---
 
 ⭐ Si ce projet vous plaît, n'hésitez pas à le star sur GitHub !
+
+---
+
+## ⚠️ Note sur la sécurité des dépendances
+
+> Ce projet utilise Create React App (CRA) pour le build et le développement. Certaines vulnérabilités npm signalées par `npm audit` proviennent de dépendances internes à CRA (ex: `react-scripts`, `webpack-dev-server`, etc.). Elles n'affectent pas le code de production livré à l'utilisateur, mais concernent l'environnement de développement. Pour un usage professionnel ou long terme, il est recommandé de migrer vers [Vite](https://vitejs.dev/) ou [Next.js](https://nextjs.org/) afin de bénéficier d'un écosystème plus moderne et sécurisé.
+
+---
+
+## 🚀 Axes d'amélioration possibles
+
+Voici quelques idées pour faire évoluer et professionnaliser encore plus l'application :
+
+- **Migration vers Vite ou Next.js** : pour un build/dev plus rapide, moderne et sécurisé
+- **Authentification & Cloud Sync** : permettre la connexion utilisateur et la synchronisation des données (Firebase, Supabase...)
+- **Mode sombre / Thèmes** : personnalisation de l'interface
+- **Notifications push** : rappels d'entraînement
+- **Export/Import de données** : CSV, PDF, partage de séances
+- **Progression visuelle** : graphiques avancés, badges, objectifs
+- **Accessibilité avancée** : navigation clavier, contraste, ARIA
+- **Tests E2E** : Cypress ou Playwright pour tester les parcours utilisateur
+- **Storybook** : documentation interactive des composants UI
+- **Internationalisation (i18n)** : support multilingue
+- **PWA avancée** : installation, offline, synchronisation background
+- **API REST/GraphQL** : ouverture à d'autres apps ou intégrations
+
+N'hésitez pas à forker et proposer vos propres améliorations !
