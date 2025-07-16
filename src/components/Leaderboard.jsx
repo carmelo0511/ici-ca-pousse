@@ -2,41 +2,115 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useFriends } from '../hooks/useFriends';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, Trophy, Target, Clock, Dumbbell, Repeat, Calendar } from 'lucide-react';
+import { 
+  PERIODS, 
+  METRICS, 
+  calculateUserStats, 
+  getLeaderboardRanking, 
+  formatMetricValue, 
+  getPeriodLabel, 
+  getMetricLabel 
+} from '../utils/leaderboardUtils';
 
 function Leaderboard({ user, onShowComparison }) {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPeriod, setSelectedPeriod] = useState(PERIODS.WEEK);
+  const [selectedMetric, setSelectedMetric] = useState(METRICS.WORKOUTS);
+  const [selectedExercise, setSelectedExercise] = useState(null);
   const { friends } = useFriends(user);
 
-  // Récupère les stats (nombre de séances) pour chaque ami + soi-même
+  // Récupère les stats pour chaque ami + soi-même
   useEffect(() => {
     const fetchStats = async () => {
       setLoading(true);
       const allUsers = [user, ...friends];
       const statsArr = [];
+
       for (const u of allUsers) {
         if (!u) continue;
-        const q = query(collection(db, 'workouts'), where('userId', '==', u.uid));
-        const snap = await getDocs(q);
-        statsArr.push({
-          uid: u.uid,
-          displayName: u.displayName || u.email,
-          count: snap.size
-        });
+        
+        try {
+          // Récupérer les workouts de l'utilisateur
+          const q = query(collection(db, 'workouts'), where('userId', '==', u.uid));
+          const snap = await getDocs(q);
+          const workouts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          
+          // Calculer les statistiques
+          const userStats = calculateUserStats(workouts, selectedPeriod);
+          
+          statsArr.push({
+            uid: u.uid,
+            displayName: u.displayName || u.email,
+            stats: userStats,
+            workouts: workouts
+          });
+        } catch (error) {
+          console.error(`Erreur lors de la récupération des stats pour ${u.displayName}:`, error);
+        }
       }
-      // Tri décroissant par nombre de séances
-      statsArr.sort((a, b) => b.count - a.count);
+
       setStats(statsArr);
       setLoading(false);
     };
+
     if (user) fetchStats();
-  }, [user, friends]);
+  }, [user, friends, selectedPeriod]);
+
+  // Obtenir le classement actuel
+  const currentRanking = getLeaderboardRanking(stats, selectedMetric);
+
+  // Obtenir la liste des exercices disponibles
+  const getAvailableExercises = () => {
+    const exercises = new Set();
+    stats.forEach(user => {
+      Object.keys(user.stats.exerciseStats || {}).forEach(exerciseName => {
+        exercises.add(exerciseName);
+      });
+    });
+    return Array.from(exercises).sort();
+  };
+
+  // Obtenir le classement pour un exercice spécifique
+  const getExerciseRanking = (exerciseName) => {
+    return stats
+      .map(user => ({
+        uid: user.uid,
+        displayName: user.displayName,
+        value: user.stats.exerciseStats?.[exerciseName]?.totalWeight || 0,
+        stats: user.stats.exerciseStats?.[exerciseName] || null
+      }))
+      .filter(user => user.value > 0)
+      .sort((a, b) => b.value - a.value)
+      .map((user, index) => ({
+        ...user,
+        rank: index + 1,
+        medal: index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : null
+      }));
+  };
+
+  const exerciseRanking = selectedExercise ? getExerciseRanking(selectedExercise) : [];
+
+  // Icônes pour les métriques
+  const getMetricIcon = (metric) => {
+    switch (metric) {
+      case METRICS.WORKOUTS: return <Calendar className="h-4 w-4" />;
+      case METRICS.DURATION: return <Clock className="h-4 w-4" />;
+      case METRICS.TOTAL_WEIGHT: return <Dumbbell className="h-4 w-4" />;
+      case METRICS.TOTAL_REPS: return <Repeat className="h-4 w-4" />;
+      case METRICS.TOTAL_SETS: return <Target className="h-4 w-4" />;
+      default: return <Trophy className="h-4 w-4" />;
+    }
+  };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow-lg space-y-8">
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-lg space-y-6">
+      {/* En-tête */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Leaderboard</h2>
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          🏆 Leaderboard
+        </h2>
         {friends.length > 0 && (
           <button
             onClick={onShowComparison}
@@ -47,17 +121,190 @@ function Leaderboard({ user, onShowComparison }) {
           </button>
         )}
       </div>
+
+      {/* Sélecteurs */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Période */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Période</label>
+          <select
+            value={selectedPeriod}
+            onChange={(e) => setSelectedPeriod(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+          >
+            <option value={PERIODS.WEEK}>Cette semaine</option>
+            <option value={PERIODS.MONTH}>Ce mois</option>
+            <option value={PERIODS.YEAR}>Cette année</option>
+            <option value={PERIODS.ALL_TIME}>Tout le temps</option>
+          </select>
+        </div>
+
+        {/* Métrique */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Métrique</label>
+          <select
+            value={selectedMetric}
+            onChange={(e) => setSelectedMetric(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+          >
+            <option value={METRICS.WORKOUTS}>Séances</option>
+            <option value={METRICS.DURATION}>Temps total</option>
+            <option value={METRICS.TOTAL_WEIGHT}>Poids total</option>
+            <option value={METRICS.TOTAL_REPS}>Répétitions</option>
+            <option value={METRICS.TOTAL_SETS}>Séries</option>
+          </select>
+        </div>
+
+        {/* Exercice spécifique */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Exercice spécifique</label>
+          <select
+            value={selectedExercise || ''}
+            onChange={(e) => setSelectedExercise(e.target.value || null)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+          >
+            <option value="">Tous les exercices</option>
+            {getAvailableExercises().map(exercise => (
+              <option key={exercise} value={exercise}>{exercise}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Affichage du classement */}
       {loading ? (
-        <div className="text-gray-400 text-sm">Chargement...</div>
+        <div className="text-center py-8">
+          <div className="text-gray-400 text-sm">Chargement du classement...</div>
+        </div>
       ) : (
-        <ol className="space-y-2">
-          {stats.map((s, idx) => (
-            <li key={s.uid} className={`flex items-center justify-between px-4 py-2 rounded-lg ${s.uid === user.uid ? 'bg-indigo-100 font-bold' : 'bg-gray-50'}`}> 
-              <span>#{idx + 1} {s.displayName}</span>
-              <span>{s.count} séances</span>
-            </li>
-          ))}
-        </ol>
+        <div className="space-y-6">
+          {/* Titre du classement */}
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-gray-800">
+              {getPeriodLabel(selectedPeriod)} - {getMetricLabel(selectedMetric)}
+              {selectedExercise && ` - ${selectedExercise}`}
+            </h3>
+          </div>
+
+          {/* Classement principal */}
+          <div className="bg-gray-50 rounded-xl p-4">
+            <div className="space-y-3">
+              {selectedExercise ? (
+                // Classement par exercice spécifique
+                exerciseRanking.length > 0 ? (
+                  exerciseRanking.map((user, idx) => (
+                    <div
+                      key={user.uid}
+                      className={`flex items-center justify-between p-4 rounded-lg ${
+                        user.uid === user?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="text-2xl">{user.medal || `#${user.rank}`}</div>
+                        <div>
+                          <div className="font-semibold">{user.displayName}</div>
+                          <div className="text-sm text-gray-600">
+                            {user.stats?.count || 0} fois • Meilleur: {user.stats?.bestWeight || 0}kg
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-bold text-lg text-indigo-600">
+                          {formatMetricValue(user.value, METRICS.EXERCISE_SPECIFIC)}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {user.stats?.totalReps || 0} reps total
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    Aucune donnée pour cet exercice sur cette période
+                  </div>
+                )
+              ) : (
+                // Classement général
+                currentRanking.length > 0 ? (
+                  currentRanking.map((user, idx) => (
+                    <div
+                      key={user.uid}
+                      className={`flex items-center justify-between p-4 rounded-lg ${
+                        user.uid === user?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="text-2xl">{user.medal || `#${user.rank}`}</div>
+                        <div>
+                          <div className="font-semibold">{user.displayName}</div>
+                          <div className="text-sm text-gray-600">
+                            {user.stats.totalWorkouts} séances • {user.stats.averageWorkoutDuration}min/séance
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-bold text-lg text-indigo-600">
+                          {formatMetricValue(user.value, selectedMetric)}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {user.stats.workoutFrequency} séances/semaine
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    Aucune donnée sur cette période
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* Statistiques supplémentaires */}
+          {!selectedExercise && currentRanking.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Trophy className="h-5 w-5 text-green-600" />
+                  <span className="font-semibold text-green-800">Champion</span>
+                </div>
+                <div className="text-2xl font-bold text-green-600">
+                  {currentRanking[0]?.displayName}
+                </div>
+                <div className="text-sm text-green-600">
+                  {formatMetricValue(currentRanking[0]?.value, selectedMetric)}
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Target className="h-5 w-5 text-blue-600" />
+                  <span className="font-semibold text-blue-800">Ton rang</span>
+                </div>
+                <div className="text-2xl font-bold text-blue-600">
+                  #{currentRanking.find(u => u.uid === user?.uid)?.rank || 'N/A'}
+                </div>
+                <div className="text-sm text-blue-600">
+                  {formatMetricValue(currentRanking.find(u => u.uid === user?.uid)?.value || 0, selectedMetric)}
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <BarChart3 className="h-5 w-5 text-purple-600" />
+                  <span className="font-semibold text-purple-800">Participants</span>
+                </div>
+                <div className="text-2xl font-bold text-purple-600">
+                  {currentRanking.length}
+                </div>
+                <div className="text-sm text-purple-600">
+                  actifs sur cette période
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
