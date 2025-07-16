@@ -1,9 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useWorkouts } from './useWorkouts';
+import { useState, useEffect } from 'react';
+import { 
+  createChallengeInFirebase, 
+  getChallengesFromFirebase, 
+  updateChallengeInFirebase, 
+  deleteChallengeFromFirebase 
+} from '../utils/firebase';
+import { getWorkoutsForDateRange } from '../utils/workoutUtils';
 
 export const useChallenges = (user) => {
   const [challenges, setChallenges] = useState([]);
-  const { workouts } = useWorkouts(user);
+  const [loading, setLoading] = useState(false);
 
   // Types de défis disponibles
   const challengeTypes = [
@@ -13,92 +19,113 @@ export const useChallenges = (user) => {
     { id: 'calories', label: 'Calories brûlées', icon: '🔥' }
   ];
 
-  const loadChallenges = useCallback(() => {
+  const loadChallenges = async () => {
     if (!user) return;
     
-    const savedChallenges = localStorage.getItem(`challenges_${user.uid}`);
-    if (savedChallenges) {
-      setChallenges(JSON.parse(savedChallenges));
+    setLoading(true);
+    try {
+      const challenges = await getChallengesFromFirebase(user.uid);
+      setChallenges(challenges);
+    } catch (error) {
+      console.error('Erreur lors du chargement des défis:', error);
+    } finally {
+      setLoading(false);
     }
-  }, [user]);
+  };
 
   useEffect(() => {
     loadChallenges();
-  }, [loadChallenges]);
+  }, [user]);
 
-  const saveChallenges = (newChallenges) => {
-    if (!user) return;
-    
-    localStorage.setItem(`challenges_${user.uid}`, JSON.stringify(newChallenges));
-    setChallenges(newChallenges);
-  };
+  const createChallenge = async (challengeData) => {
+    if (!user) return null;
 
-  const createChallenge = (challengeData) => {
     const newChallenge = {
-      id: Date.now(),
-      ...challengeData,
+      senderId: user.uid,
+      senderName: user.displayName || user.email,
+      receiverId: challengeData.friend.uid,
+      receiverName: challengeData.friend.displayName || challengeData.friend.email,
+      type: challengeData.type,
+      target: challengeData.target,
+      duration: challengeData.duration,
       startDate: new Date().toISOString(),
       endDate: new Date(Date.now() + challengeData.duration * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'active',
+      status: 'pending',
       myScore: 0,
       friendScore: 0,
-      winner: null,
-      createdAt: new Date().toISOString()
+      winner: null
     };
 
-    const updatedChallenges = [...challenges, newChallenge];
-    saveChallenges(updatedChallenges);
-    return newChallenge;
+    try {
+      const createdChallenge = await createChallengeInFirebase(newChallenge);
+      setChallenges(prev => [...prev, createdChallenge]);
+      return createdChallenge;
+    } catch (error) {
+      console.error('Erreur lors de la création du défi:', error);
+      throw error;
+    }
   };
 
-  const updateChallenge = (challengeId, updates) => {
-    const updatedChallenges = challenges.map(challenge => 
-      challenge.id === challengeId ? { ...challenge, ...updates } : challenge
-    );
-    saveChallenges(updatedChallenges);
+  const updateChallenge = async (challengeId, updates) => {
+    try {
+      await updateChallengeInFirebase(challengeId, updates);
+      setChallenges(prev => prev.map(challenge => 
+        challenge.id === challengeId ? { ...challenge, ...updates } : challenge
+      ));
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour du défi:', error);
+      throw error;
+    }
   };
 
-  const deleteChallenge = (challengeId) => {
-    const updatedChallenges = challenges.filter(challenge => challenge.id !== challengeId);
-    saveChallenges(updatedChallenges);
+  const deleteChallenge = async (challengeId) => {
+    try {
+      await deleteChallengeFromFirebase(challengeId);
+      setChallenges(prev => prev.filter(challenge => challenge.id !== challengeId));
+    } catch (error) {
+      console.error('Erreur lors de la suppression du défi:', error);
+      throw error;
+    }
   };
 
-  const getChallengeScore = (challenge) => {
-    const filteredWorkouts = workouts.filter(workout => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= new Date(challenge.startDate) && workoutDate <= new Date(challenge.endDate);
-    });
+  const getChallengeScore = async (challenge, userId) => {
+    try {
+      const workouts = await getWorkoutsForDateRange(userId, new Date(challenge.startDate), new Date(challenge.endDate));
 
-    switch (challenge.type) {
-      case 'workouts':
-        return filteredWorkouts.length;
-      case 'duration':
-        return filteredWorkouts.reduce((total, workout) => total + (workout.duration || 0), 0);
-      case 'streak':
-        // Calcul de la série consécutive
-        const sortedDates = filteredWorkouts
-          .map(w => new Date(w.date))
-          .sort((a, b) => a - b);
-        
-        let maxStreak = 0;
-        let currentStreak = 0;
-        let lastDate = null;
+      switch (challenge.type) {
+        case 'workouts':
+          return workouts.length;
+        case 'duration':
+          return workouts.reduce((total, workout) => total + (workout.duration || 0), 0);
+        case 'streak':
+          // Calcul de la série consécutive
+          const sortedDates = workouts
+            .map(w => new Date(w.date))
+            .sort((a, b) => a - b);
+          
+          let maxStreak = 0;
+          let currentStreak = 0;
+          let lastDate = null;
 
-        sortedDates.forEach(date => {
-          if (!lastDate || (date - lastDate) / (1000 * 60 * 60 * 24) === 1) {
-            currentStreak++;
-            maxStreak = Math.max(maxStreak, currentStreak);
-          } else {
-            currentStreak = 1;
-          }
-          lastDate = date;
-        });
+          sortedDates.forEach(date => {
+            if (!lastDate || (date - lastDate) / (1000 * 60 * 60 * 24) === 1) {
+              currentStreak++;
+              maxStreak = Math.max(maxStreak, currentStreak);
+            } else {
+              currentStreak = 1;
+            }
+            lastDate = date;
+          });
 
-        return maxStreak;
-      case 'calories':
-        return filteredWorkouts.reduce((total, workout) => total + (workout.calories || 0), 0);
-      default:
-        return 0;
+          return maxStreak;
+        case 'calories':
+          return workouts.reduce((total, workout) => total + (workout.calories || 0), 0);
+        default:
+          return 0;
+      }
+    } catch (error) {
+      console.error('Erreur lors du calcul du score:', error);
+      return 0;
     }
   };
 
@@ -128,12 +155,12 @@ export const useChallenges = (user) => {
     }
   };
 
-  const getChallengeStatus = (challenge) => {
+  const getChallengeStatus = async (challenge) => {
     const now = new Date();
     const endDate = new Date(challenge.endDate);
     
     if (now > endDate) {
-      const myScore = getChallengeScore(challenge);
+      const myScore = await getChallengeScore(challenge, user.uid);
       const friendScore = challenge.friendScore || 0;
       
       if (myScore > friendScore) return { status: 'victory', text: 'Victoire ! 🎉' };
@@ -144,163 +171,74 @@ export const useChallenges = (user) => {
     return { status: 'active', text: 'En cours...' };
   };
 
-  const getDetailedStats = () => {
-    const totalChallenges = challenges.length;
-    const completedChallenges = challenges.filter(challenge => 
-      new Date() > new Date(challenge.endDate)
-    );
-    const activeChallenges = challenges.filter(challenge => 
-      new Date() <= new Date(challenge.endDate)
-    );
-
-    const victories = completedChallenges.filter(challenge => {
-      const myScore = getChallengeScore(challenge);
-      const friendScore = challenge.friendScore || 0;
-      return myScore > friendScore;
-    }).length;
-
-    const defeats = completedChallenges.filter(challenge => {
-      const myScore = getChallengeScore(challenge);
-      const friendScore = challenge.friendScore || 0;
-      return friendScore > myScore;
-    }).length;
-
-    const ties = completedChallenges.filter(challenge => {
-      const myScore = getChallengeScore(challenge);
-      const friendScore = challenge.friendScore || 0;
-      return myScore === friendScore;
-    }).length;
-
-    const winRate = completedChallenges.length > 0 ? Math.round((victories / completedChallenges.length) * 100) : 0;
-
-    // Stats par type de défi
-    const statsByType = {};
-    challengeTypes.forEach(type => {
-      const typeChallenges = challenges.filter(c => c.type === type.id);
-      const typeCompleted = typeChallenges.filter(c => new Date() > new Date(c.endDate));
-      const typeVictories = typeCompleted.filter(c => {
-        const myScore = getChallengeScore(c);
-        const friendScore = c.friendScore || 0;
-        return myScore > friendScore;
-      }).length;
-      
-      statsByType[type.id] = {
-        total: typeChallenges.length,
-        completed: typeCompleted.length,
-        victories: typeVictories,
-        winRate: typeCompleted.length > 0 ? Math.round((typeVictories / typeCompleted.length) * 100) : 0
-      };
-    });
-
-    // Ami le plus challengé
-    const friendStats = {};
-    challenges.forEach(challenge => {
-      const friendId = challenge.friend.uid || challenge.friend.id;
-      if (!friendStats[friendId]) {
-        friendStats[friendId] = {
-          name: challenge.friend.displayName || challenge.friend.name,
-          total: 0,
-          victories: 0,
-          defeats: 0
-        };
-      }
-      friendStats[friendId].total++;
-      
-      if (new Date() > new Date(challenge.endDate)) {
-        const myScore = getChallengeScore(challenge);
-        const friendScore = challenge.friendScore || 0;
-        if (myScore > friendScore) {
-          friendStats[friendId].victories++;
-        } else if (friendScore > myScore) {
-          friendStats[friendId].defeats++;
-        }
-      }
-    });
-
-    return {
-      overview: {
-        total: totalChallenges,
-        active: activeChallenges.length,
-        completed: completedChallenges.length,
-        victories,
-        defeats,
-        ties,
-        winRate
-      },
-      byType: statsByType,
-      byFriend: friendStats
-    };
-  };
-
-  // Obtenir les défis envoyés par l'utilisateur
   const getSentChallenges = () => {
-    return challenges.filter(challenge => challenge.createdBy === user?.uid);
+    return challenges.filter(challenge => challenge.senderId === user.uid);
   };
 
-  // Obtenir les défis reçus par l'utilisateur
   const getReceivedChallenges = () => {
-    return challenges.filter(challenge => 
-      (challenge.friend.uid === user?.uid || challenge.friend.id === user?.uid) && 
-      challenge.createdBy !== user?.uid
-    );
+    return challenges.filter(challenge => challenge.receiverId === user.uid);
   };
 
-  // Obtenir tous les défis actifs de l'utilisateur (envoyés + reçus)
   const getAllUserChallenges = () => {
     return challenges.filter(challenge => 
-      challenge.createdBy === user?.uid || 
-      challenge.friend.uid === user?.uid || 
-      challenge.friend.id === user?.uid
+      challenge.senderId === user.uid || challenge.receiverId === user.uid
     );
   };
 
-  // Accepter un défi reçu
   const acceptChallenge = async (challengeId) => {
-    const updatedChallenges = challenges.map(challenge => 
-      challenge.id === challengeId 
-        ? { ...challenge, status: 'accepted', acceptedAt: new Date().toISOString() }
-        : challenge
-    );
-    saveChallenges(updatedChallenges);
+    try {
+      await updateChallenge(challengeId, { 
+        status: 'accepted', 
+        acceptedAt: new Date().toISOString() 
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'acceptation du défi:', error);
+      throw error;
+    }
   };
 
-  // Refuser un défi reçu
   const declineChallenge = async (challengeId) => {
-    const updatedChallenges = challenges.map(challenge => 
-      challenge.id === challengeId 
-        ? { ...challenge, status: 'declined', declinedAt: new Date().toISOString() }
-        : challenge
-    );
-    saveChallenges(updatedChallenges);
+    try {
+      await updateChallenge(challengeId, { 
+        status: 'declined', 
+        declinedAt: new Date().toISOString() 
+      });
+    } catch (error) {
+      console.error('Erreur lors du refus du défi:', error);
+      throw error;
+    }
   };
 
-  // Annuler un défi (par le créateur)
   const cancelChallenge = async (challengeId) => {
-    const updatedChallenges = challenges.map(challenge => 
-      challenge.id === challengeId 
-        ? { ...challenge, status: 'cancelled', cancelledAt: new Date().toISOString() }
-        : challenge
-    );
-    saveChallenges(updatedChallenges);
+    try {
+      await updateChallenge(challengeId, { 
+        status: 'cancelled', 
+        cancelledAt: new Date().toISOString() 
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'annulation du défi:', error);
+      throw error;
+    }
   };
 
   return {
     challenges,
+    loading,
+    challengeTypes,
     createChallenge,
     updateChallenge,
     deleteChallenge,
     getChallengeScore,
     getActiveChallenges,
     getCompletedChallenges,
+    formatScore,
+    getChallengeStatus,
     getSentChallenges,
     getReceivedChallenges,
     getAllUserChallenges,
     acceptChallenge,
     declineChallenge,
     cancelChallenge,
-    formatScore,
-    getChallengeStatus,
-    getDetailedStats,
     loadChallenges
   };
 }; 
