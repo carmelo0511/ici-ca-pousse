@@ -149,6 +149,8 @@ const resources = {
       "weight_lifted": "kg soulevés",
       "no_sessions_recorded": "Aucune séance enregistrée",
       "week": "semaine",
+      "last_sessions": "Dernières séances",
+      "history_by_week": "Historique par semaine",
       // Jours
       "monday": "Lun",
       "tuesday": "Mar",
@@ -318,6 +320,8 @@ const resources = {
       "weight_lifted": "kg lifted",
       "no_sessions_recorded": "No sessions recorded",
       "week": "week",
+      "last_sessions": "Last sessions",
+      "history_by_week": "History by week",
       // Days
       "monday": "Mon",
       "tuesday": "Tue",
