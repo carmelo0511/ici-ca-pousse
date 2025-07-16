@@ -402,7 +402,7 @@ const Challenges = ({ user }) => {
                     <div className="flex items-center space-x-3">
                       <div className="text-2xl">{getChallengeIcon(challenge.type)}</div>
                       <div>
-                        <h3 className="font-semibold">Défi vs {challenge.friend.displayName || challenge.friend.email || 'Utilisateur'}</h3>
+                        <h3 className="font-semibold">Défi vs {challenge.receiverName || 'Utilisateur'}</h3>
                         <p className="text-sm text-gray-600">
                           {getChallengeTypeLabel(challenge.type)} • {challenge.duration} jours
                         </p>
@@ -464,7 +464,7 @@ const Challenges = ({ user }) => {
                     <div className="flex items-center space-x-3">
                       <div className="text-2xl">{getChallengeIcon(challenge.type)}</div>
                       <div>
-                        <h3 className="font-semibold">Défi de {challenge.createdBy === user?.uid ? 'toi' : (challenge.senderName || 'Un ami')}</h3>
+                        <h3 className="font-semibold">Défi de {challenge.senderName || 'Un ami'}</h3>
                         <p className="text-sm text-gray-600">
                           {getChallengeTypeLabel(challenge.type)} • {challenge.duration} jours
                         </p>
