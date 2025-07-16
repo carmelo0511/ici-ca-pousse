@@ -13,9 +13,7 @@ import {
   getMetricLabel,
   getAllowedExercises
 } from '../utils/leaderboardUtils';
-import ProfilePicture from './ProfilePicture';
 import BadgeList from './Badges';
-import { useBadges } from '../hooks/useBadges';
 
 function Leaderboard({ user, onShowComparison }) {
   const [stats, setStats] = useState([]);
@@ -47,7 +45,6 @@ function Leaderboard({ user, onShowComparison }) {
           statsArr.push({
             uid: u.uid,
             displayName: u.displayName || u.email,
-            photoURL: u.photoURL,
             badges: u.badges || [],
             stats: userStats,
             workouts: workouts
@@ -73,7 +70,6 @@ function Leaderboard({ user, onShowComparison }) {
       .map(user => ({
         uid: user.uid,
         displayName: user.displayName,
-        photoURL: user.photoURL,
         badges: user.badges,
         value: user.stats.exerciseStats?.[exerciseName]?.maxWeight || 0,
         stats: user.stats.exerciseStats?.[exerciseName] || null
@@ -183,21 +179,15 @@ function Leaderboard({ user, onShowComparison }) {
                     >
                       <div className="flex items-center space-x-3 md:space-x-4">
                         <div className="text-xl md:text-2xl">{user.medal || `#${user.rank}`}</div>
-                        <ProfilePicture 
-                          user={{ uid: user.uid, displayName: user.displayName, photoURL: user.photoURL }}
-                          size="md"
-                          showBadges={true}
-                          badges={user.badges}
-                        />
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
                           <div className="text-xs md:text-sm text-gray-600">
                             {user.stats?.count || 0} fois
                           </div>
-                          {user.badges && user.badges.length > 0 && (
-                            <BadgeList badges={user.badges} size="xs" maxDisplay={2} />
-                          )}
                         </div>
+                        {user.badges && user.badges.length > 0 && (
+                          <BadgeList badges={user.badges} size="sm" maxDisplay={3} />
+                        )}
                       </div>
                       <div className="text-right sm:text-right">
                         <div className="font-bold text-base md:text-lg text-indigo-600">
@@ -223,21 +213,15 @@ function Leaderboard({ user, onShowComparison }) {
                     >
                       <div className="flex items-center space-x-3 md:space-x-4">
                         <div className="text-xl md:text-2xl">{user.medal || `#${user.rank}`}</div>
-                        <ProfilePicture 
-                          user={{ uid: user.uid, displayName: user.displayName, photoURL: user.photoURL }}
-                          size="md"
-                          showBadges={true}
-                          badges={user.badges}
-                        />
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
                           <div className="text-xs md:text-sm text-gray-600">
                             {user.stats.workouts || 0} séances • Poids max: {user.stats.maxWeight || 0}kg
                           </div>
-                          {user.badges && user.badges.length > 0 && (
-                            <BadgeList badges={user.badges} size="xs" maxDisplay={2} />
-                          )}
                         </div>
+                        {user.badges && user.badges.length > 0 && (
+                          <BadgeList badges={user.badges} size="sm" maxDisplay={3} />
+                        )}
                       </div>
                       <div className="text-right sm:text-right">
                         <div className="font-bold text-base md:text-lg text-indigo-600">

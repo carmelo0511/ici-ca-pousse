@@ -13,7 +13,7 @@ import { useChallenges } from './hooks/useChallenges';
 import { createWorkout } from './utils/workoutUtils';
 
 import { auth } from './utils/firebase';
-import { ensureUserProfile, uploadProfilePicture } from './utils/firebase';
+import { ensureUserProfile } from './utils/firebase';
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
 import PWAInstallButton from './components/PWAInstallButton';
@@ -22,7 +22,6 @@ import LeaderboardView from './components/LeaderboardView';
 import Challenges from './components/Challenges';
 import BadgesPage from './components/BadgesPage';
 import Notifications from './components/Notifications';
-import ProfilePicture, { ProfilePictureEditor } from './components/ProfilePicture';
 
 function App() {
   const [user, setUser] = useState(null);

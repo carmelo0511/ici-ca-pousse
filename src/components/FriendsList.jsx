@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useFriends } from '../hooks/useFriends';
 import GradientButton from './GradientButton';
 import FriendProfile from './FriendProfile';
-import ProfilePicture from './ProfilePicture';
 import BadgeList from './Badges';
 
 function FriendsList({ user }) {
@@ -71,13 +70,10 @@ function FriendsList({ user }) {
             {pendingInvites.map(invite => (
               <li key={invite.uid} className="flex items-center justify-between bg-indigo-50 rounded-lg px-4 py-2">
                 <div className="flex items-center space-x-3">
-                  <ProfilePicture 
-                    user={invite}
-                    size="sm"
-                    showBadges={true}
-                    badges={invite.badges || []}
-                  />
                   <span className="font-medium">{invite.displayName || invite.email}</span>
+                  {invite.badges && invite.badges.length > 0 && (
+                    <BadgeList badges={invite.badges} size="xs" maxDisplay={2} />
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => acceptInvite(invite.uid)} className="bg-green-500 text-white px-3 py-1 rounded-lg font-semibold hover:bg-green-600">Accepter</button>
@@ -102,12 +98,6 @@ function FriendsList({ user }) {
                   onClick={() => setSelectedFriend(friend)}
                   title="Voir le profil"
                 >
-                  <ProfilePicture 
-                    user={friend}
-                    size="md"
-                    showBadges={true}
-                    badges={friend.badges || []}
-                  />
                   <div className="min-w-0 flex-1">
                     <div className="font-semibold text-indigo-700 group-hover:underline truncate">
                       {friend.displayName || friend.email}
