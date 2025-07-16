@@ -161,11 +161,11 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
               <div key={workout.id} className="flex justify-between items-center py-4 px-6 bg-gray-100 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow duration-200">
                 <div>
                   <p className="font-bold text-gray-800">{new Date(workout.date).toLocaleDateString('fr-FR')}</p>
-                  <p className="text-sm text-gray-600">{workout.exercises.length} exercices • {workout.totalSets} séries</p>
+                  <p className="text-sm text-gray-600">{workout.exercises.length} {t('exercises')} • {workout.totalSets} {t('sets')}</p>
                 </div>
                 <div className="text-right">
                   <p className="font-bold text-gray-800">{workout.duration} min</p>
-                  <p className="text-sm text-gray-600">{workout.totalWeight} kg</p>
+                  <p className="text-sm text-gray-600">{workout.totalWeight} {t('kg')}</p>
                 </div>
               </div>
             ))}
@@ -186,7 +186,7 @@ const StatsView = ({ stats, workouts, onEditWorkout }) => {
                   <div key={w.id} className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100">
                     <div>
                       <div className="font-bold text-lg text-gray-800">{formatDate(w.date)}</div>
-                      <div className="text-sm text-gray-500">{w.exercises.length} exercice(s), {w.totalSets} série(s), {w.totalReps} rep, {w.totalWeight} kg</div>
+                      <div className="text-sm text-gray-500">{w.exercises.length} {t('exercises')}, {w.totalSets} {t('sets')}, {w.totalReps} {t('reps')}, {w.totalWeight} {t('kg')}</div>
                     </div>
                     <div className="flex gap-2 mt-2 sm:mt-0">
                       <button

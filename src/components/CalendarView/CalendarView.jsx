@@ -1,5 +1,6 @@
 import React from 'react';
 import { Clock, Zap, Dumbbell, Heart, Trash2, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const CalendarView = ({
   workouts,
@@ -31,6 +32,8 @@ const CalendarView = ({
     'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
   ];
 
+  const { t } = useTranslation();
+
   return (
     <div className="p-6 space-y-8">
       <div className="flex items-center justify-between">
@@ -50,7 +53,7 @@ const CalendarView = ({
         <div className="grid grid-cols-7 gap-2 mb-4">
           {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map((day) => (
             <div key={day} className="text-center text-sm font-bold text-gray-600 py-3">
-              {day}
+              {t(`day_${day}`)}
             </div>
           ))}
         </div>
@@ -87,7 +90,7 @@ const CalendarView = ({
         <div className="bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-green-200 rounded-2xl p-6 fade-in-up">
           <div className="flex items-center space-x-3 mb-3">
             <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-            <span className="text-sm font-bold text-green-800">Séances effectuées</span>
+            <span className="text-sm font-bold text-green-800">{t('sessions_done')}</span>
           </div>
           <p className="text-3xl font-bold text-green-900">{workouts.length}</p>
         </div>
@@ -95,7 +98,7 @@ const CalendarView = ({
         <div className="bg-gradient-to-br from-blue-100 to-indigo-100 border-2 border-blue-200 rounded-2xl p-6 fade-in-up">
           <div className="flex items-center space-x-3 mb-3">
             <Clock className="h-5 w-5 text-blue-600" />
-            <span className="text-sm font-bold text-blue-800">Cette semaine</span>
+            <span className="text-sm font-bold text-blue-800">{t('this_week')}</span>
           </div>
           <p className="text-3xl font-bold text-blue-900">
             {workouts.filter(w => {
@@ -153,25 +156,25 @@ const CalendarView = ({
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-4 rounded-2xl text-center border border-blue-200">
                   <div className="text-2xl sm:text-3xl font-bold text-blue-600">{selectedWorkout.duration}</div>
-                  <div className="text-xs sm:text-sm font-medium text-blue-800">Minutes</div>
+                  <div className="text-xs sm:text-sm font-medium text-blue-800">{t('minutes')}</div>
                 </div>
                 <div className="bg-gradient-to-br from-green-100 to-emerald-100 p-4 rounded-2xl text-center border border-green-200">
                   <div className="text-2xl sm:text-3xl font-bold text-green-600">{selectedWorkout.totalSets}</div>
-                  <div className="text-xs sm:text-sm font-medium text-green-800">Séries</div>
+                  <div className="text-xs sm:text-sm font-medium text-green-800">{t('series')}</div>
                 </div>
                 <div className="bg-gradient-to-br from-purple-100 to-pink-100 p-4 rounded-2xl text-center border border-purple-200">
                   <div className="text-2xl sm:text-3xl font-bold text-purple-600">{selectedWorkout.totalReps}</div>
-                  <div className="text-xs sm:text-sm font-medium text-purple-800">Répétitions</div>
+                  <div className="text-xs sm:text-sm font-medium text-purple-800">{t('repetitions')}</div>
                 </div>
                 <div className="bg-gradient-to-br from-orange-100 to-red-100 p-4 rounded-2xl text-center border border-orange-200">
                   <div className="text-2xl sm:text-3xl font-bold text-orange-600">{selectedWorkout.totalWeight}</div>
-                  <div className="text-xs sm:text-sm font-medium text-orange-800">kg soulevés</div>
+                  <div className="text-xs sm:text-sm font-medium text-orange-800">{t('kg_lifted')}</div>
                 </div>
               </div>
               <div className="space-y-4">
                 <h4 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center space-x-2">
                   <Dumbbell className="h-5 w-5" />
-                  <span>Exercices réalisés</span>
+                  <span>{t('exercises_performed')}</span>
                 </h4>
                 {selectedWorkout.exercises.map((exercise, index) => (
                   <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 border border-gray-200 fade-in-up">
@@ -188,16 +191,16 @@ const CalendarView = ({
                     </div>
                     <div className="space-y-3">
                       <div className={`grid gap-3 text-xs sm:text-sm font-bold text-gray-600 pb-2 border-b border-gray-300 ${exercise.type === 'cardio' ? 'grid-cols-3' : 'grid-cols-3'}`}> 
-                        <span>Série</span>
+                        <span>{t('set')}</span>
                         {exercise.type === 'cardio' ? (
                           <>
-                            <span>Durée (min)</span>
-                            <span>Intensité</span>
+                            <span>{t('duration')}</span>
+                            <span>{t('intensity')}</span>
                           </>
                         ) : (
                           <>
-                            <span>Répétitions</span>
-                            <span>Poids (kg)</span>
+                            <span>{t('repetitions')}</span>
+                            <span>{t('weight')}</span>
                           </>
                         )}
                       </div>
