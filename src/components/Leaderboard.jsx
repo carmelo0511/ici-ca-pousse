@@ -67,13 +67,25 @@ function Leaderboard({ user, onShowComparison }) {
   // Obtenir le classement pour un exercice spécifique
   const getExerciseRanking = (exerciseName) => {
     return stats
-      .map(user => ({
-        uid: user.uid,
-        displayName: user.displayName,
-        badges: user.badges,
-        value: user.stats.exerciseStats?.[exerciseName]?.maxWeight || 0,
-        stats: user.stats.exerciseStats?.[exerciseName] || null
-      }))
+      .map(user => {
+        const exerciseStats = user.stats.exerciseStats?.[exerciseName];
+        let value = 0;
+        
+        // Choisir la valeur selon la métrique sélectionnée
+        if (selectedMetric === METRICS.WORKOUTS) {
+          value = exerciseStats?.count || 0;
+        } else if (selectedMetric === METRICS.MAX_WEIGHT) {
+          value = exerciseStats?.maxWeight || 0;
+        }
+        
+        return {
+          uid: user.uid,
+          displayName: user.displayName,
+          badges: user.badges,
+          value: value,
+          stats: exerciseStats || null
+        };
+      })
       .filter(user => user.value > 0)
       .sort((a, b) => b.value - a.value)
       .map((user, index) => ({
@@ -182,7 +194,10 @@ function Leaderboard({ user, onShowComparison }) {
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
                           <div className="text-xs md:text-sm text-gray-600">
-                            {user.stats?.count || 0} fois
+                            {selectedMetric === METRICS.WORKOUTS 
+                              ? `${user.stats?.count || 0} fois`
+                              : `Poids max: ${user.stats?.maxWeight || 0}kg`
+                            }
                           </div>
                         </div>
                         {user.badges && user.badges.length > 0 && (
@@ -191,7 +206,7 @@ function Leaderboard({ user, onShowComparison }) {
                       </div>
                       <div className="text-right sm:text-right">
                         <div className="font-bold text-base md:text-lg text-indigo-600">
-                          {formatMetricValue(user.value, METRICS.MAX_WEIGHT)}
+                          {formatMetricValue(user.value, selectedMetric)}
                         </div>
                       </div>
                     </div>
