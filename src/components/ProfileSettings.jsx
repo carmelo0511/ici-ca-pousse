@@ -6,8 +6,8 @@ import ProfilePicture from './ProfilePicture';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../utils/firebase';
 
-const ProfileSettings = ({ user, isOpen, onClose }) => {
-  const { badges, selectedBadge } = useBadges(user.workouts, user.challenges, user);
+const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose }) => {
+  const { badges, selectedBadge } = useBadges(workouts, challenges, user);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
 
@@ -39,20 +39,30 @@ const ProfileSettings = ({ user, isOpen, onClose }) => {
       </div>
       <div className="mb-4">
         <h3 className="font-semibold mb-2">Choisir un badge comme avatar</h3>
-        <div className="grid grid-cols-3 gap-3">
-          {badges.map((badge) => (
-            <button
-              key={badge}
-              onClick={() => handleBadgeSelect(badge)}
-              className={`flex flex-col items-center p-2 rounded-lg border-2 transition-all ${selectedBadge === badge ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 bg-white'} hover:border-indigo-400`}
-              disabled={loading}
-            >
-              <span className={`text-3xl mb-1 ${BADGE_CONFIG[badge].color}`}>{BADGE_CONFIG[badge].icon}</span>
-              <span className="text-xs text-gray-700 text-center">{BADGE_CONFIG[badge].name}</span>
-              {selectedBadge === badge && <span className="text-indigo-500 text-xs mt-1">Sélectionné</span>}
-            </button>
-          ))}
-        </div>
+        {badges.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <div className="text-4xl mb-2">🔒</div>
+            <p>Aucun badge débloqué pour l'instant</p>
+            <p className="text-sm">Commence à t'entraîner pour débloquer des badges !</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-3 max-h-64 overflow-y-auto">
+            {badges.map((badge) => (
+              <button
+                key={badge}
+                onClick={() => handleBadgeSelect(badge)}
+                className={`flex flex-col items-center p-2 rounded-lg border-2 transition-all ${selectedBadge === badge ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 bg-white'} hover:border-indigo-400`}
+                disabled={loading}
+              >
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${BADGE_CONFIG[badge].color}`}>
+                  {BADGE_CONFIG[badge].icon}
+                </div>
+                <span className="text-xs text-gray-700 text-center mt-1">{BADGE_CONFIG[badge].name}</span>
+                {selectedBadge === badge && <span className="text-indigo-500 text-xs mt-1">✓ Sélectionné</span>}
+              </button>
+            ))}
+          </div>
+        )}
         <button
           onClick={() => handleBadgeSelect(null)}
           className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium w-full"

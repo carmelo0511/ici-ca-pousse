@@ -73,7 +73,13 @@ const Header = memo(({ workoutCount, className = '', user }) => {
       </div>
       {/* Modale de profil */}
       {user && (
-        <ProfileSettings user={user} isOpen={showProfile} onClose={() => setShowProfile(false)} />
+        <ProfileSettings 
+          user={user} 
+          workouts={[]} 
+          challenges={[]} 
+          isOpen={showProfile} 
+          onClose={() => setShowProfile(false)} 
+        />
       )}
     </header>
   );
