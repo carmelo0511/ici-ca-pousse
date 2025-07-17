@@ -1,9 +1,14 @@
 import { renderHook } from '@testing-library/react';
-import { useBadges, calculateUserBadges } from '../hooks/useBadges';
-import { BADGE_TYPES } from '../constants/badges';
+import { useBadges, calculateUserBadges } from '../hooks/useBadges.js';
+import { BADGE_TYPES } from '../constants/badges.js';
+
+const mockSaveUserBadges = jest.fn(() => Promise.resolve());
 
 jest.mock('../utils/firebase', () => ({
-  saveUserBadges: jest.fn()
+  db: {},
+  doc: jest.fn(),
+  updateDoc: jest.fn(),
+  saveUserBadges: mockSaveUserBadges
 }));
 
 describe('useBadges', () => {
@@ -42,8 +47,41 @@ describe('useBadges', () => {
     expect(badges).toContain(BADGE_TYPES.CHALLENGE_WINNER);
   });
 
+  it('should unlock WORKOUTS_10 badge for 10 workouts', () => {
+    const workouts = Array.from({ length: 10 }, (_, i) => ({
+      id: `w${i+1}`,
+      date: new Date().toISOString(),
+      exercises: []
+    }));
+    const badges = calculateUserBadges(workouts, [], mockUser);
+    expect(badges).toContain(BADGE_TYPES.WORKOUTS_10);
+  });
+
+  it('should unlock BENCH_MASTER badge for 10 bench press workouts', () => {
+    const workouts = Array.from({ length: 10 }, (_, i) => ({
+      id: `w${i+1}`,
+      date: new Date().toISOString(),
+      exercises: [{ name: 'Développé couché', sets: [{ reps: 10, weight: 50 }] }]
+    }));
+    const badges = calculateUserBadges(workouts, [], mockUser);
+    expect(badges).toContain(BADGE_TYPES.BENCH_MASTER);
+  });
+
   it('should return empty array if no workouts or challenges', () => {
     const badges = calculateUserBadges([], [], mockUser);
     expect(badges).toEqual([]);
+  });
+
+  it('should use the hook correctly', () => {
+    const workouts = [{ id: 'w1', date: new Date().toISOString(), exercises: [] }];
+    const challenges = [];
+    const mockAddBadgeUnlockXP = jest.fn();
+    
+    const { result } = renderHook(() => 
+      useBadges(workouts, challenges, mockUser, mockAddBadgeUnlockXP)
+    );
+    
+    expect(result.current.badges).toContain(BADGE_TYPES.FIRST_WORKOUT);
+    expect(result.current.badgeCount).toBe(1);
   });
 }); 
