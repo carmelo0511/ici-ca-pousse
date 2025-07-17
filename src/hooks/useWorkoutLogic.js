@@ -59,7 +59,7 @@ export default function useWorkoutLogic({
         showToastMsg(t('error_update'), 'error');
       }
     } else {
-      addWorkout(workout);
+      await addWorkout(workout);
       // Ajouter de l'XP pour la nouvelle séance
       if (addWorkoutXP) {
         try {
