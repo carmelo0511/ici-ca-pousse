@@ -2,20 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Flame } from 'lucide-react';
 import PropTypes from 'prop-types';
 
-const COLORS = [
-  'from-yellow-400 to-orange-500', // 1-6
-  'from-orange-500 to-red-500',    // 7-29
-  'from-red-500 to-yellow-500',    // 30-99
-  'from-pink-500 to-purple-500'    // 100+
-];
-
-function getStreakColor(streak) {
-  if (streak >= 100) return COLORS[3];
-  if (streak >= 30) return COLORS[2];
-  if (streak >= 7) return COLORS[1];
-  return COLORS[0];
-}
-
 function getStreakMessage(streak) {
   if (streak >= 100) return '🔥 LÉGENDAIRE !';
   if (streak >= 30) return '🔥 INCROYABLE !';
@@ -27,24 +13,20 @@ function getStreakMessage(streak) {
 
 const StreakCounter = ({ streak, className = '' }) => {
   const [displayStreak, setDisplayStreak] = useState(streak);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (streak > displayStreak) {
-      setIsAnimating(true);
       let current = displayStreak;
       const timer = setInterval(() => {
         current++;
         setDisplayStreak(current);
         if (current >= streak) {
           clearInterval(timer);
-          setIsAnimating(false);
         }
       }, 40);
       return () => clearInterval(timer);
     } else {
       setDisplayStreak(streak);
-      setIsAnimating(false);
     }
   }, [streak, displayStreak]);
 
