@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, Bell, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next'; // Temporarily disabled for CI
 import PropTypes from 'prop-types';
 
 const Navigation = ({ activeTab, setActiveTab, className = '' }) => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 export const useSwipeNavigation = (activeTab, setActiveTab, tabs) => {
   const touchStart = useRef(null);
@@ -16,7 +16,7 @@ export const useSwipeNavigation = (activeTab, setActiveTab, tabs) => {
     touchEnd.current = e.targetTouches[0].clientX;
   };
 
-  const onTouchEnd = () => {
+  const onTouchEnd = useCallback(() => {
     if (!touchStart.current || !touchEnd.current) return;
     
     const distance = touchStart.current - touchEnd.current;
@@ -39,7 +39,7 @@ export const useSwipeNavigation = (activeTab, setActiveTab, tabs) => {
         setActiveTab(tabs[newIndex].id);
       }
     }
-  };
+  }, [activeTab, tabs, setActiveTab]);
 
   useEffect(() => {
     const element = document.getElementById('main-content');
@@ -54,7 +54,7 @@ export const useSwipeNavigation = (activeTab, setActiveTab, tabs) => {
       element.removeEventListener('touchmove', onTouchMove);
       element.removeEventListener('touchend', onTouchEnd);
     };
-  }, [activeTab, tabs, onTouchEnd]);
+  }, [onTouchEnd]);
 
   return null;
 }; 
