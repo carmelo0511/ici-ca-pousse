@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../utils/firebase';
+import { db } from '../../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { BarChart3, Calendar, Target, TrendingUp, User } from 'lucide-react';
 

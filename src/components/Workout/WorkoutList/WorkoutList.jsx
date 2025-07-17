@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { db, auth } from '../../utils/firebase';
+import { db, auth } from '../../../utils/firebase';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import {
   Calendar,
@@ -17,11 +17,11 @@ import {
   Zap,
   Apple
 } from 'lucide-react';
-import { exerciseDatabase } from '../../utils/exerciseDatabase';
+import { exerciseDatabase } from '../../../utils/exerciseDatabase';
 import Modal from '../Modal';
-import GradientButton from '../GradientButton';
-import Card from '../Card';
-import IconButton from '../IconButton';
+import GradientButton from '../../GradientButton';
+import Card from '../../Card';
+import IconButton from '../../IconButton';
 import PropTypes from 'prop-types';
 
 function getMuscleIcon(muscle) {

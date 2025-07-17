@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Leaderboard from './Leaderboard';
-import StatsComparison from './StatsComparison';
+import StatsComparison from '../Workout/StatsComparison';
 import { ArrowLeft } from 'lucide-react';
 
 function LeaderboardView({ user }) {

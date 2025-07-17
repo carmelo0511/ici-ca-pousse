@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { db } from '../utils/firebase';
+import { db } from '../../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { useFriends } from '../hooks/useFriends';
+import { useFriends } from '../../hooks/useFriends';
 import { BarChart3, Calendar, Target, TrendingUp } from 'lucide-react';
 
 function StatsComparison({ user }) {

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import Card from './Card';
+import Card from '../Card';
 import { Trophy, Lock, TrendingUp } from 'lucide-react';
-import Toast from './Toast';
-import { useBadges } from '../hooks/useBadges';
+import Toast from '../Toast';
+import { useBadges } from '../../hooks/useBadges';
 import { BADGE_CONFIG } from './Badges';
 import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../utils/firebase';
+import { db } from '../../utils/firebase';
 
-const BadgesPage = ({ workouts, challenges, friends, user }) => {
+const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) => {
   const [showLocked, setShowLocked] = useState(false);
   const [toast, setToast] = useState(null);
-  const { badges, badgeCount, selectedBadge } = useBadges(workouts, challenges, user);
+  const { badges, badgeCount, selectedBadge } = useBadges(workouts, challenges, user, addBadgeUnlockXP);
 
   // Tous les badges disponibles
   const allBadges = Object.keys(BADGE_CONFIG).map(type => ({

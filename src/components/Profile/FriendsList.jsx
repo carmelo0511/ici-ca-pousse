@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useFriends } from '../hooks/useFriends';
-import GradientButton from './GradientButton';
+import { useFriends } from '../../hooks/useFriends';
+import GradientButton from '../GradientButton';
 import FriendProfile from './FriendProfile';
-import BadgeList from './Badges';
+import BadgeList from '../Badges/Badges';
 import ProfilePicture from './ProfilePicture';
 
 function FriendsList({ user }) {

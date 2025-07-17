@@ -8,7 +8,7 @@ import {
 import { getWorkoutsForDateRange } from '../utils/workoutUtils';
 import { useWorkouts } from './useWorkouts';
 
-export const useChallenges = (user) => {
+export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(false);
   const { workouts } = useWorkouts(user);
@@ -59,12 +59,24 @@ export const useChallenges = (user) => {
     try {
       const createdChallenge = await createChallengeInFirebase(newChallenge);
       setChallenges(prev => [...prev, createdChallenge]);
+      
+      // Ajouter de l'XP pour l'envoi du défi
+      if (addChallengeSendXP) {
+        try {
+          const challengeName = `${challengeData.type} vs ${challengeData.friend.displayName}`;
+          const result = await addChallengeSendXP(challengeName);
+          console.log(`Défi envoyé: ${challengeName} - +${result.xpGained} XP`);
+        } catch (error) {
+          console.error('Erreur lors de l\'ajout d\'XP pour défi:', error);
+        }
+      }
+      
       return createdChallenge;
     } catch (error) {
       console.error('Erreur lors de la création du défi:', error);
       throw error;
     }
-  }, [user]);
+  }, [user, addChallengeSendXP]);
 
   const updateChallenge = useCallback(async (challengeId, updates) => {
     try {
@@ -157,12 +169,27 @@ export const useChallenges = (user) => {
     if (now > endDate) {
       const myScore = getChallengeScore(challenge);
       const friendScore = challenge.friendScore || 0;
+      
+      // Vérifier si c'est une victoire et ajouter de l'XP
+      if (myScore > friendScore && challenge.status !== 'completed' && addChallengeWinXP) {
+        // Marquer le défi comme terminé et ajouter de l'XP
+        updateChallenge(challenge.id, { status: 'completed' }).then(() => {
+          const challengeName = `${challenge.type} vs ${challenge.receiverName}`;
+          addChallengeWinXP(challengeName).then(result => {
+            console.log(`Défi gagné: ${challengeName} - +${result.xpGained} XP`);
+          }).catch(error => {
+            console.error('Erreur lors de l\'ajout d\'XP pour victoire:', error);
+          });
+        });
+        return { status: 'victory', text: 'Victoire ! 🎉' };
+      }
+      
       if (myScore > friendScore) return { status: 'victory', text: 'Victoire ! 🎉' };
       if (friendScore > myScore) return { status: 'defeat', text: 'Défaite 😔' };
       return { status: 'tie', text: 'Égalité 🤝' };
     }
     return { status: 'active', text: 'En cours...' };
-  }, [getChallengeScore]);
+  }, [getChallengeScore, updateChallenge, addChallengeWinXP]);
 
   const getSentChallenges = useCallback(() => {
     return challenges.filter(challenge => challenge.senderId === user?.uid);

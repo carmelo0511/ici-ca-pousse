@@ -3,7 +3,7 @@ import './App.css';
 import Auth from './components/Auth';
 import Header from './components/Header/Header';
 import Navigation from './components/Navigation/Navigation';
-import WorkoutList from './components/WorkoutList/WorkoutList';
+import WorkoutList from './components/Workout/WorkoutList/WorkoutList';
 import CalendarView from './components/CalendarView/CalendarView';
 import StatsView from './components/StatsView/StatsView';
 import { useWorkouts } from './hooks/useWorkouts';
@@ -11,44 +11,107 @@ import { useExercises } from './hooks/useExercises';
 import { useFriends } from './hooks/useFriends';
 import { useChallenges } from './hooks/useChallenges';
 import { useUserProfile } from './hooks/useUserProfile';
-import { createWorkout } from './utils/workoutUtils';
+// createWorkout est maintenant utilisé dans useWorkoutLogic
 
 
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
 import PWAInstallButton from './components/PWAInstallButton';
-import FriendsList from './components/FriendsList';
-import LeaderboardView from './components/LeaderboardView';
+import FriendsList from './components/Profile/FriendsList';
+import LeaderboardView from './components/Leaderboard/LeaderboardView';
+import BadgesPage from './components/Badges/BadgesPage';
 import Challenges from './components/Challenges';
-import BadgesPage from './components/BadgesPage';
 import Notifications from './components/Notifications';
+import MigrationPrompt from './components/MigrationPrompt';
+import useWorkoutLogic from './hooks/useWorkoutLogic';
+import useAppState from './hooks/useAppState';
+import { useExperience } from './hooks/useExperience';
+import PageTransition from './components/PageTransition';
+import { useSwipeNavigation } from './hooks/useSwipeNavigation';
+import { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
 
 function App() {
   const { user, loading: userLoading } = useUserProfile();
   const [authChecked, setAuthChecked] = useState(false);
-  const [activeTab, setActiveTab] = useState('workout');
-  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  });
-  const [showAddExercise, setShowAddExercise] = useState(false);
-  const [selectedWorkout, setSelectedWorkout] = useState(null);
-  const [showWorkoutDetail, setShowWorkoutDetail] = useState(false);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
-  const [showMigratePrompt, setShowMigratePrompt] = useState(false);
+  
+  // Hook personnalisé pour l'état global
+  const appState = useAppState();
+  const {
+    activeTab,
+    toast,
+    selectedDate,
+    showAddExercise,
+    selectedWorkout,
+    showWorkoutDetail,
+    startTime,
+    endTime,
+    selectedMuscleGroup,
+    showMigratePrompt,
+    setActiveTab,
+    setSelectedDate,
+    setShowAddExercise,
+    setSelectedWorkout,
+    setShowWorkoutDetail,
+    setStartTime,
+    setEndTime,
+    setSelectedMuscleGroup,
+    setShowMigratePrompt,
+    showToastMsg,
+    // clearWorkoutForm est disponible si nécessaire
+  } = appState;
 
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
   const { exercises, addExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
-  const { challenges } = useChallenges(user);
-  const { friends } = useFriends(user);
+  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP } = useExperience(user);
+  const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
+  const { friends } = useFriends(user, addFriendXP);
   const { t } = useTranslation();
+
+  // Hook personnalisé pour la logique des workouts
+  const workoutLogic = useWorkoutLogic({
+    exercises,
+    selectedDate,
+    startTime,
+    endTime,
+    selectedWorkout,
+    addWorkout,
+    updateWorkout,
+    deleteWorkout,
+    addExercise,
+    clearExercises,
+    setStartTime,
+    setEndTime,
+    setSelectedWorkout,
+    setShowAddExercise,
+    setSelectedMuscleGroup,
+    setActiveTab,
+    setSelectedDate,
+    setExercisesFromWorkout,
+    setShowWorkoutDetail,
+    showToastMsg,
+    t,
+    addWorkoutXP,
+    workouts
+  });
+
+  const { addExerciseToWorkout, saveWorkout, openWorkoutDetail, handleEditWorkout, handleDeleteWorkout } = workoutLogic;
+
+  // Configuration des onglets pour la navigation
+  const tabs = [
+    { id: 'workout', label: 'Séance' },
+    { id: 'calendar', label: 'Calendrier' },
+    { id: 'stats', label: 'Statistiques' },
+    { id: 'friends', label: 'Amis' },
+    { id: 'leaderboard', label: 'Classement' },
+    { id: 'challenges', label: 'Défis' },
+    { id: 'badges', label: 'Badges' },
+    { id: 'notifications', label: 'Notifications' }
+  ];
+
+  // Navigation par gestes et raccourcis clavier
+  useSwipeNavigation(activeTab, setActiveTab, tabs);
+  useKeyboardNavigation(activeTab, setActiveTab, tabs);
 
   useEffect(() => {
     if (user) {
@@ -67,7 +130,7 @@ function App() {
         setShowMigratePrompt(true);
       }
     }
-  }, [user]);
+  }, [user, setShowMigratePrompt]);
 
   if (!authChecked || userLoading) {
     return <div className="flex items-center justify-center min-h-screen">Chargement...</div>;
@@ -76,86 +139,6 @@ function App() {
   if (!user) {
     return <Auth />;
   }
-
-  // Fonctions utilitaires
-  const showToastMsg = (message, type = 'success') => {
-    setToast({ show: true, message, type });
-    setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 2500);
-  };
-
-  const addExerciseToWorkout = (exerciseName) => {
-    addExercise(exerciseName);
-    setShowAddExercise(false);
-    setSelectedMuscleGroup(null);
-    showToastMsg(t('exercise_added'));
-  };
-
-  const saveWorkout = async () => {
-    if (exercises.length === 0) return;
-    
-    // Calculer la durée à partir des heures de début et fin
-    let duration = 30; // durée par défaut
-    if (startTime && endTime) {
-      const start = new Date(`2000-01-01T${startTime}`);
-      const end = new Date(`2000-01-01T${endTime}`);
-      duration = Math.round((end - start) / (1000 * 60)); // durée en minutes
-    }
-    
-    // On ne passe l'id que s'il s'agit d'une édition et que l'id est une chaîne (Firestore)
-    const workout = createWorkout(
-      exercises,
-      selectedDate,
-      duration,
-      selectedWorkout && typeof selectedWorkout.id === 'string' ? selectedWorkout.id : undefined,
-      startTime,
-      endTime
-    );
-    if (selectedWorkout && typeof selectedWorkout.id === 'string') {
-      try {
-        await updateWorkout(selectedWorkout.id, workout);
-        showToastMsg(t('workout_updated'));
-      } catch (e) {
-        showToastMsg(t('error_update'), 'error');
-      }
-    } else {
-      addWorkout(workout);
-      showToastMsg(t('workout_saved'));
-    }
-    clearExercises();
-    setStartTime('');
-    setEndTime('');
-    setSelectedWorkout(null);
-  };
-
-  const openWorkoutDetail = (workout) => {
-    setSelectedWorkout(workout);
-    setShowWorkoutDetail(true);
-  };
-
-  const handleEditWorkout = (workout) => {
-    setSelectedWorkout(workout);
-    setSelectedDate(workout.date);
-    setStartTime(workout.startTime);
-    setEndTime(workout.endTime);
-    setExercisesFromWorkout(workout.exercises);
-    setActiveTab('workout');
-  };
-
-
-  const handleDeleteWorkout = async (workoutId) => {
-    // On ne supprime que si l'id est une chaîne (Firestore)
-    if (typeof workoutId === 'string' && window.confirm(t('confirm_delete_workout'))) {
-      try {
-        await deleteWorkout(workoutId);
-        setShowWorkoutDetail(false);
-        showToastMsg(t('workout_deleted'), 'error');
-      } catch (e) {
-        showToastMsg(t('error_delete'), 'error');
-      }
-    } else {
-      showToastMsg('Suppression impossible : id de séance invalide.', 'error');
-    }
-  };
 
   const handleMigrate = async () => {
     await migrateLocalWorkoutsToCloud(user, addWorkout);
@@ -166,24 +149,7 @@ function App() {
   // Afficher la proposition de migration si besoin
   if (showMigratePrompt) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen gap-6">
-        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md text-center">
-          <h2 className="text-2xl font-bold mb-4">Migration des données</h2>
-          <p className="mb-6">Des séances locales ont été détectées. Voulez-vous les transférer sur votre compte cloud pour les retrouver sur tous vos appareils ?</p>
-          <button
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 mb-2"
-            onClick={handleMigrate}
-          >
-            Migrer mes séances locales vers le cloud
-          </button>
-          <button
-            className="text-gray-500 underline mt-2"
-            onClick={() => setShowMigratePrompt(false)}
-          >
-            Ignorer
-          </button>
-        </div>
-      </div>
+      <MigrationPrompt onMigrate={handleMigrate} onIgnore={() => setShowMigratePrompt(false)} />
     );
   }
 
@@ -191,49 +157,77 @@ function App() {
     switch (activeTab) {
       case 'workout':
         return (
-          <WorkoutList
-            exercises={exercises}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            startTime={startTime}
-            setStartTime={setStartTime}
-            endTime={endTime}
-            setEndTime={setEndTime}
-            addSet={addSet}
-            updateSet={updateSet}
-            removeSet={removeSet}
-            saveWorkout={saveWorkout}
-            showAddExercise={showAddExercise}
-            setShowAddExercise={setShowAddExercise}
-            selectedMuscleGroup={selectedMuscleGroup}
-            setSelectedMuscleGroup={setSelectedMuscleGroup}
-            addExerciseToWorkout={addExerciseToWorkout}
-          />
+          <PageTransition key="workout">
+            <WorkoutList
+              exercises={exercises}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              startTime={startTime}
+              setStartTime={setStartTime}
+              endTime={endTime}
+              setEndTime={setEndTime}
+              addSet={addSet}
+              updateSet={updateSet}
+              removeSet={removeSet}
+              saveWorkout={saveWorkout}
+              showAddExercise={showAddExercise}
+              setShowAddExercise={setShowAddExercise}
+              selectedMuscleGroup={selectedMuscleGroup}
+              setSelectedMuscleGroup={setSelectedMuscleGroup}
+              addExerciseToWorkout={addExerciseToWorkout}
+            />
+          </PageTransition>
         );
       case 'calendar':
         return (
-          <CalendarView
-            workouts={workouts}
-            getWorkoutForDate={getWorkoutForDate}
-            openWorkoutDetail={openWorkoutDetail}
-            showWorkoutDetail={showWorkoutDetail}
-            selectedWorkout={selectedWorkout}
-            deleteWorkout={handleDeleteWorkout}
-            setShowWorkoutDetail={setShowWorkoutDetail}
-          />
+          <PageTransition key="calendar">
+            <CalendarView
+              workouts={workouts}
+              getWorkoutForDate={getWorkoutForDate}
+              openWorkoutDetail={openWorkoutDetail}
+              showWorkoutDetail={showWorkoutDetail}
+              selectedWorkout={selectedWorkout}
+              deleteWorkout={handleDeleteWorkout}
+              setShowWorkoutDetail={setShowWorkoutDetail}
+            />
+          </PageTransition>
         );
       case 'stats':
-        return <StatsView stats={getStats()} workouts={workouts} onEditWorkout={handleEditWorkout} />;
+        return (
+          <PageTransition key="stats">
+            <StatsView stats={getStats()} workouts={workouts} onEditWorkout={handleEditWorkout} />
+          </PageTransition>
+        );
       case 'friends':
-        return <FriendsList user={user} />;
+        return (
+          <PageTransition key="friends">
+            <FriendsList user={user} />
+          </PageTransition>
+        );
       case 'leaderboard':
-        return <LeaderboardView user={user} />;
+        return (
+          <PageTransition key="leaderboard">
+            <LeaderboardView user={user} />
+          </PageTransition>
+        );
       case 'challenges':
-        return <Challenges user={user} />;
+        return (
+          <PageTransition key="challenges">
+            <Challenges user={user} />
+          </PageTransition>
+        );
       case 'badges':
-        return <BadgesPage workouts={workouts} challenges={challenges} friends={friends} user={user} />;
+        return (
+          <PageTransition key="badges">
+            <BadgesPage workouts={workouts} challenges={challenges} friends={friends} user={user} addBadgeUnlockXP={addBadgeUnlockXP} />
+          </PageTransition>
+        );
       case 'notifications':
-        return <Notifications user={user} />;
+        return (
+          <PageTransition key="notifications">
+            <Notifications user={user} />
+          </PageTransition>
+        );
       default:
         return null;
     }
@@ -241,19 +235,20 @@ function App() {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
+      <div id="main-content" className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
         <Header 
           workoutCount={workouts.length} 
           user={user} 
           workouts={workouts} 
           challenges={challenges}
+          addBadgeUnlockXP={addBadgeUnlockXP}
           onUserUpdate={(updatedUser) => {
             // Mettre à jour l'utilisateur dans l'état global
             // Note: setUser n'est plus disponible car on utilise useUserProfile
             // Les changements sont gérés automatiquement par le hook
           }}
         />
-        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} tabs={[{id:'workout',label:'Séance'},{id:'calendar',label:'Calendrier'},{id:'stats',label:'Statistiques'},{id:'friends',label:'Amis'}]} />
+        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
         {renderActiveTab()}
         {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
         <PWAInstallButton />

@@ -1,13 +1,13 @@
 import React from 'react';
-import Modal from './Modal';
-import { useBadges } from '../hooks/useBadges';
-import { BADGE_CONFIG } from './Badges';
+import Modal from '../Workout/Modal';
+import { useBadges } from '../../hooks/useBadges';
+import { BADGE_CONFIG } from '../Badges/Badges';
 import ProfilePicture from './ProfilePicture';
 import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../utils/firebase';
+import { db } from '../../utils/firebase';
 
-const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose, onUserUpdate }) => {
-  const { badges, selectedBadge } = useBadges(workouts, challenges, user);
+const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose, onUserUpdate, addBadgeUnlockXP }) => {
+  const { badges, selectedBadge } = useBadges(workouts, challenges, user, addBadgeUnlockXP);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
   const [localSelectedBadge, setLocalSelectedBadge] = React.useState(selectedBadge);
@@ -83,27 +83,28 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
                 className={`flex flex-col items-center p-2 rounded-lg border-2 transition-all ${localSelectedBadge === badge ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 bg-white'} hover:border-indigo-400`}
                 disabled={loading}
               >
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${BADGE_CONFIG[badge].color}`}>
-                  {BADGE_CONFIG[badge].icon}
-                </div>
-                <span className="text-xs text-gray-700 text-center mt-1">{BADGE_CONFIG[badge].name}</span>
-                {localSelectedBadge === badge && <span className="text-indigo-500 text-xs mt-1">✓ Sélectionné</span>}
-              </button>
-            ))}
-          </div>
-        )}
-        <button
-          onClick={() => handleBadgeSelect(null)}
-          className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium w-full"
-          disabled={loading}
-        >
-          Retirer le badge de profil
-        </button>
-      </div>
-      {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
-      {successMessage && <div className="text-green-600 text-sm mb-2 bg-green-50 p-2 rounded-lg">{successMessage}</div>}
-    </Modal>
-  );
+                <div className={`
+                  w-12 h-12 rounded-full flex items-center justify-center text-2xl ${BADGE_CONFIG[badge].color}`}>
+                    {BADGE_CONFIG[badge].icon}
+                  </div>
+                  <span className="text-xs text-gray-700 text-center mt-1">{BADGE_CONFIG[badge].name}</span>
+                  {localSelectedBadge === badge && <span className="text-indigo-500 text-xs mt-1">✓ Sélectionné</span>}
+                </button>
+              ))}
+            </div>
+          )}
+          <button
+            onClick={() => handleBadgeSelect(null)}
+            className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium w-full"
+            disabled={loading}
+          >
+            Retirer le badge de profil
+          </button>
+        </div>
+        {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
+        {successMessage && <div className="text-green-600 text-sm mb-2 bg-green-50 p-2 rounded-lg">{successMessage}</div>}
+      </Modal>
+    );
 };
 
-export default ProfileSettings; 
+export default ProfileSettings;

@@ -3,7 +3,7 @@ import { db } from '../utils/firebase';
 import { collection, doc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove, query, where, onSnapshot } from 'firebase/firestore';
 import { getUserProfile as getUserProfileFromFirebase } from '../utils/firebase';
 
-export function useFriends(currentUser) {
+export function useFriends(currentUser, addFriendXP) {
   const [friends, setFriends] = useState([]);
   const [pendingInvites, setPendingInvites] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -91,6 +91,19 @@ export function useFriends(currentUser) {
     await updateDoc(doc(db, 'users', uid), {
       friends: arrayUnion(currentUser.uid)
     });
+    
+    // Ajouter de l'XP pour l'ajout d'ami
+    if (addFriendXP) {
+      try {
+        const friendProfile = await getUserProfile(uid);
+        const friendName = friendProfile?.displayName || friendProfile?.email || 'Nouvel ami';
+        const result = await addFriendXP(friendName);
+        console.log(`Ami ajouté: ${friendName} - +${result.xpGained} XP`);
+      } catch (error) {
+        console.error('Erreur lors de l\'ajout d\'XP pour ami:', error);
+      }
+    }
+    
     // Pas besoin d'appeler refreshFriends() car onSnapshot sen charge
   };
 

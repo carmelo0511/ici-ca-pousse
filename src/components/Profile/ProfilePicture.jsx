@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, User } from 'lucide-react';
-import { BADGE_CONFIG } from './Badges';
+import { BADGE_CONFIG } from '../Badges/Badges';
 
 // Composant pour afficher une photo de profil
 function ProfilePicture({ 
@@ -71,6 +71,8 @@ function ProfilePicture({
       >
         {useBadgeAsProfile && badgeConfig ? (
           <div className="text-2xl">{badgeConfig.icon}</div>
+        ) : useBadgeAsProfile && !badgeConfig ? (
+          <div className="text-2xl">🏆</div>
         ) : hasProfilePicture ? (
           <>
             <img

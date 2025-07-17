@@ -3,7 +3,7 @@ import { useFriends } from '../hooks/useFriends';
 import { useChallenges } from '../hooks/useChallenges';
 import Card from './Card';
 import GradientButton from './GradientButton';
-import Modal from './Modal';
+import Modal from './Workout/Modal';
 import Toast from './Toast';
 import { createNotification, NOTIFICATION_TYPES } from '../utils/notifications';
 

@@ -1,34 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../utils/firebase';
+import { db } from '../../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { useFriends } from '../hooks/useFriends';
+import { useFriends } from '../../hooks/useFriends';
 import { BarChart3 } from 'lucide-react';
+import { PERIODS, METRICS } from '../../constants/leaderboard';
 import { 
-  PERIODS, 
-  METRICS, 
   calculateUserStats, 
   getLeaderboardRanking, 
   formatMetricValue, 
   getPeriodLabel, 
   getMetricLabel,
   getAllowedExercises
-} from '../utils/leaderboardUtils';
-import BadgeList from './Badges';
-import ProfilePicture from './ProfilePicture';
+} from '../../utils/leaderboardUtils';
+import BadgeList from '../Badges/Badges';
+import ProfilePicture from '../Profile/ProfilePicture';
 
-function Leaderboard({ user, onShowComparison, onShowTeam }) {
+function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState(PERIODS.WEEK);
   const [selectedMetric, setSelectedMetric] = useState(METRICS.WORKOUTS);
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const { friends } = useFriends(user);
+  const { friends } = useFriends(currentUser);
 
   // Récupère les stats pour chaque ami + soi-même
   useEffect(() => {
     const fetchStats = async () => {
       setLoading(true);
-      const allUsers = [user, ...friends];
+      const allUsers = [currentUser, ...friends];
       const statsArr = [];
 
       for (const u of allUsers) {
@@ -43,11 +42,20 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
           // Calculer les statistiques
           const userStats = calculateUserStats(workouts, selectedPeriod);
           
+          console.log('User data for leaderboard:', {
+            uid: u.uid,
+            displayName: u.displayName || u.email,
+            badges: u.badges || [],
+            selectedBadge: u.selectedBadge || null,
+            photoURL: u.photoURL
+          });
+          
           statsArr.push({
             uid: u.uid,
             displayName: u.displayName || u.email,
             badges: u.badges || [],
             selectedBadge: u.selectedBadge || null,
+            photoURL: u.photoURL,
             stats: userStats,
             workouts: workouts
           });
@@ -60,8 +68,8 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
       setLoading(false);
     };
 
-    if (user) fetchStats();
-  }, [user, friends, selectedPeriod]); // Ajout de friends dans les dépendances pour synchronisation
+    if (currentUser) fetchStats();
+  }, [currentUser, friends, selectedPeriod]); // Ajout de friends dans les dépendances pour synchronisation
 
   // Obtenir le classement actuel - par défaut basé sur les séances
   const currentRanking = getLeaderboardRanking(stats, selectedMetric);
@@ -122,8 +130,9 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         {/* Période */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Période</label>
+          <label htmlFor="period-select" className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Période</label>
           <select
+            id="period-select"
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
             className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
@@ -137,8 +146,9 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
 
         {/* Métrique */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Métrique</label>
+          <label htmlFor="metric-select" className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Métrique</label>
           <select
+            id="metric-select"
             value={selectedMetric}
             onChange={(e) => setSelectedMetric(e.target.value)}
             className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
@@ -150,8 +160,9 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
 
         {/* Exercice spécifique */}
         <div className="sm:col-span-2 lg:col-span-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Exercice spécifique</label>
+          <label htmlFor="exercise-select" className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">Exercice spécifique</label>
           <select
+            id="exercise-select"
             value={selectedExercise || ''}
             onChange={(e) => setSelectedExercise(e.target.value || null)}
             className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
@@ -189,7 +200,7 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
                     <div
                       key={user.uid}
                       className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 ${
-                        user.uid === user?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
+                        user.uid === currentUser?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
                       }`}
                     >
                       <div className="flex items-center space-x-3 md:space-x-4">
@@ -197,7 +208,7 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
                         <ProfilePicture 
                           user={user} 
                           size="sm" 
-                          useBadgeAsProfile={!!user.selectedBadge}
+                          useBadgeAsProfile={true}
                           selectedBadge={user.selectedBadge}
                           showTeamButton={true}
                           onTeamClick={() => onShowTeam && onShowTeam(user)}
@@ -234,7 +245,7 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
                     <div
                       key={user.uid}
                       className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 ${
-                        user.uid === user?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
+                        user.uid === currentUser?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
                       }`}
                     >
                       <div className="flex items-center space-x-3 md:space-x-4">
@@ -242,7 +253,7 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
                         <ProfilePicture 
                           user={user} 
                           size="sm" 
-                          useBadgeAsProfile={!!user.selectedBadge}
+                          useBadgeAsProfile={true}
                           selectedBadge={user.selectedBadge}
                           showTeamButton={true}
                           onTeamClick={() => onShowTeam && onShowTeam(user)}

@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { BADGE_TYPES } from '../components/Badges';
+import { BADGE_TYPES } from '../constants/badges';
 import { saveUserBadges } from '../utils/firebase';
 
 // Fonction pour calculer les badges d'un utilisateur
@@ -175,7 +175,7 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
 }
 
 // Hook pour utiliser les badges
-export function useBadges(workouts, challenges, user) {
+export function useBadges(workouts, challenges, user, addBadgeUnlockXP) {
   const badges = useMemo(() => {
     return calculateUserBadges(workouts, challenges, user);
   }, [workouts, challenges, user]);
@@ -194,9 +194,22 @@ export function useBadges(workouts, challenges, user) {
         saveUserBadges(user.uid, badges).catch(error => {
           console.error('Erreur lors de la sauvegarde des badges:', error);
         });
+        
+        // Ajouter de l'XP pour les nouveaux badges débloqués
+        if (addBadgeUnlockXP) {
+          const newBadges = badges.filter(badge => !currentBadges.includes(badge));
+          newBadges.forEach(async (badge) => {
+            try {
+              const result = await addBadgeUnlockXP(badge);
+              console.log(`Badge débloqué: ${badge} - +${result.xpGained} XP`);
+            } catch (error) {
+              console.error('Erreur lors de l\'ajout d\'XP pour badge:', error);
+            }
+          });
+        }
       }
     }
-  }, [badges, user]);
+  }, [badges, user, addBadgeUnlockXP]);
 
   return {
     badges,

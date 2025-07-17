@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
-import ProfileSettings from '../ProfileSettings';
-import ProfilePicture from '../ProfilePicture';
+import ProfileSettings from '../Profile/ProfileSettings';
+import ProfilePicture from '../Profile/ProfilePicture';
 import { useExperience } from '../../hooks/useExperience.js';
 import StreakCounter from '../StreakCounter';
 
-const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], onUserUpdate }) => {
+const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate }) => {
   const { t, i18n } = useTranslation();
   const [showProfile, setShowProfile] = React.useState(false);
   const [localUser, setLocalUser] = React.useState(user);
@@ -121,6 +121,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
               onUserUpdate(updatedUser);
             }
           }}
+          addBadgeUnlockXP={addBadgeUnlockXP}
         />
       )}
     </header>
