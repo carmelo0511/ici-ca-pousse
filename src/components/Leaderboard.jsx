@@ -61,7 +61,7 @@ function Leaderboard({ user, onShowComparison, onShowTeam }) {
     };
 
     if (user) fetchStats();
-  }, [user, friends, selectedPeriod]);
+  }, [user, friends, selectedPeriod]); // Ajout de friends dans les dépendances pour synchronisation
 
   // Obtenir le classement actuel - par défaut basé sur les séances
   const currentRanking = getLeaderboardRanking(stats, selectedMetric);

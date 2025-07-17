@@ -250,8 +250,11 @@ function App() {
           workouts={workouts} 
           challenges={challenges}
           onUserUpdate={(updatedUser) => {
-            // Mettre à jour l'utilisateur dans l'état global si nécessaire
-            // Pour l'instant, on laisse Firebase gérer la synchronisation
+            // Mettre à jour l'utilisateur dans l'état global
+            setUser(prevUser => ({
+              ...prevUser,
+              ...updatedUser
+            }));
           }}
         />
         <Navigation activeTab={activeTab} setActiveTab={setActiveTab} tabs={[{id:'workout',label:'Séance'},{id:'calendar',label:'Calendrier'},{id:'stats',label:'Statistiques'},{id:'friends',label:'Amis'}]} />

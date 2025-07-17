@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { db } from '../utils/firebase';
-import { collection, doc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove, query, where, onSnapshot } from 'firebase/firestore';
 import { getUserProfile as getUserProfileFromFirebase } from '../utils/firebase';
 
 export function useFriends(currentUser) {
@@ -42,9 +42,35 @@ export function useFriends(currentUser) {
     setLoading(false);
   }, [currentUser]);
 
+  // Synchronisation en temps réel des profils amis
   useEffect(() => {
-    refreshFriends();
-  }, [refreshFriends]);
+    if (!currentUser) return;
+
+    const userRef = doc(db, 'users', currentUser.uid);
+    
+    // Écoute les changements du profil utilisateur actuel
+    const unsubscribeUser = onSnapshot(userRef, async (userSnap) => {
+      if (!userSnap.exists()) return;
+      const data = userSnap.data();
+      
+      // Amis avec profils complets (photos et badges)
+      const friendsProfiles = await Promise.all(
+        (data.friends || []).map(getUserProfile)
+      );
+      setFriends(friendsProfiles.filter(Boolean));
+      
+      // Invitations reçues avec profils complets
+      const invitesProfiles = await Promise.all(
+        (data.pendingInvites || []).map(getUserProfile)
+      );
+      setPendingInvites(invitesProfiles.filter(Boolean));
+      setLoading(false);
+    });
+
+    return () => {
+      unsubscribeUser();
+    };
+  }, [currentUser]);
 
   // Envoie une invitation à un utilisateur par email
   const sendInvite = async (email) => {
@@ -72,7 +98,7 @@ export function useFriends(currentUser) {
     await updateDoc(doc(db, 'users', uid), {
       friends: arrayUnion(currentUser.uid)
     });
-    refreshFriends();
+    // Pas besoin d'appeler refreshFriends() car onSnapshot sen charge
   };
 
   // Refuse une invitation reçue
@@ -81,7 +107,7 @@ export function useFriends(currentUser) {
     await updateDoc(doc(db, 'users', currentUser.uid), {
       pendingInvites: arrayRemove(uid)
     });
-    refreshFriends();
+    // Pas besoin d'appeler refreshFriends() car onSnapshot sen charge
   };
 
   // Supprime un ami
@@ -93,7 +119,7 @@ export function useFriends(currentUser) {
     await updateDoc(doc(db, 'users', uid), {
       friends: arrayRemove(currentUser.uid)
     });
-    refreshFriends();
+    // Pas besoin d'appeler refreshFriends() car onSnapshot sen charge
   };
 
   return {
