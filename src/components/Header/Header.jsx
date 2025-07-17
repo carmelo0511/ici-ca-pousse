@@ -112,4 +112,4 @@ Header.propTypes = {
   onUserUpdate: PropTypes.func,
 };
 
-export default Header; 
+export default Header; // Force rebuild
