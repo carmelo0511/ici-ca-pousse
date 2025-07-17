@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../utils/firebase';
 
@@ -89,6 +89,12 @@ export const useExperience = (user) => {
     streak: 0
   });
   const [loading, setLoading] = useState(false);
+  const experienceRef = useRef(experience);
+
+  // Mettre à jour la ref quand l'expérience change
+  useEffect(() => {
+    experienceRef.current = experience;
+  }, [experience]);
 
   // Charger l'expérience depuis Firestore
   const loadExperience = useCallback(async () => {
@@ -123,18 +129,19 @@ export const useExperience = (user) => {
   const addWorkoutXP = useCallback(async (workout, previousWorkouts = []) => {
     if (!user?.uid) return;
     const xpGained = calculateWorkoutXP(workout, previousWorkouts);
-    const newXP = experience.xp + xpGained;
+    const currentExp = experienceRef.current;
+    const newXP = currentExp.xp + xpGained;
     const newLevel = calculateLevel(newXP);
     const newProgress = calculateProgress(newXP, newLevel);
     const newLevelName = getLevelName(newLevel);
-    const levelUp = newLevel > experience.level;
+    const levelUp = newLevel > currentExp.level;
     try {
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, {
         'experience.xp': newXP,
         'experience.level': newLevel,
         'experience.levelName': newLevelName,
-        'experience.totalWorkouts': experience.totalWorkouts + 1,
+        'experience.totalWorkouts': currentExp.totalWorkouts + 1,
         'experience.lastWorkoutDate': new Date().toISOString()
       });
       setExperience(prev => ({
@@ -155,17 +162,18 @@ export const useExperience = (user) => {
       console.error("Erreur lors de l'ajout d'XP:", error);
       throw error;
     }
-  }, [user, experience]);
+  }, [user]);
 
   // Fonction générique pour ajouter de l'XP
   const addXP = useCallback(async (amount, reason = '') => {
     if (!user?.uid || amount <= 0) return { xpGained: 0, levelUp: false };
     
-    const newXP = experience.xp + amount;
+    const currentExp = experienceRef.current;
+    const newXP = currentExp.xp + amount;
     const newLevel = calculateLevel(newXP);
     const newProgress = calculateProgress(newXP, newLevel);
     const newLevelName = getLevelName(newLevel);
-    const levelUp = newLevel > experience.level;
+    const levelUp = newLevel > currentExp.level;
     
     try {
       const userRef = doc(db, 'users', user.uid);
@@ -194,7 +202,7 @@ export const useExperience = (user) => {
       console.error("Erreur lors de l'ajout d'XP:", error);
       throw error;
     }
-  }, [user, experience]);
+  }, [user]);
 
   // Ajouter de l'XP pour déblocage de badge
   const addBadgeUnlockXP = useCallback(async (badgeName) => {

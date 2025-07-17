@@ -1,7 +1,6 @@
 import React, { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { db, auth } from '../../../utils/firebase';
+import { db } from '../../../utils/firebase';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import {
   Calendar,
@@ -55,10 +54,10 @@ function WorkoutList({
   selectedMuscleGroup,
   setSelectedMuscleGroup,
   addExerciseToWorkout,
+  user,
   className = '',
 }) {
   const { t } = useTranslation();
-  const [user] = useAuthState(auth);
   // Ajout d'un état local pour le nom de l'exercice personnalisé
   const [customExerciseName, setCustomExerciseName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -638,6 +637,7 @@ WorkoutList.propTypes = {
   selectedMuscleGroup: PropTypes.string,
   setSelectedMuscleGroup: PropTypes.func,
   addExerciseToWorkout: PropTypes.func,
+  user: PropTypes.object, // Added user prop type
   className: PropTypes.string,
 };
 

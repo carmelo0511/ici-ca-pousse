@@ -28,10 +28,11 @@ export default function useWorkoutLogic({
 }) {
   // Ajout d'un exercice à la séance
   const addExerciseToWorkout = useCallback((exerciseName) => {
+    addExercise(exerciseName);
     setShowAddExercise(false);
     setSelectedMuscleGroup(null);
     showToastMsg(t('exercise_added'));
-  }, [setShowAddExercise, setSelectedMuscleGroup, showToastMsg, t]);
+  }, [addExercise, setShowAddExercise, setSelectedMuscleGroup, showToastMsg, t]);
 
   // Sauvegarde d'une séance
   const saveWorkout = useCallback(async () => {

@@ -133,7 +133,16 @@ function App() {
   }, [user, setShowMigratePrompt]);
 
   if (!authChecked || userLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Chargement...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-2xl font-bold text-indigo-600 mb-4">Chargement...</div>
+          <div className="text-sm text-gray-500">
+            {userLoading ? 'Chargement du profil...' : 'Vérification de l\'authentification...'}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!user) {
@@ -159,6 +168,7 @@ function App() {
         return (
           <PageTransition key="workout">
             <WorkoutList
+              user={user}
               exercises={exercises}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
