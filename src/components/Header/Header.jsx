@@ -6,7 +6,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
 import ProfileSettings from '../ProfileSettings';
 import ProfilePicture from '../ProfilePicture';
-import { useExperience } from '../../hooks/useExperience';
+import { useExperience } from '../../hooks/useExperience.js';
 import StreakCounter from '../StreakCounter';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], onUserUpdate }) => {
