@@ -13,6 +13,29 @@ export const useChallenges = (user) => {
   const [loading, setLoading] = useState(false);
   const { workouts } = useWorkouts(user);
 
+  // Si user n'a pas d'uid, c'est qu'il n'est pas encore chargé
+  if (!user?.uid) {
+    return { 
+      challenges: [], 
+      loading: true,
+      createChallenge: async () => null,
+      updateChallenge: async () => {},
+      deleteChallenge: async () => {},
+      getChallengeScore: () => 0,
+      getActiveChallenges: () => [],
+      getCompletedChallenges: () => [],
+      formatScore: () => '',
+      getChallengeStatus: () => ({ status: 'loading', text: 'Chargement...' }),
+      getSentChallenges: () => [],
+      getReceivedChallenges: () => [],
+      getAllUserChallenges: () => [],
+      acceptChallenge: async () => {},
+      declineChallenge: async () => {},
+      cancelChallenge: async () => {},
+      challengeTypes: []
+    };
+  }
+
   // Types de défis disponibles
   const challengeTypes = [
     { id: 'workouts', label: 'Nombre de séances', icon: '💪' },

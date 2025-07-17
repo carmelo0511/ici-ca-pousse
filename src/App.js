@@ -10,6 +10,7 @@ import { useWorkouts } from './hooks/useWorkouts';
 import { useExercises } from './hooks/useExercises';
 import { useFriends } from './hooks/useFriends';
 import { useChallenges } from './hooks/useChallenges';
+import { useUserProfile } from './hooks/useUserProfile';
 import { createWorkout } from './utils/workoutUtils';
 
 import { auth } from './utils/firebase';
@@ -24,7 +25,7 @@ import BadgesPage from './components/BadgesPage';
 import Notifications from './components/Notifications';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const { user, loading: userLoading } = useUserProfile();
   const [authChecked, setAuthChecked] = useState(false);
   const [activeTab, setActiveTab] = useState('workout');
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
@@ -47,19 +48,17 @@ function App() {
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
   const { exercises, addExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
   const { challenges } = useChallenges(user);
-  const { friends } = useFriends();
+  const { friends } = useFriends(user);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (u) => {
-      setUser(u);
+    if (user) {
       setAuthChecked(true);
-      if (u) {
-        await ensureUserProfile(u);
-      }
-    });
-    return unsubscribe;
-  }, []);
+      // ensureUserProfile est maintenant géré dans useUserProfile
+    } else if (!userLoading) {
+      setAuthChecked(true);
+    }
+  }, [user, userLoading]);
 
   useEffect(() => {
     if (user) {
@@ -71,7 +70,7 @@ function App() {
     }
   }, [user]);
 
-  if (!authChecked) {
+  if (!authChecked || userLoading) {
     return <div className="flex items-center justify-center min-h-screen">Chargement...</div>;
   }
 

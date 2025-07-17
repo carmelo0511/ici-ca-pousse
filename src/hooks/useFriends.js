@@ -8,6 +8,11 @@ export function useFriends(currentUser) {
   const [pendingInvites, setPendingInvites] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Si currentUser n'a pas d'uid, c'est qu'il n'est pas encore chargé
+  if (!currentUser?.uid) {
+    return { friends: [], pendingInvites: [], loading: true };
+  }
+
   // Récupère le profil complet d'un user par UID
   const getUserProfile = async (uid) => {
     try {
