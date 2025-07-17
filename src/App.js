@@ -13,7 +13,6 @@ import { useChallenges } from './hooks/useChallenges';
 import { useUserProfile } from './hooks/useUserProfile';
 import { createWorkout } from './utils/workoutUtils';
 
-import { auth } from './utils/firebase';
 import { ensureUserProfile } from './utils/firebase';
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
@@ -250,10 +249,8 @@ function App() {
           challenges={challenges}
           onUserUpdate={(updatedUser) => {
             // Mettre à jour l'utilisateur dans l'état global
-            setUser(prevUser => ({
-              ...prevUser,
-              ...updatedUser
-            }));
+            // Note: setUser n'est plus disponible car on utilise useUserProfile
+            // Les changements sont gérés automatiquement par le hook
           }}
         />
         <Navigation activeTab={activeTab} setActiveTab={setActiveTab} tabs={[{id:'workout',label:'Séance'},{id:'calendar',label:'Calendrier'},{id:'stats',label:'Statistiques'},{id:'friends',label:'Amis'}]} />

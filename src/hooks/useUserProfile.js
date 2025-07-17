@@ -3,14 +3,11 @@ import { auth } from '../utils/firebase';
 import { getUserProfile } from '../utils/firebase';
 
 export function useUserProfile() {
-  const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
-      setUser(authUser);
-      
       if (authUser) {
         try {
           // Récupérer le profil complet depuis Firestore

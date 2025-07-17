@@ -13,6 +13,34 @@ export const useChallenges = (user) => {
   const [loading, setLoading] = useState(false);
   const { workouts } = useWorkouts(user);
 
+  // Types de défis disponibles
+  const challengeTypes = [
+    { id: 'workouts', label: 'Nombre de séances', icon: '💪' },
+    { id: 'duration', label: 'Temps d\'entraînement', icon: '⏱️' },
+    { id: 'streak', label: 'Série consécutive', icon: '🔥' },
+    { id: 'calories', label: 'Calories brûlées', icon: '🔥' }
+  ];
+
+  const loadChallenges = useCallback(async () => {
+    if (!user?.uid) return;
+    
+    try {
+      setLoading(true);
+      const challengesData = await getChallengesFromFirebase(user.uid);
+      setChallenges(challengesData);
+    } catch (error) {
+      console.error('Erreur lors du chargement des défis:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      loadChallenges();
+    }
+  }, [user, loadChallenges]);
+
   // Si user n'a pas d'uid, c'est qu'il n'est pas encore chargé
   if (!user?.uid) {
     return { 
@@ -32,37 +60,11 @@ export const useChallenges = (user) => {
       acceptChallenge: async () => {},
       declineChallenge: async () => {},
       cancelChallenge: async () => {},
-      challengeTypes: []
+      challengeTypes
     };
   }
 
-  // Types de défis disponibles
-  const challengeTypes = [
-    { id: 'workouts', label: 'Nombre de séances', icon: '💪' },
-    { id: 'duration', label: 'Temps d\'entraînement', icon: '⏱️' },
-    { id: 'streak', label: 'Série consécutive', icon: '🔥' },
-    { id: 'calories', label: 'Calories brûlées', icon: '🔥' }
-  ];
 
-  const loadChallenges = useCallback(async () => {
-    if (!user) return;
-    
-    try {
-      setLoading(true);
-      const challengesData = await getChallengesFromFirebase(user.uid);
-      setChallenges(challengesData);
-    } catch (error) {
-      console.error('Erreur lors du chargement des défis:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      loadChallenges();
-    }
-  }, [user, loadChallenges]);
 
   const createChallenge = async (challengeData) => {
     if (!user) return null;

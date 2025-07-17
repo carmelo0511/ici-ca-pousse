@@ -8,11 +8,6 @@ export function useFriends(currentUser) {
   const [pendingInvites, setPendingInvites] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Si currentUser n'a pas d'uid, c'est qu'il n'est pas encore chargé
-  if (!currentUser?.uid) {
-    return { friends: [], pendingInvites: [], loading: true };
-  }
-
   // Récupère le profil complet d'un user par UID
   const getUserProfile = async (uid) => {
     try {
@@ -26,7 +21,7 @@ export function useFriends(currentUser) {
 
   // Rafraîchit la liste d'amis et d'invitations
   const refreshFriends = useCallback(async () => {
-    if (!currentUser) return;
+    if (!currentUser?.uid) return;
     setLoading(true);
     const userRef = doc(db, 'users', currentUser.uid);
     const userSnap = await getDoc(userRef);
@@ -49,7 +44,7 @@ export function useFriends(currentUser) {
 
   // Synchronisation en temps réel des profils amis
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser?.uid) return;
 
     const userRef = doc(db, 'users', currentUser.uid);
     
@@ -76,6 +71,11 @@ export function useFriends(currentUser) {
       unsubscribeUser();
     };
   }, [currentUser]);
+
+  // Si currentUser n'a pas d'uid, c'est qu'il n'est pas encore chargé
+  if (!currentUser?.uid) {
+    return { friends: [], pendingInvites: [], loading: true };
+  }
 
   // Envoie une invitation à un utilisateur par email
   const sendInvite = async (email) => {
