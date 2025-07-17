@@ -27,13 +27,11 @@ export function useFriends(currentUser) {
     const userSnap = await getDoc(userRef);
     if (!userSnap.exists()) return;
     const data = userSnap.data();
-    
     // Amis avec profils complets (photos et badges)
     const friendsProfiles = await Promise.all(
       (data.friends || []).map(getUserProfile)
     );
     setFriends(friendsProfiles.filter(Boolean));
-    
     // Invitations reçues avec profils complets
     const invitesProfiles = await Promise.all(
       (data.pendingInvites || []).map(getUserProfile)
@@ -45,20 +43,16 @@ export function useFriends(currentUser) {
   // Synchronisation en temps réel des profils amis
   useEffect(() => {
     if (!currentUser?.uid) return;
-
     const userRef = doc(db, 'users', currentUser.uid);
-    
     // Écoute les changements du profil utilisateur actuel
     const unsubscribeUser = onSnapshot(userRef, async (userSnap) => {
       if (!userSnap.exists()) return;
       const data = userSnap.data();
-      
       // Amis avec profils complets (photos et badges)
       const friendsProfiles = await Promise.all(
         (data.friends || []).map(getUserProfile)
       );
       setFriends(friendsProfiles.filter(Boolean));
-      
       // Invitations reçues avec profils complets
       const invitesProfiles = await Promise.all(
         (data.pendingInvites || []).map(getUserProfile)
@@ -66,16 +60,10 @@ export function useFriends(currentUser) {
       setPendingInvites(invitesProfiles.filter(Boolean));
       setLoading(false);
     });
-
     return () => {
       unsubscribeUser();
     };
   }, [currentUser]);
-
-  // Si currentUser n'a pas d'uid, c'est qu'il n'est pas encore chargé
-  if (!currentUser?.uid) {
-    return { friends: [], pendingInvites: [], loading: true };
-  }
 
   // Envoie une invitation à un utilisateur par email
   const sendInvite = async (email) => {
@@ -126,6 +114,20 @@ export function useFriends(currentUser) {
     });
     // Pas besoin d'appeler refreshFriends() car onSnapshot sen charge
   };
+
+  // Si currentUser n'est pas prêt, retourner des valeurs vides mais TOUJOURS après les hooks
+  if (!currentUser?.uid) {
+    return {
+      friends: [],
+      pendingInvites: [],
+      loading: true,
+      sendInvite: async () => {},
+      acceptInvite: async () => {},
+      declineInvite: async () => {},
+      removeFriend: async () => {},
+      refreshFriends: async () => {},
+    };
+  }
 
   return {
     friends,
