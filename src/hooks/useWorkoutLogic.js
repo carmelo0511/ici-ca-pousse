@@ -80,7 +80,8 @@ export default function useWorkoutLogic({
     setStartTime('');
     setEndTime('');
     setSelectedWorkout(null);
-  }, [exercises, selectedDate, startTime, endTime, selectedWorkout, addWorkout, updateWorkout, clearExercises, setStartTime, setEndTime, setSelectedWorkout, showToastMsg, t, addWorkoutXP, workouts]);
+    setShowWorkoutDetail(false); // Fermer la modale/détail après ajout
+  }, [exercises, selectedDate, startTime, endTime, selectedWorkout, addWorkout, updateWorkout, clearExercises, setStartTime, setEndTime, setSelectedWorkout, setShowWorkoutDetail, showToastMsg, t, addWorkoutXP, workouts]);
 
   // Ouvre le détail d'une séance
   const openWorkoutDetail = useCallback((workout) => {
@@ -103,8 +104,8 @@ export default function useWorkoutLogic({
     if (typeof workoutId === 'string' && window.confirm(t('confirm_delete_workout'))) {
       try {
         await deleteWorkout(workoutId);
-        setShowWorkoutDetail(false);
-        showToastMsg(t('workout_deleted'), 'error');
+        setShowWorkoutDetail(false); // Fermer la modale après suppression
+        showToastMsg(t('workout_deleted'), 'success');
       } catch (e) {
         showToastMsg(t('error_delete'), 'error');
       }
