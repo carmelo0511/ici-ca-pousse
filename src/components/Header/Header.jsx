@@ -9,7 +9,7 @@ import ProfilePicture from '../Profile/ProfilePicture';
 import { useExperience } from '../../hooks/useExperience.js';
 import StreakCounter from '../StreakCounter';
 
-const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate }) => {
+const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate, refreshUserProfile }) => {
   const { t, i18n } = useTranslation();
   const [showProfile, setShowProfile] = React.useState(false);
   const [localUser, setLocalUser] = React.useState(user);
@@ -124,6 +124,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
             }
           }}
           addBadgeUnlockXP={addBadgeUnlockXP}
+          refreshUserProfile={refreshUserProfile}
         />
       )}
     </header>

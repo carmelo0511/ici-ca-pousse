@@ -6,7 +6,7 @@ import ProfilePicture from './ProfilePicture';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../utils/firebase';
 
-const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose, onUserUpdate, addBadgeUnlockXP }) => {
+const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose, onUserUpdate, addBadgeUnlockXP, refreshUserProfile }) => {
   const { badges, selectedBadge } = useBadges(workouts, challenges, user, addBadgeUnlockXP);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -44,6 +44,11 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
       
       // Effacer le message après 3 secondes
       setTimeout(() => setSuccessMessage(''), 3000);
+      
+      // Forcer le rafraîchissement du profil
+      if (refreshUserProfile) {
+        await refreshUserProfile();
+      }
       
     } catch (e) {
       console.error('Erreur lors de la sélection du badge:', e);

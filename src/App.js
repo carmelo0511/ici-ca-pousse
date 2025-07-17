@@ -32,7 +32,7 @@ import { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
 import { useNotifications } from './hooks/useNotifications';
 
 function App() {
-  const { user, loading: userLoading } = useUserProfile();
+  const { user, loading: userLoading, refreshUserProfile } = useUserProfile();
   const [authChecked, setAuthChecked] = useState(false);
   
   // Hook personnalisé pour l'état global
@@ -254,6 +254,7 @@ function App() {
           workouts={workouts} 
           challenges={challenges}
           addBadgeUnlockXP={addBadgeUnlockXP}
+          refreshUserProfile={refreshUserProfile}
           onUserUpdate={(updatedUser) => {
             // Mettre à jour l'utilisateur dans l'état global
             // Note: setUser n'est plus disponible car on utilise useUserProfile
