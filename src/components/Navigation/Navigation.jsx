@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 const Navigation = ({ activeTab, setActiveTab, className = '' }) => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation(); // Temporarily disabled for CI
   const [showScrollButtons, setShowScrollButtons] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);

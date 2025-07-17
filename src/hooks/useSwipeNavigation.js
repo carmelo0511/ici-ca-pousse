@@ -54,7 +54,7 @@ export const useSwipeNavigation = (activeTab, setActiveTab, tabs) => {
       element.removeEventListener('touchmove', onTouchMove);
       element.removeEventListener('touchend', onTouchEnd);
     };
-  }, [activeTab, tabs]);
+  }, [activeTab, tabs, onTouchEnd]);
 
   return null;
 }; 
