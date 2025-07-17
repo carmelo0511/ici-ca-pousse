@@ -44,7 +44,19 @@ export async function ensureUserProfile(user) {
       email: user.email || '',
       displayName: user.displayName || '',
       friends: [],
-      pendingInvites: []
+      pendingInvites: [],
+      experience: {
+        xp: 0,
+        level: 1,
+        levelName: 'Débutant',
+        totalWorkouts: 0,
+        streak: 0,
+        lastWorkoutDate: null
+      },
+      badges: [],
+      selectedBadge: null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
     });
   }
 }
@@ -254,6 +266,14 @@ export async function getUserProfile(userId) {
         photoURL: userData.photoURL,
         badges: userData.badges || [],
         selectedBadge: userData.selectedBadge || null,
+        experience: userData.experience || {
+          xp: 0,
+          level: 1,
+          levelName: 'Débutant',
+          totalWorkouts: 0,
+          streak: 0,
+          lastWorkoutDate: null
+        },
         createdAt: userData.createdAt,
         updatedAt: userData.updatedAt
       };

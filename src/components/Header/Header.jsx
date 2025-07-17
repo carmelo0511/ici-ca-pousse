@@ -48,18 +48,20 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
                 <div className="mt-2 flex flex-col gap-2">
                   <div className="flex items-center space-x-3">
                     <div className="flex flex-col items-start">
-                      <span className="text-xs font-semibold text-indigo-700">Niveau {experience.level} - {experience.levelName}</span>
+                      <span className="text-xs font-semibold text-indigo-700">
+                        Niveau {experience?.level || 1} - {experience?.levelName || 'Débutant'}
+                      </span>
                       <div className="w-40 h-3 bg-gray-200 rounded-full overflow-hidden mt-1">
                         <div
                           className="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-500"
-                          style={{ width: `${experience.progress}%` }}
+                          style={{ width: `${experience?.progress || 0}%` }}
                         ></div>
                       </div>
                     </div>
-                    <span className="text-xs text-gray-500 font-mono">{experience.xp} XP</span>
+                    <span className="text-xs text-gray-500 font-mono">{experience?.xp || 0} XP</span>
                   </div>
                   {/* StreakCounter intégré */}
-                  <StreakCounter streak={experience.streak || 0} />
+                  <StreakCounter streak={experience?.streak || 0} />
                 </div>
               )}
             </div>

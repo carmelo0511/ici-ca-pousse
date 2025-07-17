@@ -1,12 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import ProfilePicture from '../components/Profile/ProfilePicture';
-import React from 'react';
+import ProfilePicture from '../components/Profile/ProfilePicture.jsx';
 
 describe('ProfilePicture', () => {
   const user = {
-    displayName: 'Alice',
-    selectedBadge: 'first_workout',
-    badges: ['first_workout', 'streak_5']
+    uid: '123',
+    displayName: 'Test User',
+    email: 'test@example.com',
+    photoURL: 'https://example.com/photo.jpg',
+    selectedBadge: 'first_workout'
   };
 
   it('affiche le badge sélectionné comme avatar', () => {
@@ -16,14 +17,28 @@ describe('ProfilePicture', () => {
 
   it('affiche un fallback si pas de badge sélectionné', () => {
     render(<ProfilePicture user={{ ...user, selectedBadge: null }} useBadgeAsProfile={true} />);
-    expect(screen.getByTestId('profile-fallback')).toBeInTheDocument();
+    expect(screen.getByText(/🏆/)).toBeInTheDocument();
   });
 
   it('appelle onTeamClick si bouton équipe cliqué', () => {
-    const onTeamClick = jest.fn();
-    render(<ProfilePicture user={user} showTeamButton={true} onTeamClick={onTeamClick} />);
-    const button = screen.getByRole('button');
-    fireEvent.click(button);
-    expect(onTeamClick).toHaveBeenCalled();
+    const mockOnTeamClick = jest.fn();
+    render(<ProfilePicture user={user} showTeamButton={true} onTeamClick={mockOnTeamClick} />);
+    
+    const teamButton = screen.getByTitle('Voir l\'équipe');
+    fireEvent.click(teamButton);
+    
+    expect(mockOnTeamClick).toHaveBeenCalled();
+  });
+
+  it('affiche la photo de profil si disponible', () => {
+    render(<ProfilePicture user={user} />);
+    const img = screen.getByAltText('Test User');
+    expect(img).toHaveAttribute('src', 'https://example.com/photo.jpg');
+  });
+
+  it('affiche l\'icône utilisateur si pas de photo', () => {
+    render(<ProfilePicture user={{ ...user, photoURL: null }} />);
+    // Vérifier que l'icône User est présente (lucide-react)
+    expect(document.querySelector('svg')).toBeInTheDocument();
   });
 }); 

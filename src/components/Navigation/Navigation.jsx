@@ -108,7 +108,6 @@ const Navigation = ({ activeTab, setActiveTab, className = '' }) => {
                 <div className="flex flex-col items-start">
                   <span className="hidden sm:inline">{label}</span>
                   <span className="sm:hidden">{label.charAt(0)}</span>
-                  <span className="text-xs opacity-60 hidden lg:inline">⌨ {shortcut}</span>
                 </div>
               </div>
               

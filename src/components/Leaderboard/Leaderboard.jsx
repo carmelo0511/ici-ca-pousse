@@ -316,6 +316,11 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
               )}
             </div>
           )}
+          {!loading && currentRanking.length === 0 && (
+            <div className="text-center py-6 text-gray-500">
+              Aucun utilisateur trouvé pour le classement.
+            </div>
+          )}
         </div>
       )}
     </div>

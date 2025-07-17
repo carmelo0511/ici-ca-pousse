@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { auth } from '../utils/firebase';
-import { getUserProfile } from '../utils/firebase';
+import { getUserProfile, ensureUserProfile } from '../utils/firebase';
 
 export function useUserProfile() {
   const [userProfile, setUserProfile] = useState(null);
@@ -10,6 +10,9 @@ export function useUserProfile() {
     const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
       if (authUser) {
         try {
+          // S'assurer que le profil existe avec l'expérience initialisée
+          await ensureUserProfile(authUser);
+          
           // Récupérer le profil complet depuis Firestore
           const profile = await getUserProfile(authUser.uid);
           if (profile) {
