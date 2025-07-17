@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
 import ProfileSettings from '../ProfileSettings';
+import ProfilePicture from '../ProfilePicture';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], onUserUpdate }) => {
   const { t, i18n } = useTranslation();
