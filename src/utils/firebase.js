@@ -253,6 +253,7 @@ export async function getUserProfile(userId) {
         email: userData.email,
         photoURL: userData.photoURL,
         badges: userData.badges || [],
+        selectedBadge: userData.selectedBadge || null,
         createdAt: userData.createdAt,
         updatedAt: userData.updatedAt
       };
