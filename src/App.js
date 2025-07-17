@@ -13,7 +13,7 @@ import { useChallenges } from './hooks/useChallenges';
 import { useUserProfile } from './hooks/useUserProfile';
 import { createWorkout } from './utils/workoutUtils';
 
-import { ensureUserProfile } from './utils/firebase';
+
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
 import { useTranslation } from 'react-i18next';
 import PWAInstallButton from './components/PWAInstallButton';
