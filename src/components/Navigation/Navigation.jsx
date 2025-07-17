@@ -106,8 +106,7 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
               <div className="flex items-center space-x-2 md:space-x-3">
                 <Icon className={`h-5 w-5 transition-transform duration-200 ${activeTab === id ? 'animate-pulse' : 'group-hover:scale-110'}`} />
                 <div className="flex flex-col items-start">
-                  <span className="hidden sm:inline">{label}</span>
-                  <span className="sm:hidden">{label.charAt(0)}</span>
+                  <span>{label}</span>
                 </div>
               </div>
               
