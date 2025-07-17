@@ -79,7 +79,10 @@ export function getLeaderboardRanking(usersStats, metric) {
       uid: user.uid,
       displayName: user.displayName,
       value: user.stats[metric] || 0,
-      stats: user.stats
+      stats: user.stats,
+      photoURL: user.photoURL,
+      selectedBadge: user.selectedBadge,
+      badges: user.badges
     }))
     .sort((a, b) => b.value - a.value)
     .map((user, index) => ({

@@ -135,6 +135,24 @@ export const useExperience = (user) => {
     const newProgress = calculateProgress(newXP, newLevel);
     const newLevelName = getLevelName(newLevel);
     const levelUp = newLevel > currentExp.level;
+
+    // Calcul streak
+    let newStreak = 1;
+    let streakIncreased = false;
+    if (previousWorkouts.length > 0) {
+      const lastWorkoutDate = new Date(previousWorkouts[0].date);
+      const currentWorkoutDate = new Date(workout.date);
+      const daysDiff = Math.floor((currentWorkoutDate - lastWorkoutDate) / (1000 * 60 * 60 * 24));
+      if (daysDiff === 1) {
+        newStreak = currentExp.streak + 1;
+        streakIncreased = true;
+      } else if (daysDiff === 0) {
+        newStreak = currentExp.streak; // même jour, ne pas incrémenter
+      } else {
+        newStreak = 1; // streak reset
+      }
+    }
+
     try {
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, {
@@ -142,7 +160,8 @@ export const useExperience = (user) => {
         'experience.level': newLevel,
         'experience.levelName': newLevelName,
         'experience.totalWorkouts': currentExp.totalWorkouts + 1,
-        'experience.lastWorkoutDate': new Date().toISOString()
+        'experience.lastWorkoutDate': new Date().toISOString(),
+        'experience.streak': newStreak
       });
       setExperience(prev => ({
         ...prev,
@@ -150,13 +169,16 @@ export const useExperience = (user) => {
         level: newLevel,
         progress: newProgress,
         levelName: newLevelName,
-        totalWorkouts: prev.totalWorkouts + 1
+        totalWorkouts: prev.totalWorkouts + 1,
+        streak: newStreak
       }));
       return {
         xpGained,
         levelUp,
         newLevel,
-        newLevelName
+        newLevelName,
+        streakIncreased,
+        newStreak
       };
     } catch (error) {
       console.error("Erreur lors de l'ajout d'XP:", error);

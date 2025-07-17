@@ -29,6 +29,7 @@ import { useExperience } from './hooks/useExperience';
 import PageTransition from './components/PageTransition';
 import { useSwipeNavigation } from './hooks/useSwipeNavigation';
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
+import { useNotifications } from './hooks/useNotifications';
 
 function App() {
   const { user, loading: userLoading } = useUserProfile();
@@ -66,6 +67,7 @@ function App() {
   const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP } = useExperience(user);
   const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
   const { friends } = useFriends(user, addFriendXP);
+  const { notifications } = useNotifications(user);
   const { t } = useTranslation();
 
   // Hook personnalisé pour la logique des workouts
@@ -258,7 +260,7 @@ function App() {
             // Les changements sont gérés automatiquement par le hook
           }}
         />
-        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} notifications={notifications} />
         {renderActiveTab()}
         {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
         <PWAInstallButton />

@@ -80,19 +80,18 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
       .map(user => {
         const exerciseStats = user.stats.exerciseStats?.[exerciseName];
         let value = 0;
-        
         // Choisir la valeur selon la métrique sélectionnée
         if (selectedMetric === METRICS.WORKOUTS) {
           value = exerciseStats?.count || 0;
         } else if (selectedMetric === METRICS.MAX_WEIGHT) {
           value = exerciseStats?.maxWeight || 0;
         }
-        
         return {
           uid: user.uid,
           displayName: user.displayName,
           badges: user.badges,
           selectedBadge: user.selectedBadge,
+          photoURL: user.photoURL,
           value: value,
           stats: exerciseStats || null
         };

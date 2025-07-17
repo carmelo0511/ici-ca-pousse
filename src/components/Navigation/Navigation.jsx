@@ -3,7 +3,7 @@ import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, Bell, ChevronL
 // import { useTranslation } from 'react-i18next'; // Temporarily disabled for CI
 import PropTypes from 'prop-types';
 
-const Navigation = ({ activeTab, setActiveTab, className = '' }) => {
+const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '' }) => {
   // const { t } = useTranslation(); // Temporarily disabled for CI
   const [showScrollButtons, setShowScrollButtons] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -115,7 +115,7 @@ const Navigation = ({ activeTab, setActiveTab, className = '' }) => {
               {id === 'workout' && (
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
               )}
-              {id === 'notifications' && (
+              {id === 'notifications' && notifications && notifications.length > 0 && (
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
               )}
             </button>

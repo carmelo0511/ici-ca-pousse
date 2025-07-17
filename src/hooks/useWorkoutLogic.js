@@ -67,6 +67,8 @@ export default function useWorkoutLogic({
           const result = await addWorkoutXP(workout, previousWorkouts);
           if (result && result.levelUp) {
             showToastMsg(`🎉 Niveau ${result.newLevel} atteint ! ${result.newLevelName}`, 'success');
+          } else if (result && result.streakIncreased) {
+            showToastMsg(`🔥 Streak +1 ! ${result.newStreak} jours !`, 'success');
           } else {
             showToastMsg(`+${result?.xpGained || 0} XP gagné ! 💪`, 'success');
           }
