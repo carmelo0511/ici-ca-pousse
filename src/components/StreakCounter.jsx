@@ -46,7 +46,7 @@ const StreakCounter = ({ streak, className = '' }) => {
       setDisplayStreak(streak);
       setIsAnimating(false);
     }
-  }, [streak]);
+  }, [streak, displayStreak]);
 
   return (
     <div className={`flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-xl p-3 border border-orange-200 shadow ${className}`}>
