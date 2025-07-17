@@ -1,160 +1,66 @@
-# Ici Ca Pousse
+# Ici Ça Pousse
 
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![PWA](https://img.shields.io/badge/PWA-ready-blueviolet)
-![i18n](https://img.shields.io/badge/i18n-FR%20%7C%20EN-yellowgreen)
+Application de suivi de séances de sport avec gamification, leaderboard, badges, amis, défis, notifications, et plus !
 
----
+## Fonctionnalités principales
 
-## 🏋️‍♂️ Ici Ca Pousse
+- **Suivi des séances** : Ajoutez, éditez, supprimez vos séances d'entraînement.
+- **Leaderboard** : Classement entre amis selon différents critères (nombre de séances, poids max, etc).
+- **Profils et badges** : Débloquez et affichez vos badges, choisissez-en un comme avatar.
+- **Défis entre amis** : Lancez des challenges à vos amis (nombre de séances, durée, etc).
+- **Notifications** : Rappels et félicitations automatiques.
+- **Progression et statistiques** : Graphiques, comparaisons, historique.
+- **PWA** : Application installable sur mobile et desktop.
 
-**Ici Ca Pousse** est une application web moderne de suivi d’entraînement (musculation & cardio) pensée pour la performance, la motivation et la synchronisation multi-appareils. Profitez d’une expérience fluide, gamifiée et sécurisée, que vous soyez débutant ou confirmé.
+## Nouveautés (2024)
 
----
+### 🎮 Gamification avancée
+- **Système de niveaux et XP** :
+  - Chaque séance rapporte de l'expérience (XP) selon la durée, la variété d'exercices, et les streaks.
+  - Barre d'expérience animée et niveau affiché dans le header.
+  - Noms de niveaux évolutifs (Débutant, Sportif, Légende, etc).
+- **Streak (série de jours consécutifs)** :
+  - Compteur de streak animé dans le header.
+  - Bonus XP pour les streaks de 7, 30, 100 jours.
+  - Messages de motivation et couleurs évolutives.
+- **Badges et réalisations** :
+  - Débloquez des badges pour vos exploits (nombre de séances, records, défis).
+  - Utilisez vos badges comme avatar.
 
-## 📑 Sommaire
-- [Fonctionnalités](#fonctionnalités)
-- [Gamification](#gamification)
-- [Internationalisation](#internationalisation)
-- [Synchronisation Cloud](#synchronisation-cloud)
-- [Installation & Configuration](#installation--configuration)
-- [Authentification](#authentification)
-- [PWA & Mobile](#pwa--mobile)
-- [Tests](#tests)
-- [Contribution](#contribution)
-- [Licence](#licence)
-- [Crédits](#crédits)
-- [Screenshots](#screenshots)
+### 🏆 Social & défis
+- **Liste d'amis** : Ajoutez, supprimez, acceptez des amis.
+- **Défis personnalisés** : Envoyez des challenges à vos amis.
+- **Classement dynamique** : Le leaderboard s'adapte au critère choisi.
 
----
+### ⚡️ UX/UI
+- **Header enrichi** :
+  - Barre d'expérience, niveau, XP, et streak animés.
+  - Accès rapide au profil et à la personnalisation.
+- **Animations** :
+  - Animations lors du gain d'XP, de niveau, ou de streak.
+  - Effets visuels lors des milestones.
 
-## 🚀 Fonctionnalités
+## Installation & développement
 
-- 🏋️‍♂️ **Suivi complet des séances** (musculation & cardio)
-- ⭐ **Favoris synchronisés**
-- 📊 **Statistiques avancées** (séries, répétitions, poids, durée, régularité)
-- 🏅 **Badges & Succès** (gamification)
-- ☁️ **Synchronisation cloud** (Firebase/Firestore)
-- 🌍 **Internationalisation** (français 🇫🇷 / anglais 🇬🇧)
-- 🔒 **Authentification Google** (Firebase Auth)
-- 📱 **Responsive & PWA** (installable sur mobile/tablette/desktop)
-- 🧪 **Tests unitaires** (hooks, logique Firestore)
-- ⚡ **Performance & sécurité** (optimisations React, CI/CD, règles Firestore)
-
----
-
-## 🏅 Gamification
-
-Boostez votre motivation grâce à un système de **badges** déblocables selon vos progrès :
-
-| Badge | Condition | Description |
-|-------|-----------|-------------|
-| 🏅 | 1 séance | Première séance réalisée |
-| 🥉 | 5 séances | 5 séances réalisées |
-| 🥈 | 10 séances | 10 séances réalisées |
-| 🥇 | 20 séances | 20 séances réalisées |
-| 💪 | 100 séries | 100 séries cumulées |
-| 🔥 | 1000 répétitions | 1000 répétitions cumulées |
-| 🏋️ | 10 000 kg | 10 000 kg soulevés au total |
-| ⏱️ | 60 min de moyenne | Séances longues (moyenne ≥ 60 min) |
-
-Les badges sont visibles dans la section **Statistiques** et s’affichent automatiquement dès qu’ils sont débloqués.
-
----
-
-## 🌍 Internationalisation
-- Interface disponible en **français** 🇫🇷 et **anglais** 🇬🇧
-- Sélecteur de langue accessible dans le header
-- Tous les textes, boutons, groupes musculaires et exercices sont traduits
-
----
-
-## ☁️ Synchronisation Cloud
-- Toutes vos séances et favoris sont stockés dans **Firestore** (Firebase)
-- Accès multi-appareils, migration automatique des données locales
-- Sécurité : accès restreint à l’utilisateur authentifié
-
----
-
-## 🛠️ Installation & Configuration
-
-### Prérequis
-- Node.js >= 16
-- npm >= 8
-
-### Installation
 ```bash
-git clone https://github.com/carmelo0511/ici-ca-pousse.git
-cd ici-ca-pousse
 npm install
-```
-
-### Lancement en développement
-```bash
 npm start
 ```
 
-### Build production
-```bash
-npm run build
-```
+## Déploiement
+- Déploiement automatique via Vercel (voir vercel.json)
+- CI/CD via GitHub Actions (tests, lint, build)
+
+## Roadmap
+- [x] Système de niveaux et XP
+- [x] Streak animé
+- [x] Leaderboard dynamique
+- [x] Badges et réalisations
+- [x] Défis entre amis
+- [ ] Quiz et mini-jeux
+- [ ] Notifications intelligentes
+- [ ] Thèmes personnalisables
 
 ---
 
-## 🔒 Authentification
-- Connexion via Google (Firebase Auth)
-- Sécurité des données assurée par les règles Firestore
-
----
-
-## 📱 PWA & Mobile
-- Application installable sur mobile/tablette/desktop
-- Design responsive et moderne
-- Expérience fluide sur tous les appareils
-
----
-
-## 🧪 Tests
-- Lancer les tests unitaires :
-```bash
-npm test
-```
-- Couverture des hooks, logique Firestore, et composants principaux
-
----
-
-## 🤝 Contribution
-Les PR sont les bienvenues !
-1. Fork le projet
-2. Créez une branche feature (`git checkout -b feature/ma-feature`)
-3. Committez vos changements (`git commit -m 'feat: ma feature'`)
-4. Pushez (`git push origin feature/ma-feature`)
-5. Ouvrez une Pull Request
-
----
-
-## 📄 Licence
-MIT
-
----
-
-## 🙏 Crédits
-- [React](https://reactjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Lucide](https://lucide.dev/)
-- [Vercel](https://vercel.com/)
-- [Firebase](https://firebase.google.com/)
-
----
-
-## 📸 Screenshots
-
-> _Ajoutez ici vos captures d’écran pour illustrer l’application !_
-
----
-
-⭐ **N’oubliez pas de star le projet si vous l’aimez, et de contribuer !**
-
-Pour toute question ou suggestion, ouvrez une issue ou contactez [@carmelo0511](https://github.com/carmelo0511).
-# Trigger Vercel deploy
+**Made with ❤️ by la team Ici Ça Pousse**

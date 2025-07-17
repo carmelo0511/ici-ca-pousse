@@ -7,6 +7,7 @@ import { auth } from '../../utils/firebase';
 import ProfileSettings from '../ProfileSettings';
 import ProfilePicture from '../ProfilePicture';
 import { useExperience } from '../../hooks/useExperience';
+import StreakCounter from '../StreakCounter';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], onUserUpdate }) => {
   const { t, i18n } = useTranslation();
@@ -44,17 +45,21 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
               </p>
               {/* Barre d'expérience et niveau */}
               {user && (
-                <div className="mt-2 flex items-center space-x-3">
-                  <div className="flex flex-col items-start">
-                    <span className="text-xs font-semibold text-indigo-700">Niveau {experience.level} - {experience.levelName}</span>
-                    <div className="w-40 h-3 bg-gray-200 rounded-full overflow-hidden mt-1">
-                      <div
-                        className="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-500"
-                        style={{ width: `${experience.progress}%` }}
-                      ></div>
+                <div className="mt-2 flex flex-col gap-2">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex flex-col items-start">
+                      <span className="text-xs font-semibold text-indigo-700">Niveau {experience.level} - {experience.levelName}</span>
+                      <div className="w-40 h-3 bg-gray-200 rounded-full overflow-hidden mt-1">
+                        <div
+                          className="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-500"
+                          style={{ width: `${experience.progress}%` }}
+                        ></div>
+                      </div>
                     </div>
+                    <span className="text-xs text-gray-500 font-mono">{experience.xp} XP</span>
                   </div>
-                  <span className="text-xs text-gray-500 font-mono">{experience.xp} XP</span>
+                  {/* StreakCounter intégré */}
+                  <StreakCounter streak={experience.streak || 0} />
                 </div>
               )}
             </div>
