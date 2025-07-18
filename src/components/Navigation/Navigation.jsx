@@ -87,7 +87,7 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
 
         <div 
           ref={scrollContainerRef}
-          className="menu-horizontal-scroll space-x-2 md:space-x-4 py-2 px-2 max-w-4xl mx-auto"
+          className="menu-horizontal-scroll flex overflow-x-auto flex-nowrap space-x-1 md:space-x-2 py-1 px-1 max-w-4xl mx-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent"
           onScroll={checkScroll}
         >
           {navItems.map(({ id, icon: Icon, label, color, shortcut }) => (
@@ -95,7 +95,7 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
               key={id}
               data-tab={id}
               onClick={() => setActiveTab(id)}
-              className={`group relative flex-shrink-0 py-3 px-4 md:px-6 rounded-xl font-semibold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 ${
+              className={`group relative flex-shrink-0 py-1.5 px-2.5 md:py-2 md:px-4 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 max-w-[90px] md:max-w-[120px] truncate text-ellipsis text-center ${
                 activeTab === id
                   ? `bg-gradient-to-r ${color} text-white shadow-lg transform scale-105`
                   : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:shadow-md transform hover:scale-105'
@@ -103,19 +103,16 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
               aria-current={activeTab === id ? 'page' : undefined}
               aria-label={label}
             >
-              <div className="flex items-center space-x-2 md:space-x-3">
-                <Icon className={`h-5 w-5 transition-transform duration-200 ${activeTab === id ? 'animate-pulse' : 'group-hover:scale-110'}`} />
-                <div className="flex flex-col items-start">
-                  <span>{label}</span>
-                </div>
+              <div className="flex flex-col items-center justify-center gap-1 w-full">
+                <Icon className={`h-4 w-4 md:h-5 md:w-5 transition-transform duration-200 ${activeTab === id ? 'animate-pulse' : 'group-hover:scale-110'}`} />
+                <span className="truncate w-full">{label}</span>
               </div>
-              
               {/* Indicateur de progression pour certains onglets */}
               {id === 'workout' && (
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
               )}
               {id === 'notifications' && notifications && notifications.length > 0 && (
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
               )}
             </button>
           ))}
