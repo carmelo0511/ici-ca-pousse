@@ -48,7 +48,11 @@ const PWAInstallButton = () => {
       style={{ maxWidth: 320 }}
     >
       <Download className="h-4 w-4 md:h-5 md:w-5" />
-      <span>{t('install_app')}</span>
+      <span>
+        {i18n.language === 'fr'
+          ? "Installer l’application sur ce navigateur"
+          : "Install this app in your browser"}
+      </span>
     </button>
   );
 };
