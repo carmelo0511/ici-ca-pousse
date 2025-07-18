@@ -64,13 +64,13 @@ export async function ensureUserProfile(user) {
 // Fonctions pour gérer les défis dans Firebase
 export async function createChallengeInFirebase(challengeData) {
   try {
-    console.log('🔥 Création du défi dans Firebase:', challengeData);
+    // Création du défi dans Firebase
     const challengeRef = await addDoc(collection(db, 'challenges'), {
       ...challengeData,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
-    console.log('🔥 Défi créé dans Firebase avec ID:', challengeRef.id);
+    // Défi créé dans Firebase avec succès
     return { id: challengeRef.id, ...challengeData };
   } catch (error) {
     console.error('🔥 Erreur lors de la création du défi dans Firebase:', error);
@@ -145,23 +145,21 @@ export async function deleteChallengeFromFirebase(challengeId) {
 // Fonction pour uploader une photo de profil
 export async function uploadProfilePicture(userId, file) {
   try {
-    console.log('📸 Début de l\'upload de la photo de profil pour:', userId);
+    // Début de l'upload de la photo de profil
     
     const storage = getStorage();
     const fileExtension = file.name.split('.').pop().toLowerCase();
     const fileName = `profile-pictures/${userId}.${fileExtension}`;
     const storageRef = ref(storage, fileName);
     
-    console.log('📸 Nom du fichier:', fileName);
-    console.log('📸 Taille du fichier:', file.size, 'bytes');
-    console.log('📸 Type du fichier:', file.type);
+          // Informations du fichier
     
     // Upload du fichier
     const snapshot = await uploadBytes(storageRef, file);
-    console.log('📸 Upload réussi, récupération de l\'URL...');
+          // Upload réussi, récupération de l'URL
     
     const downloadURL = await getDownloadURL(snapshot.ref);
-    console.log('📸 URL de téléchargement obtenue:', downloadURL);
+          // URL de téléchargement obtenue
     
     // Mettre à jour le profil utilisateur
     const userRef = doc(db, 'users', userId);
@@ -170,7 +168,7 @@ export async function uploadProfilePicture(userId, file) {
       updatedAt: serverTimestamp()
     });
     
-    console.log('📸 Profil utilisateur mis à jour avec succès');
+          // Profil utilisateur mis à jour avec succès
     return downloadURL;
   } catch (error) {
     console.error('❌ Erreur lors de l\'upload de la photo de profil:', error);

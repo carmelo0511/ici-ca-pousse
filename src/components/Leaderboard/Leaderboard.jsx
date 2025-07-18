@@ -42,13 +42,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
           // Calculer les statistiques
           const userStats = calculateUserStats(workouts, selectedPeriod);
           
-          console.log('User data for leaderboard:', {
-            uid: u.uid,
-            displayName: u.displayName || u.email,
-            badges: u.badges || [],
-            selectedBadge: u.selectedBadge || null,
-            photoURL: u.photoURL
-          });
+          // User data for leaderboard
           
           statsArr.push({
             uid: u.uid,

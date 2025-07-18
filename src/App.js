@@ -1,21 +1,19 @@
+// React imports
 import React, { useState, useEffect } from 'react';
+
+// Third-party imports
+import { useTranslation } from 'react-i18next';
+
+// Styles
 import './App.css';
+
+// Components
 import Auth from './components/Auth';
 import Header from './components/Header/Header';
 import Navigation from './components/Navigation/Navigation';
 import WorkoutList from './components/Workout/WorkoutList/WorkoutList';
 import CalendarView from './components/CalendarView/CalendarView';
 import StatsView from './components/StatsView/StatsView';
-import { useWorkouts } from './hooks/useWorkouts';
-import { useExercises } from './hooks/useExercises';
-import { useFriends } from './hooks/useFriends';
-import { useChallenges } from './hooks/useChallenges';
-import { useUserProfile } from './hooks/useUserProfile';
-// createWorkout est maintenant utilisé dans useWorkoutLogic
-
-
-import { migrateLocalWorkoutsToCloud } from './utils/storage';
-import { useTranslation } from 'react-i18next';
 import PWAInstallButton from './components/PWAInstallButton';
 import FriendsList from './components/Profile/FriendsList';
 import LeaderboardView from './components/Leaderboard/LeaderboardView';
@@ -23,13 +21,25 @@ import BadgesPage from './components/Badges/BadgesPage';
 import Challenges from './components/Challenges';
 import Notifications from './components/Notifications';
 import MigrationPrompt from './components/MigrationPrompt';
-import useWorkoutLogic from './hooks/useWorkoutLogic';
-import useAppState from './hooks/useAppState';
-import { useExperience } from './hooks/useExperience';
 import PageTransition from './components/PageTransition';
-import { useSwipeNavigation } from './hooks/useSwipeNavigation';
-import { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
-import { useNotifications } from './hooks/useNotifications';
+
+// Hooks
+import {
+  useWorkouts,
+  useExercises,
+  useFriends,
+  useChallenges,
+  useUserProfile,
+  useWorkoutLogic,
+  useAppState,
+  useExperience,
+  useSwipeNavigation,
+  useKeyboardNavigation,
+  useNotifications
+} from './hooks';
+
+// Utils
+import { migrateLocalWorkoutsToCloud } from './utils/storage';
 
 function App() {
   const { user, loading: userLoading, refreshUserProfile } = useUserProfile();

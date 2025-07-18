@@ -201,7 +201,7 @@ export function useBadges(workouts, challenges, user, addBadgeUnlockXP) {
           newBadges.forEach(async (badge) => {
             try {
               const result = await addBadgeUnlockXP(badge);
-              console.log(`Badge débloqué: ${badge} - +${result.xpGained} XP`);
+              // Badge débloqué avec succès
             } catch (error) {
               console.error('Erreur lors de l\'ajout d\'XP pour badge:', error);
             }

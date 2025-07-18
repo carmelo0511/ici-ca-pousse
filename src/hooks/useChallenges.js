@@ -65,7 +65,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
         try {
           const challengeName = `${challengeData.type} vs ${challengeData.friend.displayName}`;
           const result = await addChallengeSendXP(challengeName);
-          console.log(`Défi envoyé: ${challengeName} - +${result.xpGained} XP`);
+          // Défi envoyé avec succès
         } catch (error) {
           console.error('Erreur lors de l\'ajout d\'XP pour défi:', error);
         }
@@ -180,7 +180,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
         updateChallenge(challenge.id, { status: 'completed' }).then(() => {
           const challengeName = `${challenge.type} vs ${challenge.receiverName}`;
           addChallengeWinXP(challengeName).then(result => {
-            console.log(`Défi gagné: ${challengeName} - +${result.xpGained} XP`);
+            // Défi gagné avec succès
           }).catch(error => {
             console.error('Erreur lors de l\'ajout d\'XP pour victoire:', error);
           });
