@@ -164,11 +164,28 @@ function App() {
     );
   }
 
-  const renderActiveTab = () => {
-    switch (activeTab) {
-      case 'workout':
-        return (
-          <PageTransition key="workout">
+  return (
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
+      <div id="main-content" className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
+        <Header 
+          workoutCount={workouts.length} 
+          user={user} 
+          workouts={workouts} 
+          challenges={challenges}
+          addBadgeUnlockXP={addBadgeUnlockXP}
+          refreshUserProfile={refreshUserProfile}
+          onUserUpdate={(updatedUser) => {
+            // Mettre à jour l'utilisateur dans l'état global
+            // Note: setUser n'est plus disponible car on utilise useUserProfile
+            // Les changements sont gérés automatiquement par le hook
+          }}
+        />
+        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} notifications={notifications} />
+        
+        {/* Conteneur pour tous les onglets avec position relative */}
+        <div className="relative">
+          {/* Onglet Séance */}
+          <PageTransition isActive={activeTab === 'workout'}>
             <WorkoutList
               user={user}
               exercises={exercises}
@@ -189,10 +206,9 @@ function App() {
               addExerciseToWorkout={addExerciseToWorkout}
             />
           </PageTransition>
-        );
-      case 'calendar':
-        return (
-          <PageTransition key="calendar">
+
+          {/* Onglet Calendrier */}
+          <PageTransition isActive={activeTab === 'calendar'}>
             <CalendarView
               workouts={workouts}
               getWorkoutForDate={getWorkoutForDate}
@@ -203,66 +219,38 @@ function App() {
               setShowWorkoutDetail={setShowWorkoutDetail}
             />
           </PageTransition>
-        );
-      case 'stats':
-        return (
-          <PageTransition key="stats">
+
+          {/* Onglet Statistiques */}
+          <PageTransition isActive={activeTab === 'stats'}>
             <StatsView stats={getStats()} workouts={workouts} onEditWorkout={handleEditWorkout} />
           </PageTransition>
-        );
-      case 'friends':
-        return (
-          <PageTransition key="friends">
+
+          {/* Onglet Amis */}
+          <PageTransition isActive={activeTab === 'friends'}>
             <FriendsList user={user} />
           </PageTransition>
-        );
-      case 'leaderboard':
-        return (
-          <PageTransition key="leaderboard">
+
+          {/* Onglet Classement */}
+          <PageTransition isActive={activeTab === 'leaderboard'}>
             <LeaderboardView user={user} />
           </PageTransition>
-        );
-      case 'challenges':
-        return (
-          <PageTransition key="challenges">
+
+          {/* Onglet Défis */}
+          <PageTransition isActive={activeTab === 'challenges'}>
             <Challenges user={user} />
           </PageTransition>
-        );
-      case 'badges':
-        return (
-          <PageTransition key="badges">
+
+          {/* Onglet Badges */}
+          <PageTransition isActive={activeTab === 'badges'}>
             <BadgesPage workouts={workouts} challenges={challenges} friends={friends} user={user} addBadgeUnlockXP={addBadgeUnlockXP} />
           </PageTransition>
-        );
-      case 'notifications':
-        return (
-          <PageTransition key="notifications">
+
+          {/* Onglet Notifications */}
+          <PageTransition isActive={activeTab === 'notifications'}>
             <Notifications user={user} />
           </PageTransition>
-        );
-      default:
-        return null;
-    }
-  };
+        </div>
 
-  return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
-      <div id="main-content" className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
-        <Header 
-          workoutCount={workouts.length} 
-          user={user} 
-          workouts={workouts} 
-          challenges={challenges}
-          addBadgeUnlockXP={addBadgeUnlockXP}
-          refreshUserProfile={refreshUserProfile}
-          onUserUpdate={(updatedUser) => {
-            // Mettre à jour l'utilisateur dans l'état global
-            // Note: setUser n'est plus disponible car on utilise useUserProfile
-            // Les changements sont gérés automatiquement par le hook
-          }}
-        />
-        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} notifications={notifications} />
-        {renderActiveTab()}
         {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
         <PWAInstallButton />
         {toast.show && (

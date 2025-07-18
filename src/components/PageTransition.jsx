@@ -1,24 +1,19 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
-const PageTransition = ({ children, key }) => {
+const PageTransition = ({ children, isActive, className = "" }) => {
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={key}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ 
-          duration: 0.3, 
-          ease: [0.4, 0.0, 0.2, 1],
-          staggerChildren: 0.1
-        }}
-        className="w-full"
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <div 
+      className={`w-full transition-all duration-300 ease-in-out ${
+        isActive 
+          ? 'opacity-100 translate-y-0 pointer-events-auto' 
+          : 'opacity-0 translate-y-4 pointer-events-none absolute inset-0'
+      } ${className}`}
+      style={{
+        display: isActive ? 'block' : 'none'
+      }}
+    >
+      {children}
+    </div>
   );
 };
 
