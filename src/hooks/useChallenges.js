@@ -102,15 +102,19 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
 
   const getChallengeScore = useCallback((challenge) => {
     try {
-      const filteredWorkouts = getWorkoutsForDateRange(workouts, new Date(challenge.startDate), new Date(challenge.endDate));
+      // S'assurer que les dates sont bien des objets Date
+      const start = typeof challenge.startDate === 'string' ? new Date(challenge.startDate) : challenge.startDate;
+      const end = typeof challenge.endDate === 'string' ? new Date(challenge.endDate) : challenge.endDate;
+      const filteredWorkouts = getWorkoutsForDateRange(workouts, start, end);
       switch (challenge.type) {
         case 'workouts':
           return filteredWorkouts.length;
         case 'duration':
           return filteredWorkouts.reduce((total, workout) => total + (workout.duration || 0), 0);
         case 'streak': {
+          // S'assurer que les dates de workout sont bien des objets Date
           const sortedDates = filteredWorkouts
-            .map(w => new Date(w.date))
+            .map(w => typeof w.date === 'string' ? new Date(w.date) : w.date)
             .sort((a, b) => a - b);
           let maxStreak = 0;
           let currentStreak = 0;

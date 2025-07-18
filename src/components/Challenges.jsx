@@ -305,7 +305,9 @@ const Challenges = ({ user }) => {
               const status = getChallengeStatus(challenge);
               const isSentByMe = challenge.senderId === user?.uid;
               const isPending = challenge.status === 'pending';
-              
+              const isStreakChallenge = challenge.type === 'streak';
+              const startDate = challenge.startDate ? new Date(challenge.startDate) : null;
+              const endDate = challenge.endDate ? new Date(challenge.endDate) : null;
               return (
                 <Card key={challenge.id}>
                   <div className="flex items-center justify-between">
@@ -324,6 +326,11 @@ const Challenges = ({ user }) => {
                         <p className="text-xs text-gray-500">
                           {isSentByMe ? 'Envoyé par toi' : 'Reçu de ' + (challenge.senderName || 'un ami')} • Statut: {challenge.status || 'en attente'}
                         </p>
+                        {isStreakChallenge && startDate && endDate && (
+                          <p className="text-xs text-indigo-500 mt-1">
+                            Période du défi : {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="text-right">
@@ -353,6 +360,9 @@ const Challenges = ({ user }) => {
                           <div className="text-sm text-gray-600">
                             {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
                           </div>
+                          {isStreakChallenge && myScore === 0 && (
+                            <div className="text-xs text-red-500 mt-1">Aucune série consécutive pendant la période du défi.</div>
+                          )}
                           {isPending && isSentByMe && (
                             <button
                               onClick={() => handleCancelChallenge(challenge.id)}
