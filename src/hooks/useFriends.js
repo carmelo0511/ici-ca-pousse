@@ -97,7 +97,7 @@ export function useFriends(currentUser, addFriendXP) {
       try {
         const friendProfile = await getUserProfile(uid);
         const friendName = friendProfile?.displayName || friendProfile?.email || 'Nouvel ami';
-        const result = await addFriendXP(friendName);
+        await addFriendXP(friendName);
         // Ami ajouté avec succès
       } catch (error) {
         console.error('Erreur lors de l\'ajout d\'XP pour ami:', error);

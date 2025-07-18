@@ -64,7 +64,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       if (addChallengeSendXP) {
         try {
           const challengeName = `${challengeData.type} vs ${challengeData.friend.displayName}`;
-          const result = await addChallengeSendXP(challengeName);
+          await addChallengeSendXP(challengeName);
           // Défi envoyé avec succès
         } catch (error) {
           console.error('Erreur lors de l\'ajout d\'XP pour défi:', error);

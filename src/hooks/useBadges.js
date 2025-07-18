@@ -199,10 +199,10 @@ export function useBadges(workouts, challenges, user, addBadgeUnlockXP) {
         if (addBadgeUnlockXP) {
           const newBadges = badges.filter(badge => !currentBadges.includes(badge));
           newBadges.forEach(async (badge) => {
-            try {
-              const result = await addBadgeUnlockXP(badge);
-              // Badge débloqué avec succès
-            } catch (error) {
+                          try {
+                await addBadgeUnlockXP(badge);
+                // Badge débloqué avec succès
+              } catch (error) {
               console.error('Erreur lors de l\'ajout d\'XP pour badge:', error);
             }
           });
