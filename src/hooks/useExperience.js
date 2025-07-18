@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../utils/firebase';
 
 // XP nécessaire pour chaque niveau (progression exponentielle)
@@ -96,31 +96,40 @@ export const useExperience = (user) => {
     experienceRef.current = experience;
   }, [experience]);
 
-  // Charger l'expérience depuis Firestore
+  // Charger l'expérience depuis Firestore avec écoute en temps réel
   const loadExperience = useCallback(async () => {
     if (!user?.uid) return;
     try {
       setLoading(true);
       const userRef = doc(db, 'users', user.uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists()) {
-        const data = userSnap.data();
-        const xp = data.experience?.xp || 0;
-        const level = calculateLevel(xp);
-        const progress = calculateProgress(xp, level);
-        const levelName = getLevelName(level);
-        setExperience({
-          xp,
-          level,
-          progress,
-          levelName,
-          totalWorkouts: data.experience?.totalWorkouts || 0,
-          streak: data.experience?.streak || 0
-        });
-      }
+      
+      // Utiliser onSnapshot pour écouter les changements en temps réel
+      const unsubscribe = onSnapshot(userRef, (userSnap) => {
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          const xp = data.experience?.xp || 0;
+          const level = calculateLevel(xp);
+          const progress = calculateProgress(xp, level);
+          const levelName = getLevelName(level);
+          setExperience({
+            xp,
+            level,
+            progress,
+            levelName,
+            totalWorkouts: data.experience?.totalWorkouts || 0,
+            streak: data.experience?.streak || 0
+          });
+        }
+        setLoading(false);
+      }, (error) => {
+        console.error("Erreur lors de l'écoute de l'expérience:", error);
+        setLoading(false);
+      });
+
+      // Retourner la fonction de nettoyage
+      return unsubscribe;
     } catch (error) {
       console.error("Erreur lors du chargement de l'expérience:", error);
-    } finally {
       setLoading(false);
     }
   }, [user]);
@@ -289,9 +298,19 @@ export const useExperience = (user) => {
   }, [user]);
 
   useEffect(() => {
+    let unsubscribe = null;
     if (user?.uid) {
-      loadExperience();
+      loadExperience().then((unsub) => {
+        unsubscribe = unsub;
+      });
     }
+    
+    // Fonction de nettoyage pour désabonner l'écoute
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [user, loadExperience]);
 
   return {
