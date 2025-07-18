@@ -12,7 +12,8 @@ body {
   /* Ajout safe area iOS */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
-  /* Suppression du zoom global */
+  transform: scale(0.85);
+  transform-origin: top center;
 }
 
 /* Pour le conteneur principal (optionnel, si besoin d'encore plus de sécurité) */
