@@ -67,20 +67,6 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
             </div>
           </div>
           <div className="flex items-center space-x-2 flex-wrap w-full justify-end sm:justify-end sm:flex-row flex-col gap-2">
-            <button
-              onClick={() => changeLanguage('fr')}
-              className={`px-3 py-1 rounded-lg font-semibold border focus:outline-none focus:ring-2 focus:ring-indigo-400 ${i18n.language === 'fr' ? 'bg-indigo-500 text-white border-indigo-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-indigo-50'}`}
-              aria-label="Passer en français"
-            >
-              FR
-            </button>
-            <button
-              onClick={() => changeLanguage('en')}
-              className={`px-3 py-1 rounded-lg font-semibold border focus:outline-none focus:ring-2 focus:ring-indigo-400 ${i18n.language === 'en' ? 'bg-indigo-500 text-white border-indigo-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-indigo-50'}`}
-              aria-label="Switch to English"
-            >
-              EN
-            </button>
             {/* Avatar utilisateur pour ouvrir la modale de profil */}
             {localUser && (
               <button
