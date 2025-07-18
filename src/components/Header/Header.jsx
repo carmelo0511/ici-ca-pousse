@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { Dumbbell } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
@@ -10,7 +9,6 @@ import { useExperience } from '../../hooks/useExperience.js';
 import StreakCounter from '../StreakCounter';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate, refreshUserProfile }) => {
-  const { t, i18n } = useTranslation();
   const [showProfile, setShowProfile] = React.useState(false);
   const [localUser, setLocalUser] = React.useState(user);
 
@@ -21,7 +19,6 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
   React.useEffect(() => {
     setLocalUser(user);
   }, [user]);
-  const changeLanguage = (lng) => i18n.changeLanguage(lng);
 
   const handleSignOut = async () => {
     await signOut(auth);
@@ -41,7 +38,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
                 Ici Ca Pousse
               </h1>
               <p className="text-sm text-gray-600 font-medium">
-                {t('workout_done', { count: workoutCount })}
+                {`Séances effectuées : ${workoutCount}`}
               </p>
               {/* Barre d'expérience et niveau */}
               {user && (
