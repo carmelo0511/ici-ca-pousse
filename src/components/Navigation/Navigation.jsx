@@ -87,7 +87,7 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
 
         <div 
           ref={scrollContainerRef}
-          className="flex space-x-2 md:space-x-4 overflow-x-auto scrollbar-hide py-2 px-2"
+          className="menu-horizontal-scroll space-x-2 md:space-x-4 py-2 px-2"
           onScroll={checkScroll}
         >
           {navItems.map(({ id, icon: Icon, label, color, shortcut }) => (

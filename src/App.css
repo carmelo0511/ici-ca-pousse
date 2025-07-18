@@ -435,4 +435,23 @@ button:focus {
   overflow-wrap: break-word;
 }
 
+/* Forcer le menu à rester horizontal et visible */
+.menu-horizontal-scroll {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 0;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #c7d2fe #f1f5f9;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.menu-horizontal-scroll > * {
+  flex-shrink: 0;
+  min-width: max-content;
+}
+
 /* Les tailles de police réduites sont déjà définies plus haut, inutile de les redéfinir ici */
