@@ -24,7 +24,7 @@ const Modal = ({ isOpen, onClose, children, className = '', maxWidth = 'max-w-lg
         >
           <span aria-hidden="true">&times;</span>
         </button>
-        <div className="w-full h-full overflow-y-auto flex-1 pr-2">{children}</div>
+        <div className="w-full h-full overflow-y-auto flex-1 min-h-0 pr-2">{children}</div>
       </div>
     </div>
   );
