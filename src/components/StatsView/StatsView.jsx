@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap, Calendar, Edit3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { formatDate, getBadges, parseLocalDate, analyzeWorkoutHabits, getPreferredWorkoutTime, getAverageDurationByTime } from '../../utils/workoutUtils';
@@ -65,6 +65,9 @@ function getWeekBounds(date) {
 
 const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
   const { t } = useTranslation();
+  const [openWeeks, setOpenWeeks] = useState([]);
+  // Trie les séances par date décroissante
+  const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
   const weeks = groupWorkoutsByWeek(workouts);
   const badges = getBadges(stats);
   const workoutHabits = analyzeWorkoutHabits(workouts);
@@ -256,14 +259,14 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
         </div>
       </div>
 
-      {workouts.length > 0 && (
+      {sortedWorkouts.length > 0 && (
         <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
           <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
             <BarChart3 className="h-6 w-6" />
             <span>{t('last_sessions')}</span>
           </h3>
           <div className="space-y-4">
-            {workouts.slice(-5).reverse().map((workout) => (
+            {sortedWorkouts.slice(0, 5).map((workout) => (
               <div key={workout.id} className="flex justify-between items-center py-4 px-6 bg-gray-100 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow duration-200">
                 <div>
                   <p className="font-bold text-gray-800">{new Date(workout.date).toLocaleDateString('fr-FR')}</p>
@@ -293,34 +296,41 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
           <div className="text-gray-400">{t('no_sessions_recorded')}</div>
         ) : (
           Object.entries(weeks).sort(([a], [b]) => b.localeCompare(a)).map(([week, weekWorkouts]) => {
-            // Affichage de l'intervalle de la semaine
             const firstWorkout = weekWorkouts[0];
             const d = parseLocalDate(firstWorkout.date);
             const { monday, sunday } = getWeekBounds(d);
+            const isOpen = openWeeks.includes(week);
             return (
-              <div key={week} className="mb-8">
-                <div className="font-semibold text-indigo-700 mb-2">
-                  {t('week')}: {monday.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} - {sunday.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}
-                </div>
-                <div className="space-y-3">
-                  {weekWorkouts.map((w) => (
-                    <div key={w.id} className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100">
-                      <div>
-                        <div className="font-bold text-lg text-gray-800">{formatDate(w.date)}</div>
-                        <div className="text-sm text-gray-500">{w.exercises.length} {t('exercises')}, {w.totalSets} {t('sets')}, {w.totalReps} {t('reps')}, {w.totalWeight} {t('kg')}</div>
+              <div key={week} className="mb-4">
+                <button
+                  className={`w-full flex justify-between items-center px-6 py-4 rounded-2xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 font-semibold text-indigo-700 shadow transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+                  onClick={() => setOpenWeeks((prev) => prev.includes(week) ? prev.filter(w => w !== week) : [...prev, week])}
+                  aria-expanded={isOpen}
+                >
+                  <span>Semaine du {monday.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} au {sunday.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</span>
+                  <span className="ml-2">{isOpen ? '▲' : '▼'}</span>
+                </button>
+                {isOpen && (
+                  <div className="space-y-3 mt-2">
+                    {weekWorkouts.sort((a, b) => new Date(b.date) - new Date(a.date)).map((w) => (
+                      <div key={w.id} className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100">
+                        <div>
+                          <div className="font-bold text-lg text-gray-800">{formatDate(w.date)}</div>
+                          <div className="text-sm text-gray-500">{w.exercises.length} {t('exercises')}, {w.totalSets} {t('sets')}, {w.totalReps} {t('reps')}, {w.totalWeight} {t('kg')}</div>
+                        </div>
+                        <div className="flex gap-2 mt-2 sm:mt-0">
+                          <button
+                            onClick={() => onEditWorkout(w)}
+                            className={`flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap`}
+                          >
+                            <Edit3 className="h-4 w-4" />
+                            {t('edit')}
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex gap-2 mt-2 sm:mt-0">
-                        <button
-                          onClick={() => onEditWorkout(w)}
-                          className={`flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap`}
-                        >
-                          <Edit3 className="h-4 w-4" />
-                          {t('edit')}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })
