@@ -12,6 +12,11 @@ body {
   /* Ajout safe area iOS */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
+  transform: scale(0.5);
+  transform-origin: top left;
+  width: 200vw;
+  height: 200vh;
+  overflow-x: auto;
 }
 
 /* Pour le conteneur principal (optionnel, si besoin d'encore plus de sécurité) */
