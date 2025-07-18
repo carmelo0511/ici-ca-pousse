@@ -365,42 +365,26 @@ function WorkoutList({
               <div className="flex items-center space-x-4">
                 <div className="flex flex-col flex-1">
                   <label className="text-sm font-medium text-gray-700 mb-2">Début</label>
-                  <select
+                  <input
+                    type="time"
                     value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
+                    onChange={e => setStartTime(e.target.value)}
                     className="border-2 border-blue-200 rounded-xl px-4 py-3 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200 bg-white"
-                  >
-                    <option value="">Choisir l'heure</option>
-                    {Array.from({ length: 24 }, (_, i) => {
-                      const hour = i.toString().padStart(2, '0');
-                      return (
-                        <option key={hour} value={`${hour}:00`}>
-                          {hour}:00
-                        </option>
-                      );
-                    })}
-                  </select>
+                    step="60"
+                  />
                 </div>
                 
                 <div className="text-gray-700 font-medium text-2xl mt-6">→</div>
                 
                 <div className="flex flex-col flex-1">
                   <label className="text-sm font-medium text-gray-700 mb-2">Fin</label>
-                  <select
+                  <input
+                    type="time"
                     value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
+                    onChange={e => setEndTime(e.target.value)}
                     className="border-2 border-blue-200 rounded-xl px-4 py-3 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200 bg-white"
-                  >
-                    <option value="">Choisir l'heure</option>
-                    {Array.from({ length: 24 }, (_, i) => {
-                      const hour = i.toString().padStart(2, '0');
-                      return (
-                        <option key={hour} value={`${hour}:00`}>
-                          {hour}:00
-                        </option>
-                      );
-                    })}
-                  </select>
+                    step="60"
+                  />
                 </div>
               </div>
 
