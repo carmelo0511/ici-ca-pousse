@@ -43,7 +43,7 @@ const CalendarView = ({
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-xl p-2 sm:p-4 border border-gray-100 fade-in-up calendar-scrollable w-full max-w-xs sm:max-w-md mx-auto">
+      <div className="bg-white rounded-3xl shadow-xl p-2 sm:p-4 border border-gray-100 fade-in-up calendar-scrollable w-full max-w-full overflow-x-auto">
         <div className="flex items-center justify-between mb-4">
           <button
             className="p-2 rounded-full hover:bg-gray-100 transition"

@@ -85,7 +85,7 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">{t('total_workouts')}</p>
@@ -95,7 +95,7 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-green-600 text-white p-8 rounded-3xl shadow-xl">
+        <div className="bg-green-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-green-100 text-sm font-medium">{t('total_sets')}</p>
@@ -105,7 +105,7 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-purple-600 text-white p-8 rounded-3xl shadow-xl">
+        <div className="bg-purple-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-purple-100 text-sm font-medium">{t('total_reps')}</p>
@@ -117,7 +117,7 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
 
 
 
-        <div className="bg-red-600 text-white p-8 rounded-3xl shadow-xl">
+        <div className="bg-red-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-red-100 text-sm font-medium">{t('avg_duration')}</p>
@@ -127,7 +127,7 @@ const StatsView = ({ stats, workouts, onEditWorkout, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-indigo-600 text-white p-8 rounded-3xl shadow-xl">
+        <div className="bg-indigo-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-indigo-100 text-sm font-medium">{t('regularity')}</p>
