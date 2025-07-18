@@ -528,7 +528,7 @@ function WorkoutList({
                   autoFocus
                 />
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 gap-4 mb-6">
                 {filteredExercises.length === 0 ? (
                   <div className="col-span-2 sm:col-span-3 text-center text-gray-400 py-8">{t('no_exercise_found')}</div>
                 ) : (
