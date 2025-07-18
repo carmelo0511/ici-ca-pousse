@@ -22,8 +22,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  transform: scale(0.85);
-  transform-origin: top center;
 }
 
 /* Pour le conteneur principal (optionnel, si besoin d'encore plus de sécurité) */
