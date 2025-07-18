@@ -100,7 +100,7 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 w-full min-h-screen h-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Badges</h1>
         <div className="flex items-center space-x-2">

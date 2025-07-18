@@ -59,7 +59,7 @@ const Notifications = ({ user }) => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 w-full min-h-screen h-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Notifications</h1>
         {unreadCount > 0 && (
