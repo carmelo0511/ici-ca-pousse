@@ -546,7 +546,7 @@ function WorkoutList({
                                 <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}>
                                   {selectedMuscleGroup === 'cardio' ? <Heart className="h-4 w-4" /> : <Dumbbell className="h-4 w-4" />}
                                 </div>
-                                <span className="flex-1">{t(exercise)}</span>
+                                <span className="flex-1 whitespace-nowrap text-center text-sm font-medium overflow-hidden text-ellipsis">{t(exercise)}</span>
                                 <span className="text-gray-400">→</span>
                               </div>
                             </button>
@@ -573,7 +573,7 @@ function WorkoutList({
                             <div className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}>
                               {selectedMuscleGroup === 'cardio' ? <Heart className="h-4 w-4" /> : <Dumbbell className="h-4 w-4" />}
                             </div>
-                            <span className="flex-1">{t(exercise)}</span>
+                            <span className="flex-1 whitespace-nowrap text-center text-sm font-medium overflow-hidden text-ellipsis">{t(exercise)}</span>
                             <span className="text-gray-400">→</span>
                           </div>
                         </button>
