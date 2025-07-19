@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useFriends } from '../../hooks/useFriends';
@@ -8,7 +8,30 @@ function StatsComparison({ user }) {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [comparisonData, setComparisonData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
   const { friends } = useFriends(user);
+
+  // Fonction pour récupérer tous les utilisateurs
+  const fetchAllUsers = async () => {
+    try {
+      const usersQuery = query(collection(db, 'users'));
+      const usersSnapshot = await getDocs(usersQuery);
+      const users = usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+      return users;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des utilisateurs:', error);
+      return [];
+    }
+  };
+
+  // Récupérer tous les utilisateurs au chargement
+  useEffect(() => {
+    const loadUsers = async () => {
+      const users = await fetchAllUsers();
+      setAllUsers(users);
+    };
+    loadUsers();
+  }, []);
 
   // Récupère les stats détaillées pour un ami
   const fetchFriendStats = async (friend) => {
@@ -76,23 +99,23 @@ function StatsComparison({ user }) {
           Comparaison de Stats
         </h2>
         
-        {/* Sélection d'ami */}
+        {/* Sélection d'utilisateur */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Choisir un ami à comparer :
+            Choisir un utilisateur à comparer :
           </label>
           <div className="flex flex-wrap gap-2">
-            {friends.map(friend => (
+            {allUsers.filter(u => u.uid !== user?.uid).map(otherUser => (
               <button
-                key={friend.uid}
-                onClick={() => fetchFriendStats(friend)}
+                key={otherUser.uid}
+                onClick={() => fetchFriendStats(otherUser)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  selectedFriend?.uid === friend.uid
+                  selectedFriend?.uid === otherUser.uid
                     ? 'bg-indigo-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {friend.displayName || friend.email}
+                {otherUser.displayName || otherUser.email}
               </button>
             ))}
           </div>

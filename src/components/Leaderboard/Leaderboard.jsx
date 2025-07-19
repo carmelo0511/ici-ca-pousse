@@ -23,47 +23,66 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const { friends } = useFriends(currentUser);
 
-  // Récupère les stats pour chaque ami + soi-même
+  // Fonction pour récupérer tous les utilisateurs
+  const fetchAllUsers = async () => {
+    try {
+      const usersQuery = query(collection(db, 'users'));
+      const usersSnapshot = await getDocs(usersQuery);
+      const users = usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+      return users;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des utilisateurs:', error);
+      return [];
+    }
+  };
+
+  // Récupère les stats pour tous les utilisateurs
   useEffect(() => {
     const fetchStats = async () => {
       setLoading(true);
-      const allUsers = [currentUser, ...friends];
-      const statsArr = [];
+      
+      try {
+        // Récupérer tous les utilisateurs
+        const allUsers = await fetchAllUsers();
+        const statsArr = [];
 
-      for (const u of allUsers) {
-        if (!u) continue;
-        
-        try {
-          // Récupérer les workouts de l'utilisateur
-          const q = query(collection(db, 'workouts'), where('userId', '==', u.uid));
-          const snap = await getDocs(q);
-          const workouts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        for (const u of allUsers) {
+          if (!u) continue;
           
-          // Calculer les statistiques
-          const userStats = calculateUserStats(workouts, selectedPeriod);
-          
-          // User data for leaderboard
-          
-          statsArr.push({
-            uid: u.uid,
-            displayName: u.displayName || u.email,
-            badges: u.badges || [],
-            selectedBadge: u.selectedBadge || null,
-            photoURL: u.photoURL,
-            stats: userStats,
-            workouts: workouts
-          });
-        } catch (error) {
-          console.error(`Erreur lors de la récupération des stats pour ${u.displayName}:`, error);
+          try {
+            // Récupérer les workouts de l'utilisateur
+            const q = query(collection(db, 'workouts'), where('userId', '==', u.uid));
+            const snap = await getDocs(q);
+            const workouts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Calculer les statistiques
+            const userStats = calculateUserStats(workouts, selectedPeriod);
+            
+            // User data for leaderboard
+            statsArr.push({
+              uid: u.uid,
+              displayName: u.displayName || u.email,
+              badges: u.badges || [],
+              selectedBadge: u.selectedBadge || null,
+              photoURL: u.photoURL,
+              stats: userStats,
+              workouts: workouts
+            });
+          } catch (error) {
+            console.error(`Erreur lors de la récupération des stats pour ${u.displayName}:`, error);
+          }
         }
-      }
 
-      setStats(statsArr);
+        setStats(statsArr);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données:', error);
+      }
+      
       setLoading(false);
     };
 
     if (currentUser) fetchStats();
-  }, [currentUser, friends, selectedPeriod]); // Ajout de friends dans les dépendances pour synchronisation
+  }, [currentUser, selectedPeriod]); // Suppression de friends des dépendances
 
   // Obtenir le classement actuel - par défaut basé sur les séances
   const currentRanking = getLeaderboardRanking(stats, selectedMetric);
@@ -108,7 +127,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
         <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           🏆 Leaderboard
         </h2>
-        {friends.length > 0 && (
+        {onShowComparison && (
           <button
             onClick={onShowComparison}
             className="flex items-center justify-center space-x-2 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium w-full sm:w-auto"
