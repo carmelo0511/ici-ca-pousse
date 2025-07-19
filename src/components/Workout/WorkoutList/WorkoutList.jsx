@@ -194,7 +194,8 @@ function WorkoutList({
                       exercise.type === 'custom' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
                     }`}>
                       {exercise.type === 'cardio' ? 'Cardio' : 
-                       exercise.type === 'custom' ? 'Personnalisé' : 'Musculation'}
+                       exercise.type === 'custom' ? 'Personnalisé' : 
+                       exercise.type ? t(exercise.type) : 'Musculation'}
                     </span>
                   </div>
                 </div>
@@ -525,7 +526,7 @@ function WorkoutList({
                         {favoriteInGroup.map((exercise) => (
                           <div key={exercise} className="relative">
                             <button
-                              onClick={() => addExerciseToWorkout(exercise)}
+                              onClick={() => addExerciseToWorkout(exercise, selectedMuscleGroup)}
                               className="w-full text-left p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 hover:from-yellow-100 hover:to-yellow-200 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-yellow-200 hover:border-yellow-400 hover:shadow-md transform hover:scale-[1.02]"
                             >
                               <div className="flex items-center space-x-3">
@@ -552,7 +553,7 @@ function WorkoutList({
                     {nonFavoriteInGroup.map((exercise) => (
                       <div key={exercise} className="relative">
                         <button
-                          onClick={() => addExerciseToWorkout(exercise)}
+                          onClick={() => addExerciseToWorkout(exercise, selectedMuscleGroup)}
                           className="w-full text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
                         >
                           <div className="flex items-center space-x-3">
@@ -587,7 +588,8 @@ function WorkoutList({
                 <button
                   onClick={() => {
                     if (customExerciseName.trim()) {
-                      addExerciseToWorkout(customExerciseName.trim());
+                      // Passer l'exercice avec sa catégorie musculaire
+                      addExerciseToWorkout(customExerciseName.trim(), selectedMuscleGroup);
                       setCustomExerciseName('');
                       setShowAddExercise(false);
                       setSelectedMuscleGroup(null);

@@ -27,8 +27,8 @@ export default function useWorkoutLogic({
   workouts
 }) {
   // Ajout d'un exercice à la séance
-  const addExerciseToWorkout = useCallback((exerciseName) => {
-    addExercise(exerciseName);
+  const addExerciseToWorkout = useCallback((exerciseName, muscleGroup = null) => {
+    addExercise(exerciseName, muscleGroup);
     setShowAddExercise(false);
     setSelectedMuscleGroup(null);
     showToastMsg(t('exercise_added'));

@@ -5,16 +5,16 @@ export const useExercises = () => {
   const [exercises, setExercises] = useState([]);
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
 
-  const addExercise = (exerciseName) => {
+  const addExercise = (exerciseName, muscleGroup = null) => {
     if (!exerciseName || exerciseName.trim() === '') return;
     
     const newExercise = {
       id: Date.now(),
       name: exerciseName.trim(),
       sets: [{ reps: 0, weight: 0, duration: 0 }],
-      type: Object.keys(exerciseDatabase).find(key => 
+      type: muscleGroup || Object.keys(exerciseDatabase).find(key => 
         exerciseDatabase[key].includes(exerciseName)
-      ) || 'custom' // Type par défaut pour les exercices personnalisés
+      ) || 'custom' // Utilise la catégorie sélectionnée ou trouve automatiquement
     };
     setExercises(prev => [...prev, newExercise]);
     setSelectedMuscleGroup(null);

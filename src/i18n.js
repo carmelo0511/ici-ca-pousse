@@ -39,6 +39,15 @@ const resources = {
       "no_exercises_to_save": "Aucun exercice à sauvegarder",
       "workout_creation_error": "Erreur lors de la création de la séance",
       "workout_save_error": "Erreur lors de la sauvegarde de la séance",
+      // Catégories musculaires
+      "pectoraux": "Pectoraux",
+      "dos": "Dos",
+      "épaules": "Épaules",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "jambes": "Jambes",
+      "abdos": "Abdominaux",
+      "cardio": "Cardio",
       // Exercices français complets
       "Développé couché": "Développé couché",
       "Développé incliné": "Développé incliné",
@@ -232,6 +241,15 @@ const resources = {
       "no_exercises_to_save": "No exercises to save",
       "workout_creation_error": "Error creating workout",
       "workout_save_error": "Error saving workout",
+      // Catégories musculaires
+      "pectoraux": "Chest",
+      "dos": "Back",
+      "épaules": "Shoulders",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "jambes": "Legs",
+      "abdos": "Abs",
+      "cardio": "Cardio",
       // Exercices anglais complets
       "Développé couché": "Bench Press",
       "Développé incliné": "Incline Press",
