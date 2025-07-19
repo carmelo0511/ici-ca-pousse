@@ -204,6 +204,18 @@ service firebase.storage {
 }
 ```
 
+### 5. Fichiers de configuration Firebase
+Le projet contient plusieurs fichiers de configuration Firebase utiles :
+
+- **`firebase-storage-rules.txt`** : Règles Storage complètes pour les photos de profil
+- **`firebase-firestore-rules-default.txt`** : Règles Firestore par défaut (accès complet)
+- **`firebase-storage-rules-default.txt`** : Règles Storage par défaut (accès complet)
+- **`FIREBASE_SETUP.md`** : Guide détaillé de configuration Firebase
+- **`REFACTORING_NOTES.md`** : Notes sur l'architecture et les refactorings
+- **`ARCHITECTURE.md`** : Documentation de l'architecture du projet
+
+**⚠️ Note** : Les fichiers `*-default.txt` contiennent des règles moins sécurisées pour le développement. Utilisez les règles sécurisées en production.
+
 ## 🚀 Déploiement
 
 ### Déploiement automatique (recommandé)
