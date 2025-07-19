@@ -12,7 +12,7 @@ export const useExercises = () => {
       sets: [{ reps: 0, weight: 0, duration: 0 }],
       type: Object.keys(exerciseDatabase).find(key => 
         exerciseDatabase[key].includes(exerciseName)
-      )
+      ) || 'custom' // Type par défaut pour les exercices personnalisés
     };
     setExercises(prev => [...prev, newExercise]);
     setSelectedMuscleGroup(null);

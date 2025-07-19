@@ -12,21 +12,28 @@ export function parseLocalDate(dateStr) {
 }
 
 export const createWorkout = (exercises, date, duration, workoutId = undefined, startTime = null, endTime = null) => {
-  if (exercises.length === 0) return null;
+  if (!exercises || exercises.length === 0) return null;
+  
+  // S'assurer que tous les exercices ont un type valide
+  const validatedExercises = exercises.map(exercise => ({
+    ...exercise,
+    type: exercise.type || 'custom', // Type par défaut si manquant
+    sets: exercise.sets || [{ reps: 0, weight: 0, duration: 0 }] // Sets par défaut si manquant
+  }));
   
   return {
     ...(workoutId ? { id: workoutId } : {}),
     date,
-    exercises,
+    exercises: validatedExercises,
     duration: parseInt(duration) || DEFAULT_WORKOUT_DURATION,
     startTime,
     endTime,
-    totalSets: exercises.reduce((acc, ex) => acc + ex.sets.length, 0),
-    totalReps: exercises.reduce((acc, ex) => 
-      acc + ex.sets.reduce((setAcc, set) => setAcc + set.reps, 0), 0
+    totalSets: validatedExercises.reduce((acc, ex) => acc + (ex.sets?.length || 0), 0),
+    totalReps: validatedExercises.reduce((acc, ex) => 
+      acc + (ex.sets?.reduce((setAcc, set) => setAcc + (set.reps || 0), 0) || 0), 0
     ),
-    totalWeight: exercises.reduce((acc, ex) => 
-      acc + ex.sets.reduce((setAcc, set) => setAcc + (set.weight * set.reps), 0), 0
+    totalWeight: validatedExercises.reduce((acc, ex) => 
+      acc + (ex.sets?.reduce((setAcc, set) => setAcc + ((set.weight || 0) * (set.reps || 0)), 0) || 0), 0
     )
   };
 };

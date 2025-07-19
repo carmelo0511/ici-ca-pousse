@@ -36,6 +36,9 @@ const resources = {
       "confirm_delete_workout": "Êtes-vous sûr de vouloir supprimer cette séance ? 🗑️",
       "error_update": "Erreur lors de la modification de la séance.",
       "error_delete": "Erreur lors de la suppression de la séance.",
+      "no_exercises_to_save": "Aucun exercice à sauvegarder",
+      "workout_creation_error": "Erreur lors de la création de la séance",
+      "workout_save_error": "Erreur lors de la sauvegarde de la séance",
       // Exercices français complets
       "Développé couché": "Développé couché",
       "Développé incliné": "Développé incliné",
@@ -226,6 +229,9 @@ const resources = {
       "confirm_delete_workout": "Are you sure you want to delete this workout? 🗑️",
       "error_update": "Error updating workout.",
       "error_delete": "Error deleting workout.",
+      "no_exercises_to_save": "No exercises to save",
+      "workout_creation_error": "Error creating workout",
+      "workout_save_error": "Error saving workout",
       // Exercices anglais complets
       "Développé couché": "Bench Press",
       "Développé incliné": "Incline Press",

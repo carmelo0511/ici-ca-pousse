@@ -190,9 +190,11 @@ function WorkoutList({
                   <div>
                     <h3 className="text-xl font-bold text-gray-800">{exercise.name}</h3>
                     <span className={`text-sm font-medium px-3 py-1 rounded-full ${
-                      exercise.type === 'cardio' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                      exercise.type === 'cardio' ? 'bg-red-100 text-red-700' : 
+                      exercise.type === 'custom' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
                     }`}>
-                      {exercise.type === 'cardio' ? 'Cardio' : 'Musculation'}
+                      {exercise.type === 'cardio' ? 'Cardio' : 
+                       exercise.type === 'custom' ? 'Personnalisé' : 'Musculation'}
                     </span>
                   </div>
                 </div>
