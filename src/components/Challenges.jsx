@@ -340,13 +340,13 @@ const Challenges = ({ user }) => {
                           <div className="flex space-x-2">
                             <button
                               onClick={() => handleAcceptChallenge(challenge.id)}
-                              className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600"
+                              className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition-colors shadow-sm"
                             >
                               Accepter
                             </button>
                             <button
                               onClick={() => handleDeclineChallenge(challenge.id)}
-                              className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                              className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition-colors shadow-sm"
                             >
                               Refuser
                             </button>
@@ -490,13 +490,13 @@ const Challenges = ({ user }) => {
                           <div className="flex space-x-2">
                             <button
                               onClick={() => handleAcceptChallenge(challenge.id)}
-                              className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600"
+                              className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition-colors shadow-sm"
                             >
                               Accepter
                             </button>
                             <button
                               onClick={() => handleDeclineChallenge(challenge.id)}
-                              className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                              className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition-colors shadow-sm"
                             >
                               Refuser
                             </button>
@@ -568,10 +568,10 @@ const Challenges = ({ user }) => {
               {challengeTypes.map(type => (
                 <button
                   key={type.id}
-                  className={`p-3 border rounded-lg text-left ${
+                  className={`p-3 border rounded-lg text-left transition-all ${
                     challengeType === type.id 
-                      ? 'border-blue-500 bg-blue-50' 
-                      : 'border-gray-300'
+                      ? 'border-blue-500 bg-blue-50 shadow-md' 
+                      : 'border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400'
                   }`}
                   onClick={() => setChallengeType(type.id)}
                 >
@@ -599,7 +599,7 @@ const Challenges = ({ user }) => {
 
           <div className="flex space-x-3">
             <button
-              className="flex-1 p-3 border border-gray-300 rounded-lg"
+              className="flex-1 p-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 hover:border-gray-400 transition-all"
               onClick={() => setShowCreateModal(false)}
             >
               Annuler

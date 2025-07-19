@@ -1,6 +1,8 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { BADGE_TYPES } from '../constants/badges';
 import { saveUserBadges } from '../utils/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../utils/firebase';
 
 // Fonction pour calculer les badges d'un utilisateur
 export function calculateUserBadges(workouts = [], challenges = [], user) {
@@ -171,50 +173,175 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   if (workouts.length >= 100) badges.push(BADGE_TYPES.ROUTINE_MASTER);
   if (uniqueExercises >= 5) badges.push(BADGE_TYPES.SPECIALIST);
 
+  // Badges d'anime japonais
+  // Naruto Runner - Course rapide
+  const fastWorkouts = workouts.filter(w => {
+    const duration = w.duration || 0;
+    return duration < 30; // Séances de moins de 30 minutes
+  });
+  if (fastWorkouts.length >= 10) badges.push(BADGE_TYPES.NARUTO_RUNNER);
+
+  // Dragon Ball Warrior - Force surhumaine
+  if (maxWeight >= 200) badges.push(BADGE_TYPES.DRAGON_BALL_WARRIOR);
+
+  // One Piece Navigator - Navigation dans les défis
+  if (challenges.length >= 10) badges.push(BADGE_TYPES.ONE_PIECE_NAVIGATOR);
+
+  // Attack on Titan Soldier - Courage face aux défis
+  const difficultChallenges = challenges.filter(c => c.duration >= 30);
+  if (difficultChallenges.length >= 5) badges.push(BADGE_TYPES.ATTACK_ON_TITAN_SOLDIER);
+
+  // Demon Slayer Hashira - Techniques avancées
+  if (uniqueExercises >= 15) badges.push(BADGE_TYPES.DEMON_SLAYER_HASHIRA);
+
+  // My Hero Academia Hero - Héros en devenir
+  if (workouts.length >= 50 && maxStreak >= 15) badges.push(BADGE_TYPES.MY_HERO_ACADEMIA_HERO);
+
+  // Pokemon Trainer - Collectionneur de badges
+  const totalBadgesEarned = workouts.length >= 10 ? 1 : 0 + 
+                           (maxStreak >= 5 ? 1 : 0) + 
+                           (maxWeight >= 100 ? 1 : 0) + 
+                           (challenges.length >= 5 ? 1 : 0) +
+                           (uniqueExercises >= 5 ? 1 : 0) +
+                           (workouts.length >= 25 ? 1 : 0) +
+                           (workouts.length >= 50 ? 1 : 0) +
+                           (workouts.length >= 100 ? 1 : 0) +
+                           (wonChallenges.length >= 5 ? 1 : 0) +
+                           (earlyWorkouts.length >= 5 ? 1 : 0);
+  if (totalBadgesEarned >= 10) badges.push(BADGE_TYPES.POKEMON_TRAINER);
+
+  // Sailor Moon Guardian - Protectrice de la motivation
+  if (workouts.length >= 100 && maxStreak >= 20) badges.push(BADGE_TYPES.SAILOR_MOON_GUARDIAN);
+
+  // Bleach Soul Reaper - Maître de la discipline
+  if (workouts.length >= 200) badges.push(BADGE_TYPES.BLEACH_SOUL_REAPER);
+
+  // Fullmetal Alchemist - Transmutation parfaite
+  if (maxWeight >= 150 && workouts.length >= 75) badges.push(BADGE_TYPES.FULLMETAL_ALCHEMIST);
+
+  // Death Note Detective - Stratégie et planification
+  if (challenges.length >= 20) badges.push(BADGE_TYPES.DEATH_NOTE_DETECTIVE);
+
+  // Tokyo Ghoul Investigator - Perception aiguisée
+  if (uniqueExercises >= 25) badges.push(BADGE_TYPES.TOKYO_GHOUL_INVESTIGATOR);
+
+  // Hunter x Hunter Hunter - Chasseur d'objectifs
+  if (workouts.length >= 150) badges.push(BADGE_TYPES.HUNTER_X_HUNTER_HUNTER);
+
+  // Fairy Tail Mage - Magie de l'amitié
+  if (challenges.length >= 15 && wonChallenges.length >= 10) badges.push(BADGE_TYPES.FAIRY_TAIL_MAGE);
+
+  // Sword Art Online Player - Maître du virtuel
+  if (workouts.length >= 300) badges.push(BADGE_TYPES.SWORD_ART_ONLINE_PLAYER);
+
+  // JoJo Bizarre Adventure - Style et pose parfaits
+  if (maxWeight >= 100 && uniqueExercises >= 10) badges.push(BADGE_TYPES.JOJO_BIZARRE_ADVENTURE);
+
+  // Evangelion Pilot - Synchronisation parfaite
+  if (workouts.length >= 250 && maxStreak >= 30) badges.push(BADGE_TYPES.EVANGELION_PILOT);
+
+  // Ghost in the Shell - Conscience augmentée
+  if (workouts.length >= 400) badges.push(BADGE_TYPES.GHOST_IN_THE_SHELL);
+
+  // Akira Psychic - Pouvoirs psychiques
+  if (maxWeight >= 300) badges.push(BADGE_TYPES.AKIRA_PSYCHIC);
+
+  // Cowboy Bebop Bounty - Chasseur de records
+  if (workouts.length >= 500) badges.push(BADGE_TYPES.COWBOY_BEBOP_BOUNTY);
+
   return [...new Set(badges)]; // Supprimer les doublons
 }
 
 // Hook pour utiliser les badges
 export function useBadges(workouts, challenges, user, addBadgeUnlockXP) {
-  const badges = useMemo(() => {
+  const [storedBadges, setStoredBadges] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Charger les badges stockés dans Firebase
+  useEffect(() => {
+    if (!user?.uid) {
+      setLoading(false);
+      return;
+    }
+
+    const loadStoredBadges = async () => {
+      try {
+        setLoading(true);
+        const userRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setStoredBadges(userData.badges || []);
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des badges stockés:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStoredBadges();
+
+    // Écouter l'événement de rafraîchissement des badges
+    const handleRefreshBadges = () => {
+      loadStoredBadges();
+    };
+
+    window.addEventListener('refreshBadges', handleRefreshBadges);
+
+    return () => {
+      window.removeEventListener('refreshBadges', handleRefreshBadges);
+    };
+  }, [user?.uid]);
+
+  // Calculer les badges automatiques
+  const calculatedBadges = useMemo(() => {
     return calculateUserBadges(workouts, challenges, user);
   }, [workouts, challenges, user]);
 
-  const badgeCount = badges.length;
+  // Combiner les badges calculés avec les badges stockés
+  const allBadges = useMemo(() => {
+    const combined = [...new Set([...calculatedBadges, ...storedBadges])];
+    return combined;
+  }, [calculatedBadges, storedBadges]);
+
+  const badgeCount = allBadges.length;
 
   // Sauvegarder automatiquement les badges dans Firebase quand ils changent
   useEffect(() => {
-    if (user && user.uid && badges.length > 0) {
+    if (user && user.uid && allBadges.length > 0 && !loading) {
       // Vérifier si les badges ont changé par rapport à ceux stockés
       const currentBadges = user.badges || [];
-      const hasChanged = badges.length !== currentBadges.length || 
-                        !badges.every(badge => currentBadges.includes(badge));
+      const hasChanged = allBadges.length !== currentBadges.length || 
+                        !allBadges.every(badge => currentBadges.includes(badge));
       
       if (hasChanged) {
-        saveUserBadges(user.uid, badges).catch(error => {
+        saveUserBadges(user.uid, allBadges).catch(error => {
           console.error('Erreur lors de la sauvegarde des badges:', error);
         });
         
         // Ajouter de l'XP pour les nouveaux badges débloqués
         if (addBadgeUnlockXP) {
-          const newBadges = badges.filter(badge => !currentBadges.includes(badge));
+          const newBadges = allBadges.filter(badge => !currentBadges.includes(badge));
           newBadges.forEach(async (badge) => {
-                          try {
-                await addBadgeUnlockXP(badge);
-                // Badge débloqué avec succès
-              } catch (error) {
+            try {
+              await addBadgeUnlockXP(badge);
+              // Badge débloqué avec succès
+            } catch (error) {
               console.error('Erreur lors de l\'ajout d\'XP pour badge:', error);
             }
           });
         }
       }
     }
-  }, [badges, user, addBadgeUnlockXP]);
+  }, [allBadges, user, addBadgeUnlockXP, loading]);
 
   return {
-    badges,
+    badges: allBadges,
     badgeCount,
-    hasBadge: (badgeType) => badges.includes(badgeType),
-    selectedBadge: user?.selectedBadge || null
+    hasBadge: (badgeType) => allBadges.includes(badgeType),
+    selectedBadge: user?.selectedBadge || null,
+    loading
   };
 } 

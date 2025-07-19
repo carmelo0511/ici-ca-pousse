@@ -443,6 +443,128 @@ export const BADGE_CONFIG = {
     icon: '🎯',
     description: 'Expert dans un domaine',
     color: 'bg-red-100 text-red-800 border-red-200'
+  },
+  
+  // Badges d'anime japonais
+  [BADGE_TYPES.NARUTO_RUNNER]: {
+    name: 'Coureur Naruto',
+    icon: '🏃‍♂️',
+    description: 'Course rapide comme Naruto',
+    color: 'bg-orange-100 text-orange-800 border-orange-200'
+  },
+  [BADGE_TYPES.DRAGON_BALL_WARRIOR]: {
+    name: 'Guerrier Dragon Ball',
+    icon: '🐉',
+    description: 'Force surhumaine atteinte',
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+  },
+  [BADGE_TYPES.ONE_PIECE_NAVIGATOR]: {
+    name: 'Navigateur One Piece',
+    icon: '🧭',
+    description: 'Navigation parfaite dans les défis',
+    color: 'bg-blue-100 text-blue-800 border-blue-200'
+  },
+  [BADGE_TYPES.ATTACK_ON_TITAN_SOLDIER]: {
+    name: 'Soldat Attack on Titan',
+    icon: '⚔️',
+    description: 'Courage face aux défis difficiles',
+    color: 'bg-gray-100 text-gray-800 border-gray-200'
+  },
+  [BADGE_TYPES.DEMON_SLAYER_HASHIRA]: {
+    name: 'Hashira Demon Slayer',
+    icon: '🗡️',
+    description: 'Maître des techniques avancées',
+    color: 'bg-purple-100 text-purple-800 border-purple-200'
+  },
+  [BADGE_TYPES.MY_HERO_ACADEMIA_HERO]: {
+    name: 'Héros My Hero Academia',
+    icon: '🦸‍♂️',
+    description: 'Héros en devenir',
+    color: 'bg-green-100 text-green-800 border-green-200'
+  },
+  [BADGE_TYPES.POKEMON_TRAINER]: {
+    name: 'Dresseur Pokémon',
+    icon: '⚡',
+    description: 'Collectionneur de badges',
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+  },
+  [BADGE_TYPES.SAILOR_MOON_GUARDIAN]: {
+    name: 'Gardienne Sailor Moon',
+    icon: '🌙',
+    description: 'Protectrice de la motivation',
+    color: 'bg-pink-100 text-pink-800 border-pink-200'
+  },
+  [BADGE_TYPES.BLEACH_SOUL_REAPER]: {
+    name: 'Shinigami Bleach',
+    icon: '⚰️',
+    description: 'Maître de la discipline',
+    color: 'bg-black-100 text-black-800 border-black-200'
+  },
+  [BADGE_TYPES.FULLMETAL_ALCHEMIST]: {
+    name: 'Alchimiste Fullmetal',
+    icon: '⚗️',
+    description: 'Transmutation parfaite',
+    color: 'bg-red-100 text-red-800 border-red-200'
+  },
+  [BADGE_TYPES.DEATH_NOTE_DETECTIVE]: {
+    name: 'Détective Death Note',
+    icon: '📓',
+    description: 'Stratégie et planification',
+    color: 'bg-gray-100 text-gray-800 border-gray-200'
+  },
+  [BADGE_TYPES.TOKYO_GHOUL_INVESTIGATOR]: {
+    name: 'Enquêteur Tokyo Ghoul',
+    icon: '👁️',
+    description: 'Perception aiguisée',
+    color: 'bg-purple-100 text-purple-800 border-purple-200'
+  },
+  [BADGE_TYPES.HUNTER_X_HUNTER_HUNTER]: {
+    name: 'Hunter Hunter x Hunter',
+    icon: '🎯',
+    description: 'Chasseur d\'objectifs',
+    color: 'bg-green-100 text-green-800 border-green-200'
+  },
+  [BADGE_TYPES.FAIRY_TAIL_MAGE]: {
+    name: 'Mage Fairy Tail',
+    icon: '🧙‍♂️',
+    description: 'Magie de l\'amitié',
+    color: 'bg-blue-100 text-blue-800 border-blue-200'
+  },
+  [BADGE_TYPES.SWORD_ART_ONLINE_PLAYER]: {
+    name: 'Joueur Sword Art Online',
+    icon: '⚔️',
+    description: 'Maître du virtuel',
+    color: 'bg-indigo-100 text-indigo-800 border-indigo-200'
+  },
+  [BADGE_TYPES.JOJO_BIZARRE_ADVENTURE]: {
+    name: 'Aventurier JoJo',
+    icon: '💪',
+    description: 'Style et pose parfaits',
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+  },
+  [BADGE_TYPES.EVANGELION_PILOT]: {
+    name: 'Pilote Evangelion',
+    icon: '🤖',
+    description: 'Synchronisation parfaite',
+    color: 'bg-purple-100 text-purple-800 border-purple-200'
+  },
+  [BADGE_TYPES.GHOST_IN_THE_SHELL]: {
+    name: 'Ghost in the Shell',
+    icon: '🤖',
+    description: 'Conscience augmentée',
+    color: 'bg-cyan-100 text-cyan-800 border-cyan-200'
+  },
+  [BADGE_TYPES.AKIRA_PSYCHIC]: {
+    name: 'Psychique Akira',
+    icon: '🧠',
+    description: 'Pouvoirs psychiques',
+    color: 'bg-pink-100 text-pink-800 border-pink-200'
+  },
+  [BADGE_TYPES.COWBOY_BEBOP_BOUNTY]: {
+    name: 'Chasseur de Primes Cowboy Bebop',
+    icon: '🌙',
+    description: 'Chasseur de records',
+    color: 'bg-blue-100 text-blue-800 border-blue-200'
   }
 };
 

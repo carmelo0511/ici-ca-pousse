@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Card from '../Card';
-import { Trophy, Lock, TrendingUp } from 'lucide-react';
+import { Trophy, Lock, TrendingUp, Gift, Clock } from 'lucide-react';
 import Toast from '../Toast';
 import { useBadges } from '../../hooks/useBadges';
+import { useWeeklyBadgeUnlock } from '../../hooks/useWeeklyBadgeUnlock';
 import { BADGE_CONFIG } from './Badges';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../utils/firebase';
 
 const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) => {
   const [showLocked, setShowLocked] = useState(false);
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+  const [selectedBadgeToUnlock, setSelectedBadgeToUnlock] = useState(null);
   const [toast, setToast] = useState(null);
   const { badges, badgeCount, selectedBadge } = useBadges(workouts, challenges, user, addBadgeUnlockXP);
+  const { loading: unlockLoading, canUnlock, unlockBadge, getTimeUntilNextUnlock, resetWeeklyUnlock } = useWeeklyBadgeUnlock(user);
 
   // Tous les badges disponibles
   const allBadges = Object.keys(BADGE_CONFIG).map(type => ({
@@ -32,6 +36,16 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
       });
     }
   }, [badgeCount, unlockedBadges]);
+
+  // Notification quand on peut débloquer un badge hebdomadaire
+  useEffect(() => {
+    if (canUnlock && !unlockLoading) {
+      setToast({ 
+        message: `🎁 Tu peux débloquer un badge de ton choix cette semaine !`, 
+        type: 'success' 
+      });
+    }
+  }, [canUnlock, unlockLoading]);
 
   const handleBadgeSelect = async (badgeId) => {
     try {
@@ -56,6 +70,46 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
       console.error('Erreur lors de la sélection du badge:', error);
       setToast({ 
         message: 'Erreur lors de la sélection du badge', 
+        type: 'error' 
+      });
+    }
+  };
+
+  const handleWeeklyUnlock = async () => {
+    if (!selectedBadgeToUnlock) return;
+    
+    try {
+      await unlockBadge(selectedBadgeToUnlock);
+      setToast({ 
+        message: `🎉 Badge "${BADGE_CONFIG[selectedBadgeToUnlock]?.name}" débloqué avec succès !`, 
+        type: 'success' 
+      });
+      setShowUnlockModal(false);
+      setSelectedBadgeToUnlock(null);
+      
+      // Forcer le rafraîchissement des badges après un délai
+      setTimeout(() => {
+        // Déclencher un événement personnalisé pour rafraîchir les badges
+        window.dispatchEvent(new CustomEvent('refreshBadges'));
+      }, 1500);
+    } catch (error) {
+      setToast({ 
+        message: 'Erreur lors du déblocage du badge', 
+        type: 'error' 
+      });
+    }
+  };
+
+  const handleResetWeeklyUnlock = async () => {
+    try {
+      await resetWeeklyUnlock();
+      setToast({ 
+        message: '🔄 Déblocage hebdomadaire réinitialisé ! Vous pouvez maintenant débloquer un nouveau badge.', 
+        type: 'success' 
+      });
+    } catch (error) {
+      setToast({ 
+        message: 'Erreur lors de la réinitialisation', 
         type: 'error' 
       });
     }
@@ -134,6 +188,62 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
         </Card>
       </div>
 
+      {/* Déblocage hebdomadaire */}
+      <Card className="mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+              <Gift className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg">Déblocage hebdomadaire</h3>
+              <p className="text-sm text-gray-600">
+                Débloque un badge de ton choix une fois par semaine !
+              </p>
+            </div>
+          </div>
+          <div className="text-right">
+            {canUnlock ? (
+              <div className="flex space-x-2">
+                <button
+                  onClick={handleResetWeeklyUnlock}
+                  className="px-3 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:from-orange-600 hover:to-red-700 transition-all font-medium text-sm"
+                  title="Réinitialiser pour tester"
+                >
+                  🔄 Test
+                </button>
+                <button
+                  onClick={() => setShowUnlockModal(true)}
+                  className="px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all font-medium"
+                  disabled={unlockLoading}
+                >
+                  {unlockLoading ? 'Chargement...' : 'Débloquer un badge'}
+                </button>
+              </div>
+            ) : (
+              <div className="text-center">
+                <div className="flex items-center justify-center space-x-1 text-gray-600">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-sm font-medium">Prochain déblocage</span>
+                </div>
+                {(() => {
+                  const timeLeft = getTimeUntilNextUnlock();
+                  return timeLeft ? (
+                    <div className="text-xs text-gray-500 mt-1">
+                      {timeLeft.days}j {timeLeft.hours}h
+                    </div>
+                  ) : (
+                    <div className="text-xs text-gray-500 mt-1">Bientôt disponible</div>
+                  );
+                })()}
+              </div>
+            )}
+          </div>
+        </div>
+      </Card>
+
+
+
       {/* Onglets et sélection de badge */}
       <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-6">
         <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg flex-1">
@@ -211,6 +321,65 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
             <div>• Entraîne-toi 3 jours consécutifs pour débloquer "Série d'entraînement"</div>
           </div>
         </Card>
+      )}
+
+      {/* Modal de déblocage hebdomadaire */}
+      {showUnlockModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-800">Débloquer un badge</h2>
+                <button
+                  onClick={() => setShowUnlockModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <p className="text-gray-600 mb-4">
+                Choisis un badge à débloquer. Tu ne pourras plus en débloquer un autre avant 7 jours.
+              </p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
+                {lockedBadges.map(badge => (
+                  <button
+                    key={badge.id}
+                    onClick={() => setSelectedBadgeToUnlock(badge.id)}
+                    className={`p-3 border-2 rounded-lg text-center transition-all ${
+                      selectedBadgeToUnlock === badge.id
+                        ? 'border-yellow-500 bg-yellow-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl mx-auto mb-2 ${badge.color}`}>
+                      {badge.icon}
+                    </div>
+                    <div className="text-sm font-medium text-gray-800">{badge.name}</div>
+                    <div className="text-xs text-gray-600 mt-1">{badge.description}</div>
+                  </button>
+                ))}
+              </div>
+              
+              <div className="flex space-x-3 mt-6">
+                <button
+                  onClick={() => setShowUnlockModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleWeeklyUnlock}
+                  disabled={!selectedBadgeToUnlock || unlockLoading}
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {unlockLoading ? 'Déblocage...' : 'Débloquer le badge'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {toast && (
