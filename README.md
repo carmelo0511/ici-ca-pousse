@@ -6,6 +6,10 @@
 [![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)](https://jestjs.io/)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com/)
 
+## 🌐 Application en ligne
+
+**[ici-ca-pousse.vercel.app](https://ici-ca-pousse.vercel.app)**
+
 Application moderne de suivi de séances de sport avec gamification avancée et fonctionnalités sociales complètes.
 
 ## 🚀 Fonctionnalités
