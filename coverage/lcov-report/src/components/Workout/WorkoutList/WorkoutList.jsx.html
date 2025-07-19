@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/117</span>
+                <span class='fraction'>0/123</span>
             </div>
         
             
@@ -691,7 +691,11 @@
 <a name='L626'></a><a href='#L626'>626</a>
 <a name='L627'></a><a href='#L627'>627</a>
 <a name='L628'></a><a href='#L628'>628</a>
-<a name='L629'></a><a href='#L629'>629</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L629'></a><a href='#L629'>629</a>
+<a name='L630'></a><a href='#L630'>630</a>
+<a name='L631'></a><a href='#L631'>631</a>
+<a name='L632'></a><a href='#L632'>632</a>
+<a name='L633'></a><a href='#L633'>633</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -889,6 +893,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1278,6 +1285,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1511,9 +1519,12 @@ function <span class="fstat-no" title="function not covered" >WorkoutList(</span
                   &lt;div&gt;
                     &lt;h3 className="text-xl font-bold text-gray-800"&gt;{exercise.name}&lt;/h3&gt;
                     &lt;span className={`text-sm font-medium px-3 py-1 rounded-full ${
-                      exercise.type === 'cardio' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                      exercise.type === 'cardio' ? 'bg-red-100 text-red-700' : 
+                      exercise.type === 'custom' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
                     }`}&gt;
-                      {exercise.type === 'cardio' ? 'Cardio' : 'Musculation'}
+                      {exercise.type === 'cardio' ? 'Cardio' : 
+                       exercise.type === 'custom' ? 'Personnalisé' : 
+                       exercise.type ? t(exercise.type) : 'Musculation'}
                     &lt;/span&gt;
                   &lt;/div&gt;
                 &lt;/div&gt;
@@ -1844,7 +1855,7 @@ function <span class="fstat-no" title="function not covered" >WorkoutList(</span
                         {favoriteInGroup.map(<span class="fstat-no" title="function not covered" >(e</span>xercise) =&gt; (
 <span class="cstat-no" title="statement not covered" >                          &lt;div key={exercise} className="relative"&gt;</span>
                             &lt;button
-                              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >addExerciseToWorkout(exercise)}</span>
+                              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >addExerciseToWorkout(exercise, selectedMuscleGroup)}</span>
                               className="w-full text-left p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 hover:from-yellow-100 hover:to-yellow-200 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-yellow-200 hover:border-yellow-400 hover:shadow-md transform hover:scale-[1.02]"
                             &gt;
                               &lt;div className="flex items-center space-x-3"&gt;
@@ -1871,7 +1882,7 @@ function <span class="fstat-no" title="function not covered" >WorkoutList(</span
                     {nonFavoriteInGroup.map(<span class="fstat-no" title="function not covered" >(e</span>xercise) =&gt; (
 <span class="cstat-no" title="statement not covered" >                      &lt;div key={exercise} className="relative"&gt;</span>
                         &lt;button
-                          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >addExerciseToWorkout(exercise)}</span>
+                          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >addExerciseToWorkout(exercise, selectedMuscleGroup)}</span>
                           className="w-full text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
                         &gt;
                           &lt;div className="flex items-center space-x-3"&gt;
@@ -1906,7 +1917,8 @@ function <span class="fstat-no" title="function not covered" >WorkoutList(</span
                 &lt;button
                   onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >                    if (customExerciseName.trim()) {</span>
-<span class="cstat-no" title="statement not covered" >                      addExerciseToWorkout(customExerciseName.trim());</span>
+                      // Passer l'exercice avec sa catégorie musculaire
+<span class="cstat-no" title="statement not covered" >                      addExerciseToWorkout(customExerciseName.trim(), selectedMuscleGroup);</span>
 <span class="cstat-no" title="statement not covered" >                      setCustomExerciseName('');</span>
 <span class="cstat-no" title="statement not covered" >                      setShowAddExercise(false);</span>
 <span class="cstat-no" title="statement not covered" >                      setSelectedMuscleGroup(null);</span>
@@ -1954,7 +1966,7 @@ export default memo(WorkoutList);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-19T22:30:46.674Z
+                at 2025-07-19T23:48:10.584Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

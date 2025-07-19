@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -151,33 +151,31 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,10 +184,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -243,6 +249,7 @@
 import { load, save } from '../utils/storage';
 import { db } from '../utils/firebase';
 import { collection, query, where, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { cleanWorkoutForFirestore } from '../utils/workoutUtils';
 &nbsp;
 export const useWorkouts = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; {</span>
   const [workouts, setWorkouts] = <span class="cstat-no" title="statement not covered" >useState([]);</span>
@@ -271,7 +278,8 @@ export const useWorkouts = <span class="cstat-no" title="statement not covered" 
 &nbsp;
   const addWorkout = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync (workout) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (user) {</span>
-<span class="cstat-no" title="statement not covered" >      await addDoc(collection(db, 'workouts'), { ...workout, userId: user.uid });</span>
+      const cleanedWorkout = <span class="cstat-no" title="statement not covered" >cleanWorkoutForFirestore(workout);</span>
+<span class="cstat-no" title="statement not covered" >      await addDoc(collection(db, 'workouts'), { ...cleanedWorkout, userId: user.uid });</span>
       // On ne met pas à jour localement, la synchro temps réel s'en charge
     } else {
 <span class="cstat-no" title="statement not covered" >      setWorkouts(<span class="fstat-no" title="function not covered" >pr</span>ev =&gt; <span class="cstat-no" title="statement not covered" >[...prev, { ...workout, id: workout.id || Date.now() }])</span>;</span>
@@ -281,7 +289,8 @@ export const useWorkouts = <span class="cstat-no" title="statement not covered" 
   const updateWorkout = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync (workoutId, updatedWorkout) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (user) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
-<span class="cstat-no" title="statement not covered" >        await updateDoc(doc(db, 'workouts', workoutId), updatedWorkout);</span>
+        const cleanedWorkout = <span class="cstat-no" title="statement not covered" >cleanWorkoutForFirestore(updatedWorkout);</span>
+<span class="cstat-no" title="statement not covered" >        await updateDoc(doc(db, 'workouts', workoutId), cleanedWorkout);</span>
       } catch (error) {
 <span class="cstat-no" title="statement not covered" >        console.error('Erreur update Firestore:', error);</span>
 <span class="cstat-no" title="statement not covered" >        throw error;</span>
@@ -334,7 +343,7 @@ export const useWorkouts = <span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-19T22:30:46.674Z
+                at 2025-07-19T23:48:10.584Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

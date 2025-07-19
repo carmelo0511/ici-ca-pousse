@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -143,7 +143,12 @@
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -153,6 +158,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,6 +195,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,14 +240,16 @@ export const useExercises = <span class="cstat-no" title="statement not covered"
   const [exercises, setExercises] = <span class="cstat-no" title="statement not covered" >useState([]);</span>
   const [selectedMuscleGroup, setSelectedMuscleGroup] = <span class="cstat-no" title="statement not covered" >useState(null);</span>
 &nbsp;
-  const addExercise = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>xerciseName) =&gt; {</span>
+  const addExercise = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>xerciseName, muscleGroup = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!exerciseName || exerciseName.trim() === '') <span class="cstat-no" title="statement not covered" >return;</span></span>
+    
     const newExercise = <span class="cstat-no" title="statement not covered" >{</span>
       id: Date.now(),
-      name: exerciseName,
+      name: exerciseName.trim(),
       sets: [{ reps: 0, weight: 0, duration: 0 }],
-      type: Object.keys(exerciseDatabase).find(<span class="fstat-no" title="function not covered" >ke</span>y =&gt; 
+      type: muscleGroup || Object.keys(exerciseDatabase).find(<span class="fstat-no" title="function not covered" >ke</span>y =&gt; 
 <span class="cstat-no" title="statement not covered" >        exerciseDatabase[key].includes(exerciseName)</span>
-      )
+      ) || 'custom' // Utilise la catégorie sélectionnée ou trouve automatiquement
     };
 <span class="cstat-no" title="statement not covered" >    setExercises(<span class="fstat-no" title="function not covered" >pr</span>ev =&gt; <span class="cstat-no" title="statement not covered" >[...prev, newExercise])</span>;</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedMuscleGroup(null);</span>
@@ -267,7 +279,10 @@ export const useExercises = <span class="cstat-no" title="statement not covered"
         ? { 
             ...ex, 
             sets: ex.sets.map(<span class="fstat-no" title="function not covered" >(s</span>et, idx) =&gt; 
-<span class="cstat-no" title="statement not covered" >              idx === setIndex ? { ...set, [field]: parseInt(value) || 0 } : set</span>
+<span class="cstat-no" title="statement not covered" >              idx === setIndex ? { </span>
+                ...set, 
+                [field]: Math.max(0, parseInt(value) || 0) // Valeur minimale 0
+              } : set
             )
           }
         : ex
@@ -310,7 +325,7 @@ export const useExercises = <span class="cstat-no" title="statement not covered"
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-19T22:30:46.674Z
+                at 2025-07-19T23:48:10.584Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
