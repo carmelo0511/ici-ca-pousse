@@ -46,7 +46,13 @@ export const useWorkouts = (user) => {
         await updateDoc(doc(db, 'workouts', workoutId), cleanedWorkout);
       } catch (error) {
         console.error('Erreur update Firestore:', error);
-        throw error;
+        // Si le document n'existe pas, on le crée à la place
+        if (error.code === 'not-found') {
+          console.log('Document non trouvé, création d\'un nouveau workout');
+          await addDoc(collection(db, 'workouts'), { ...cleanedWorkout, userId: user.uid });
+        } else {
+          throw error;
+        }
       }
     } else {
       setWorkouts(prev => prev.map(w => w.id === workoutId ? updatedWorkout : w));

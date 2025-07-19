@@ -28,11 +28,13 @@ export default function useWorkoutLogic({
 }) {
   // Ajout d'un exercice à la séance
   const addExerciseToWorkout = useCallback((exerciseName, muscleGroup = null) => {
+    // S'assurer qu'on n'est pas en mode édition quand on ajoute un exercice
+    setSelectedWorkout(null);
     addExercise(exerciseName, muscleGroup);
     setShowAddExercise(false);
     setSelectedMuscleGroup(null);
     showToastMsg(t('exercise_added'));
-  }, [addExercise, setShowAddExercise, setSelectedMuscleGroup, showToastMsg, t]);
+  }, [addExercise, setShowAddExercise, setSelectedMuscleGroup, setSelectedWorkout, showToastMsg, t]);
 
   // Sauvegarde d'une séance
   const saveWorkout = useCallback(async () => {
@@ -63,10 +65,12 @@ export default function useWorkoutLogic({
     }
     
     try {
-      if (selectedWorkout && typeof selectedWorkout.id === 'string') {
+      // Vérifier si on est vraiment en mode édition avec un workout valide
+      if (selectedWorkout && selectedWorkout.id && typeof selectedWorkout.id === 'string' && selectedWorkout.id.length > 0) {
         await updateWorkout(selectedWorkout.id, workout);
         showToastMsg(t('workout_updated'));
       } else {
+        // Mode création d'un nouveau workout
         await addWorkout(workout);
         // Ajouter de l'XP pour la nouvelle séance
         if (addWorkoutXP) {
