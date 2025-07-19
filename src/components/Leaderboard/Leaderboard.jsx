@@ -297,7 +297,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
           {/* Statistiques rapides */}
           {!selectedExercise && currentRanking.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-              <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-3 md:p-4 rounded-lg text-center">
+              <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-3 md:p-4 rounded-lg text-center shadow-lg">
                 <div className="text-2xl md:text-3xl font-bold">🥇</div>
                 <div className="text-sm md:text-base font-semibold">{currentRanking[0]?.displayName}</div>
                 <div className="text-xs md:text-sm opacity-90">
@@ -306,7 +306,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
               </div>
               
               {currentRanking[1] && (
-                <div className="bg-gradient-to-r from-gray-400 to-gray-500 text-white p-3 md:p-4 rounded-lg text-center">
+                <div className="bg-gradient-to-r from-gray-400 to-gray-500 text-white p-3 md:p-4 rounded-lg text-center shadow-lg">
                   <div className="text-2xl md:text-3xl font-bold">🥈</div>
                   <div className="text-sm md:text-base font-semibold">{currentRanking[1]?.displayName}</div>
                   <div className="text-xs md:text-sm opacity-90">
@@ -316,7 +316,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
               )}
               
               {currentRanking[2] && (
-                <div className="bg-gradient-to-r from-orange-400 to-orange-500 text-white p-3 md:p-4 rounded-lg text-center">
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-3 md:p-4 rounded-lg text-center shadow-lg">
                   <div className="text-2xl md:text-3xl font-bold">🥉</div>
                   <div className="text-sm md:text-base font-semibold">{currentRanking[2]?.displayName}</div>
                   <div className="text-xs md:text-sm opacity-90">

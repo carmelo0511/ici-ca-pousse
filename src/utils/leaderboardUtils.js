@@ -75,15 +75,26 @@ export function calculateUserStats(workouts, period = PERIODS.ALL_TIME) {
 // Obtenir le classement pour une métrique donnée
 export function getLeaderboardRanking(usersStats, metric) {
   return usersStats
-    .map(user => ({
-      uid: user.uid,
-      displayName: user.displayName,
-      value: user.stats[metric] || 0,
-      stats: user.stats,
-      photoURL: user.photoURL,
-      selectedBadge: user.selectedBadge,
-      badges: user.badges
-    }))
+    .map(user => {
+      let value = 0;
+      
+      // Mapper les métriques aux bonnes propriétés
+      if (metric === METRICS.WORKOUTS) {
+        value = user.stats.workouts || 0;
+      } else if (metric === METRICS.MAX_WEIGHT) {
+        value = user.stats.maxWeight || 0;
+      }
+      
+      return {
+        uid: user.uid,
+        displayName: user.displayName,
+        value: value,
+        stats: user.stats,
+        photoURL: user.photoURL,
+        selectedBadge: user.selectedBadge,
+        badges: user.badges
+      };
+    })
     .sort((a, b) => b.value - a.value)
     .map((user, index) => ({
       ...user,
