@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1752968890635" clover="3.2.0">
-  <project timestamp="1752968890635" name="All files">
+<coverage generated="1752969244893" clover="3.2.0">
+  <project timestamp="1752969244893" name="All files">
     <metrics statements="2151" coveredstatements="25" conditionals="1770" coveredconditionals="1" methods="623" coveredmethods="5" elements="4544" coveredelements="31" complexity="0" loc="2151" ncloc="2151" packages="14" files="55" classes="55"/>
     <package name="src">
       <metrics statements="40" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="6" coveredmethods="0"/>
@@ -48,7 +48,7 @@
       <file name="i18n.js" path="/Users/bryannakache/ici-ca-pousse-2/src/i18n.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
-        <line num="405" count="0" type="stmt"/>
+        <line num="203" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components">
