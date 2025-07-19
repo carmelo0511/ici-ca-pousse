@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { load, save } from '../utils/storage';
 import { db } from '../utils/firebase';
 import { collection, query, where, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { cleanWorkoutForFirestore } from '../utils/workoutUtils';
 
 export const useWorkouts = (user) => {
   const [workouts, setWorkouts] = useState([]);
@@ -30,7 +31,8 @@ export const useWorkouts = (user) => {
 
   const addWorkout = useCallback(async (workout) => {
     if (user) {
-      await addDoc(collection(db, 'workouts'), { ...workout, userId: user.uid });
+      const cleanedWorkout = cleanWorkoutForFirestore(workout);
+      await addDoc(collection(db, 'workouts'), { ...cleanedWorkout, userId: user.uid });
       // On ne met pas à jour localement, la synchro temps réel s'en charge
     } else {
       setWorkouts(prev => [...prev, { ...workout, id: workout.id || Date.now() }]);
@@ -40,7 +42,8 @@ export const useWorkouts = (user) => {
   const updateWorkout = useCallback(async (workoutId, updatedWorkout) => {
     if (user) {
       try {
-        await updateDoc(doc(db, 'workouts', workoutId), updatedWorkout);
+        const cleanedWorkout = cleanWorkoutForFirestore(updatedWorkout);
+        await updateDoc(doc(db, 'workouts', workoutId), cleanedWorkout);
       } catch (error) {
         console.error('Erreur update Firestore:', error);
         throw error;

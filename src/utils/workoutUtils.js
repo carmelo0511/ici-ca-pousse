@@ -16,18 +16,20 @@ export const createWorkout = (exercises, date, duration, workoutId = undefined, 
   
   // S'assurer que tous les exercices ont un type valide
   const validatedExercises = exercises.map(exercise => ({
-    ...exercise,
+    id: exercise.id || Date.now(),
+    name: exercise.name || 'Exercice sans nom',
     type: exercise.type || 'custom', // Type par défaut si manquant
-    sets: exercise.sets || [{ reps: 0, weight: 0, duration: 0 }] // Sets par défaut si manquant
+    sets: (exercise.sets || [{ reps: 0, weight: 0, duration: 0 }]).map(set => ({
+      reps: parseInt(set.reps) || 0,
+      weight: parseInt(set.weight) || 0,
+      duration: parseInt(set.duration) || 0
+    }))
   }));
   
-  return {
-    ...(workoutId ? { id: workoutId } : {}),
-    date,
+  const workout = {
+    date: date || new Date().toISOString().split('T')[0],
     exercises: validatedExercises,
     duration: parseInt(duration) || DEFAULT_WORKOUT_DURATION,
-    startTime,
-    endTime,
     totalSets: validatedExercises.reduce((acc, ex) => acc + (ex.sets?.length || 0), 0),
     totalReps: validatedExercises.reduce((acc, ex) => 
       acc + (ex.sets?.reduce((setAcc, set) => setAcc + (set.reps || 0), 0) || 0), 0
@@ -36,6 +38,13 @@ export const createWorkout = (exercises, date, duration, workoutId = undefined, 
       acc + (ex.sets?.reduce((setAcc, set) => setAcc + ((set.weight || 0) * (set.reps || 0)), 0) || 0), 0
     )
   };
+  
+  // Ajouter les champs optionnels seulement s'ils ont une valeur
+  if (workoutId) workout.id = workoutId;
+  if (startTime) workout.startTime = startTime;
+  if (endTime) workout.endTime = endTime;
+  
+  return workout;
 };
 
 export const calculateWorkoutStats = (workouts) => {
@@ -174,4 +183,28 @@ export function getWorkoutsForDateRange(workouts, startDate, endDate) {
     const workoutDate = new Date(workout.date);
     return workoutDate >= startDate && workoutDate <= endDate;
   });
+}
+
+// Fonction pour nettoyer les données avant envoi à Firebase
+export function cleanWorkoutForFirestore(workout) {
+  if (!workout) return null;
+  
+  // Fonction récursive pour nettoyer les objets
+  const cleanObject = (obj) => {
+    if (obj === null || obj === undefined) return null;
+    if (typeof obj !== 'object') return obj;
+    if (Array.isArray(obj)) {
+      return obj.map(cleanObject).filter(item => item !== null && item !== undefined);
+    }
+    
+    const cleaned = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== null && value !== undefined) {
+        cleaned[key] = cleanObject(value);
+      }
+    }
+    return cleaned;
+  };
+  
+  return cleanObject(workout);
 } 

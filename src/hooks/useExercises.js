@@ -6,9 +6,11 @@ export const useExercises = () => {
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
 
   const addExercise = (exerciseName) => {
+    if (!exerciseName || exerciseName.trim() === '') return;
+    
     const newExercise = {
       id: Date.now(),
-      name: exerciseName,
+      name: exerciseName.trim(),
       sets: [{ reps: 0, weight: 0, duration: 0 }],
       type: Object.keys(exerciseDatabase).find(key => 
         exerciseDatabase[key].includes(exerciseName)
@@ -42,7 +44,10 @@ export const useExercises = () => {
         ? { 
             ...ex, 
             sets: ex.sets.map((set, idx) => 
-              idx === setIndex ? { ...set, [field]: parseInt(value) || 0 } : set
+              idx === setIndex ? { 
+                ...set, 
+                [field]: Math.max(0, parseInt(value) || 0) // Valeur minimale 0
+              } : set
             )
           }
         : ex
