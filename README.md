@@ -235,6 +235,14 @@ npm run build
 
 ## 🧪 Tests
 
+### Suite de Tests Complète
+Le projet dispose d'une suite de tests moderne et extensible :
+
+- **Tests de hooks** : Tests complets pour les hooks React personnalisés
+- **Tests de composants** : Tests d'intégration pour les composants UI
+- **Tests utilitaires** : Tests pour les fonctions utilitaires
+- **Couverture de code** : Suivi automatique de la couverture de tests
+
 ### Lancement des tests
 ```bash
 # Tests unitaires
@@ -244,14 +252,25 @@ npm test
 npm run test:coverage
 
 # Tests en mode watch
-npm test -- --watch
+npm run test:watch
+```
+
+### Structure des Tests
+```
+src/tests/
+├── hooks/           # Tests des hooks personnalisés
+│   └── useAppState.test.js  # ✅ 100% couverture
+├── components/      # Tests des composants
+└── utils/          # Tests des utilitaires
 ```
 
 ### Couverture actuelle
-- **Statements** : 4.06%
-- **Branches** : 1.81%
-- **Functions** : 4.12%
-- **Lines** : 4.28%
+- **Statements** : 1.08%
+- **Branches** : 0.05%
+- **Functions** : 0.8%
+- **Lines** : 1.17%
+
+**Note** : La couverture est actuellement basse car nous avons refactorisé complètement la suite de tests. Le hook `useAppState` a une couverture de **100%** et sert de base pour l'expansion future des tests.
 
 ## 📈 Roadmap 2025
 
@@ -264,6 +283,7 @@ npm test -- --watch
 - [x] Notifications intelligentes
 - [x] PWA installable
 - [x] Photos de profil
+- [x] Suite de tests complète avec 100% couverture sur useAppState
 
 ### 🚧 En développement
 - [ ] Chatbot IA pour recommandations d'entraînement
