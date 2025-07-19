@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { useFriends } from '../../hooks/useFriends';
 import { BarChart3, Calendar, Target, TrendingUp } from 'lucide-react';
 
 function StatsComparison({ user }) {
@@ -9,7 +8,6 @@ function StatsComparison({ user }) {
   const [comparisonData, setComparisonData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
-  const { friends } = useFriends(user);
 
   // Fonction pour récupérer tous les utilisateurs
   const fetchAllUsers = async () => {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { useFriends } from '../../hooks/useFriends';
 import { BarChart3 } from 'lucide-react';
 import { PERIODS, METRICS } from '../../constants/leaderboard';
 import { 
@@ -21,7 +20,6 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
   const [selectedPeriod, setSelectedPeriod] = useState(PERIODS.WEEK);
   const [selectedMetric, setSelectedMetric] = useState(METRICS.WORKOUTS);
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const { friends } = useFriends(currentUser);
 
   // Fonction pour récupérer tous les utilisateurs
   const fetchAllUsers = async () => {
