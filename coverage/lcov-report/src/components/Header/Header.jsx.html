@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -189,22 +189,7 @@
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L127'></a><a href='#L127'>127</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,7 +202,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -226,7 +210,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -267,18 +250,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -324,6 +295,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -345,7 +317,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { memo } from 'react';
 import { Dumbbell } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
@@ -354,8 +325,7 @@ import ProfilePicture from '../Profile/ProfilePicture';
 import { useExperience } from '../../hooks/useExperience.js';
 import StreakCounter from '../StreakCounter';
 &nbsp;
-const Header = <span class="cstat-no" title="statement not covered" >memo(<span class="fstat-no" title="function not covered" >({</span> workoutCount, className = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> user, workouts = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span> challenges = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span> addBadgeUnlockXP, onUserUpdate }) =&gt; {</span>
-  const { t, i18n } = <span class="cstat-no" title="statement not covered" >useTranslation();</span>
+const Header = <span class="cstat-no" title="statement not covered" >memo(<span class="fstat-no" title="function not covered" >({</span> workoutCount, className = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> user, workouts = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span> challenges = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span> addBadgeUnlockXP, onUserUpdate, refreshUserProfile }) =&gt; {</span>
   const [showProfile, setShowProfile] = <span class="cstat-no" title="statement not covered" >React.useState(false);</span>
   const [localUser, setLocalUser] = <span class="cstat-no" title="statement not covered" >React.useState(user);</span>
 &nbsp;
@@ -366,7 +336,6 @@ const Header = <span class="cstat-no" title="statement not covered" >memo(<span 
 <span class="cstat-no" title="statement not covered" >  React.useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setLocalUser(user);</span>
   }, [user]);
-  const changeLanguage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ng) =&gt; <span class="cstat-no" title="statement not covered" >i18n.changeLanguage(lng);</span></span>
 &nbsp;
   const handleSignOut = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    await signOut(auth);</span>
@@ -386,44 +355,32 @@ const Header = <span class="cstat-no" title="statement not covered" >memo(<span 
                 Ici Ca Pousse
               &lt;/h1&gt;
               &lt;p className="text-sm text-gray-600 font-medium"&gt;
-                {t('workout_done', { count: workoutCount })}
+                {`Séances effectuées : ${workoutCount}`}
               &lt;/p&gt;
               {/* Barre d'expérience et niveau */}
               {user &amp;&amp; (
                 &lt;div className="mt-2 flex flex-col gap-2"&gt;
                   &lt;div className="flex items-center space-x-3"&gt;
                     &lt;div className="flex flex-col items-start"&gt;
-                      &lt;span className="text-xs font-semibold text-indigo-700"&gt;Niveau {experience.level} - {experience.levelName}&lt;/span&gt;
+                      &lt;span className="text-xs font-semibold text-indigo-700"&gt;
+                        Niveau {experience?.level || 1} - {experience?.levelName || 'Débutant'}
+                      &lt;/span&gt;
                       &lt;div className="w-40 h-3 bg-gray-200 rounded-full overflow-hidden mt-1"&gt;
                         &lt;div
                           className="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-500"
-                          style={{ width: `${experience.progress}%` }}
+                          style={{ width: `${experience?.progress || 0}%` }}
                         &gt;&lt;/div&gt;
                       &lt;/div&gt;
                     &lt;/div&gt;
-                    &lt;span className="text-xs text-gray-500 font-mono"&gt;{experience.xp} XP&lt;/span&gt;
+                    &lt;span className="text-xs text-gray-500 font-mono"&gt;{experience?.xp || 0} XP&lt;/span&gt;
                   &lt;/div&gt;
                   {/* StreakCounter intégré */}
-                  &lt;StreakCounter streak={experience.streak || 0} /&gt;
+                  &lt;StreakCounter streak={experience?.streak || 0} /&gt;
                 &lt;/div&gt;
               )}
             &lt;/div&gt;
           &lt;/div&gt;
-          &lt;div className="flex items-center space-x-2"&gt;
-            &lt;button
-              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >changeLanguage('fr')}</span>
-              className={`px-3 py-1 rounded-lg font-semibold border focus:outline-none focus:ring-2 focus:ring-indigo-400 ${i18n.language === 'fr' ? 'bg-indigo-500 text-white border-indigo-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-indigo-50'}`}
-              aria-label="Passer en français"
-            &gt;
-              FR
-            &lt;/button&gt;
-            &lt;button
-              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >changeLanguage('en')}</span>
-              className={`px-3 py-1 rounded-lg font-semibold border focus:outline-none focus:ring-2 focus:ring-indigo-400 ${i18n.language === 'en' ? 'bg-indigo-500 text-white border-indigo-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-indigo-50'}`}
-              aria-label="Switch to English"
-            &gt;
-              EN
-            &lt;/button&gt;
+          &lt;div className="flex items-center space-x-2 flex-wrap w-full justify-end sm:justify-end sm:flex-row flex-col gap-2"&gt;
             {/* Avatar utilisateur pour ouvrir la modale de profil */}
             {localUser &amp;&amp; (
               &lt;button
@@ -467,6 +424,7 @@ const Header = <span class="cstat-no" title="statement not covered" >memo(<span 
             }
           }}
           addBadgeUnlockXP={addBadgeUnlockXP}
+          refreshUserProfile={refreshUserProfile}
         /&gt;
       )}
     &lt;/header&gt;
@@ -490,7 +448,7 @@ export default Header; // Force rebuild
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-17T04:23:13.836Z
+                at 2025-07-19T22:30:46.674Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

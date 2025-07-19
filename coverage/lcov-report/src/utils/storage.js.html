@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40.9% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/22</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40.9% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/22</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -101,37 +101,16 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -139,25 +118,46 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export const load = (key, defaultValue) =&gt; {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : <span class="branch-1 cbranch-no" title="branch not covered" >defaultValue;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export const load = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(k</span>ey, defaultValue) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    const raw = <span class="cstat-no" title="statement not covered" >localStorage.getItem(key);</span>
+<span class="cstat-no" title="statement not covered" >    return raw ? JSON.parse(raw) : defaultValue;</span>
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    console.error('Erreur chargement', err);</span>
 <span class="cstat-no" title="statement not covered" >    return defaultValue;</span>
   }
 };
 &nbsp;
-export const save = (key, value) =&gt; {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
+export const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(k</span>ey, value) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    localStorage.setItem(key, JSON.stringify(value));</span>
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    console.error('Erreur sauvegarde', err);</span>
   }
 };
 &nbsp;
-export const migrateLocalWorkoutsToCloud = <span class="fstat-no" title="function not covered" >as</span>ync (user, addWorkoutCloud) =&gt; {
+export const migrateLocalWorkoutsToCloud = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (user, addWorkoutCloud) =&gt; {</span>
   const localWorkouts = <span class="cstat-no" title="statement not covered" >load('iciCaPousse_workouts', []);</span>
 <span class="cstat-no" title="statement not covered" >  if (user &amp;&amp; localWorkouts.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    for (const workout of localWorkouts) {</span>
@@ -169,7 +169,7 @@ export const migrateLocalWorkoutsToCloud = <span class="fstat-no" title="functio
   }
 };
 &nbsp;
-export const migrateLocalFavoritesToCloud = <span class="fstat-no" title="function not covered" >as</span>ync (user, setFavoriteCloud) =&gt; {
+export const migrateLocalFavoritesToCloud = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (user, setFavoriteCloud) =&gt; {</span>
   const localFavorites = <span class="cstat-no" title="statement not covered" >load('favoriteExercises', []);</span>
 <span class="cstat-no" title="statement not covered" >  if (user &amp;&amp; localFavorites.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    await setFavoriteCloud(localFavorites);</span>
@@ -184,7 +184,7 @@ export const migrateLocalFavoritesToCloud = <span class="fstat-no" title="functi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-17T04:23:13.836Z
+                at 2025-07-19T22:30:46.674Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
