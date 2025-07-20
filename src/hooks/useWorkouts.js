@@ -41,8 +41,8 @@ export const useWorkouts = (user) => {
 
   const updateWorkout = useCallback(async (workoutId, updatedWorkout) => {
     if (user) {
+      const cleanedWorkout = cleanWorkoutForFirestore(updatedWorkout);
       try {
-        const cleanedWorkout = cleanWorkoutForFirestore(updatedWorkout);
         await updateDoc(doc(db, 'workouts', workoutId), cleanedWorkout);
       } catch (error) {
         console.error('Erreur update Firestore:', error);
