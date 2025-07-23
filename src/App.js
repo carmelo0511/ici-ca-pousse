@@ -74,7 +74,16 @@ function App() {
 
   // Hooks personnalisés
   const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
-  const { exercises, addExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
+  const {
+    exercises,
+    addExercise,
+    removeExercise,
+    addSet,
+    updateSet,
+    removeSet,
+    clearExercises,
+    setExercisesFromWorkout,
+  } = useExercises();
   const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP } = useExperience(user);
   const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
   const { friends } = useFriends(user, addFriendXP);
@@ -92,6 +101,7 @@ function App() {
     updateWorkout,
     deleteWorkout,
     addExercise,
+    removeExercise,
     clearExercises,
     setStartTime,
     setEndTime,
@@ -108,7 +118,14 @@ function App() {
     workouts
   });
 
-  const { addExerciseToWorkout, saveWorkout, openWorkoutDetail, handleEditWorkout, handleDeleteWorkout } = workoutLogic;
+  const {
+    addExerciseToWorkout,
+    removeExerciseFromWorkout,
+    saveWorkout,
+    openWorkoutDetail,
+    handleEditWorkout,
+    handleDeleteWorkout,
+  } = workoutLogic;
 
   // Configuration des onglets pour la navigation
   const tabs = [
@@ -215,6 +232,7 @@ function App() {
               selectedMuscleGroup={selectedMuscleGroup}
               setSelectedMuscleGroup={setSelectedMuscleGroup}
               addExerciseToWorkout={addExerciseToWorkout}
+              removeExerciseFromWorkout={removeExerciseFromWorkout}
             />
           </PageTransition>
 
