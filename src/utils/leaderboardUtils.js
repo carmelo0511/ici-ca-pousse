@@ -1,5 +1,6 @@
 // Utilitaires pour le leaderboard avancé
 import { PERIODS, METRICS, ALLOWED_EXERCISES } from '../constants/leaderboard';
+import { parseLocalDate } from './workoutUtils';
 
 // Obtenir la date de début selon la période
 export function getStartDate(period) {
@@ -29,7 +30,7 @@ export function getStartDate(period) {
 export function filterWorkoutsByPeriod(workouts, period) {
   const startDate = getStartDate(period);
   return workouts.filter(workout => {
-    const workoutDate = new Date(workout.date);
+    const workoutDate = parseLocalDate(workout.date);
     return workoutDate >= startDate;
   });
 }

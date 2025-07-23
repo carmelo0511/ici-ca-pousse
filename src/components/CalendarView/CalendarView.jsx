@@ -64,7 +64,9 @@ const CalendarView = ({
   }
 
   const [openWeeks, setOpenWeeks] = useState([]);
-  const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedWorkouts = [...workouts].sort(
+    (a, b) => parseLocalDate(b.date) - parseLocalDate(a.date)
+  );
   const weeks = groupWorkoutsByWeek(workouts);
   const dateLocale = i18n.language === 'fr' ? 'fr-FR' : undefined;
 
@@ -159,7 +161,7 @@ const CalendarView = ({
           </div>
           <p className="text-3xl font-bold text-blue-900">
             {workouts.filter(w => {
-              const workoutDate = new Date(w.date);
+              const workoutDate = parseLocalDate(w.date);
               const today = new Date();
               const weekStart = new Date(today);
               weekStart.setDate(today.getDate() - today.getDay());
@@ -190,10 +192,10 @@ const CalendarView = ({
           <span>{t('last_sessions')}</span>
         </h3>
         <div className="space-y-4">
-          {sortedWorkouts.slice(0, 5).map((workout) => (
-            <div key={workout.id} className="flex justify-between items-center py-4 px-6 bg-gray-100 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow duration-200">
-              <div>
-                <p className="font-bold text-gray-800">{new Date(workout.date).toLocaleDateString(dateLocale)}</p>
+            {sortedWorkouts.slice(0, 5).map((workout) => (
+              <div key={workout.id} className="flex justify-between items-center py-4 px-6 bg-gray-100 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                <div>
+                  <p className="font-bold text-gray-800">{parseLocalDate(workout.date).toLocaleDateString(dateLocale)}</p>
                 <p className="text-sm text-gray-600">
                   {workout.exercises.length} {t('exercises')} • {workout.totalSets} {t('sets')}
                   {workout.startTime && (
@@ -245,15 +247,15 @@ const CalendarView = ({
                 </button>
                 {isOpen && (
                   <div className="space-y-3 mt-2">
-                    {weekWorkouts
-                      .sort((a, b) => new Date(b.date) - new Date(a.date))
-                      .map((w) => (
-                        <div
-                          key={w.id}
-                          className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100"
-                        >
-                          <div>
-                            <div className="font-bold text-lg text-gray-800">{new Date(w.date).toLocaleDateString(dateLocale)}</div>
+                      {weekWorkouts
+                        .sort((a, b) => parseLocalDate(b.date) - parseLocalDate(a.date))
+                        .map((w) => (
+                          <div
+                            key={w.id}
+                            className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100"
+                          >
+                            <div>
+                              <div className="font-bold text-lg text-gray-800">{parseLocalDate(w.date).toLocaleDateString(dateLocale)}</div>
                             <div className="text-sm text-gray-500">
                               {w.exercises.length} {t('exercises')}, {w.totalSets} {t('sets')}, {w.totalReps}{' '}
                               {t('reps')}, {w.totalWeight} {t('kg')}

@@ -3,6 +3,7 @@ import { BADGE_TYPES } from '../constants/badges';
 import { saveUserBadges } from '../utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../utils/firebase';
+import { parseLocalDate } from '../utils/workoutUtils';
 
 // Fonction pour calculer les badges d'un utilisateur
 export function calculateUserBadges(workouts = [], challenges = [], user) {
@@ -18,13 +19,15 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   }
 
   // Badges de séries d'entraînement
-  const sortedWorkouts = [...workouts].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sortedWorkouts = [...workouts].sort(
+    (a, b) => parseLocalDate(a.date) - parseLocalDate(b.date)
+  );
   let currentStreak = 1;
   let maxStreak = 1;
 
   for (let i = 1; i < sortedWorkouts.length; i++) {
-    const prevDate = new Date(sortedWorkouts[i - 1].date);
-    const currDate = new Date(sortedWorkouts[i].date);
+    const prevDate = parseLocalDate(sortedWorkouts[i - 1].date);
+    const currDate = parseLocalDate(sortedWorkouts[i].date);
     const dayDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
 
     if (dayDiff === 1) {
@@ -75,7 +78,7 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   // Badges de régularité hebdomadaire
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-  const recentWorkouts = workouts.filter(w => new Date(w.date) >= oneWeekAgo);
+  const recentWorkouts = workouts.filter(w => parseLocalDate(w.date) >= oneWeekAgo);
   
   if (recentWorkouts.length >= 3) badges.push(BADGE_TYPES.WEEKLY_3);
   if (recentWorkouts.length >= 5) badges.push(BADGE_TYPES.WEEKLY_5);
@@ -84,7 +87,7 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   // Badges de régularité mensuelle
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-  const monthlyWorkouts = workouts.filter(w => new Date(w.date) >= oneMonthAgo);
+  const monthlyWorkouts = workouts.filter(w => parseLocalDate(w.date) >= oneMonthAgo);
   
   if (monthlyWorkouts.length >= 10) badges.push(BADGE_TYPES.MONTHLY_10);
   if (monthlyWorkouts.length >= 20) badges.push(BADGE_TYPES.MONTHLY_20);
@@ -117,19 +120,19 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
 
   // Badges de temps
   const earlyWorkouts = workouts.filter(w => {
-    const hour = new Date(w.date).getHours();
+    const hour = parseLocalDate(w.date).getHours();
     return hour < 8;
   });
   if (earlyWorkouts.length >= 5) badges.push(BADGE_TYPES.EARLY_BIRD);
 
   const nightWorkouts = workouts.filter(w => {
-    const hour = new Date(w.date).getHours();
+    const hour = parseLocalDate(w.date).getHours();
     return hour >= 22;
   });
   if (nightWorkouts.length >= 5) badges.push(BADGE_TYPES.NIGHT_OWL);
 
   const weekendWorkouts = workouts.filter(w => {
-    const day = new Date(w.date).getDay();
+    const day = parseLocalDate(w.date).getDay();
     return day === 0 || day === 6;
   });
   if (weekendWorkouts.length >= 10) badges.push(BADGE_TYPES.WEEKEND_WARRIOR);
