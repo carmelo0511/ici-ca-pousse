@@ -360,7 +360,7 @@ button:focus {
 
 /* Dark mode global */
 body.dark, .dark .min-h-screen, .dark .w-full {
-  background: #2d2e36 !important;
+  background: #111 !important;
   color: #fff !important;
 }
 .dark, .dark * {
@@ -375,7 +375,7 @@ body.dark, .dark .min-h-screen, .dark .w-full {
 .dark .bg-yellow-50,
 .dark .bg-purple-50,
 .dark .bg-green-50 {
-  background-color: #353646 !important;
+  background-color: #111 !important;
 }
 .dark .card,
 .dark .bg-white *,
@@ -413,7 +413,7 @@ body.dark, .dark .min-h-screen, .dark .w-full {
   transform: translateY(-20px);
 }
 .dark .toast {
-  background: #23232a !important;
+  background: #111 !important;
   color: #f3f4f6 !important;
   border-color: #444;
 }
@@ -438,7 +438,7 @@ button:active, .btn:active {
 }
 
 .dark button, .dark .btn {
-  background: #23232a;
+  background: #111;
   color: #f3f4f6;
   border-color: #444;
 }
@@ -449,7 +449,7 @@ button:active, .btn:active {
 .dark .bg-purple-600,
 .dark .bg-red-600,
 .dark .bg-indigo-600 {
-  background-color: #353646 !important;
+  background-color: #111 !important;
   color: #fff !important;
 }
 
@@ -469,7 +469,7 @@ button:active, .btn:active {
 .dark .to-indigo-100,
 .dark .to-emerald-100,
 .dark .to-gray-100 {
-  background: #353646 !important;
+  background: #111 !important;
   color: #fff !important;
 }
 
@@ -478,7 +478,7 @@ button:active, .btn:active {
 .dark .bg-white\/90,
 .dark .bg-gray-50,
 .dark .bg-gray-100 {
-  background-color: #353646 !important;
+  background-color: #111 !important;
   color: #fff !important;
 }
 
@@ -514,6 +514,6 @@ button:active, .btn:active {
 .dark .bg-indigo-100,
 .dark .bg-green-100,
 .dark .bg-emerald-200 {
-  background-color: #353646 !important;
+  background-color: #111 !important;
   color: #fff !important;
 }

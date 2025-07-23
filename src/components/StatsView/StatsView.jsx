@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { getBadges, parseLocalDate, analyzeWorkoutHabits, getPreferredWorkoutTime, getAverageDurationByTime } from '../../utils/workoutUtils';
+import { parseLocalDate, analyzeWorkoutHabits, getPreferredWorkoutTime, getAverageDurationByTime } from '../../utils/workoutUtils';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
@@ -38,7 +38,7 @@ const StatsView = ({ stats, workouts, className = '' }) => {
   const { t, i18n } = useTranslation();
   // Trie les séances par date décroissante
   const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
-  const badges = getBadges(stats);
+  const weeks = groupWorkoutsByWeek(workouts);
   const workoutHabits = analyzeWorkoutHabits(workouts);
   const preferredTime = getPreferredWorkoutTime(workouts);
   const avgDurationByTime = getAverageDurationByTime(workouts);
@@ -190,16 +190,6 @@ const StatsView = ({ stats, workouts, className = '' }) => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-      {badges.length > 0 && (
-        <div className="flex flex-wrap gap-3 mt-6">
-          {badges.map(badge => (
-            <div key={badge.key} className="badge bg-gradient-to-r from-yellow-100 to-yellow-300 border border-yellow-300 shadow text-yellow-800 flex items-center gap-2">
-              <span className="text-xl">{badge.icon}</span>
-              <span>{t(badge.key, { defaultValue: badge.label })}</span>
-            </div>
-          ))}
         </div>
       )}
 

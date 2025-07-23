@@ -108,9 +108,6 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
                 <span className="truncate w-full">{label}</span>
               </div>
               {/* Indicateur de progression pour certains onglets */}
-              {id === 'workout' && (
-                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
-              )}
               {id === 'notifications' && notifications && notifications.length > 0 && (
                 <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
               )}
