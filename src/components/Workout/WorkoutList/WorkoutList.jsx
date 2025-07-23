@@ -23,6 +23,7 @@ import GradientButton from '../../GradientButton';
 import Card from '../../Card';
 import IconButton from '../../IconButton';
 import PropTypes from 'prop-types';
+import { getLastExerciseWeight } from '../../../utils/workoutUtils';
 
 function getMuscleIcon(muscle) {
   switch (muscle) {
@@ -42,6 +43,7 @@ function WorkoutList({
   selectedDate,
   setSelectedDate,
   exercises,
+  workouts,
   addSet,
   updateSet,
   removeSet,
@@ -64,6 +66,10 @@ function WorkoutList({
   const [customExerciseName, setCustomExerciseName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [favoriteExercises, setFavoriteExercises] = useState([]);
+  const getLastWeightFor = useCallback(
+    (name) => getLastExerciseWeight(workouts || [], name, selectedDate),
+    [workouts, selectedDate]
+  );
 
   // Synchro favoris Firestore <-> localStorage
   useEffect(() => {
@@ -191,8 +197,11 @@ function WorkoutList({
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-800">{exercise.name}</h3>
+                    {exercise.type !== 'cardio' && getLastWeightFor(exercise.name) !== null && (
+                      <p className="text-xs text-gray-500">Dernier poids : {getLastWeightFor(exercise.name)} kg</p>
+                    )}
                     <span className={`text-sm font-medium px-3 py-1 rounded-full ${
-                      exercise.type === 'cardio' ? 'bg-red-100 text-red-700' : 
+                      exercise.type === 'cardio' ? 'bg-red-100 text-red-700' :
                       exercise.type === 'custom' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
                     }`}>
                       {exercise.type === 'cardio' ? 'Cardio' : 
@@ -617,6 +626,7 @@ WorkoutList.propTypes = {
   selectedDate: PropTypes.string.isRequired,
   setSelectedDate: PropTypes.func.isRequired,
   exercises: PropTypes.array.isRequired,
+  workouts: PropTypes.array,
   addSet: PropTypes.func.isRequired,
   updateSet: PropTypes.func.isRequired,
   removeSet: PropTypes.func,

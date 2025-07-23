@@ -207,4 +207,22 @@ export function cleanWorkoutForFirestore(workout) {
   };
   
   return cleanObject(workout);
-} 
+}
+
+export function getLastExerciseWeight(workouts, exerciseName, beforeDate = null) {
+  if (!Array.isArray(workouts) || !exerciseName) return null;
+  const sorted = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  for (const workout of sorted) {
+    if (beforeDate && new Date(workout.date) >= new Date(beforeDate)) continue;
+    const exercise = workout.exercises?.find(
+      ex => ex.name && ex.name.toLowerCase() === exerciseName.toLowerCase()
+    );
+    if (exercise && Array.isArray(exercise.sets)) {
+      const weights = exercise.sets.map(s => parseFloat(s.weight || 0)).filter(w => w > 0);
+      if (weights.length > 0) {
+        return weights[weights.length - 1];
+      }
+    }
+  }
+  return null;
+}
