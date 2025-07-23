@@ -40,4 +40,18 @@ describe('Chatbot component', () => {
     expect(sendMessage).toHaveBeenCalledWith('Yo', null);
     await waitFor(() => expect(screen.getByPlaceholderText('Votre message...').value).toBe(''));
   });
+
+  it('uses API key from environment variables', () => {
+    const originalKey = process.env.REACT_APP_OPENAI_API_KEY;
+    process.env.REACT_APP_OPENAI_API_KEY = 'test-key';
+
+    const sendMessage = jest.fn();
+    useChatGPT.mockReturnValue({ messages: [], sendMessage });
+
+    render(<Chatbot workouts={[]} />);
+
+    expect(useChatGPT).toHaveBeenCalledWith('test-key');
+
+    process.env.REACT_APP_OPENAI_API_KEY = originalKey;
+  });
 });
