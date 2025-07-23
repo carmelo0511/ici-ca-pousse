@@ -55,6 +55,7 @@ function WorkoutList({
   selectedMuscleGroup,
   setSelectedMuscleGroup,
   addExerciseToWorkout,
+  removeExerciseFromWorkout,
   user,
   className = '',
 }) {
@@ -200,7 +201,19 @@ function WorkoutList({
                     </span>
                   </div>
                 </div>
-                <IconButton icon={Plus} onClick={() => addSet(exercise.id)} className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg" />
+                <div className="flex items-center space-x-2">
+                  <IconButton
+                    icon={Plus}
+                    onClick={() => addSet(exercise.id)}
+                    className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg"
+                  />
+                  <IconButton
+                    icon={X}
+                    onClick={() => removeExerciseFromWorkout(exercise.id)}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    title={t('remove')}
+                  />
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -617,6 +630,7 @@ WorkoutList.propTypes = {
   selectedMuscleGroup: PropTypes.string,
   setSelectedMuscleGroup: PropTypes.func,
   addExerciseToWorkout: PropTypes.func,
+  removeExerciseFromWorkout: PropTypes.func,
   user: PropTypes.object, // Added user prop type
   className: PropTypes.string,
 };

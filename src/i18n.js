@@ -33,6 +33,8 @@ const resources = {
       "workout_updated": "Séance modifiée avec succès ! 💪",
       "workout_deleted": "Séance supprimée !",
       "exercise_added": "Exercice ajouté à la séance !",
+      "exercise_removed": "Exercice supprimé de la séance !",
+      "remove": "Supprimer",
       "confirm_delete_workout": "Êtes-vous sûr de vouloir supprimer cette séance ? 🗑️",
       "error_update": "Erreur lors de la modification de la séance.",
       "error_delete": "Erreur lors de la suppression de la séance.",

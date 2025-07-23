@@ -12,6 +12,7 @@ export default function useWorkoutLogic({
   updateWorkout,
   deleteWorkout,
   addExercise,
+  removeExercise,
   clearExercises,
   setStartTime,
   setEndTime,
@@ -45,6 +46,15 @@ export default function useWorkoutLogic({
       showToastMsg,
       t,
     ]
+  );
+
+  // Suppression d'un exercice de la séance
+  const removeExerciseFromWorkout = useCallback(
+    (exerciseId) => {
+      removeExercise(exerciseId);
+      showToastMsg(t('exercise_removed'));
+    },
+    [removeExercise, showToastMsg, t]
   );
 
   // Sauvegarde d'une séance
@@ -204,6 +214,7 @@ export default function useWorkoutLogic({
 
   return {
     addExerciseToWorkout,
+    removeExerciseFromWorkout,
     saveWorkout,
     openWorkoutDetail,
     handleEditWorkout,
