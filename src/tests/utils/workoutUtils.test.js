@@ -37,6 +37,14 @@ describe('workoutUtils', () => {
     expect(stats.totalWorkouts).toBe(1);
   });
 
+  it('handles decimal weights correctly', () => {
+    const workout = createWorkout([
+      { name: 'Bench', sets: [{ reps: 2, weight: 4.5 }] }
+    ], '2024-01-05', 30);
+    expect(workout.exercises[0].sets[0].weight).toBe(4.5);
+    expect(workout.totalWeight).toBeCloseTo(9);
+  });
+
   it('formats date and gets current date', () => {
     const spy = jest.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue('lun. 08 janv.');
     expect(formatDate('2024-01-08')).toBe('lun. 08 janv.');
