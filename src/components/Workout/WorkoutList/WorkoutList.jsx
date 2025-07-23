@@ -470,15 +470,6 @@ function WorkoutList({
               {selectedMuscleGroup ? `💪 ${selectedMuscleGroup.charAt(0).toUpperCase() + selectedMuscleGroup.slice(1)}` : t('choose_muscle_group')}
             </h3>
           </div>
-          <button
-            onClick={() => {
-              setShowAddExercise(false);
-              setSelectedMuscleGroup(null);
-            }}
-            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-lg transition-all duration-200"
-          >
-            <X className="h-6 w-6" />
-          </button>
         </div>
 
         <div className="overflow-y-auto flex-1 pr-2">

@@ -357,3 +357,65 @@ button:focus {
 }
 
 /* Les tailles de police réduites sont déjà définies plus haut, inutile de les redéfinir ici */
+
+/* Dark mode global */
+body.dark, .dark .min-h-screen, .dark .w-full {
+  background: #2d2e36 !important;
+  color: #fff !important;
+}
+.dark, .dark * {
+  color: #fff !important;
+}
+.dark .bg-white, .dark .bg-white\/90, .dark .bg-gray-50, .dark .bg-gray-100 {
+  background-color: #353646 !important;
+}
+.dark .text-gray-400, .dark .text-gray-500, .dark .text-gray-600, .dark .text-gray-700 {
+  color: #e0e0e0 !important;
+}
+.dark .border-gray-200 {
+  border-color: #333646 !important;
+}
+.dark .shadow-lg {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.45) !important;
+}
+
+/* Toasts */
+.toast {
+  transition: opacity 0.4s, transform 0.4s;
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast.hide {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.dark .toast {
+  background: #23232a !important;
+  color: #f3f4f6 !important;
+  border-color: #444;
+}
+
+/* Onglets (PageTransition) */
+.page-transition {
+  transition: opacity 0.5s, transform 0.5s;
+  opacity: 1;
+  transform: translateX(0);
+}
+.page-transition-exit {
+  opacity: 0;
+  transform: translateX(40px);
+}
+
+/* Boutons principaux */
+button, .btn {
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.15s;
+}
+button:active, .btn:active {
+  transform: scale(0.97);
+}
+
+.dark button, .dark .btn {
+  background: #23232a;
+  color: #f3f4f6;
+  border-color: #444;
+}
