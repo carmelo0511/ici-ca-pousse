@@ -270,7 +270,7 @@ function WorkoutList({
                           onChange={(e) => updateSet(exercise.id, setIndex, 'weight', e.target.value)}
                           className="border-2 border-gray-200 rounded-lg px-3 py-2 text-center focus:border-blue-500 focus:outline-none transition-colors duration-200"
                           min="0"
-                          step="0.5"
+                          step="0.25"
                           placeholder="50"
                         />
                         <span className="text-sm font-semibold text-blue-600 bg-blue-50 rounded-lg px-3 py-2 text-center">
