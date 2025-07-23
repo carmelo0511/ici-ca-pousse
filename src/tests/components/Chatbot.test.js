@@ -1,4 +1,4 @@
-import { render, fireEvent, act, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import Chatbot from '../../components/Chatbot/Chatbot';
 import useChatGPT from '../../hooks/useChatGPT';
@@ -14,18 +14,16 @@ describe('Chatbot component', () => {
       { date: '2024-01-01', exercises: [{}, {}], duration: 30 }
     ];
 
-    const { getByPlaceholderText, getByText, getByRole } = render(
-      <Chatbot workouts={workouts} />
-    );
+    render(<Chatbot workouts={workouts} />);
 
-    await act(async () => {
-      fireEvent.change(getByPlaceholderText('Votre message...'), { target: { value: 'Hello' } });
-      fireEvent.click(getByText('Envoyer'));
-    });
+    fireEvent.change(screen.getByPlaceholderText('Votre message...'), { target: { value: 'Hello' } });
+    fireEvent.click(screen.getByText('Envoyer'));
 
-    expect(sendMessage).toHaveBeenCalledWith(
-      'Hello',
-      expect.stringContaining('Données récentes')
+    await waitFor(() =>
+      expect(sendMessage).toHaveBeenCalledWith(
+        'Hello',
+        expect.stringContaining('Données récentes')
+      )
     );
   });
 
@@ -33,17 +31,13 @@ describe('Chatbot component', () => {
     const sendMessage = jest.fn();
     useChatGPT.mockReturnValue({ messages: [], sendMessage });
 
-    const { getByPlaceholderText, getByText, getByRole } = render(
-      <Chatbot workouts={[]} />
-    );
+    render(<Chatbot workouts={[]} />);
 
-    await act(async () => {
-      fireEvent.change(getByRole('combobox'), { target: { value: 'free' } });
-      fireEvent.change(getByPlaceholderText('Votre message...'), { target: { value: 'Yo' } });
-      fireEvent.click(getByText('Envoyer'));
-    });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'free' } });
+    fireEvent.change(screen.getByPlaceholderText('Votre message...'), { target: { value: 'Yo' } });
+    fireEvent.click(screen.getByText('Envoyer'));
 
     expect(sendMessage).toHaveBeenCalledWith('Yo', null);
-    await waitFor(() => expect(getByPlaceholderText('Votre message...').value).toBe(''));
+    await waitFor(() => expect(screen.getByPlaceholderText('Votre message...').value).toBe(''));
   });
 });
