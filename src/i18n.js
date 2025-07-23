@@ -60,6 +60,8 @@ const resources = {
       "Pull-over": "Pull-over",
       "Pec deck": "Pec deck",
       "Tractions": "Tractions",
+      "Tractions lestées": "Tractions lestées",
+      "Tractions assistées": "Tractions assistées",
       "Rowing barre": "Rowing barre",
       "Rowing haltères": "Rowing haltères",
       "Tirage horizontal": "Tirage horizontal",
