@@ -64,8 +64,6 @@ function WorkoutList({
   selectedMuscleGroup,
   setSelectedMuscleGroup,
   addExerciseToWorkout,
-  onSaveTemplate,
-  onLoadTemplate,
   user,
   className = '',
 }) {
@@ -184,28 +182,7 @@ function WorkoutList({
             className="border-0 outline-none font-medium text-gray-700"
           />
         </div>
-        {onSaveTemplate && onLoadTemplate && (
-          <div className="flex gap-2 ml-4">
-            <GradientButton
-              icon={Star}
-              from="yellow-500"
-              to="yellow-600"
-              size="sm"
-              onClick={onSaveTemplate}
-            >
-              Sauver modèle
-            </GradientButton>
-            <GradientButton
-              icon={Calendar}
-              from="gray-500"
-              to="gray-600"
-              size="sm"
-              onClick={onLoadTemplate}
-            >
-              Charger
-            </GradientButton>
-          </div>
-        )}
+        
       </div>
 
       {exercises.length === 0 ? (
@@ -812,8 +789,6 @@ WorkoutList.propTypes = {
   selectedMuscleGroup: PropTypes.string,
   setSelectedMuscleGroup: PropTypes.func,
   addExerciseToWorkout: PropTypes.func,
-  onSaveTemplate: PropTypes.func,
-  onLoadTemplate: PropTypes.func,
   user: PropTypes.object, // Added user prop type
   className: PropTypes.string,
 };

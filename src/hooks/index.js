@@ -12,4 +12,3 @@ export { useSwipeNavigation } from './useSwipeNavigation';
 export { useUserProfile } from './useUserProfile';
 export { default as useWorkoutLogic } from './useWorkoutLogic';
 export { useWorkouts } from './useWorkouts';
-export { default as useWorkoutTemplates } from './useWorkoutTemplates';

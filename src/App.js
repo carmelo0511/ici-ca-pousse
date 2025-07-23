@@ -36,7 +36,6 @@ import {
   useSwipeNavigation,
   useKeyboardNavigation,
   useNotifications,
-  useWorkoutTemplates,
 } from './hooks';
 
 // Utils
@@ -105,7 +104,6 @@ function App() {
   );
   const { friends } = useFriends(user, addFriendXP);
   const { notifications } = useNotifications(user);
-  const { templates, saveTemplate } = useWorkoutTemplates();
   const { t } = useTranslation();
 
   // Hook personnalisé pour la logique des workouts
@@ -234,32 +232,6 @@ function App() {
     showToastMsg('Migration des séances locales vers le cloud réussie !');
   };
 
-  const handleSaveTemplate = () => {
-    if (exercises.length === 0) {
-      showToastMsg(t('no_exercises_to_save'), 'error');
-      return;
-    }
-    const name = window.prompt('Nom du template ?');
-    if (name) {
-      saveTemplate(name, exercises);
-      showToastMsg('Template sauvegardé');
-    }
-  };
-
-  const handleLoadTemplate = () => {
-    if (templates.length === 0) {
-      showToastMsg('Aucun template enregistré', 'error');
-      return;
-    }
-    const choices = templates.map((t) => t.name).join('\n');
-    const name = window.prompt('Choisissez un template:\n' + choices);
-    const temp = templates.find((t) => t.name === name);
-    if (temp) {
-      setExercisesFromWorkout(temp.exercises);
-      showToastMsg('Template chargé');
-    }
-  };
-
   // Afficher la proposition de migration si besoin
   if (showMigratePrompt) {
     return (
@@ -317,8 +289,6 @@ function App() {
               selectedMuscleGroup={selectedMuscleGroup}
               setSelectedMuscleGroup={setSelectedMuscleGroup}
               addExerciseToWorkout={addExerciseToWorkout}
-              onSaveTemplate={handleSaveTemplate}
-              onLoadTemplate={handleLoadTemplate}
             />
           </PageTransition>
 
