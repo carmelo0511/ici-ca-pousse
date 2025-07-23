@@ -40,4 +40,23 @@ describe('useChatGPT', () => {
       { role: 'assistant', content: 'Bonjour' }
     ]);
   });
+
+  it('uses Authorization header with provided API key', async () => {
+    global.fetch.mockResolvedValue({ json: async () => ({ choices: [] }) });
+
+    const { result } = renderHook(() => useChatGPT('my-key'));
+
+    await act(async () => {
+      await result.current.sendMessage('Hello');
+    });
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      'https://api.openai.com/v1/chat/completions',
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: 'Bearer my-key'
+        })
+      })
+    );
+  });
 });
