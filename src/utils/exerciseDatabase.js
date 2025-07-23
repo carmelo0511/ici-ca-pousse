@@ -4,7 +4,8 @@ export const exerciseDatabase = {
     'Écarté incliné', 'Développé haltères', 'Dips', 'Pull-over', 'Pec deck'
   ],
   dos: [
-    'Tractions', 'Rowing barre', 'Rowing haltères', 'Tirage horizontal', 'Tirage vertical',
+    'Tractions', 'Tractions lestées', 'Tractions assistées',
+    'Rowing barre', 'Rowing haltères', 'Tirage horizontal', 'Tirage vertical',
     'Soulevé de terre', 'Rowing T-bar', 'Shrugs', 'Hyperextensions', 'Tirage poulie haute'
   ],
   épaules: [
