@@ -12,9 +12,12 @@ const groupWorkoutsByWeek = (workouts) => {
     if (!date) return;
     const week = `${date.getFullYear()}-W${String(
       Math.ceil(
-        ((date - new Date(date.getFullYear(), 0, 1)) / 86400000 + new Date(date.getFullYear(), 0, 1).getDay() + 1) /
+        ((date - new Date(date.getFullYear(), 0, 1)) / 86400000 +
+          new Date(date.getFullYear(), 0, 1).getDay() +
+          1) /
           7
-      ).padStart(2, '0')}`;
+      )
+    ).padStart(2, '0')}`;
     if (!weeks[week]) weeks[week] = [];
     weeks[week].push(w);
   });
