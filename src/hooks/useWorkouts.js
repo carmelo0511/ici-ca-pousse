@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { load, save } from '../utils/storage';
 import { STORAGE_KEYS } from '../constants';
 import { db } from '../utils/firebase';
-import { collection, query, where, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, addDoc, setDoc, deleteDoc, doc } from 'firebase/firestore';
 import { cleanWorkoutForFirestore } from '../utils/workoutUtils';
 
 export const useWorkouts = (user) => {
@@ -44,16 +44,15 @@ export const useWorkouts = (user) => {
     if (user) {
       const cleanedWorkout = cleanWorkoutForFirestore(updatedWorkout);
       try {
-        await updateDoc(doc(db, 'workouts', workoutId), cleanedWorkout);
+        // setDoc permet de créer ou mettre à jour le document avec le même ID
+        await setDoc(
+          doc(db, 'workouts', workoutId),
+          { ...cleanedWorkout, userId: user.uid },
+          { merge: true }
+        );
       } catch (error) {
         console.error('Erreur update Firestore:', error);
-        // Si le document n'existe pas, on le crée à la place
-        if (error.code === 'not-found') {
-          console.log('Document non trouvé, création d\'un nouveau workout');
-          await addDoc(collection(db, 'workouts'), { ...cleanedWorkout, userId: user.uid });
-        } else {
-          throw error;
-        }
+        throw error;
       }
     } else {
       setWorkouts(prev => prev.map(w => w.id === workoutId ? updatedWorkout : w));
