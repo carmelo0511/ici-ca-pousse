@@ -1,9 +1,36 @@
 import React from 'react';
-import { Clock, Zap, Dumbbell, Heart, Trash2, X } from 'lucide-react';
+import { Clock, Zap, Dumbbell, Heart, Trash2, X, BarChart3, Calendar, Edit3 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { parseLocalDate } from '../../utils/workoutUtils';
+
+const groupWorkoutsByWeek = (workouts) => {
+  const weeks = {};
+  workouts.forEach((w) => {
+    const date = parseLocalDate(w.date);
+    if (!date) return;
+    const week = `${date.getFullYear()}-W${String(
+      Math.ceil(
+        ((date - new Date(date.getFullYear(), 0, 1)) / 86400000 + new Date(date.getFullYear(), 0, 1).getDay() + 1) /
+          7
+      ).padStart(2, '0')}`;
+    if (!weeks[week]) weeks[week] = [];
+    weeks[week].push(w);
+  });
+  return weeks;
+};
+
+function getWeekBounds(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diffToMonday = (day === 0 ? -6 : 1) - day;
+  const monday = new Date(d);
+  monday.setDate(d.getDate() + diffToMonday);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  return { monday, sunday };
+}
 
 const CalendarView = ({
   workouts,
@@ -13,9 +40,10 @@ const CalendarView = ({
   selectedWorkout,
   deleteWorkout,
   setShowWorkoutDetail,
+  onEditWorkout,
   className = '',
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   // Ajout navigation mois
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
@@ -31,6 +59,11 @@ const CalendarView = ({
   for (let day = 1; day <= daysInMonth; day++) {
     days.push(day);
   }
+
+  const [openWeeks, setOpenWeeks] = useState([]);
+  const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const weeks = groupWorkoutsByWeek(workouts);
+  const dateLocale = i18n.language === 'fr' ? 'fr-FR' : undefined;
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
@@ -136,16 +169,111 @@ const CalendarView = ({
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200 rounded-2xl p-6 fade-in-up">
-          <div className="flex items-center space-x-3 mb-3">
-            <Zap className="h-5 w-5 text-purple-600" />
-            <span className="text-sm font-bold text-purple-800">Motivation</span>
-          </div>
-          <p className="text-2xl font-bold text-purple-900">
-            {workouts.length > 10 ? '🔥 En feu!' : workouts.length > 5 ? '💪 Fort!' : '🌱 Début'}
-          </p>
+      <div className="bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-200 rounded-2xl p-6 fade-in-up">
+        <div className="flex items-center space-x-3 mb-3">
+          <Zap className="h-5 w-5 text-purple-600" />
+          <span className="text-sm font-bold text-purple-800">Motivation</span>
+        </div>
+        <p className="text-2xl font-bold text-purple-900">
+          {workouts.length > 10 ? '🔥 En feu!' : workouts.length > 5 ? '💪 Fort!' : '🌱 Début'}
+        </p>
+      </div>
+    </div>
+
+    {sortedWorkouts.length > 0 && (
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
+          <BarChart3 className="h-6 w-6" />
+          <span>{t('last_sessions')}</span>
+        </h3>
+        <div className="space-y-4">
+          {sortedWorkouts.slice(0, 5).map((workout) => (
+            <div key={workout.id} className="flex justify-between items-center py-4 px-6 bg-gray-100 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow duration-200">
+              <div>
+                <p className="font-bold text-gray-800">{new Date(workout.date).toLocaleDateString(dateLocale)}</p>
+                <p className="text-sm text-gray-600">
+                  {workout.exercises.length} {t('exercises')} • {workout.totalSets} {t('sets')}
+                  {workout.startTime && (
+                    <span className="ml-2 text-blue-600">
+                      • {workout.startTime}
+                      {workout.endTime && ` → ${workout.endTime}`}
+                    </span>
+                  )}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="font-bold text-gray-800">{workout.duration} min</p>
+                <p className="text-sm text-gray-600">{workout.totalWeight} {t('kg')}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
+    )}
+
+    <div className="mt-10">
+      <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><Calendar className="h-5 w-5" /> {t('history_by_week')}</h2>
+      {Object.keys(weeks).length === 0 ? (
+        <div className="text-gray-400">{t('no_sessions_recorded')}</div>
+      ) : (
+        Object.entries(weeks)
+          .sort(([a], [b]) => b.localeCompare(a))
+          .map(([week, weekWorkouts]) => {
+            const firstWorkout = weekWorkouts[0];
+            const d = parseLocalDate(firstWorkout.date);
+            const { monday, sunday } = getWeekBounds(d);
+            const isOpen = openWeeks.includes(week);
+            return (
+              <div key={week} className="mb-4">
+                <button
+                  className={`w-full flex justify-between items-center px-6 py-4 rounded-2xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 font-semibold text-indigo-700 shadow transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+                  onClick={() =>
+                    setOpenWeeks((prev) =>
+                      prev.includes(week) ? prev.filter((w) => w !== week) : [...prev, week]
+                    )
+                  }
+                  aria-expanded={isOpen}
+                >
+                  <span>
+                    Semaine du {monday.toLocaleDateString(dateLocale, { day: '2-digit', month: '2-digit' })} au{' '}
+                    {sunday.toLocaleDateString(dateLocale, { day: '2-digit', month: '2-digit' })}
+                  </span>
+                  <span className="ml-2">{isOpen ? '▲' : '▼'}</span>
+                </button>
+                {isOpen && (
+                  <div className="space-y-3 mt-2">
+                    {weekWorkouts
+                      .sort((a, b) => new Date(b.date) - new Date(a.date))
+                      .map((w) => (
+                        <div
+                          key={w.id}
+                          className="bg-white rounded-xl shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-100"
+                        >
+                          <div>
+                            <div className="font-bold text-lg text-gray-800">{new Date(w.date).toLocaleDateString(dateLocale)}</div>
+                            <div className="text-sm text-gray-500">
+                              {w.exercises.length} {t('exercises')}, {w.totalSets} {t('sets')}, {w.totalReps}{' '}
+                              {t('reps')}, {w.totalWeight} {t('kg')}
+                            </div>
+                          </div>
+                          <div className="flex gap-2 mt-2 sm:mt-0">
+                            <button
+                              onClick={() => onEditWorkout(w)}
+                              className={`flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-500 hover:to-yellow-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap`}
+                            >
+                              <Edit3 className="h-4 w-4" />
+                              {t('edit')}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            );
+          })
+      )}
+    </div>
 
       {showWorkoutDetail && selectedWorkout && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 p-2 sm:p-4 overflow-y-auto">
@@ -272,6 +400,7 @@ CalendarView.propTypes = {
   selectedWorkout: PropTypes.object,
   deleteWorkout: PropTypes.func,
   setShowWorkoutDetail: PropTypes.func,
+  onEditWorkout: PropTypes.func,
   className: PropTypes.string,
 };
 

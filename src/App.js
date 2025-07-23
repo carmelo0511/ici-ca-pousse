@@ -228,12 +228,13 @@ function App() {
               selectedWorkout={selectedWorkout}
               deleteWorkout={handleDeleteWorkout}
               setShowWorkoutDetail={setShowWorkoutDetail}
+              onEditWorkout={handleEditWorkout}
             />
           </PageTransition>
 
           {/* Onglet Statistiques */}
           <PageTransition isActive={activeTab === 'stats'}>
-            <StatsView stats={getStats()} workouts={workouts} onEditWorkout={handleEditWorkout} />
+            <StatsView stats={getStats()} workouts={workouts} />
           </PageTransition>
 
           {/* Onglet Amis */}
