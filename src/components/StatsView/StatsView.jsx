@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { parseLocalDate, analyzeWorkoutHabits, getPreferredWorkoutTime, getAverageDurationByTime } from '../../utils/workoutUtils';
@@ -35,13 +35,10 @@ function getMostWorkedMuscleGroup(workouts) {
 
 
 const StatsView = ({ stats, workouts, className = '' }) => {
-  const { t, i18n } = useTranslation();
-  // Trie les séances par date décroissante
-  const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const { t } = useTranslation();
   const workoutHabits = analyzeWorkoutHabits(workouts);
   const preferredTime = getPreferredWorkoutTime(workouts);
   const avgDurationByTime = getAverageDurationByTime(workouts);
-  const dateLocale = i18n.language === 'fr' ? 'fr-FR' : undefined;
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
