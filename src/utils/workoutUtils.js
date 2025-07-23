@@ -21,7 +21,7 @@ export const createWorkout = (exercises, date, duration, workoutId = undefined, 
     type: exercise.type || 'custom', // Type par défaut si manquant
     sets: (exercise.sets || [{ reps: 0, weight: 0, duration: 0 }]).map(set => ({
       reps: parseInt(set.reps) || 0,
-      weight: parseFloat(set.weight) || 0,
+      weight: parseFloat(String(set.weight).replace(',', '.')) || 0,
       duration: parseInt(set.duration) || 0
     }))
   }));
