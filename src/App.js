@@ -35,7 +35,8 @@ import {
   useExperience,
   useSwipeNavigation,
   useKeyboardNavigation,
-  useNotifications
+  useNotifications,
+  useWorkoutTemplates,
 } from './hooks';
 
 // Utils
@@ -45,7 +46,7 @@ import { STORAGE_KEYS } from './constants';
 function App() {
   const { user, loading: userLoading, refreshUserProfile } = useUserProfile();
   const [authChecked, setAuthChecked] = useState(false);
-  
+
   // Hook personnalisé pour l'état global
   const appState = useAppState();
   const {
@@ -73,12 +74,38 @@ function App() {
   } = appState;
 
   // Hooks personnalisés
-  const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
-  const { exercises, addExercise, addSet, updateSet, removeSet, clearExercises, setExercisesFromWorkout } = useExercises();
-  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP } = useExperience(user);
-  const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
+  const {
+    workouts,
+    addWorkout,
+    updateWorkout,
+    deleteWorkout,
+    getWorkoutForDate,
+    getStats,
+  } = useWorkouts(user);
+  const {
+    exercises,
+    addExercise,
+    addSet,
+    updateSet,
+    removeSet,
+    clearExercises,
+    setExercisesFromWorkout,
+  } = useExercises();
+  const {
+    addWorkoutXP,
+    addBadgeUnlockXP,
+    addFriendXP,
+    addChallengeSendXP,
+    addChallengeWinXP,
+  } = useExperience(user);
+  const { challenges } = useChallenges(
+    user,
+    addChallengeSendXP,
+    addChallengeWinXP
+  );
   const { friends } = useFriends(user, addFriendXP);
   const { notifications } = useNotifications(user);
+  const { templates, saveTemplate, getTemplate } = useWorkoutTemplates();
   const { t } = useTranslation();
 
   // Hook personnalisé pour la logique des workouts
@@ -105,10 +132,16 @@ function App() {
     showToastMsg,
     t,
     addWorkoutXP,
-    workouts
+    workouts,
   });
 
-  const { addExerciseToWorkout, saveWorkout, openWorkoutDetail, handleEditWorkout, handleDeleteWorkout } = workoutLogic;
+  const {
+    addExerciseToWorkout,
+    saveWorkout,
+    openWorkoutDetail,
+    handleEditWorkout,
+    handleDeleteWorkout,
+  } = workoutLogic;
 
   // Configuration des onglets pour la navigation
   const tabs = [
@@ -119,12 +152,39 @@ function App() {
     { id: 'leaderboard', label: 'Classement' },
     { id: 'challenges', label: 'Défis' },
     { id: 'badges', label: 'Badges' },
-    { id: 'notifications', label: 'Notifications' }
+    { id: 'notifications', label: 'Notifications' },
   ];
 
   // Navigation par gestes et raccourcis clavier
   useSwipeNavigation(activeTab, setActiveTab, tabs);
   useKeyboardNavigation(activeTab, setActiveTab, tabs);
+
+  // Charger un brouillon de séance s'il existe
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.WORKOUT_DRAFT);
+    if (saved) {
+      try {
+        const draft = JSON.parse(saved);
+        if (draft.exercises) setExercisesFromWorkout(draft.exercises);
+        if (draft.selectedDate) setSelectedDate(draft.selectedDate);
+        if (draft.startTime) setStartTime(draft.startTime);
+        if (draft.endTime) setEndTime(draft.endTime);
+      } catch {
+        // ignore parsing errors
+      }
+    }
+  }, []);
+
+  // Sauvegarder le brouillon à chaque modification
+  useEffect(() => {
+    const draft = {
+      exercises,
+      selectedDate,
+      startTime,
+      endTime,
+    };
+    localStorage.setItem(STORAGE_KEYS.WORKOUT_DRAFT, JSON.stringify(draft));
+  }, [exercises, selectedDate, startTime, endTime]);
 
   useEffect(() => {
     if (user) {
@@ -138,7 +198,9 @@ function App() {
   useEffect(() => {
     if (user) {
       // Vérifier s'il y a des données locales à migrer
-      const localWorkouts = JSON.parse(localStorage.getItem(STORAGE_KEYS.WORKOUTS) || '[]');
+      const localWorkouts = JSON.parse(
+        localStorage.getItem(STORAGE_KEYS.WORKOUTS) || '[]'
+      );
       if (localWorkouts.length > 0) {
         setShowMigratePrompt(true);
       }
@@ -149,9 +211,13 @@ function App() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="text-2xl font-bold text-indigo-600 mb-4">Chargement...</div>
+          <div className="text-2xl font-bold text-indigo-600 mb-4">
+            Chargement...
+          </div>
           <div className="text-sm text-gray-500">
-            {userLoading ? 'Chargement du profil...' : 'Vérification de l\'authentification...'}
+            {userLoading
+              ? 'Chargement du profil...'
+              : "Vérification de l'authentification..."}
           </div>
         </div>
       </div>
@@ -168,20 +234,52 @@ function App() {
     showToastMsg('Migration des séances locales vers le cloud réussie !');
   };
 
+  const handleSaveTemplate = () => {
+    if (exercises.length === 0) {
+      showToastMsg(t('no_exercises_to_save'), 'error');
+      return;
+    }
+    const name = window.prompt('Nom du template ?');
+    if (name) {
+      saveTemplate(name, exercises);
+      showToastMsg('Template sauvegardé');
+    }
+  };
+
+  const handleLoadTemplate = () => {
+    if (templates.length === 0) {
+      showToastMsg('Aucun template enregistré', 'error');
+      return;
+    }
+    const choices = templates.map((t) => t.name).join('\n');
+    const name = window.prompt('Choisissez un template:\n' + choices);
+    const temp = templates.find((t) => t.name === name);
+    if (temp) {
+      setExercisesFromWorkout(temp.exercises);
+      showToastMsg('Template chargé');
+    }
+  };
+
   // Afficher la proposition de migration si besoin
   if (showMigratePrompt) {
     return (
-      <MigrationPrompt onMigrate={handleMigrate} onIgnore={() => setShowMigratePrompt(false)} />
+      <MigrationPrompt
+        onMigrate={handleMigrate}
+        onIgnore={() => setShowMigratePrompt(false)}
+      />
     );
   }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
-      <div id="main-content" className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
-        <Header 
-          workoutCount={workouts.length} 
-          user={user} 
-          workouts={workouts} 
+      <div
+        id="main-content"
+        className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact"
+      >
+        <Header
+          workoutCount={workouts.length}
+          user={user}
+          workouts={workouts}
           challenges={challenges}
           addBadgeUnlockXP={addBadgeUnlockXP}
           refreshUserProfile={refreshUserProfile}
@@ -191,8 +289,12 @@ function App() {
             // Les changements sont gérés automatiquement par le hook
           }}
         />
-        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} notifications={notifications} />
-        
+        <Navigation
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          notifications={notifications}
+        />
+
         {/* Conteneur pour tous les onglets avec position relative */}
         <div className="relative">
           {/* Onglet Séance */}
@@ -215,6 +317,8 @@ function App() {
               selectedMuscleGroup={selectedMuscleGroup}
               setSelectedMuscleGroup={setSelectedMuscleGroup}
               addExerciseToWorkout={addExerciseToWorkout}
+              onSaveTemplate={handleSaveTemplate}
+              onLoadTemplate={handleLoadTemplate}
             />
           </PageTransition>
 
@@ -254,7 +358,13 @@ function App() {
 
           {/* Onglet Badges */}
           <PageTransition isActive={activeTab === 'badges'}>
-            <BadgesPage workouts={workouts} challenges={challenges} friends={friends} user={user} addBadgeUnlockXP={addBadgeUnlockXP} />
+            <BadgesPage
+              workouts={workouts}
+              challenges={challenges}
+              friends={friends}
+              user={user}
+              addBadgeUnlockXP={addBadgeUnlockXP}
+            />
           </PageTransition>
 
           {/* Onglet Notifications */}
@@ -266,7 +376,8 @@ function App() {
         {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
         <PWAInstallButton />
         {toast.show && (
-          <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg
+          <div
+            className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg
             ${toast.type === 'success' ? 'bg-white border border-green-200 text-green-700' : 'bg-white border border-red-200 text-red-700'}`}
           >
             <span>{toast.message}</span>
