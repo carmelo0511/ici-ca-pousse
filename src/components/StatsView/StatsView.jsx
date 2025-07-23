@@ -38,7 +38,6 @@ const StatsView = ({ stats, workouts, className = '' }) => {
   const { t, i18n } = useTranslation();
   // Trie les séances par date décroissante
   const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
-  const weeks = groupWorkoutsByWeek(workouts);
   const workoutHabits = analyzeWorkoutHabits(workouts);
   const preferredTime = getPreferredWorkoutTime(workouts);
   const avgDurationByTime = getAverageDurationByTime(workouts);
