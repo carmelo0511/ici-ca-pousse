@@ -39,14 +39,18 @@ export const useExercises = () => {
   };
 
   const updateSet = (exerciseId, setIndex, field, value) => {
-    setExercises(prev => prev.map(ex => 
-      ex.id === exerciseId 
-        ? { 
-            ...ex, 
-            sets: ex.sets.map((set, idx) => 
-              idx === setIndex ? { 
-                ...set, 
-                [field]: Math.max(0, parseInt(value) || 0) // Valeur minimale 0
+    const parsed = field === 'weight'
+      ? parseFloat(String(value).replace(',', '.'))
+      : parseInt(value, 10);
+
+    setExercises(prev => prev.map(ex =>
+      ex.id === exerciseId
+        ? {
+            ...ex,
+            sets: ex.sets.map((set, idx) =>
+              idx === setIndex ? {
+                ...set,
+                [field]: Math.max(0, parsed || 0) // Valeur minimale 0
               } : set
             )
           }
