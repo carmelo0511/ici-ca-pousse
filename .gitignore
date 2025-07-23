@@ -7,3 +7,5 @@ build/
 node_modules/
 node_modules/.cache/
 !/.env.example
+
+.env.local
