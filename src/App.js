@@ -105,7 +105,7 @@ function App() {
   );
   const { friends } = useFriends(user, addFriendXP);
   const { notifications } = useNotifications(user);
-  const { templates, saveTemplate, getTemplate } = useWorkoutTemplates();
+  const { templates, saveTemplate } = useWorkoutTemplates();
   const { t } = useTranslation();
 
   // Hook personnalisé pour la logique des workouts
@@ -173,7 +173,7 @@ function App() {
         // ignore parsing errors
       }
     }
-  }, []);
+  }, [setExercisesFromWorkout, setSelectedDate, setStartTime, setEndTime]);
 
   // Sauvegarder le brouillon à chaque modification
   useEffect(() => {
