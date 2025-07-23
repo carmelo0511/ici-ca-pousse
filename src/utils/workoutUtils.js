@@ -180,7 +180,7 @@ export function getWorkoutsForDateRange(workouts, startDate, endDate) {
   if (!workouts || !Array.isArray(workouts)) return [];
   
   return workouts.filter(workout => {
-    const workoutDate = new Date(workout.date);
+    const workoutDate = parseLocalDate(workout.date);
     return workoutDate >= startDate && workoutDate <= endDate;
   });
 }
@@ -211,9 +211,11 @@ export function cleanWorkoutForFirestore(workout) {
 
 export function getLastExerciseWeight(workouts, exerciseName, beforeDate = null) {
   if (!Array.isArray(workouts) || !exerciseName) return null;
-  const sorted = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sorted = [...workouts].sort(
+    (a, b) => parseLocalDate(b.date) - parseLocalDate(a.date)
+  );
   for (const workout of sorted) {
-    if (beforeDate && new Date(workout.date) >= new Date(beforeDate)) continue;
+    if (beforeDate && parseLocalDate(workout.date) >= parseLocalDate(beforeDate)) continue;
     const exercise = workout.exercises?.find(
       ex => ex.name && ex.name.toLowerCase() === exerciseName.toLowerCase()
     );

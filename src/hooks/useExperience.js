@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../utils/firebase';
+import { parseLocalDate } from '../utils/workoutUtils';
 
 // XP nécessaire pour chaque niveau (progression exponentielle)
 function xpRequired(level) {
@@ -61,12 +62,12 @@ function calculateWorkoutXP(workout, previousWorkouts = []) {
   xp += uniqueExercises * XP_REWARDS.WORKOUT.EXERCISE_BONUS;
   
   // Bonus streak si séance la veille
-  if (previousWorkouts.length > 0) {
-    const lastWorkoutDate = new Date(previousWorkouts[0].date);
-    const currentWorkoutDate = new Date(workout.date);
-    const daysDiff = Math.floor((currentWorkoutDate - lastWorkoutDate) / (1000 * 60 * 60 * 24));
-    if (daysDiff === 1) xp += XP_REWARDS.WORKOUT.STREAK_BONUS;
-  }
+    if (previousWorkouts.length > 0) {
+      const lastWorkoutDate = parseLocalDate(previousWorkouts[0].date);
+      const currentWorkoutDate = parseLocalDate(workout.date);
+      const daysDiff = Math.floor((currentWorkoutDate - lastWorkoutDate) / (1000 * 60 * 60 * 24));
+      if (daysDiff === 1) xp += XP_REWARDS.WORKOUT.STREAK_BONUS;
+    }
   
   // Bonus séance parfaite (tous les exercices ont des sets complétés)
   const allExercisesCompleted = workout.exercises?.every(ex => 
@@ -148,12 +149,12 @@ export const useExperience = (user) => {
     // Calcul streak
     let newStreak = 1;
     let streakIncreased = false;
-    if (previousWorkouts.length > 0) {
-      const lastWorkoutDate = new Date(previousWorkouts[0].date);
-      const currentWorkoutDate = new Date(workout.date);
-      const daysDiff = Math.floor((currentWorkoutDate - lastWorkoutDate) / (1000 * 60 * 60 * 24));
-      if (daysDiff === 1) {
-        newStreak = currentExp.streak + 1;
+      if (previousWorkouts.length > 0) {
+        const lastWorkoutDate = parseLocalDate(previousWorkouts[0].date);
+        const currentWorkoutDate = parseLocalDate(workout.date);
+        const daysDiff = Math.floor((currentWorkoutDate - lastWorkoutDate) / (1000 * 60 * 60 * 24));
+        if (daysDiff === 1) {
+          newStreak = currentExp.streak + 1;
         streakIncreased = true;
       } else if (daysDiff === 0) {
         newStreak = currentExp.streak; // même jour, ne pas incrémenter

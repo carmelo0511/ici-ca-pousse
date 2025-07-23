@@ -1,4 +1,6 @@
 // Système de badges pour récompenser les utilisateurs
+import { parseLocalDate } from './workoutUtils';
+
 export const badges = {
   // Badges de séances
   firstWorkout: {
@@ -158,13 +160,19 @@ export const calculateBadgeStats = (workouts, challenges, friends) => {
   }
 
   // Calcul du streak actuel
-  const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedWorkouts = [...workouts].sort(
+    (a, b) => parseLocalDate(b.date) - parseLocalDate(a.date)
+  );
   let currentStreak = 0;
   let lastDate = null;
 
   for (let i = 0; i < sortedWorkouts.length; i++) {
-    const workoutDate = new Date(sortedWorkouts[i].date);
-    const workoutDay = new Date(workoutDate.getFullYear(), workoutDate.getMonth(), workoutDate.getDate());
+    const workoutDate = parseLocalDate(sortedWorkouts[i].date);
+    const workoutDay = new Date(
+      workoutDate.getFullYear(),
+      workoutDate.getMonth(),
+      workoutDate.getDate()
+    );
     
     if (!lastDate || (lastDate - workoutDay) / (1000 * 60 * 60 * 24) === 1) {
       currentStreak++;
@@ -179,12 +187,12 @@ export const calculateBadgeStats = (workouts, challenges, friends) => {
   const maxCalories = Math.max(...workouts.map(w => w.calories || 0));
   
   const earlyWorkouts = workouts.filter(w => {
-    const hour = new Date(w.date).getHours();
+    const hour = parseLocalDate(w.date).getHours();
     return hour < 7;
   }).length;
 
   const lateWorkouts = workouts.filter(w => {
-    const hour = new Date(w.date).getHours();
+    const hour = parseLocalDate(w.date).getHours();
     return hour >= 22;
   }).length;
 

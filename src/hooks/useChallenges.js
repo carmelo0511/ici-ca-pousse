@@ -5,7 +5,7 @@ import {
   updateChallengeInFirebase,
   deleteChallengeFromFirebase
 } from '../utils/firebase';
-import { getWorkoutsForDateRange } from '../utils/workoutUtils';
+import { getWorkoutsForDateRange, parseLocalDate } from '../utils/workoutUtils';
 import { useWorkouts } from './useWorkouts';
 
 export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
@@ -111,11 +111,11 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
           return filteredWorkouts.length;
         case 'duration':
           return filteredWorkouts.reduce((total, workout) => total + (workout.duration || 0), 0);
-        case 'streak': {
-          // S'assurer que les dates de workout sont bien des objets Date
-          const sortedDates = filteredWorkouts
-            .map(w => typeof w.date === 'string' ? new Date(w.date) : w.date)
-            .sort((a, b) => a - b);
+          case 'streak': {
+            // S'assurer que les dates de workout sont bien des objets Date
+            const sortedDates = filteredWorkouts
+              .map(w => parseLocalDate(w.date))
+              .sort((a, b) => a - b);
           let maxStreak = 0;
           let currentStreak = 0;
           let lastDate = null;
