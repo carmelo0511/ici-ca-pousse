@@ -366,8 +366,31 @@ body.dark, .dark .min-h-screen, .dark .w-full {
 .dark, .dark * {
   color: #fff !important;
 }
-.dark .bg-white, .dark .bg-white\/90, .dark .bg-gray-50, .dark .bg-gray-100 {
+.dark .bg-white,
+.dark .bg-white\/90,
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-blue-50,
+.dark .bg-indigo-50,
+.dark .bg-yellow-50,
+.dark .bg-purple-50,
+.dark .bg-green-50 {
   background-color: #353646 !important;
+}
+.dark .card,
+.dark .bg-white *,
+.dark .bg-gray-50 *,
+.dark .bg-blue-50 *,
+.dark .bg-indigo-50 *,
+.dark .bg-yellow-50 *,
+.dark .bg-purple-50 *,
+.dark .bg-green-50 * {
+  color: #fff !important;
+}
+.dark .border,
+.dark .border-gray-100,
+.dark .border-blue-100 {
+  border-color: #44465a !important;
 }
 .dark .text-gray-400, .dark .text-gray-500, .dark .text-gray-600, .dark .text-gray-700 {
   color: #e0e0e0 !important;
@@ -418,4 +441,79 @@ button:active, .btn:active {
   background: #23232a;
   color: #f3f4f6;
   border-color: #444;
+}
+
+/* Cartes à fond coloré (stats, leaderboard, etc.) */
+.dark .bg-blue-600,
+.dark .bg-green-600,
+.dark .bg-purple-600,
+.dark .bg-red-600,
+.dark .bg-indigo-600 {
+  background-color: #353646 !important;
+  color: #fff !important;
+}
+
+.dark .bg-gradient-to-br,
+.dark .bg-gradient-to-r,
+.dark .from-blue-50,
+.dark .from-green-50,
+.dark .from-purple-50,
+.dark .from-yellow-50,
+.dark .from-indigo-50,
+.dark .from-emerald-100,
+.dark .from-gray-50,
+.dark .to-blue-100,
+.dark .to-green-100,
+.dark .to-purple-100,
+.dark .to-yellow-100,
+.dark .to-indigo-100,
+.dark .to-emerald-100,
+.dark .to-gray-100 {
+  background: #353646 !important;
+  color: #fff !important;
+}
+
+/* Cartes Card.jsx */
+.dark .bg-white,
+.dark .bg-white\/90,
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+  background-color: #353646 !important;
+  color: #fff !important;
+}
+
+/* Textes sur cartes */
+.dark .text-gray-800,
+.dark .text-gray-600,
+.dark .text-blue-800,
+.dark .text-green-800,
+.dark .text-purple-800,
+.dark .text-yellow-800,
+.dark .text-indigo-800 {
+  color: #fff !important;
+}
+
+/* Bordures */
+.dark .border,
+.dark .border-gray-100,
+.dark .border-blue-100,
+.dark .border-green-200 {
+  border-color: #44465a !important;
+}
+
+/* Forcer le fond foncé sur les cartes internes pastel en dark mode */
+.dark .bg-blue-50,
+.dark .bg-yellow-50,
+.dark .bg-purple-50,
+.dark .bg-indigo-50,
+.dark .bg-green-50,
+.dark .bg-emerald-100,
+.dark .bg-blue-100,
+.dark .bg-yellow-100,
+.dark .bg-purple-100,
+.dark .bg-indigo-100,
+.dark .bg-green-100,
+.dark .bg-emerald-200 {
+  background-color: #353646 !important;
+  color: #fff !important;
 }
