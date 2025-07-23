@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Flame } from 'lucide-react';
 import PropTypes from 'prop-types';
 
-function getStreakMessage(streak) {
+export function getStreakMessage(streak) {
   if (streak >= 100) return '🔥 LÉGENDAIRE !';
   if (streak >= 30) return '🔥 INCROYABLE !';
   if (streak >= 7) return '🔥 EN FEU !';
@@ -31,11 +31,28 @@ const StreakCounter = ({ streak, className = '' }) => {
   }, [streak, displayStreak]);
 
   return (
-    <div className={`flex items-center space-x-2 bg-white/70 rounded-lg px-2 py-1 border border-gray-100 shadow-sm ${className}`} style={{ minWidth: 0 }}>
-      <Flame className="h-5 w-5 text-orange-300 mr-1" style={{ minWidth: 20 }} />
-      <span className="text-base font-semibold text-gray-700" style={{ letterSpacing: 0.5 }}>{displayStreak} <span className="text-xs font-normal text-gray-400">jours</span></span>
+    <div
+      className={`flex items-center space-x-2 bg-white/70 rounded-lg px-2 py-1 border border-gray-100 shadow-sm ${className}`}
+      style={{ minWidth: 0 }}
+    >
+      <Flame
+        className="h-5 w-5 text-orange-300 mr-1"
+        style={{ minWidth: 20 }}
+      />
+      <span
+        className="text-base font-semibold text-gray-700"
+        style={{ letterSpacing: 0.5 }}
+      >
+        {displayStreak}{' '}
+        <span className="text-xs font-normal text-gray-400">jours</span>
+      </span>
       {getStreakMessage(streak) && (
-        <span className="ml-2 text-xs text-orange-400 font-medium" style={{ whiteSpace: 'nowrap' }}>{getStreakMessage(streak)}</span>
+        <span
+          className="ml-2 text-xs text-orange-400 font-medium"
+          style={{ whiteSpace: 'nowrap' }}
+        >
+          {getStreakMessage(streak)}
+        </span>
       )}
     </div>
   );
@@ -43,7 +60,7 @@ const StreakCounter = ({ streak, className = '' }) => {
 
 StreakCounter.propTypes = {
   streak: PropTypes.number.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
-export default StreakCounter; 
+export default memo(StreakCounter);
