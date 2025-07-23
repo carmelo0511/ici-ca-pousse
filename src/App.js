@@ -40,6 +40,7 @@ import {
 
 // Utils
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
+import { STORAGE_KEYS } from './constants';
 
 function App() {
   const { user, loading: userLoading, refreshUserProfile } = useUserProfile();
@@ -137,7 +138,7 @@ function App() {
   useEffect(() => {
     if (user) {
       // Vérifier s'il y a des données locales à migrer
-      const localWorkouts = JSON.parse(localStorage.getItem('iciCaPousse_workouts') || '[]');
+      const localWorkouts = JSON.parse(localStorage.getItem(STORAGE_KEYS.WORKOUTS) || '[]');
       if (localWorkouts.length > 0) {
         setShowMigratePrompt(true);
       }

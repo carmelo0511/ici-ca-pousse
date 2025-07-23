@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { load, save } from '../utils/storage';
+import { STORAGE_KEYS } from '../constants';
 import { db } from '../utils/firebase';
 import { collection, query, where, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { cleanWorkoutForFirestore } from '../utils/workoutUtils';
@@ -17,7 +18,7 @@ export const useWorkouts = (user) => {
       return unsubscribe;
     } else {
       // Fallback localStorage
-      const savedWorkouts = load('iciCaPousse_workouts', []);
+      const savedWorkouts = load(STORAGE_KEYS.WORKOUTS, []);
       setWorkouts(savedWorkouts);
     }
   }, [user]);
@@ -25,7 +26,7 @@ export const useWorkouts = (user) => {
   // Sauvegarde locale si pas connecté
   useEffect(() => {
     if (!user) {
-      save('iciCaPousse_workouts', workouts);
+      save(STORAGE_KEYS.WORKOUTS, workouts);
     }
   }, [workouts, user]);
 
