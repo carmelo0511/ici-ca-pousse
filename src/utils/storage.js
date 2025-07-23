@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from "../constants";
 export const load = (key, defaultValue) => {
   try {
     const raw = localStorage.getItem(key);
@@ -17,22 +18,23 @@ export const save = (key, value) => {
 };
 
 export const migrateLocalWorkoutsToCloud = async (user, addWorkoutCloud) => {
-  const localWorkouts = load('iciCaPousse_workouts', []);
+  const localWorkouts = load(STORAGE_KEYS.WORKOUTS, []);
   if (user && localWorkouts.length > 0) {
     for (const workout of localWorkouts) {
       const { id, ...workoutWithoutId } = workout;
       await addWorkoutCloud({ ...workoutWithoutId, userId: user.uid });
     }
     // Optionnel : vider le localStorage après migration
-    save('iciCaPousse_workouts', []);
+    save(STORAGE_KEYS.WORKOUTS, []);
   }
 };
 
 export const migrateLocalFavoritesToCloud = async (user, setFavoriteCloud) => {
-  const localFavorites = load('favoriteExercises', []);
+  const localFavorites = load(STORAGE_KEYS.FAVORITE_EXERCISES, []);
   if (user && localFavorites.length > 0) {
     await setFavoriteCloud(localFavorites);
     // Optionnel : vider le localStorage après migration
-    save('favoriteExercises', []);
+    save(STORAGE_KEYS.FAVORITE_EXERCISES, []);
   }
 };
+

@@ -7,6 +7,7 @@ import ProfileSettings from '../Profile/ProfileSettings';
 import ProfilePicture from '../Profile/ProfilePicture';
 import { useExperience } from '../../hooks/useExperience.js';
 import StreakCounter from '../StreakCounter';
+import { STORAGE_KEYS } from '../../constants';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate, refreshUserProfile }) => {
   const [showProfile, setShowProfile] = React.useState(false);
@@ -18,7 +19,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
 
   // Dark mode: détecte le mode système à l'init
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
+    const saved = localStorage.getItem(STORAGE_KEYS.THEME);
     if (saved) {
       setTheme(saved);
       document.body.classList.toggle('dark', saved === 'dark');
@@ -32,7 +33,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
   // Applique la classe dark/light sur le body à chaque changement
   useEffect(() => {
     document.body.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
+    localStorage.setItem(STORAGE_KEYS.THEME, theme);
   }, [theme]);
 
   const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');

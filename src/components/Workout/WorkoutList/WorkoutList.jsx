@@ -1,5 +1,6 @@
 import React, { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { STORAGE_KEYS } from '../../../constants';
 import { db } from '../../../utils/firebase';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import {
@@ -79,7 +80,7 @@ function WorkoutList({
     } else {
       // Fallback localStorage
       try {
-        setFavoriteExercises(JSON.parse(localStorage.getItem('favoriteExercises') || '[]'));
+        setFavoriteExercises(JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVORITE_EXERCISES) || '[]'));
       } catch {
         setFavoriteExercises([]);
       }
@@ -92,18 +93,18 @@ function WorkoutList({
       const favRef = doc(db, 'favorites', user.uid);
       setDoc(favRef, { exercises: favoriteExercises }, { merge: true });
     } else {
-      localStorage.setItem('favoriteExercises', JSON.stringify(favoriteExercises));
+      localStorage.setItem(STORAGE_KEYS.FAVORITE_EXERCISES, JSON.stringify(favoriteExercises));
     }
   }, [favoriteExercises, user]);
 
   // Migration favoris locaux -> cloud
   useEffect(() => {
     if (user) {
-      const localFavs = JSON.parse(localStorage.getItem('favoriteExercises') || '[]');
+      const localFavs = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVORITE_EXERCISES) || '[]');
       if (localFavs.length > 0) {
         const favRef = doc(db, 'favorites', user.uid);
         setDoc(favRef, { exercises: localFavs }, { merge: true });
-        localStorage.setItem('favoriteExercises', '[]');
+        localStorage.setItem(STORAGE_KEYS.FAVORITE_EXERCISES, '[]');
       }
     }
   }, [user]);
