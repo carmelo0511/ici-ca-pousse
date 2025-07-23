@@ -149,6 +149,7 @@ REACT_APP_FIREBASE_PROJECT_ID=your_project_id
 REACT_APP_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 REACT_APP_FIREBASE_APP_ID=your_app_id
+REACT_APP_OPENAI_API_KEY=your_openai_api_key
 ```
 
 ### 3. Règles Firestore
@@ -286,7 +287,7 @@ src/tests/
 - [x] Suite de tests complète avec 100% couverture sur useAppState
 
 ### 🚧 En développement
-- [ ] Chatbot IA pour recommandations d'entraînement
+- [x] Chatbot IA pour recommandations d'entraînement
 - [ ] Recommandations d'exercices intelligentes
 - [ ] Analyse de performance avancée
 - [ ] Intégration wearables (Apple Watch, Fitbit)

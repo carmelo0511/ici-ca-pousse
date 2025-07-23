@@ -22,6 +22,7 @@ import Challenges from './components/Challenges';
 import Notifications from './components/Notifications';
 import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
+import Chatbot from './components/Chatbot/Chatbot';
 
 // Hooks
 import {
@@ -132,6 +133,7 @@ function App() {
     { id: 'workout', label: 'Séance' },
     { id: 'calendar', label: 'Calendrier' },
     { id: 'stats', label: 'Statistiques' },
+    { id: 'chatbot', label: 'Chatbot' },
     { id: 'friends', label: 'Amis' },
     { id: 'leaderboard', label: 'Classement' },
     { id: 'challenges', label: 'Défis' },
@@ -253,7 +255,12 @@ function App() {
 
           {/* Onglet Statistiques */}
           <PageTransition isActive={activeTab === 'stats'}>
-            <StatsView stats={getStats()} workouts={workouts} />
+          <StatsView stats={getStats()} workouts={workouts} />
+          </PageTransition>
+
+          {/* Onglet Chatbot */}
+          <PageTransition isActive={activeTab === 'chatbot'}>
+            <Chatbot workouts={workouts} />
           </PageTransition>
 
           {/* Onglet Amis */}
