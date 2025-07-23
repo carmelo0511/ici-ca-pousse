@@ -200,6 +200,7 @@ function App() {
             <WorkoutList
               user={user}
               exercises={exercises}
+              workouts={workouts}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               startTime={startTime}
