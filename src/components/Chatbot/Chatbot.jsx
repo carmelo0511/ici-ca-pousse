@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import useChatGPT from '../../hooks/useChatGPT';
+import { getMuscleGroupDistribution, getWeightProgress } from '../../utils/workoutUtils';
 
 const Chatbot = ({ workouts }) => {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
@@ -11,14 +12,28 @@ const Chatbot = ({ workouts }) => {
   const [mode, setMode] = useState('advice');
 
   const getSummary = () => {
-    if (!workouts || workouts.length === 0) return "Aucune séance enregistrée.";
-    const last = workouts.slice(-5).map(w => `${w.date} - ${w.exercises.length} ex (${w.duration || 0} min)`).join('\n');
-    return `Données récentes:\n${last}`;
+    if (!workouts || workouts.length === 0) return 'Aucune séance enregistrée.';
+
+    const distribution = getMuscleGroupDistribution(workouts);
+    const distString = Object.entries(distribution)
+      .map(([muscle, percent]) => `${muscle}:${percent}%`)
+      .join(', ');
+
+    const progress = getWeightProgress(workouts);
+    const progressString = Object.entries(progress)
+      .slice(0, 3)
+      .map(([name, diff]) => `${name}:${diff >= 0 ? '+' : ''}${diff}kg`)
+      .join(', ');
+
+    return `Répartition ${distString}. Progression poids ${progressString}`;
   };
 
   const handleSend = async () => {
     if (!input.trim()) return;
-    const context = mode === 'advice' ? `Tu es un coach sportif. Voici mes dernières séances:\n${getSummary()}\nDonne-moi des recommandations adaptées.` : null;
+    const context =
+      mode === 'advice'
+        ? `Tu es un coach sportif. Analyse mes séances précédentes. ${getSummary()} Donne-moi des conseils précis.`
+        : null;
     await sendMessage(input, context);
     setInput('');
   };

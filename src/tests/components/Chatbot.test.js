@@ -22,7 +22,7 @@ describe('Chatbot component', () => {
     await waitFor(() =>
       expect(sendMessage).toHaveBeenCalledWith(
         'Hello',
-        expect.stringContaining('Données récentes')
+        expect.stringContaining('Répartition')
       )
     );
   });

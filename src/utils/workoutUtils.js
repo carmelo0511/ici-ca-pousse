@@ -228,3 +228,46 @@ export function getLastExerciseWeight(workouts, exerciseName, beforeDate = null)
   }
   return null;
 }
+
+// Calcule la répartition des groupes musculaires travaillés sur toutes les séances
+export function getMuscleGroupDistribution(workouts) {
+  if (!Array.isArray(workouts)) return {};
+  const count = {};
+  workouts.forEach(w => {
+    w.exercises?.forEach(ex => {
+      if (ex.type) {
+        count[ex.type] = (count[ex.type] || 0) + 1;
+      }
+    });
+  });
+  const total = Object.values(count).reduce((a, b) => a + b, 0);
+  const distribution = {};
+  Object.entries(count).forEach(([muscle, c]) => {
+    distribution[muscle] = total > 0 ? Math.round((c / total) * 100) : 0;
+  });
+  return distribution;
+}
+
+// Retourne la progression de poids moyenne par exercice entre la première et la dernière séance
+export function getWeightProgress(workouts) {
+  if (!Array.isArray(workouts)) return {};
+  const sorted = [...workouts].sort((a, b) => parseLocalDate(a.date) - parseLocalDate(b.date));
+  const map = {};
+  sorted.forEach(w => {
+    w.exercises?.forEach(ex => {
+      const weight = Array.isArray(ex.sets)
+        ? ex.sets.reduce((s, set) => s + (parseFloat(set.weight) || 0), 0) / (ex.sets.length || 1)
+        : 0;
+      if (!map[ex.name]) {
+        map[ex.name] = { first: weight, last: weight };
+      } else {
+        map[ex.name].last = weight;
+      }
+    });
+  });
+  const progress = {};
+  Object.entries(map).forEach(([name, { first, last }]) => {
+    progress[name] = Math.round(last - first);
+  });
+  return progress;
+}

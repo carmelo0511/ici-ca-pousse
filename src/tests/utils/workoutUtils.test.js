@@ -9,7 +9,9 @@ import {
   getPreferredWorkoutTime,
   getAverageDurationByTime,
   getWorkoutsForDateRange,
-  cleanWorkoutForFirestore
+  cleanWorkoutForFirestore,
+  getMuscleGroupDistribution,
+  getWeightProgress
 } from '../../utils/workoutUtils';
 
 describe('workoutUtils', () => {
@@ -78,5 +80,23 @@ describe('workoutUtils', () => {
     expect(range).toHaveLength(1);
     const cleaned = cleanWorkoutForFirestore({ a: 1, b: null, c: { d: 2, e: undefined } });
     expect(cleaned).toEqual({ a: 1, c: { d: 2 } });
+  });
+
+  it('computes muscle group distribution', () => {
+    const workouts = [
+      { exercises: [{ type: 'jambes' }, { type: 'jambes' }] },
+      { exercises: [{ type: 'biceps' }] }
+    ];
+    const dist = getMuscleGroupDistribution(workouts);
+    expect(dist.jambes).toBeGreaterThan(dist.biceps);
+  });
+
+  it('calculates weight progress', () => {
+    const workouts = [
+      { date: '2024-01-01', exercises: [{ name: 'Squat', sets: [{ weight: 50 }] }] },
+      { date: '2024-01-10', exercises: [{ name: 'Squat', sets: [{ weight: 60 }] }] }
+    ];
+    const progress = getWeightProgress(workouts);
+    expect(progress.Squat).toBe(10);
   });
 });
