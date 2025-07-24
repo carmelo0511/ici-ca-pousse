@@ -39,26 +39,26 @@ const Chatbot = ({ workouts }) => {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-6 space-y-4 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800">Chatbot IA</h2>
+        <h2 className="text-3xl font-bold text-gray-800">Chatbot IA</h2>
         <select
           value={mode}
           onChange={e => setMode(e.target.value)}
-          className="border rounded p-1"
+          className="border rounded p-1 text-lg"
         >
           <option value="advice">Recommandations</option>
           <option value="free">Libre</option>
         </select>
       </div>
-      <div className="border rounded-xl p-4 h-64 overflow-y-auto bg-white space-y-2">
+      <div className="border rounded-xl p-4 h-64 overflow-y-auto bg-white space-y-2 shadow-inner">
         {messages.map((m, i) => (
           <div key={i} className={m.role === 'user' ? 'text-right' : 'text-left'}>
             <span
               className={
                 m.role === 'user'
-                  ? 'bg-indigo-100 text-indigo-800 px-2 py-1 rounded inline-block'
-                  : 'bg-gray-100 px-2 py-1 rounded inline-block'
+                  ? 'bg-indigo-100 text-indigo-800 px-3 py-2 rounded inline-block text-lg'
+                  : 'bg-gray-100 px-3 py-2 rounded inline-block text-lg'
               }
             >
               {m.content}
@@ -70,10 +70,10 @@ const Chatbot = ({ workouts }) => {
         <input
           value={input}
           onChange={e => setInput(e.target.value)}
-          className="flex-1 border rounded px-2 py-1"
+          className="flex-1 border rounded px-3 py-2 text-lg input-modern"
           placeholder="Votre message..."
         />
-        <button onClick={handleSend} className="bg-indigo-600 text-white px-4 py-2 rounded">
+        <button onClick={handleSend} className="btn-gradient text-white px-5 py-2 rounded text-lg">
           Envoyer
         </button>
       </div>
