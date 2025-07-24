@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import useChatGPT from '../../hooks/useChatGPT';
-import { getMuscleGroupDistribution, getAverageWeights } from '../../utils/workoutUtils';
+import {
+  getMuscleGroupDistribution,
+  getAverageWeights,
+  getWorkoutWeightDetails,
+} from '../../utils/workoutUtils';
 
 const Chatbot = ({ workouts }) => {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  console.log("REACT_APP_OPENAI_API_KEY:", apiKey);
-  console.log("REACT_APP_TEST_VAR:", process.env.REACT_APP_TEST_VAR);
+  console.log('REACT_APP_OPENAI_API_KEY:', apiKey);
+  console.log('REACT_APP_TEST_VAR:', process.env.REACT_APP_TEST_VAR);
   const { messages, sendMessage } = useChatGPT(apiKey);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState('advice');
@@ -33,10 +37,15 @@ const Chatbot = ({ workouts }) => {
     return workouts
       .slice(-3)
       .map(
-        w =>
-          `${w.date} - ${(w.exercises?.length || 0)} exercices - ${(w.duration || 0)}min`
+        (w) =>
+          `${w.date} - ${w.exercises?.length || 0} exercices - ${w.duration || 0}min`
       )
       .join('; ');
+  };
+
+  const getWeightDetails = () => {
+    if (!workouts || workouts.length === 0) return '';
+    return getWorkoutWeightDetails(workouts.slice(-3));
   };
 
   const handleSend = async () => {
@@ -45,7 +54,7 @@ const Chatbot = ({ workouts }) => {
       'Tu es mon coach sportif personnel. Sois motivant et adapte tes conseils à mon niveau.';
     const context =
       mode === 'advice'
-        ? `${base} Analyse mes séances précédentes. ${getSummary()} ${getDetails()} Donne-moi des conseils précis.`
+        ? `${base} Analyse mes séances précédentes. ${getSummary()} ${getDetails()} ${getWeightDetails()} Donne-moi des conseils précis.`
         : base;
     await sendMessage(input, context);
     setInput('');
@@ -57,7 +66,7 @@ const Chatbot = ({ workouts }) => {
         <h2 className="text-3xl font-bold text-gray-800">Chatbot IA</h2>
         <select
           value={mode}
-          onChange={e => setMode(e.target.value)}
+          onChange={(e) => setMode(e.target.value)}
           className="border rounded p-1 text-lg"
         >
           <option value="advice">Recommandations</option>
@@ -66,7 +75,10 @@ const Chatbot = ({ workouts }) => {
       </div>
       <div className="border rounded-xl p-4 h-64 overflow-y-auto bg-white space-y-2 shadow-inner">
         {messages.map((m, i) => (
-          <div key={i} className={m.role === 'user' ? 'text-right' : 'text-left'}>
+          <div
+            key={i}
+            className={m.role === 'user' ? 'text-right' : 'text-left'}
+          >
             <span
               className={
                 m.role === 'user'
@@ -82,11 +94,14 @@ const Chatbot = ({ workouts }) => {
       <div className="flex space-x-2">
         <input
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value)}
           className="flex-1 border rounded px-3 py-2 text-lg input-modern"
           placeholder="Votre message..."
         />
-        <button onClick={handleSend} className="btn-gradient text-white px-5 py-2 rounded text-lg">
+        <button
+          onClick={handleSend}
+          className="btn-gradient text-white px-5 py-2 rounded text-lg"
+        >
           Envoyer
         </button>
       </div>
