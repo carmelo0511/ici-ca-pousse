@@ -13,7 +13,7 @@ describe('Chatbot component', () => {
     const workouts = [
       {
         date: '2024-01-01',
-        exercises: [{ name: 'Squat', sets: [{ weight: 100 }] }],
+        exercises: [{ name: 'Squat', sets: [{ reps: 5, weight: 100 }] }],
         duration: 30,
       },
     ];
@@ -34,6 +34,10 @@ describe('Chatbot component', () => {
     expect(sendMessage).toHaveBeenCalledWith(
       'Hello',
       expect.stringContaining('2024-01-01')
+    );
+    expect(sendMessage).toHaveBeenCalledWith(
+      'Hello',
+      expect.stringContaining('Squat:5x100')
     );
     expect(sendMessage).toHaveBeenCalledWith(
       'Hello',
