@@ -27,7 +27,7 @@ describe('Chatbot component', () => {
     );
   });
 
-  it('sends message without context in free mode', async () => {
+  it('sends message with coach context in free mode', async () => {
     const sendMessage = jest.fn();
     useChatGPT.mockReturnValue({ messages: [], sendMessage });
 
@@ -37,7 +37,10 @@ describe('Chatbot component', () => {
     fireEvent.change(screen.getByPlaceholderText('Votre message...'), { target: { value: 'Yo' } });
     fireEvent.click(screen.getByText('Envoyer'));
 
-    expect(sendMessage).toHaveBeenCalledWith('Yo', null);
+    expect(sendMessage).toHaveBeenCalledWith(
+      'Yo',
+      expect.stringContaining('coach sportif')
+    );
     await waitFor(() => expect(screen.getByPlaceholderText('Votre message...').value).toBe(''));
   });
 

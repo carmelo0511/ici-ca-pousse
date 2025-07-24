@@ -30,10 +30,12 @@ const Chatbot = ({ workouts }) => {
 
   const handleSend = async () => {
     if (!input.trim()) return;
+    const base =
+      'Tu es mon coach sportif personnel. Sois motivant et adapte tes conseils à mon niveau.';
     const context =
       mode === 'advice'
-        ? `Tu es un coach sportif. Analyse mes séances précédentes. ${getSummary()} Donne-moi des conseils précis.`
-        : null;
+        ? `${base} Analyse mes séances précédentes. ${getSummary()} Donne-moi des conseils précis.`
+        : base;
     await sendMessage(input, context);
     setInput('');
   };
