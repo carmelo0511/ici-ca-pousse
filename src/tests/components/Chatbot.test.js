@@ -33,10 +33,6 @@ describe('Chatbot component', () => {
     );
     expect(sendMessage).toHaveBeenCalledWith(
       'Hello',
-      expect.stringContaining('Poids')
-    );
-    expect(sendMessage).toHaveBeenCalledWith(
-      'Hello',
       expect.stringContaining('2024-01-01')
     );
     expect(sendMessage).toHaveBeenCalledWith(

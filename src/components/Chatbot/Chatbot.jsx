@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import useChatGPT from '../../hooks/useChatGPT';
 import {
   getMuscleGroupDistribution,
-  getAverageWeights,
   getWorkoutWeightDetails,
 } from '../../utils/workoutUtils';
 
@@ -23,13 +22,7 @@ const Chatbot = ({ workouts }) => {
       .map(([muscle, percent]) => `${muscle}:${percent}%`)
       .join(', ');
 
-    const weights = getAverageWeights(workouts);
-    const weightString = Object.entries(weights)
-      .slice(0, 3)
-      .map(([name, avg]) => `${name}:${avg}kg`)
-      .join(', ');
-
-    return `Répartition ${distString}. Poids ${weightString}`;
+    return `Répartition ${distString}`;
   };
 
   const getDetails = () => {
