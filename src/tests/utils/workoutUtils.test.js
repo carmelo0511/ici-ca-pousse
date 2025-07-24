@@ -11,7 +11,8 @@ import {
   getWorkoutsForDateRange,
   cleanWorkoutForFirestore,
   getMuscleGroupDistribution,
-  getWeightProgress
+  getWeightProgress,
+  getAverageWeights
 } from '../../utils/workoutUtils';
 
 describe('workoutUtils', () => {
@@ -98,5 +99,14 @@ describe('workoutUtils', () => {
     ];
     const progress = getWeightProgress(workouts);
     expect(progress.Squat).toBe(10);
+  });
+
+  it('computes average weights', () => {
+    const workouts = [
+      { exercises: [{ name: 'Bench', sets: [{ weight: 40 }, { weight: 50 }] }] },
+      { exercises: [{ name: 'Bench', sets: [{ weight: 60 }] }] }
+    ];
+    const weights = getAverageWeights(workouts);
+    expect(weights.Bench).toBe(50);
   });
 });
