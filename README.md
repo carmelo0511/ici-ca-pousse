@@ -20,6 +20,11 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Badges et réalisations** : Débloquez des badges pour vos exploits
 - **Leaderboard dynamique** : Classement entre amis selon différents critères
 
+### 🔐 Authentification & Profil
+- **Connexion Google** : Authentification rapide et sécurisée
+- **Gestion du profil** : Photo, pseudo et badge sélectionné
+- **Notifications en temps réel** : Suivi des invitations et rappels
+
 ### 👥 Social & Défis
 - **Système d'amis** : Ajoutez, gérez vos connexions
 - **Défis personnalisés** : Lancez des challenges à vos amis
@@ -32,11 +37,21 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Calendrier interactif** : Vue d'ensemble de vos séances
 - **Export de données** : Sauvegarde de vos progrès
 
+### 🌐 Internationalisation
+- **Français / Anglais** : Interface disponible dans deux langues
+- **Formatage localisé** : Dates et unités adaptées automatiquement
+
 ### 📱 PWA & Mobile-First
 - **Application installable** : Fonctionne hors ligne
 - **Design responsive** : Optimisé mobile et desktop
 - **Performance optimisée** : Chargement rapide, animations fluides
 - **Accessibilité** : Compatible avec les lecteurs d'écran
+- **Mode sombre global** : Commutation instantanée clair/sombre
+- **Notifications push** : Restez informé même hors de l'application
+
+### 🤖 Chatbot IA
+- **Mode sombre** : Interface adaptée aux thèmes clairs et foncés
+- **Tests dédiés** : Scénarios vérifiant le comportement du chatbot
 
 ## 🏗️ Architecture
 
@@ -242,6 +257,7 @@ Le projet dispose d'une suite de tests moderne et extensible :
 - **Tests de hooks** : Tests complets pour les hooks React personnalisés
 - **Tests de composants** : Tests d'intégration pour les composants UI
 - **Tests utilitaires** : Tests pour les fonctions utilitaires
+- **Tests du Chatbot** : Vérifient le bon fonctionnement en mode sombre
 - **Couverture de code** : Suivi automatique de la couverture de tests
 
 ### Lancement des tests
@@ -287,7 +303,7 @@ src/tests/
 - [x] Suite de tests complète avec 100% couverture sur useAppState
 
 ### 🚧 En développement
-- [x] Chatbot IA pour recommandations d'entraînement
+- [x] Chatbot IA pour recommandations d'entraînement (mode sombre disponible et tests)
 - [ ] Recommandations d'exercices intelligentes
 - [ ] Analyse de performance avancée
 - [ ] Intégration wearables (Apple Watch, Fitbit)
