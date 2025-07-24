@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import useChatGPT from '../../hooks/useChatGPT';
+import GradientButton from '../GradientButton';
 
 const Chatbot = ({ workouts }) => {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
@@ -24,19 +25,19 @@ const Chatbot = ({ workouts }) => {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="max-w-2xl mx-auto p-4 md:p-6 bg-white rounded-2xl shadow-lg space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800">Chatbot IA</h2>
+        <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Chatbot IA</h2>
         <select
           value={mode}
           onChange={e => setMode(e.target.value)}
-          className="border rounded p-1"
+          className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="advice">Recommandations</option>
           <option value="free">Libre</option>
         </select>
       </div>
-      <div className="border rounded-xl p-4 h-64 overflow-y-auto bg-white space-y-2">
+      <div className="border border-gray-200 rounded-xl p-4 h-[32rem] overflow-y-auto bg-gray-50 space-y-2 shadow-inner">
         {messages.map((m, i) => (
           <div key={i} className={m.role === 'user' ? 'text-right' : 'text-left'}>
             <span
@@ -55,12 +56,12 @@ const Chatbot = ({ workouts }) => {
         <input
           value={input}
           onChange={e => setInput(e.target.value)}
-          className="flex-1 border rounded px-2 py-1"
+          className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           placeholder="Votre message..."
         />
-        <button onClick={handleSend} className="bg-indigo-600 text-white px-4 py-2 rounded">
+        <GradientButton onClick={handleSend}>
           Envoyer
-        </button>
+        </GradientButton>
       </div>
     </div>
   );
