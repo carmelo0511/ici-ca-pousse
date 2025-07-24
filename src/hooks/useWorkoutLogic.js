@@ -75,7 +75,7 @@ export default function useWorkoutLogic({
       exercises,
       selectedDate,
       duration,
-      selectedWorkout && typeof selectedWorkout.id === 'string'
+      selectedWorkout && selectedWorkout.id != null
         ? selectedWorkout.id
         : undefined,
       startTime,
@@ -89,12 +89,7 @@ export default function useWorkoutLogic({
 
     try {
       // Vérifier si on est vraiment en mode édition avec un workout valide
-      if (
-        selectedWorkout &&
-        selectedWorkout.id &&
-        typeof selectedWorkout.id === 'string' &&
-        selectedWorkout.id.length > 0
-      ) {
+      if (selectedWorkout && selectedWorkout.id != null) {
         await updateWorkout(selectedWorkout.id, workout);
         showToastMsg(t('workout_updated'));
       } else {
