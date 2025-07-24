@@ -14,6 +14,7 @@ import {
   getWeightProgress,
   getAverageWeights,
   getWorkoutWeightDetails,
+  getWorkoutSetRepDetails,
 } from '../../utils/workoutUtils';
 
 describe('workoutUtils', () => {
@@ -164,5 +165,25 @@ describe('workoutUtils', () => {
     expect(details).toContain('Squat:100/110');
     expect(details).toContain('2024-01-02');
     expect(details).toContain('Bench:80');
+  });
+
+  it('generates rep and set details', () => {
+    const workouts = [
+      {
+        date: '2024-01-01',
+        exercises: [
+          { name: 'Squat', sets: [{ reps: 5, weight: 100 }, { reps: 5, weight: 110 }] },
+        ],
+      },
+      {
+        date: '2024-01-02',
+        exercises: [{ name: 'Bench', sets: [{ reps: 8, weight: 80 }] }],
+      },
+    ];
+    const details = getWorkoutSetRepDetails(workouts);
+    expect(details).toContain('2024-01-01');
+    expect(details).toContain('Squat:5x100/5x110');
+    expect(details).toContain('2024-01-02');
+    expect(details).toContain('Bench:8x80');
   });
 });

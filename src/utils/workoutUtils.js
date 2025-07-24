@@ -419,3 +419,21 @@ export function getWorkoutWeightDetails(workouts) {
     })
     .join('; ');
 }
+
+// Retourne un résumé détaillé des répétitions et poids de chaque série
+export function getWorkoutSetRepDetails(workouts) {
+  if (!Array.isArray(workouts)) return '';
+  return workouts
+    .map((w) => {
+      const exercises = (w.exercises || [])
+        .map((ex) => {
+          const sets = (ex.sets || [])
+            .map((set) => `${set.reps || 0}x${parseFloat(set.weight) || 0}`)
+            .join('/');
+          return `${ex.name}:${sets}`;
+        })
+        .join(', ');
+      return `${w.date} - ${exercises}`;
+    })
+    .join('; ');
+}

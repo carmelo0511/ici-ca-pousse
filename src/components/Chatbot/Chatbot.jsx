@@ -4,6 +4,7 @@ import useChatGPT from '../../hooks/useChatGPT';
 import {
   getMuscleGroupDistribution,
   getWorkoutWeightDetails,
+  getWorkoutSetRepDetails,
 } from '../../utils/workoutUtils';
 
 const Chatbot = ({ workouts }) => {
@@ -41,13 +42,18 @@ const Chatbot = ({ workouts }) => {
     return getWorkoutWeightDetails(workouts.slice(-3));
   };
 
+  const getSetRepDetails = () => {
+    if (!workouts || workouts.length === 0) return '';
+    return getWorkoutSetRepDetails(workouts.slice(-3));
+  };
+
   const handleSend = async () => {
     if (!input.trim()) return;
     const base =
       'Tu es mon coach sportif personnel. Sois motivant et adapte tes conseils à mon niveau.';
     const context =
       mode === 'advice'
-        ? `${base} Analyse mes séances précédentes. ${getSummary()} ${getDetails()} ${getWeightDetails()} Donne-moi des conseils précis.`
+        ? `${base} Analyse mes séances précédentes. ${getSummary()} ${getDetails()} ${getWeightDetails()} ${getSetRepDetails()} Donne-moi des conseils précis.`
         : base;
     await sendMessage(input, context);
     setInput('');
