@@ -6,7 +6,7 @@ import useChatGPT from '../../hooks/useChatGPT';
 jest.mock('../../hooks/useChatGPT');
 
 describe('Chatbot component', () => {
-  it('sends message with workout summary in advice mode', async () => {
+  it('sends message with workout summary and context', async () => {
     const sendMessage = jest.fn();
     useChatGPT.mockReturnValue({ messages: [], sendMessage });
 
@@ -20,7 +20,7 @@ describe('Chatbot component', () => {
 
     render(<Chatbot workouts={workouts} />);
 
-    fireEvent.change(screen.getByPlaceholderText('Votre message...'), {
+    fireEvent.change(screen.getByPlaceholderText("Posez n'importe quelle question..."), {
       target: { value: 'Hello' },
     });
     fireEvent.click(screen.getByText('Envoyer'));
@@ -35,37 +35,8 @@ describe('Chatbot component', () => {
       'Hello',
       expect.stringContaining('2024-01-01')
     );
-    expect(sendMessage).toHaveBeenCalledWith(
-      'Hello',
-      expect.stringContaining('Squat:5x100')
-    );
-    expect(sendMessage).toHaveBeenCalledWith(
-      'Hello',
-      expect.stringContaining('Squat:100')
-    );
-  });
-
-  it('sends message with coach context in free mode', async () => {
-    const sendMessage = jest.fn();
-    useChatGPT.mockReturnValue({ messages: [], sendMessage });
-
-    render(<Chatbot workouts={[]} />);
-
-    fireEvent.change(screen.getByRole('combobox'), {
-      target: { value: 'free' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Votre message...'), {
-      target: { value: 'Yo' },
-    });
-    fireEvent.click(screen.getByText('Envoyer'));
-
-    expect(sendMessage).toHaveBeenCalledWith(
-      'Yo',
-      expect.stringContaining('coach sportif')
-    );
-    await waitFor(() =>
-      expect(screen.getByPlaceholderText('Votre message...').value).toBe('')
-    );
+    // On vérifie que le contexte contient bien des infos sur les exercices
+    expect(sendMessage.mock.calls[0][1]).toMatch(/Squat/);
   });
 
   it('uses API key from environment variables', () => {

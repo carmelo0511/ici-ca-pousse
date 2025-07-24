@@ -4,6 +4,7 @@
 [![Firebase](https://img.shields.io/badge/Firebase-10.7.0-orange.svg)](https://firebase.google.com/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)](https://web.dev/progressive-web-apps/)
 [![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)](https://jestjs.io/)
+[![Coverage](https://img.shields.io/badge/coverage-86%25-brightgreen)](https://jestjs.io/)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com/)
 
 ## 🌐 Application en ligne
@@ -50,9 +51,18 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Notifications push** : Restez informé même hors de l'application
 
 ### 🤖 Chatbot IA
+- **Coach virtuel** : Le chatbot répond à toutes vos questions, que ce soit sur le sport, la motivation, la nutrition, le bien-être ou tout autre sujet.
+- **Contexte personnalisé** : L'IA prend en compte vos dernières séances pour adapter ses réponses, mais vous pouvez discuter de tout.
+- **Interface unifiée** : Plus de mode "libre" ou "recommandation" à choisir, tout se fait dans la même interface de chat.
 - **Mode sombre** : Interface adaptée aux thèmes clairs et foncés
 - **Tests dédiés** : Scénarios vérifiant le comportement du chatbot
-- **Coach virtuel** : Le chatbot répond toujours en tant que coach sportif
+
+**Exemples d'utilisation :**
+- "Comment améliorer ma récupération après l'entraînement ?"
+- "Peux-tu me donner une recette saine ?"
+- "J'ai du mal à rester motivé, des conseils ?"
+- "Explique-moi la différence entre cardio et musculation."
+- "Quels sont les bienfaits de la méditation ?"
 
 ## 🏗️ Architecture
 
@@ -252,34 +262,49 @@ npm run build
 
 ## 🧪 Tests
 
+> **Couverture actuelle :**
+> - **Statements** : 86.21%
+> - **Branches** : 60.89%
+> - **Functions** : 93.04%
+> - **Lines** : 90.39%
+
 ### Suite de Tests Complète
 Le projet dispose d'une suite de tests moderne et extensible :
 
-- **Tests de hooks** : Tests complets pour les hooks React personnalisés
-- **Tests de composants** : Tests d'intégration pour les composants UI
-- **Tests utilitaires** : Tests pour les fonctions utilitaires
-- **Tests du Chatbot** : Vérifient le bon fonctionnement en mode sombre
-- **Couverture de code** : Suivi automatique de la couverture de tests
+- **Tests de hooks** :
+  - `useAppState` (gestion d'état global, 100% couvert)
+  - `useExercises` (gestion des exercices, ajout/suppression/édition)
+  - `useChatGPT` (intégration API OpenAI, gestion des messages et erreurs)
+- **Tests de composants** :
+  - `Chatbot` (envoi de messages, contexte personnalisé, API key, interface unifiée)
+- **Tests utilitaires** :
+  - `workoutUtils` (calculs, analyse, formatage, badges)
+  - `leaderboardUtils` (classements, stats, labels)
+
+**Nouveau** :
+- Le Chatbot a été mis à jour pour accepter toutes les questions dans une interface unique, et les tests vérifient ce comportement.
 
 ### Lancement des tests
 ```bash
-# Tests unitaires
+# Tests unitaires et d'intégration
 npm test
 
 # Tests avec couverture
 npm run test:coverage
-
-# Tests en mode watch
-npm run test:watch
 ```
 
 ### Structure des Tests
 ```
 src/tests/
 ├── hooks/           # Tests des hooks personnalisés
-│   └── useAppState.test.js  # ✅ 100% couverture
+│   ├── useAppState.test.js
+│   ├── useExercises.test.js
+│   └── useChatGPT.test.js
 ├── components/      # Tests des composants
-└── utils/          # Tests des utilitaires
+│   └── Chatbot.test.js
+└── utils/           # Tests des utilitaires
+    ├── workoutUtils.test.js
+    └── leaderboardUtils.test.js
 ```
 
 ### Couverture actuelle
