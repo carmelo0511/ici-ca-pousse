@@ -12,7 +12,8 @@ import {
   cleanWorkoutForFirestore,
   getMuscleGroupDistribution,
   getWeightProgress,
-  getAverageWeights
+  getAverageWeights,
+  getWorkoutWeightDetails,
 } from '../../utils/workoutUtils';
 
 describe('workoutUtils', () => {
@@ -32,7 +33,14 @@ describe('workoutUtils', () => {
   });
 
   it('creates workouts and calculates stats', () => {
-    const workout = createWorkout([{ name: 'Squat', sets: [{ reps: 5, weight: 100 }] }], '2024-01-05', 45, 'id', '10:00', '11:00');
+    const workout = createWorkout(
+      [{ name: 'Squat', sets: [{ reps: 5, weight: 100 }] }],
+      '2024-01-05',
+      45,
+      'id',
+      '10:00',
+      '11:00'
+    );
     expect(workout.totalSets).toBe(1);
     expect(workout.totalReps).toBe(5);
     expect(workout.totalWeight).toBe(500);
@@ -41,22 +49,32 @@ describe('workoutUtils', () => {
   });
 
   it('handles decimal weights correctly', () => {
-    const workout = createWorkout([
-      { name: 'Bench', sets: [{ reps: 2, weight: 4.5 }] }
-    ], '2024-01-05', 30);
+    const workout = createWorkout(
+      [{ name: 'Bench', sets: [{ reps: 2, weight: 4.5 }] }],
+      '2024-01-05',
+      30
+    );
     expect(workout.exercises[0].sets[0].weight).toBe(4.5);
     expect(workout.totalWeight).toBeCloseTo(9);
   });
 
   it('formats date and gets current date', () => {
-    const spy = jest.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue('lun. 08 janv.');
+    const spy = jest
+      .spyOn(Date.prototype, 'toLocaleDateString')
+      .mockReturnValue('lun. 08 janv.');
     expect(formatDate('2024-01-08')).toBe('lun. 08 janv.');
     expect(getCurrentDate()).toBe('2024-01-08');
     spy.mockRestore();
   });
 
   it('generates badges', () => {
-    const badges = getBadges({ totalWorkouts: 10, totalSets: 120, totalReps: 1500, totalWeight: 12000, avgDuration: 61 });
+    const badges = getBadges({
+      totalWorkouts: 10,
+      totalSets: 120,
+      totalReps: 1500,
+      totalWeight: 12000,
+      avgDuration: 61,
+    });
     expect(badges.length).toBeGreaterThan(0);
   });
 
@@ -65,28 +83,38 @@ describe('workoutUtils', () => {
       { startTime: '06:00', duration: 30 },
       { startTime: '14:00', duration: 45 },
       { startTime: '20:00', duration: 20 },
-      { startTime: '23:00', duration: 40 }
+      { startTime: '23:00', duration: 40 },
     ];
     const habits = analyzeWorkoutHabits(workouts);
     expect(habits.night.count).toBe(1);
     const pref = getPreferredWorkoutTime(workouts);
     expect(pref.name).toBe('matin');
-    const avg = getAverageDurationByTime(workouts.map(w => ({ ...w, date: '2024-01-05' })));
+    const avg = getAverageDurationByTime(
+      workouts.map((w) => ({ ...w, date: '2024-01-05' }))
+    );
     expect(avg.afternoon).toBe(45);
   });
 
   it('filters workouts and cleans for firestore', () => {
     const ws = [{ date: '2024-01-05' }, { date: '2024-01-10' }];
-    const range = getWorkoutsForDateRange(ws, new Date('2024-01-07'), new Date('2024-01-12'));
+    const range = getWorkoutsForDateRange(
+      ws,
+      new Date('2024-01-07'),
+      new Date('2024-01-12')
+    );
     expect(range).toHaveLength(1);
-    const cleaned = cleanWorkoutForFirestore({ a: 1, b: null, c: { d: 2, e: undefined } });
+    const cleaned = cleanWorkoutForFirestore({
+      a: 1,
+      b: null,
+      c: { d: 2, e: undefined },
+    });
     expect(cleaned).toEqual({ a: 1, c: { d: 2 } });
   });
 
   it('computes muscle group distribution', () => {
     const workouts = [
       { exercises: [{ type: 'jambes' }, { type: 'jambes' }] },
-      { exercises: [{ type: 'biceps' }] }
+      { exercises: [{ type: 'biceps' }] },
     ];
     const dist = getMuscleGroupDistribution(workouts);
     expect(dist.jambes).toBeGreaterThan(dist.biceps);
@@ -94,8 +122,14 @@ describe('workoutUtils', () => {
 
   it('calculates weight progress', () => {
     const workouts = [
-      { date: '2024-01-01', exercises: [{ name: 'Squat', sets: [{ weight: 50 }] }] },
-      { date: '2024-01-10', exercises: [{ name: 'Squat', sets: [{ weight: 60 }] }] }
+      {
+        date: '2024-01-01',
+        exercises: [{ name: 'Squat', sets: [{ weight: 50 }] }],
+      },
+      {
+        date: '2024-01-10',
+        exercises: [{ name: 'Squat', sets: [{ weight: 60 }] }],
+      },
     ];
     const progress = getWeightProgress(workouts);
     expect(progress.Squat).toBe(10);
@@ -103,10 +137,32 @@ describe('workoutUtils', () => {
 
   it('computes average weights', () => {
     const workouts = [
-      { exercises: [{ name: 'Bench', sets: [{ weight: 40 }, { weight: 50 }] }] },
-      { exercises: [{ name: 'Bench', sets: [{ weight: 60 }] }] }
+      {
+        exercises: [{ name: 'Bench', sets: [{ weight: 40 }, { weight: 50 }] }],
+      },
+      { exercises: [{ name: 'Bench', sets: [{ weight: 60 }] }] },
     ];
     const weights = getAverageWeights(workouts);
     expect(weights.Bench).toBe(50);
+  });
+
+  it('generates weight details', () => {
+    const workouts = [
+      {
+        date: '2024-01-01',
+        exercises: [
+          { name: 'Squat', sets: [{ weight: 100 }, { weight: 110 }] },
+        ],
+      },
+      {
+        date: '2024-01-02',
+        exercises: [{ name: 'Bench', sets: [{ weight: 80 }] }],
+      },
+    ];
+    const details = getWorkoutWeightDetails(workouts);
+    expect(details).toContain('2024-01-01');
+    expect(details).toContain('Squat:100/110');
+    expect(details).toContain('2024-01-02');
+    expect(details).toContain('Bench:80');
   });
 });

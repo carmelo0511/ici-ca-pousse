@@ -11,12 +11,18 @@ describe('Chatbot component', () => {
     useChatGPT.mockReturnValue({ messages: [], sendMessage });
 
     const workouts = [
-      { date: '2024-01-01', exercises: [{}, {}], duration: 30 }
+      {
+        date: '2024-01-01',
+        exercises: [{ name: 'Squat', sets: [{ weight: 100 }] }],
+        duration: 30,
+      },
     ];
 
     render(<Chatbot workouts={workouts} />);
 
-    fireEvent.change(screen.getByPlaceholderText('Votre message...'), { target: { value: 'Hello' } });
+    fireEvent.change(screen.getByPlaceholderText('Votre message...'), {
+      target: { value: 'Hello' },
+    });
     fireEvent.click(screen.getByText('Envoyer'));
 
     await waitFor(() =>
@@ -33,6 +39,10 @@ describe('Chatbot component', () => {
       'Hello',
       expect.stringContaining('2024-01-01')
     );
+    expect(sendMessage).toHaveBeenCalledWith(
+      'Hello',
+      expect.stringContaining('Squat:100')
+    );
   });
 
   it('sends message with coach context in free mode', async () => {
@@ -41,15 +51,21 @@ describe('Chatbot component', () => {
 
     render(<Chatbot workouts={[]} />);
 
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'free' } });
-    fireEvent.change(screen.getByPlaceholderText('Votre message...'), { target: { value: 'Yo' } });
+    fireEvent.change(screen.getByRole('combobox'), {
+      target: { value: 'free' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Votre message...'), {
+      target: { value: 'Yo' },
+    });
     fireEvent.click(screen.getByText('Envoyer'));
 
     expect(sendMessage).toHaveBeenCalledWith(
       'Yo',
       expect.stringContaining('coach sportif')
     );
-    await waitFor(() => expect(screen.getByPlaceholderText('Votre message...').value).toBe(''));
+    await waitFor(() =>
+      expect(screen.getByPlaceholderText('Votre message...').value).toBe('')
+    );
   });
 
   it('uses API key from environment variables', () => {
