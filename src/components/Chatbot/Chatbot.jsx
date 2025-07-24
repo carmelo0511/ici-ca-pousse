@@ -4,6 +4,7 @@ import useChatGPT from '../../hooks/useChatGPT';
 
 const Chatbot = ({ workouts }) => {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  console.log("REACT_APP_OPENAI_API_KEY:", apiKey);
   const { messages, sendMessage } = useChatGPT(apiKey);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState('advice');
