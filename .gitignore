@@ -1,11 +1,16 @@
 node_modules/
 build/
-.env
-.env.*
+
 .DS_Store
 
 node_modules/
 node_modules/.cache/
-!/.env.example
 
+# Ignore les fichiers d'environnement
+.env
 .env.local
+.env.development
+.env.production
+.env.test
+
+
