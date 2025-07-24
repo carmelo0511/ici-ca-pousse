@@ -271,3 +271,26 @@ export function getWeightProgress(workouts) {
   });
   return progress;
 }
+
+// Calcule le poids moyen par exercice sur l'ensemble des séances
+export function getAverageWeights(workouts) {
+  if (!Array.isArray(workouts)) return {};
+  const totals = {};
+  const counts = {};
+  workouts.forEach(w => {
+    w.exercises?.forEach(ex => {
+      if (Array.isArray(ex.sets)) {
+        ex.sets.forEach(set => {
+          const weight = parseFloat(set.weight) || 0;
+          totals[ex.name] = (totals[ex.name] || 0) + weight;
+          counts[ex.name] = (counts[ex.name] || 0) + 1;
+        });
+      }
+    });
+  });
+  const averages = {};
+  Object.keys(totals).forEach(name => {
+    averages[name] = Math.round(totals[name] / counts[name]);
+  });
+  return averages;
+}
