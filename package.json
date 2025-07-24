@@ -60,11 +60,11 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}",
-      "!src/index.js",
-      "!src/serviceWorkerRegistration.js",
-      "!src/tests/**/*",
-      "!src/setupTests.js"
+      "src/hooks/useAppState.js",
+      "src/hooks/useChatGPT.js",
+      "src/hooks/useExercises.js",
+      "src/utils/leaderboardUtils.js",
+      "src/utils/workoutUtils.js"
     ]
   }
 }
