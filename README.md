@@ -52,6 +52,7 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 ### 🤖 Chatbot IA
 - **Mode sombre** : Interface adaptée aux thèmes clairs et foncés
 - **Tests dédiés** : Scénarios vérifiant le comportement du chatbot
+- **Coach virtuel** : Le chatbot répond toujours en tant que coach sportif
 
 ## 🏗️ Architecture
 
