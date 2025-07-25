@@ -73,7 +73,7 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       // Message d'accueil personnalisé
       const prenom = user?.displayName ? user.displayName.split(' ')[0] : '';
       setMessages([
-        { role: 'assistant', content: `${prenom ? 'Bonjour ' + prenom + ', ' : 'Bonjour,'}je suis ton coach IA perso. Je peux t'aider avec tes séances de sport, la nutrition et le bien-être. Prêt pour une nouvelle séance ?` }
+        { role: 'assistant', content: `${prenom ? 'Bonjour ' + prenom + ', ' : 'Bonjour,'}je suis Coach Lex IA. Je peux t'aider avec tes séances de sport, la nutrition et le bien-être. Prêt pour une nouvelle séance ?` }
       ]);
     }
     // eslint-disable-next-line
@@ -181,7 +181,7 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
   return (
     <div className="p-6 space-y-4 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-gray-800">Chatbot IA</h2>
+        <h2 className="text-3xl font-bold text-gray-800">Coach Lex IA</h2>
       </div>
       <div className="mb-2 flex gap-2 items-center">
         <button

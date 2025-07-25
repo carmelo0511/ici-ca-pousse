@@ -6,7 +6,7 @@ export default function useChatGPT(apiKey) {
   // Ajout d'un flag 'welcome' pour le message d'accueil
   const sendMessage = async (content, context = null, height = null, weight = null, welcome = false) => {
     if (welcome) {
-      setMessages([{ role: 'assistant', content: 'Bonjour, je suis ton coach IA perso' }]);
+      setMessages([{ role: 'assistant', content: 'Bonjour, je suis Coach Lex IA' }]);
       return;
     }
     // Ajout d'un contexte système personnalisé si height/weight sont fournis
