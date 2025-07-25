@@ -182,8 +182,8 @@ describe('workoutUtils', () => {
     ];
     const details = getWorkoutSetRepDetails(workouts);
     expect(details).toContain('2024-01-01');
-    expect(details).toContain('Squat:5x100/5x110');
+    expect(details).toContain('Squat : 2 séries de 5 répétitions à 105 kg');
     expect(details).toContain('2024-01-02');
-    expect(details).toContain('Bench:8x80');
+    expect(details).toContain('Bench : 1 série de 8 répétitions à 80 kg');
   });
 });

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.74% </span>
+                <span class="strong">83.49% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>170/203</span>
+                <span class='fraction'>177/212</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.39% </span>
+                <span class="strong">59.63% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>122/202</span>
+                <span class='fraction'>130/218</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.16% </span>
+                <span class="strong">90.32% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>55/61</span>
+                <span class='fraction'>56/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.83% </span>
+                <span class="strong">89.56% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>159/177</span>
+                <span class='fraction'>163/182</span>
             </div>
         
             
@@ -502,7 +502,13 @@
 <a name='L437'></a><a href='#L437'>437</a>
 <a name='L438'></a><a href='#L438'>438</a>
 <a name='L439'></a><a href='#L439'>439</a>
-<a name='L440'></a><a href='#L440'>440</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
@@ -932,8 +938,14 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1353,7 +1365,7 @@ export function getWorkoutWeightDetails(workouts) {
       const exercises = (w.exercises || <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>
         .map((ex) =&gt; {
           const weights = (ex.sets || <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>
-            .map((set) =&gt; parseFloat(set.weight) || <span class="branch-1 cbranch-no" title="branch not covered" >0)</span>
+            .map((set) =&gt; (set.weight &amp;&amp; parseFloat(set.weight) &gt; 0 ? set.weight : <span class="branch-1 cbranch-no" title="branch not covered" >'-')</span>)
             .join('/');
           return `${ex.name}:${weights}`;
         })
@@ -1370,13 +1382,19 @@ export function getWorkoutSetRepDetails(workouts) {
     .map((w) =&gt; {
       const exercises = (w.exercises || <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>
         .map((ex) =&gt; {
-          const sets = (ex.sets || <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>
-            .map((set) =&gt; `${set.reps || <span class="branch-1 cbranch-no" title="branch not covered" >0}</span>x${parseFloat(set.weight) || <span class="branch-1 cbranch-no" title="branch not covered" >0}</span>`)
-            .join('/');
-          return `${ex.name}:${sets}`;
+          const sets = ex.sets || <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
+          const nbSeries = sets.length;
+          // Moyenne des répétitions
+          const avgReps = sets.length &gt; 0 ? Math.round(sets.reduce((sum, s) =&gt; sum + (parseFloat(s.reps) || <span class="branch-1 cbranch-no" title="branch not covered" >0)</span>, 0) / sets.length) : <span class="branch-1 cbranch-no" title="branch not covered" >0;</span>
+          // Moyenne du poids
+          const avgWeight = sets.length &gt; 0 ? Math.round(sets.reduce((sum, s) =&gt; sum + (parseFloat(s.weight) || <span class="branch-1 cbranch-no" title="branch not covered" >0)</span>, 0) / sets.length) : <span class="branch-1 cbranch-no" title="branch not covered" >0;</span>
+          let poidsStr = '-';
+          if (avgWeight &gt; 0) poidsStr = avgWeight + ' kg';
+          else <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="else path not taken" >E</span>if (ex.name.toLowerCase().includes('traction') || ex.name.toLowerCase().includes('pompe')) <span class="cstat-no" title="statement not covered" >poidsStr = 'au poids du corps';</span></span>
+          return `${ex.name} : ${nbSeries} série${nbSeries &gt; 1 ? 's' : ''} de ${avgReps} répétitions${poidsStr !== '-' ? ' à ' + poidsStr : <span class="branch-1 cbranch-no" title="branch not covered" >''}</span>`;
         })
-        .join(', ');
-      return `${w.date} - ${exercises}`;
+        .join(' - ');
+      return `${w.date} : ${exercises}`;
     })
     .join('; ');
 }
@@ -1387,7 +1405,7 @@ export function getWorkoutSetRepDetails(workouts) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-24T15:37:18.895Z
+                at 2025-07-25T21:51:33.529Z
             </div>
         <script src="../prettify.js"></script>
         <script>
