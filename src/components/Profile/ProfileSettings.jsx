@@ -23,14 +23,14 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
     setLocalSelectedBadge(selectedBadge);
   }, [selectedBadge]);
 
-  // Mettre à jour l'état local quand user change (pour height/weight)
+  // Initialiser les valeurs avec les données utilisateur
   React.useEffect(() => {
-    if (isOpen) {
+    if (user) {
       setHeight(user.height || '');
       setWeight(user.weight || '');
       setNickname(user.nickname || '');
     }
-  }, [isOpen, user.uid]);
+  }, [user]);
 
   const handleBadgeSelect = async (badgeId) => {
     setLoading(true);

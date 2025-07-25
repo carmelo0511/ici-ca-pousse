@@ -40,10 +40,11 @@ describe('Chatbot component', () => {
 
     await waitFor(() => {
       expect(sendMessage).toHaveBeenCalled();
-      const call = sendMessage.mock.calls[0];
-      expect(call[0]).toBe('Hello');
-      expect(call[1]).toEqual(expect.stringContaining('Répartition'));
     });
+    
+    const call = sendMessage.mock.calls[0];
+    expect(call[0]).toBe('Hello');
+    expect(call[1]).toEqual(expect.stringContaining('Répartition'));
     // On vérifie que le contexte contient bien des infos sur les exercices
     expect(sendMessage.mock.calls[0][1]).toMatch(/Squat/);
   });

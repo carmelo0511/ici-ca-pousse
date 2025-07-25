@@ -164,6 +164,8 @@ export default function useWorkoutLogic({
     t,
     addWorkoutXP,
     workouts,
+    setMessages,
+    user
   ]);
 
   // Ouvre le détail d'une séance

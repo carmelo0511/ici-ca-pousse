@@ -1,17 +1,16 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Dumbbell, Moon, Sun, Flame } from 'lucide-react';
+import { Flame, Sun, Moon } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
 import ProfileSettings from '../Profile/ProfileSettings';
 import ProfilePicture from '../Profile/ProfilePicture';
 import { useExperience } from '../../hooks/useExperience.js';
-import StreakCounter from '../StreakCounter';
 import { STORAGE_KEYS } from '../../constants';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate, refreshUserProfile }) => {
-  const [showProfile, setShowProfile] = React.useState(false);
-  const [localUser, setLocalUser] = React.useState(user);
+  const [showProfile, setShowProfile] = useState(false);
+  const [localUser, setLocalUser] = useState(user);
   const [theme, setTheme] = useState('light');
 
   // Ajout du hook d'expérience
@@ -39,7 +38,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
   const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
 
   // Mettre à jour l'utilisateur local quand user change
-  React.useEffect(() => {
+  useEffect(() => {
     setLocalUser(user);
   }, [user]);
 
@@ -51,8 +50,6 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
   // Calcul du pourcentage d'XP
   const xpPercent = experience?.progress || 0;
   const level = experience?.level || 1;
-  const levelName = experience?.levelName || 'Débutant';
-  const xp = experience?.xp || 0;
   const streak = experience?.streak || 0;
 
   return (

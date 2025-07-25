@@ -1,24 +1,9 @@
 import React from 'react';
-import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
-import { parseLocalDate, analyzeWorkoutHabits, getPreferredWorkoutTime, getAverageDurationByTime } from '../../utils/workoutUtils';
+import { Dumbbell, Target, TrendingUp, Clock, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { analyzeWorkoutHabits, getPreferredWorkoutTime, getAverageDurationByTime } from '../../utils/workoutUtils';
 import PropTypes from 'prop-types';
-
-function getWeeklyWorkoutData(workouts) {
-  // Regroupe les séances par semaine (année + numéro de semaine)
-  const weekMap = {};
-  workouts.forEach(w => {
-    const d = parseLocalDate(w.date);
-    if (!d) return;
-    const year = d.getFullYear();
-    // Numéro de semaine ISO
-    const week = Math.ceil((((d - new Date(year,0,1)) / 86400000) + new Date(year,0,1).getDay()+1)/7);
-    const key = `${year}-S${week}`;
-    weekMap[key] = (weekMap[key] || 0) + 1;
-  });
-  return Object.entries(weekMap).map(([week, count]) => ({ week, count }));
-}
 
 function getMostWorkedMuscleGroup(workouts) {
   const muscleCount = {};
