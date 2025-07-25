@@ -427,13 +427,19 @@ export function getWorkoutSetRepDetails(workouts) {
     .map((w) => {
       const exercises = (w.exercises || [])
         .map((ex) => {
-          const sets = (ex.sets || [])
-            .map((set) => `${set.reps || 0}x${parseFloat(set.weight) || 0}`)
-            .join('/');
-          return `${ex.name}:${sets}`;
+          const sets = ex.sets || [];
+          const nbSeries = sets.length;
+          // Moyenne des répétitions
+          const avgReps = sets.length > 0 ? Math.round(sets.reduce((sum, s) => sum + (parseFloat(s.reps) || 0), 0) / sets.length) : 0;
+          // Moyenne du poids
+          const avgWeight = sets.length > 0 ? Math.round(sets.reduce((sum, s) => sum + (parseFloat(s.weight) || 0), 0) / sets.length) : 0;
+          let poidsStr = '-';
+          if (avgWeight > 0) poidsStr = avgWeight + ' kg';
+          else if (ex.name.toLowerCase().includes('traction') || ex.name.toLowerCase().includes('pompe')) poidsStr = 'au poids du corps';
+          return `${ex.name} : ${nbSeries} série${nbSeries > 1 ? 's' : ''} de ${avgReps} répétitions${poidsStr !== '-' ? ' à ' + poidsStr : ''}`;
         })
-        .join(', ');
-      return `${w.date} - ${exercises}`;
+        .join(' - ');
+      return `${w.date} : ${exercises}`;
     })
     .join('; ');
 }
