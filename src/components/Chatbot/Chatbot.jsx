@@ -123,15 +123,29 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     if (!workouts || workouts.length === 0) return;
     const last3 = workouts.slice(-3).reverse();
     const recap = last3.map(w => {
-      const date = w.date;
-      const nbExos = w.exercises?.length || 0;
-      const duration = w.duration || 0;
-      const exos = w.exercises?.map(ex => ex.name).join(', ');
-      return `• ${date} : ${nbExos} exercices (${exos}) - ${duration} min`;
+      let date = new Date(w.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+      date = date.charAt(0).toUpperCase() + date.slice(1);
+      const exos = w.exercises?.map(ex => {
+        // Détail séries/reps/poids
+        const nbSeries = ex.sets?.length || 0;
+        const reps = ex.sets?.map(s => s.reps).join('/') || '-';
+        const poids = ex.sets?.map(s => s.weight).join('/') || '-';
+        return `  - ${ex.name} : ${nbSeries} séries, reps : ${reps}, poids : ${poids}`;
+      }).join('\n');
+      return `• ${date} :\n${exos}`;
     }).join('\n');
+    // Analyse des groupes musculaires pour recommandation
+    const allExos = last3.flatMap(w => w.exercises?.map(ex => ex.name.toLowerCase()) || []);
+    const haut = ['pompes', 'tractions', 'dips', 'développé', 'row', 'biceps', 'épaules'];
+    const bas = ['squat', 'fentes', 'mollets', 'hip thrust', 'soulevé', 'leg curl', 'banc'];
+    const countHaut = allExos.filter(n => haut.some(h => n.includes(h))).length;
+    const countBas = allExos.filter(n => bas.some(b => n.includes(b))).length;
+    let reco = '';
+    if (countHaut >= countBas * 2) reco = '\n💡 Tu as beaucoup travaillé le haut du corps, pense à une séance bas du corps !';
+    else if (countBas >= countHaut * 2) reco = '\n💡 Tu as beaucoup travaillé le bas du corps, pense à une séance haut du corps !';
     setMessages(prev => [
       ...prev,
-      { role: 'assistant', content: `Voici le récap de tes 3 dernières séances :\n${recap}` }
+      { role: 'assistant', content: `Voici le récap de tes 3 dernières séances :\n${recap}${reco}` }
     ]);
   };
 
