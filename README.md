@@ -4,14 +4,15 @@
 [![Firebase](https://img.shields.io/badge/Firebase-10.7.0-orange.svg)](https://firebase.google.com/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)](https://web.dev/progressive-web-apps/)
 [![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)](https://jestjs.io/)
-[![Coverage](https://img.shields.io/badge/coverage-86%25-brightgreen)](https://jestjs.io/)
+[![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)](https://jestjs.io/)
+[![Linting](https://img.shields.io/badge/ESLint-Clean-brightgreen.svg)](https://eslint.org/)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com/)
 
 ## 🌐 Application en ligne
 
 **[ici-ca-pousse.vercel.app](https://ici-ca-pousse.vercel.app)**
 
-Application moderne de suivi de séances de sport avec gamification avancée et fonctionnalités sociales complètes.
+Application moderne de suivi de séances de sport avec gamification avancée, fonctionnalités sociales complètes et coach IA intelligent.
 
 ## 🚀 Fonctionnalités
 
@@ -23,14 +24,14 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 
 ### 🔐 Authentification & Profil
 - **Connexion Google** : Authentification rapide et sécurisée
-- **Gestion du profil** : Photo, pseudo et badge sélectionné
+- **Gestion du profil** : Photo, pseudo, surnom personnalisé et badge sélectionné
 - **Notifications en temps réel** : Suivi des invitations et rappels
 
 ### 👥 Social & Défis
-- **Système d'amis** : Ajoutez, gérez vos connexions
+- **Système d'amis** : Ajoutez, gérez vos connexions avec bouton d'invitation direct
 - **Défis personnalisés** : Lancez des challenges à vos amis
 - **Notifications intelligentes** : Rappels et félicitations automatiques
-- **Profils enrichis** : Photos de profil, statistiques détaillées
+- **Profils enrichis** : Photos de profil, statistiques détaillées, surnoms personnalisés
 
 ### 📊 Analytics & Progression
 - **Système de suivi du poids** : Enregistrez votre poids chaque semaine, visualisez votre évolution sur une courbe dédiée, recevez un rappel intelligent pour ne rien oublier.
@@ -38,7 +39,7 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Courbe d'évolution du poids** : Suivi visuel de votre poids semaine par semaine, affichée en haut de la page Statistiques
 - **Notification hebdomadaire** : Rappel automatique chaque début de semaine pour mettre à jour votre poids (avec option 'C'est le même')
 - **Suivi des performances** : Records personnels, tendances
-- **Calendrier interactif** : Vue d'ensemble de vos séances
+- **Calendrier interactif** : Vue d'ensemble de vos séances avec bouton de suppression
 - **Export de données** : Sauvegarde de vos progrès
 
 ### 🌐 Internationalisation
@@ -54,13 +55,15 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Mode sombre global** : Commutation instantanée clair/sombre
 - **Notifications push** : Restez informé même hors de l'application
 
-### 🤖 Chatbot IA
-- **Coach virtuel** : Le chatbot fonctionne en développement et répond à toutes vos questions (sport, motivation, nutrition, bien-être, etc.).
-- **Contexte personnalisé** : L'IA prend en compte vos dernières séances, votre taille et votre poids pour adapter ses réponses.
-- **Accès aux données utilisateur** : Le chatbot utilise vos informations de profil (taille, poids) pour des conseils personnalisés.
-- **Interface unifiée** : Plus de mode "libre" ou "recommandation" à choisir, tout se fait dans la même interface de chat.
+### 🤖 Coach Lex IA - Assistant Personnel Intelligent
+- **Coach virtuel personnalisé** : Coach Lex IA vous accompagne dans votre parcours fitness avec des conseils adaptés
+- **Messages de félicitations automatiques** : Recevez des encouragements personnalisés après chaque séance avec analyse de votre régularité et records
+- **Bulle de chat flottante** : Accès direct au coach depuis n'importe quel onglet avec notifications des nouveaux messages
+- **Contexte personnalisé** : L'IA prend en compte vos dernières séances, votre taille et votre poids pour adapter ses réponses
+- **Accès aux données utilisateur** : Le coach utilise vos informations de profil (taille, poids, prénom) pour des conseils personnalisés
+- **Interface unifiée** : Plus de mode "libre" ou "recommandation" à choisir, tout se fait dans la même interface de chat
 - **Mode sombre** : Interface adaptée aux thèmes clairs et foncés
-- **Tests dédiés** : Scénarios vérifiant le comportement du chatbot (envoi de message, gestion du contexte, API key, interface unifiée)
+- **Tests dédiés** : Scénarios vérifiant le comportement du coach (envoi de message, gestion du contexte, API key, interface unifiée)
 
 **Exemples d'utilisation :**
 - "Comment améliorer ma récupération après l'entraînement ?"
@@ -71,23 +74,31 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 
 #### 🏋️ Génération automatique de séances personnalisées
 
-Le chatbot peut désormais générer pour vous une séance complète, prête à être validée dans l’application :
+Le coach peut désormais générer pour vous une séance complète, prête à être validée dans l'application :
 
-- Cliquez sur **“Propose-moi une séance”** dans l’onglet Chatbot
+- Cliquez sur **"Propose-moi une séance"** dans l'onglet Coach Lex IA
 - Choisissez le **type de séance** (Full body, Haut du corps, Bas du corps, Push, Pull, Cardio, Abdos, HIIT, Mobilité…)
-- Choisissez l’**intensité** (Facile, Moyen, Difficile)
+- Choisissez l'**intensité** (Facile, Moyen, Difficile)
 - Cliquez sur **Valider**
-- Vous serez automatiquement redirigé vers la page de création de séance, avec :
+- Vous serez automatiquement redirigé vers la page de création de séance, avec :
   - **4 à 6 exercices** adaptés au type choisi (aléatoires à chaque fois)
   - **3 à 4 séries** par exercice (aléatoire)
-  - Répétitions ou durée adaptées à l’intensité
-  - Il ne vous reste qu’à remplir les poids utilisés
+  - Répétitions ou durée adaptées à l'intensité
+  - Il ne vous reste qu'à remplir les poids utilisés
 
-**Exemple d’utilisation :**
-- “Propose-moi une séance full body difficile” (ou utilisez le menu du chatbot)
-- “Je veux une séance abdos facile”
+**Exemple d'utilisation :**
+- "Propose-moi une séance full body difficile" (ou utilisez le menu du coach)
+- "Je veux une séance abdos facile"
 
-Vous pouvez aussi continuer à poser toutes vos questions sport, nutrition, motivation, etc. Le chatbot reste votre coach IA personnel !
+#### 📊 Récapitulatif intelligent des dernières séances
+
+- **Bouton "Récap des dernières séances"** : Analyse détaillée de vos 3 dernières séances
+- **Format de date lisible** : "23 Juillet 2025" au lieu de "2025-07-23"
+- **Détails complets** : Séries, répétitions, poids pour chaque exercice
+- **Recommandations intelligentes** : Le coach analyse la répartition haut/bas du corps et vous conseille sur la prochaine séance
+- **Messages personnalisés** : Le coach vous appelle par votre prénom
+
+Vous pouvez aussi continuer à poser toutes vos questions sport, nutrition, motivation, etc. Coach Lex IA reste votre coach personnel intelligent !
 
 ## 🏗️ Architecture
 
@@ -106,26 +117,30 @@ graph TB
         G --> J[WorkoutList]
         G --> K[CalendarView]
         G --> L[StatsView]
+        G --> M[Coach Lex IA]
+        G --> N[ChatbotBubble]
     end
     
     subgraph "Backend - Firebase"
-        M[Authentication] --> N[Google Auth]
-        O[Firestore] --> P[Workouts]
-        O --> Q[Users]
-        O --> R[Friends]
-        O --> S[Challenges]
-        T[Storage] --> U[Profile Pictures]
+        O[Authentication] --> P[Google Auth]
+        Q[Firestore] --> R[Workouts]
+        Q --> S[Users]
+        Q --> T[Friends]
+        Q --> U[Challenges]
+        V[Storage] --> W[Profile Pictures]
     end
     
     subgraph "External Services"
-        V[Vercel] --> W[Deployment]
-        X[GitHub Actions] --> Y[CI/CD]
+        X[OpenAI API] --> Y[Coach Lex IA]
+        Z[Vercel] --> AA[Deployment]
+        BB[GitHub Actions] --> CC[CI/CD]
     end
     
-    A -.-> M
     A -.-> O
-    A -.-> T
-    V --> A
+    A -.-> Q
+    A -.-> V
+    M -.-> X
+    Z --> A
 ```
 
 ### 📁 Structure du Projet
@@ -141,7 +156,8 @@ src/
 │   │   ├── challenges/
 │   │   ├── leaderboard/
 │   │   ├── profile/
-│   │   └── stats/
+│   │   ├── stats/
+│   │   └── Chatbot/      # Coach Lex IA
 │   └── layout/           # Composants de mise en page
 ├── hooks/                # Hooks personnalisés
 ├── utils/                # Utilitaires
@@ -155,6 +171,7 @@ src/
 - Node.js 18+ 
 - npm ou yarn
 - Compte Firebase
+- Clé API OpenAI (pour Coach Lex IA)
 
 ### Installation
 
@@ -177,7 +194,7 @@ npm start          # Démarre le serveur de développement
 npm run build      # Build de production
 npm test           # Lance les tests
 npm run test:coverage  # Tests avec couverture
-npm run lint       # Vérification du code
+npm run lint       # Vérification du code (0 erreurs, 0 warnings)
 npm run format     # Formatage automatique
 ```
 
@@ -288,10 +305,10 @@ npm run build
 ## 🧪 Tests
 
 > **Couverture actuelle :**
-> - **Statements** : 86.21%
-> - **Branches** : 60.89%
-> - **Functions** : 93.04%
-> - **Lines** : 90.39%
+> - **Statements** : 85.49%
+> - **Branches** : 59.45%
+> - **Functions** : 93.1%
+> - **Lines** : 89.56%
 
 ### Suite de Tests Complète
 Le projet dispose d'une suite de tests moderne et extensible :
@@ -307,7 +324,7 @@ Le projet dispose d'une suite de tests moderne et extensible :
   - `leaderboardUtils` (classements, stats, labels)
 
 **Nouveau** :
-- Le Chatbot a été mis à jour pour accepter toutes les questions dans une interface unique, et les tests vérifient ce comportement (interface, contexte, gestion des erreurs, personnalisation).
+- Coach Lex IA a été mis à jour pour accepter toutes les questions dans une interface unique, et les tests vérifient ce comportement (interface, contexte, gestion des erreurs, personnalisation).
 
 ### Lancement des tests
 ```bash
@@ -333,12 +350,12 @@ src/tests/
 ```
 
 ### Couverture détaillée
-- **Statements** : 86.21%
-- **Branches** : 60.89%
-- **Functions** : 93.04%
-- **Lines** : 90.39%
+- **Statements** : 85.49%
+- **Branches** : 59.45%
+- **Functions** : 93.1%
+- **Lines** : 89.56%
 
-**Note** : La couverture a été augmentée grâce à la refonte de la suite de tests et à l'ajout de tests complets pour le chatbot et les hooks principaux.
+**Note** : La couverture a été maintenue grâce à la suite de tests complète et aux tests pour Coach Lex IA et les hooks principaux.
 
 ## 📈 Roadmap 2025
 
@@ -351,9 +368,16 @@ src/tests/
 - [x] PWA installable et design mobile-first
 - [x] Header ultra-compact et moderne
 - [x] Suite de tests complète (100% sur useAppState)
-- [x] Chatbot IA (fonctionnel en développement, accès aux données utilisateur, interface unifiée, conseils personnalisés)
+- [x] Coach Lex IA (fonctionnel en développement, accès aux données utilisateur, interface unifiée, conseils personnalisés)
 - [x] Système de suivi du poids (courbe d'évolution, notification hebdomadaire intelligente)
-- [x] Génération automatique de séances personnalisées par le chatbot (type, intensité, exercices/séries aléatoires)
+- [x] Génération automatique de séances personnalisées par le coach (type, intensité, exercices/séries aléatoires)
+- [x] Messages de félicitations automatiques après chaque séance
+- [x] Bulle de chat flottante avec synchronisation des messages
+- [x] Récapitulatif intelligent des dernières séances avec recommandations
+- [x] Surnoms personnalisés dans le profil et leaderboard
+- [x] Boutons d'invitation d'amis dans le leaderboard
+- [x] Bouton de suppression des séances dans le calendrier
+- [x] Code propre avec 0 erreurs ESLint
 
 ### 🚧 En développement
 - [ ] Recommandations d'exercices intelligentes
@@ -381,6 +405,7 @@ src/tests/
 - **Authentification** : Vérifiez les variables d'environnement
 - **Synchronisation** : Vérifiez les règles Firestore
 - **Performance** : Vérifiez la taille des images uploadées
+- **Coach Lex IA** : Vérifiez la clé API OpenAI
 
 ### Support
 - **Issues** : [GitHub Issues](https://github.com/bryannakache/ici-ca-pousse/issues)
@@ -396,7 +421,7 @@ src/tests/
 5. Ouvrez une Pull Request
 
 ### Standards de code
-- **ESLint** : Configuration standard React
+- **ESLint** : Configuration standard React (0 erreurs, 0 warnings)
 - **Prettier** : Formatage automatique
 - **Tests** : Minimum 80% de couverture
 - **Commits** : Convention Conventional Commits
@@ -408,6 +433,6 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 ## 👨‍💻 Développeur
 
 - **Développeur Full-Stack** : [Bryan Nakache](https://github.com/bryannakache)
-- **Technologies** : React, Firebase, PWA, Gamification
-- **Focus** : UX/UI, Performance, Tests
+- **Technologies** : React, Firebase, PWA, Gamification, IA
+- **Focus** : UX/UI, Performance, Tests, Code Quality
 
