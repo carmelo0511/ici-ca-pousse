@@ -134,15 +134,28 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       }).join('\n');
       return `• ${date} :\n${exos}`;
     }).join('\n');
-    // Analyse des groupes musculaires pour recommandation
-    const allExos = last3.flatMap(w => w.exercises?.map(ex => ex.name.toLowerCase()) || []);
-    const haut = ['pompes', 'tractions', 'dips', 'développé', 'row', 'biceps', 'épaules'];
-    const bas = ['squat', 'fentes', 'mollets', 'hip thrust', 'soulevé', 'leg curl', 'banc'];
-    const countHaut = allExos.filter(n => haut.some(h => n.includes(h))).length;
-    const countBas = allExos.filter(n => bas.some(b => n.includes(b))).length;
+    // Analyse intelligente des groupes musculaires pour recommandation
+    const detectType = (exos) => {
+      const haut = ['pompes', 'tractions', 'dips', 'développé', 'row', 'biceps', 'épaules'];
+      const bas = ['squat', 'fentes', 'mollets', 'hip thrust', 'soulevé', 'leg curl', 'banc'];
+      let countHaut = 0, countBas = 0;
+      exos.forEach(n => {
+        const nLower = n.toLowerCase();
+        if (haut.some(h => nLower.includes(h))) countHaut++;
+        if (bas.some(b => nLower.includes(b))) countBas++;
+      });
+      if (countHaut > countBas * 1.5) return 'haut';
+      if (countBas > countHaut * 1.5) return 'bas';
+      if (countHaut && countBas) return 'mixte';
+      return 'autre';
+    };
+    const types = last3.map(w => detectType(w.exercises?.map(ex => ex.name) || []));
+    const nbHaut = types.filter(t => t === 'haut').length;
+    const nbBas = types.filter(t => t === 'bas').length;
     let reco = '';
-    if (countHaut >= countBas * 2) reco = '\n💡 Tu as beaucoup travaillé le haut du corps, pense à une séance bas du corps !';
-    else if (countBas >= countHaut * 2) reco = '\n💡 Tu as beaucoup travaillé le bas du corps, pense à une séance haut du corps !';
+    if (nbHaut > nbBas) reco = '\n💡 Tu as surtout travaillé le haut du corps, pense à une séance bas du corps !';
+    else if (nbBas > nbHaut) reco = '\n💡 Tu as surtout travaillé le bas du corps, pense à une séance haut du corps !';
+    else reco = '\n💡 Bonne répartition, continue à varier les groupes musculaires !';
     setMessages(prev => [
       ...prev,
       { role: 'assistant', content: `Voici le récap de tes 3 dernières séances :\n${recap}${reco}` }
