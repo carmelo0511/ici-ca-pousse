@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Card from '../Card';
 import { Trophy, Lock, TrendingUp, Gift, Clock } from 'lucide-react';
 import Toast from '../Toast';
@@ -27,13 +27,17 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
   const lockedBadges = allBadges.filter(badge => !badges.includes(badge.id));
 
   // Vérifier s'il y a de nouveaux badges débloqués
+  const lastBadgeRef = useRef(null);
   useEffect(() => {
     if (badgeCount > 0 && unlockedBadges.length > 0) {
       const newBadge = unlockedBadges[unlockedBadges.length - 1];
-      setToast({ 
-        message: `🎉 Nouveau badge débloqué : ${newBadge.name} !`, 
-        type: 'success' 
-      });
+      if (lastBadgeRef.current !== newBadge.id) {
+        setToast({ 
+          message: `🎉 Nouveau badge débloqué : ${newBadge.name} !`, 
+          type: 'success' 
+        });
+        lastBadgeRef.current = newBadge.id;
+      }
     }
   }, [badgeCount, unlockedBadges]);
 
@@ -384,6 +388,7 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
 
       {toast && (
         <Toast 
+          show={true}
           message={toast.message} 
           type={toast.type} 
           onClose={() => setToast(null)} 

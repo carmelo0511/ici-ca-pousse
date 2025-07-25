@@ -331,7 +331,7 @@ const CalendarView = ({
                   <span>{t('exercises_performed')}</span>
                 </h4>
                 {selectedWorkout.exercises.map((exercise, index) => (
-                  <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 border border-gray-200 fade-in-up">
+                  <div key={exercise.id || index} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 border border-gray-200 fade-in-up">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
                         <div className={`p-2 rounded-lg ${exercise.type === 'cardio' ? 'bg-red-500' : 'bg-blue-500'}`}>
@@ -359,7 +359,7 @@ const CalendarView = ({
                         )}
                       </div>
                       {exercise.sets.map((set, setIndex) => (
-                        <div key={setIndex} className="grid grid-cols-3 gap-3 text-xs sm:text-sm font-medium">
+                        <div key={`set-${setIndex}-${exercise.id || index}`} className="grid grid-cols-3 gap-3 text-xs sm:text-sm font-medium">
                           <span className="bg-white rounded-lg px-2 sm:px-3 py-2 text-center border border-gray-200">{setIndex + 1}</span>
                           {exercise.type === 'cardio' ? (
                             <>

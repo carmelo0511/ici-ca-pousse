@@ -3,7 +3,7 @@ import Modal from '../Workout/Modal';
 import { useBadges } from '../../hooks/useBadges';
 import { BADGE_CONFIG } from '../Badges/Badges';
 import ProfilePicture from './ProfilePicture';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../utils/firebase';
 
 const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose, onUserUpdate, addBadgeUnlockXP, refreshUserProfile }) => {
@@ -65,14 +65,31 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
     setSuccessMessage('');
     try {
       const userRef = doc(db, 'users', user.uid);
-      await updateDoc(userRef, { height, weight });
+      // Récupérer l'historique actuel
+      const userSnap = await getDoc(userRef);
+      let weightHistory = userSnap.exists() && userSnap.data().weightHistory ? userSnap.data().weightHistory : [];
+      // Date de la semaine courante (lundi)
+      const now = new Date();
+      const monday = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+      monday.setHours(0,0,0,0);
+      const weekKey = monday.toISOString().slice(0,10);
+      // Vérifier la dernière entrée
+      const last = weightHistory.length > 0 ? weightHistory[weightHistory.length-1] : null;
+      // Ajouter une entrée seulement si la semaine ou la valeur a changé
+      if (!last || last.weekKey !== weekKey || last.value !== weight) {
+        weightHistory = [...weightHistory, { weekKey, value: weight }];
+      }
+      await updateDoc(userRef, { height, weight, weightHistory });
       if (onUserUpdate) {
-        onUserUpdate({ ...user, height, weight });
+        onUserUpdate({ ...user, height, weight, weightHistory });
       }
       setSuccessMessage('Taille et poids enregistrés !');
       setTimeout(() => setSuccessMessage(''), 3000);
       if (refreshUserProfile) {
         await refreshUserProfile();
+      }
+      if (onClose) {
+        onClose();
       }
     } catch (e) {
       setError("Erreur lors de la sauvegarde");

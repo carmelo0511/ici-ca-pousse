@@ -274,6 +274,7 @@ export async function getUserProfile(userId) {
         },
         height: userData.height,
         weight: userData.weight,
+        weightHistory: userData.weightHistory || [],
         createdAt: userData.createdAt,
         updatedAt: userData.updatedAt
       };

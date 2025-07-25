@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart3, Dumbbell, Target, TrendingUp, Clock, Zap } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
 import { parseLocalDate, analyzeWorkoutHabits, getPreferredWorkoutTime, getAverageDurationByTime } from '../../utils/workoutUtils';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -34,11 +34,15 @@ function getMostWorkedMuscleGroup(workouts) {
 }
 
 
-const StatsView = ({ stats, workouts, className = '' }) => {
+const StatsView = ({ stats, workouts, user, className = '' }) => {
   const { t } = useTranslation();
   const workoutHabits = analyzeWorkoutHabits(workouts);
   const preferredTime = getPreferredWorkoutTime(workouts);
   const avgDurationByTime = getAverageDurationByTime(workouts);
+
+  // Préparer les données pour la courbe de poids
+  const weightData = (user?.weightHistory || []).map(w => ({ week: w.weekKey, weight: Number(w.value) })).filter(w => w.weight > 0);
+  console.log('weightData:', weightData);
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
@@ -47,6 +51,28 @@ const StatsView = ({ stats, workouts, className = '' }) => {
           {t('stats_title')}
         </h2>
         <p className="text-gray-600 mt-1">{t('stats_subtitle')}</p>
+      </div>
+      {/* Courbe d'évolution du poids */}
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up mb-8">
+        <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+          <TrendingUp className="h-6 w-6" />
+          <span>Évolution du poids</span>
+        </h3>
+        {weightData.length === 0 ? (
+          <div className="text-gray-500 text-center py-8">Aucune donnée de poids enregistrée.<br/>Ajoutez votre poids dans le profil pour voir la courbe !</div>
+        ) : (
+          <ResponsiveContainer width="100%" height={220}>
+            <LineChart data={weightData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="week" fontSize={12} />
+              <YAxis domain={['auto', 'auto']} tickCount={6} />
+              <Tooltip />
+              <Line type="monotone" dataKey="weight" stroke="#6366f1" strokeWidth={2} dot={{ r: 4, fill: '#6366f1' }} activeDot={{ r: 6 }}>
+                <LabelList position="top" offset={12} fontSize={12} />
+              </Line>
+            </LineChart>
+          </ResponsiveContainer>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -190,21 +216,6 @@ const StatsView = ({ stats, workouts, className = '' }) => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up">
-          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
-            <BarChart3 className="h-6 w-6" />
-            <span>{t('weekly_progress')}</span>
-          </h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={getWeeklyWorkoutData(workouts)} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="week" fontSize={12} />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Bar dataKey="count" fill="#6366f1" radius={[8,8,0,0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
         <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 flex flex-col justify-center items-center fade-in-up">
           <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
             <Dumbbell className="h-6 w-6" />
@@ -222,6 +233,7 @@ const StatsView = ({ stats, workouts, className = '' }) => {
 StatsView.propTypes = {
   stats: PropTypes.object.isRequired,
   workouts: PropTypes.array.isRequired,
+  user: PropTypes.object,
   className: PropTypes.string,
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useChatGPT from '../../hooks/useChatGPT';
 import {
@@ -13,6 +13,15 @@ const Chatbot = ({ workouts, user }) => {
   console.log('REACT_APP_TEST_VAR:', process.env.REACT_APP_TEST_VAR);
   const { messages, sendMessage } = useChatGPT(apiKey);
   const [input, setInput] = useState('');
+
+  // Message d'accueil automatique au premier rendu
+  useEffect(() => {
+    if (messages.length === 0) {
+      // On simule un message assistant d'accueil
+      sendMessage('', '', null, null, true); // true = flag accueil (à gérer dans le hook)
+    }
+    // eslint-disable-next-line
+  }, []);
 
   // Génère un contexte enrichi à chaque message, mais accepte toutes les questions
   const getSummary = () => {
