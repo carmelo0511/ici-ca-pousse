@@ -3,9 +3,19 @@ import { useState } from 'react';
 export default function useChatGPT(apiKey) {
   const [messages, setMessages] = useState([]);
 
-  const sendMessage = async (content, context = null) => {
+  // Ajout : on accepte height et weight en option dans sendMessage
+  const sendMessage = async (content, context = null, height = null, weight = null) => {
+    // Ajout d'un contexte système personnalisé si height/weight sont fournis
+    let systemContext = context || '';
+    if (height || weight) {
+      systemContext =
+        (systemContext ? systemContext + '\n' : '') +
+        `L'utilisateur mesure${height ? ` ${height} cm` : ''}${height && weight ? ' et' : ''}${weight ? ` pèse ${weight} kg` : ''}. Prends cela en compte dans tes conseils.`;
+    }
     const userMessage = { role: 'user', content };
-    const history = context ? [{ role: 'system', content: context }, ...messages, userMessage] : [...messages, userMessage];
+    const history = systemContext
+      ? [{ role: 'system', content: systemContext }, ...messages, userMessage]
+      : [...messages, userMessage];
     setMessages(history);
 
     if (!apiKey) {

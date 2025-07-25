@@ -272,6 +272,8 @@ export async function getUserProfile(userId) {
           streak: 0,
           lastWorkoutDate: null
         },
+        height: userData.height,
+        weight: userData.weight,
         createdAt: userData.createdAt,
         updatedAt: userData.updatedAt
       };

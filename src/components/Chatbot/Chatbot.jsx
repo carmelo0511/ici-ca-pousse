@@ -7,7 +7,7 @@ import {
   getWorkoutSetRepDetails,
 } from '../../utils/workoutUtils';
 
-const Chatbot = ({ workouts }) => {
+const Chatbot = ({ workouts, user }) => {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
   console.log('REACT_APP_OPENAI_API_KEY:', apiKey);
   console.log('REACT_APP_TEST_VAR:', process.env.REACT_APP_TEST_VAR);
@@ -46,7 +46,7 @@ const Chatbot = ({ workouts }) => {
     if (!input.trim()) return;
     // Contexte enrichi, mais l'utilisateur peut parler de tout
     const context = `Tu es un assistant personnel sportif et bien-être. Sois motivant, bienveillant et adapte tes réponses à mon niveau. Voici un résumé de mes dernières séances : ${getSummary()} ${getDetails()} ${getWeightDetails()} ${getSetRepDetails()}`;
-    await sendMessage(input, context);
+    await sendMessage(input, context, user?.height, user?.weight);
     setInput('');
   };
 
@@ -94,6 +94,7 @@ const Chatbot = ({ workouts }) => {
 
 Chatbot.propTypes = {
   workouts: PropTypes.array.isRequired,
+  user: PropTypes.object,
 };
 
 export default Chatbot;
