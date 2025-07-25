@@ -55,7 +55,7 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Contexte personnalisé** : L'IA prend en compte vos dernières séances pour adapter ses réponses, mais vous pouvez discuter de tout.
 - **Interface unifiée** : Plus de mode "libre" ou "recommandation" à choisir, tout se fait dans la même interface de chat.
 - **Mode sombre** : Interface adaptée aux thèmes clairs et foncés
-- **Tests dédiés** : Scénarios vérifiant le comportement du chatbot
+- **Tests dédiés** : Scénarios vérifiant le comportement du chatbot (envoi de message, gestion du contexte, API key, interface unifiée)
 
 **Exemples d'utilisation :**
 - "Comment améliorer ma récupération après l'entraînement ?"
@@ -274,15 +274,15 @@ Le projet dispose d'une suite de tests moderne et extensible :
 - **Tests de hooks** :
   - `useAppState` (gestion d'état global, 100% couvert)
   - `useExercises` (gestion des exercices, ajout/suppression/édition)
-  - `useChatGPT` (intégration API OpenAI, gestion des messages et erreurs)
+  - `useChatGPT` (intégration API OpenAI, gestion des messages, contexte, erreurs)
 - **Tests de composants** :
-  - `Chatbot` (envoi de messages, contexte personnalisé, API key, interface unifiée)
+  - `Chatbot` (envoi de messages, gestion du contexte personnalisé, API key, interface unifiée, mode sombre)
 - **Tests utilitaires** :
   - `workoutUtils` (calculs, analyse, formatage, badges)
   - `leaderboardUtils` (classements, stats, labels)
 
 **Nouveau** :
-- Le Chatbot a été mis à jour pour accepter toutes les questions dans une interface unique, et les tests vérifient ce comportement.
+- Le Chatbot a été mis à jour pour accepter toutes les questions dans une interface unique, et les tests vérifient ce comportement (interface, contexte, gestion des erreurs, personnalisation).
 
 ### Lancement des tests
 ```bash
@@ -307,13 +307,13 @@ src/tests/
     └── leaderboardUtils.test.js
 ```
 
-### Couverture actuelle
-- **Statements** : 1.08%
-- **Branches** : 0.05%
-- **Functions** : 0.8%
-- **Lines** : 1.17%
+### Couverture détaillée
+- **Statements** : 86.21%
+- **Branches** : 60.89%
+- **Functions** : 93.04%
+- **Lines** : 90.39%
 
-**Note** : La couverture est actuellement basse car nous avons refactorisé complètement la suite de tests. Le hook `useAppState` a une couverture de **100%** et sert de base pour l'expansion future des tests.
+**Note** : La couverture a été augmentée grâce à la refonte de la suite de tests et à l'ajout de tests complets pour le chatbot et les hooks principaux.
 
 ## 📈 Roadmap 2025
 
@@ -383,8 +383,3 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 - **Technologies** : React, Firebase, PWA, Gamification
 - **Focus** : UX/UI, Performance, Tests
 
----
-
-**Développé avec ❤️ par Bryan Nakache**
-
-*Transformez vos séances en aventure gamifiée !*
