@@ -58,7 +58,7 @@ function getSetsForIntensity(intensity, exercise) {
 
 const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, setActiveTab }) => {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  const { messages, sendMessage } = useChatGPT(apiKey);
+  const { messages, sendMessage, setMessages } = useChatGPT(apiKey);
   const [input, setInput] = useState('');
   const [sessionType, setSessionType] = useState('fullbody');
   const [intensity, setIntensity] = useState('moyen');
@@ -129,7 +129,10 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       const exos = w.exercises?.map(ex => ex.name).join(', ');
       return `• ${date} : ${nbExos} exercices (${exos}) - ${duration} min`;
     }).join('\n');
-    sendMessage('', '', null, null, false, `Voici le récap de tes 3 dernières séances :\n${recap}`);
+    setMessages(prev => [
+      ...prev,
+      { role: 'assistant', content: `Voici le récap de tes 3 dernières séances :\n${recap}` }
+    ]);
   };
 
   const handleSend = async () => {

@@ -269,6 +269,13 @@ const CalendarView = ({
                               <Edit3 className="h-4 w-4" />
                               {t('edit')}
                             </button>
+                            <button
+                              onClick={() => deleteWorkout(w.id)}
+                              className="flex items-center gap-2 bg-gradient-to-r from-red-400 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-red-500 hover:to-pink-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Supprimer
+                            </button>
                           </div>
                         </div>
                       ))}

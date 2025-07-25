@@ -54,5 +54,5 @@ export default function useChatGPT(apiKey) {
     }
   };
 
-  return { messages, sendMessage };
+  return { messages, sendMessage, setMessages };
 }
