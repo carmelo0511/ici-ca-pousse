@@ -26,6 +26,8 @@ import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
 import Chatbot from './components/Chatbot/Chatbot';
 import ProfileSettings from './components/Profile/ProfileSettings';
+import ChatbotBubble from './components/Chatbot/ChatbotBubble';
+import useChatGPT from './hooks/useChatGPT';
 
 // Hooks
 import {
@@ -221,6 +223,9 @@ function App() {
     setShowProfileModal(true);
   };
 
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  const { messages, sendMessage, setMessages } = useChatGPT(apiKey);
+
   if (!authChecked || userLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -386,6 +391,16 @@ function App() {
               <span>{toast.message}</span>
             </div>
           )}
+          <ChatbotBubble
+            user={user}
+            workouts={workouts}
+            setExercisesFromWorkout={setExercisesFromWorkout}
+            setShowAddExercise={setShowAddExercise}
+            setActiveTab={setActiveTab}
+            messages={messages}
+            sendMessage={sendMessage}
+            setMessages={setMessages}
+          />
         </div>
       </div>
     </>
