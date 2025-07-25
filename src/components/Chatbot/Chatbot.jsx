@@ -48,7 +48,7 @@ function getSetsForIntensity(intensity, exercise) {
     else base = 40;
     return Array.from({ length: nbSeries }, () => ({ reps: 0, weight: '', duration: base }));
   }
-  // Pour les autres, on joue sur reps/sets
+  // Pour les autres, on joue sur reps/sets, poids toujours vide
   let repsArr;
   if (intensity === 'facile') repsArr = [10, 8, 8, 8];
   else if (intensity === 'moyen') repsArr = [12, 10, 10, 8];

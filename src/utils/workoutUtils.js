@@ -410,7 +410,7 @@ export function getWorkoutWeightDetails(workouts) {
       const exercises = (w.exercises || [])
         .map((ex) => {
           const weights = (ex.sets || [])
-            .map((set) => parseFloat(set.weight) || 0)
+            .map((set) => (set.weight && parseFloat(set.weight) > 0 ? set.weight : '-'))
             .join('/');
           return `${ex.name}:${weights}`;
         })
