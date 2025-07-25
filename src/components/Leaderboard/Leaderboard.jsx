@@ -46,7 +46,6 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
 
         for (const u of allUsers) {
           if (!u) continue;
-          console.log('RAW USER:', u);
           
           try {
             // Récupérer les workouts de l'utilisateur
@@ -276,7 +275,6 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
                 // Classement général - par défaut basé sur les séances
                 currentRanking.length > 0 ? (
                   currentRanking.map((user, idx) => {
-                    console.log('MAPPING NICKNAME:', user.displayName, user.nickname);
                     return (
                       <div
                         key={user.uid}

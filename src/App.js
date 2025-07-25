@@ -191,13 +191,6 @@ function App() {
     checkWeightNotif();
   }, [user]);
 
-  // DEBUG : log weightHistory à chaque render
-  React.useEffect(() => {
-    if (user && user.weightHistory) {
-      console.log('weightHistory:', user.weightHistory);
-    }
-  }, [user]);
-
   // Action 'C'est le même'
   const handleSameWeight = async () => {
     if (!user || !user.uid) return;
@@ -213,7 +206,6 @@ function App() {
     if (last && last.weekKey !== weekKey) {
       const userRef = doc(db, 'users', user.uid);
       const newHistory = [...weightHistory, { weekKey, value: last.value }];
-      console.log('Ajout dans weightHistory:', newHistory);
       await updateDoc(userRef, { weightHistory: newHistory });
       if (refreshUserProfile) await refreshUserProfile();
     } else {

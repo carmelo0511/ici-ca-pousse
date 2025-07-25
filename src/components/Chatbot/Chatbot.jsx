@@ -58,8 +58,6 @@ function getSetsForIntensity(intensity, exercise) {
 
 const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, setActiveTab }) => {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  console.log('REACT_APP_OPENAI_API_KEY:', apiKey);
-  console.log('REACT_APP_TEST_VAR:', process.env.REACT_APP_TEST_VAR);
   const { messages, sendMessage } = useChatGPT(apiKey);
   const [input, setInput] = useState('');
   const [sessionType, setSessionType] = useState('fullbody');

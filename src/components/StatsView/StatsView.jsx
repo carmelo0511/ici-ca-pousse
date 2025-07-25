@@ -42,7 +42,6 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
   // Préparer les données pour la courbe de poids
   const weightData = (user?.weightHistory || []).map(w => ({ week: w.weekKey, weight: Number(w.value) })).filter(w => w.weight > 0);
-  console.log('weightData:', weightData);
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
