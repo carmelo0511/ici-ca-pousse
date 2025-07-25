@@ -276,7 +276,8 @@ export async function getUserProfile(userId) {
         weight: userData.weight,
         weightHistory: userData.weightHistory || [],
         createdAt: userData.createdAt,
-        updatedAt: userData.updatedAt
+        updatedAt: userData.updatedAt,
+        nickname: userData.nickname || ''
       };
     }
     

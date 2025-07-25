@@ -117,7 +117,7 @@ const CalendarView = ({
         </div>
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {days.map((day, index) => {
-            if (day === null) return <div key={index} className="h-10 sm:h-12"></div>;
+            if (day === null) return <div key={`empty-${year}-${month + 1}-${index}`} className="h-10 sm:h-12"></div>;
             const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const hasWorkout = getWorkoutForDate(dateString);
             // Correction : comparaison locale
@@ -126,7 +126,7 @@ const CalendarView = ({
             const isToday = cellDate && todayLocal && cellDate.getTime() === todayLocal.getTime();
             return (
               <div
-                key={day}
+                key={dateString}
                 className={`
                   h-10 sm:h-12 flex items-center justify-center text-xs sm:text-sm rounded-xl cursor-pointer font-medium transition-all duration-200 relative select-none
                   ${isToday ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg' : 'hover:bg-gray-100'}

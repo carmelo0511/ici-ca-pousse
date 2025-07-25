@@ -46,6 +46,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
 
         for (const u of allUsers) {
           if (!u) continue;
+          console.log('RAW USER:', u);
           
           try {
             // Récupérer les workouts de l'utilisateur
@@ -64,7 +65,9 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
               selectedBadge: u.selectedBadge || null,
               photoURL: u.photoURL,
               stats: userStats,
-              workouts: workouts
+              workouts: workouts,
+              level: u.experience?.level || 1,
+              nickname: u.nickname || ''
             });
           } catch (error) {
             console.error(`Erreur lors de la récupération des stats pour ${u.displayName}:`, error);
@@ -80,7 +83,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
     };
 
     if (currentUser) fetchStats();
-  }, [currentUser, selectedPeriod]); // Suppression de friends des dépendances
+  }, [currentUser, selectedPeriod, currentUser?.nickname]); // Ajout du nickname pour rafraîchir
 
   // Obtenir le classement actuel - par défaut basé sur les séances
   const currentRanking = getLeaderboardRanking(stats, selectedMetric);
@@ -104,7 +107,8 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
           selectedBadge: user.selectedBadge,
           photoURL: user.photoURL,
           value: value,
-          stats: exerciseStats || null
+          stats: exerciseStats || null,
+          nickname: user.nickname || ''
         };
       })
       .filter(user => user.value > 0)
@@ -227,7 +231,12 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
                           onTeamClick={() => onShowTeam && onShowTeam(user)}
                         />
                         <div className="min-w-0 flex-1">
-                          <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
+                          <div className="font-semibold text-sm md:text-base truncate">
+                            {user.displayName}
+                            {user.nickname && (
+                              <span className="ml-2 text-xs font-bold text-indigo-600 bg-indigo-50 rounded px-2 py-0.5 align-middle">{user.nickname}</span>
+                            )}
+                          </div>
                           <div className="text-xs md:text-sm text-gray-600">
                             {selectedMetric === METRICS.WORKOUTS 
                               ? `${user.stats?.count || 0} fois`
@@ -266,49 +275,57 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
               ) : (
                 // Classement général - par défaut basé sur les séances
                 currentRanking.length > 0 ? (
-                  currentRanking.map((user, idx) => (
-                    <div
-                      key={user.uid}
-                      className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 ${
-                        user.uid === currentUser?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3 md:space-x-4">
-                        <div className="text-xl md:text-2xl">{user.medal || `#${user.rank}`}</div>
-                        <ProfilePicture 
-                          user={user} 
-                          size="sm" 
-                          useBadgeAsProfile={true}
-                          selectedBadge={user.selectedBadge}
-                          showTeamButton={false}
-                          onTeamClick={() => onShowTeam && onShowTeam(user)}
-                        />
-                        <div className="min-w-0 flex-1">
-                          <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
+                  currentRanking.map((user, idx) => {
+                    console.log('MAPPING NICKNAME:', user.displayName, user.nickname);
+                    return (
+                      <div
+                        key={user.uid}
+                        className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 ${
+                          user.uid === currentUser?.uid ? 'bg-indigo-100 border-2 border-indigo-300' : 'bg-white'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3 md:space-x-4">
+                          <div className="text-xl md:text-2xl">{user.medal || `#${user.rank}`}</div>
+                          <ProfilePicture 
+                            user={user} 
+                            size="sm" 
+                            useBadgeAsProfile={true}
+                            selectedBadge={user.selectedBadge}
+                            showTeamButton={false}
+                            onTeamClick={() => onShowTeam && onShowTeam(user)}
+                          />
+                          <div className="min-w-0 flex-1">
+                            <div className="font-semibold text-sm md:text-base truncate">
+                              {user.displayName}
+                              {user.nickname && (
+                                <span className="ml-2 text-xs font-bold text-indigo-600 bg-indigo-50 rounded px-2 py-0.5 align-middle">{user.nickname}</span>
+                              )}
+                            </div>
+                          </div>
+                          {user.badges && user.badges.length > 0 && (
+                            <BadgeList badges={user.badges} size="sm" maxDisplay={3} />
+                          )}
+                          {user.uid !== currentUser?.uid && !isFriend(user.uid) && (
+                            <button
+                              onClick={async () => {
+                                await sendInvite(user.email);
+                                alert('Invitation envoyée à ' + user.displayName);
+                              }}
+                              className="ml-2 p-2 rounded-full bg-green-100 hover:bg-green-200 text-green-700 border border-green-200 transition"
+                              title="Ajouter en ami"
+                            >
+                              <Plus className="w-5 h-5" />
+                            </button>
+                          )}
                         </div>
-                        {user.badges && user.badges.length > 0 && (
-                          <BadgeList badges={user.badges} size="sm" maxDisplay={3} />
-                        )}
-                        {user.uid !== currentUser?.uid && !isFriend(user.uid) && (
-                          <button
-                            onClick={async () => {
-                              await sendInvite(user.email);
-                              alert('Invitation envoyée à ' + user.displayName);
-                            }}
-                            className="ml-2 p-2 rounded-full bg-green-100 hover:bg-green-200 text-green-700 border border-green-200 transition"
-                            title="Ajouter en ami"
-                          >
-                            <Plus className="w-5 h-5" />
-                          </button>
-                        )}
-                      </div>
-                      <div className="text-right sm:text-right">
-                        <div className="font-bold text-base md:text-lg text-indigo-600">
-                          {formatMetricValue(user.value, selectedMetric)}
+                        <div className="text-right sm:text-right">
+                          <div className="font-bold text-base md:text-lg text-indigo-600">
+                            {formatMetricValue(user.value, selectedMetric)}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <div className="text-center py-6 text-gray-500">
                     Aucun classement disponible

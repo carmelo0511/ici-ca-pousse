@@ -93,7 +93,8 @@ export function getLeaderboardRanking(usersStats, metric) {
         stats: user.stats,
         photoURL: user.photoURL,
         selectedBadge: user.selectedBadge,
-        badges: user.badges
+        badges: user.badges,
+        nickname: user.nickname || ''
       };
     })
     .sort((a, b) => b.value - a.value)

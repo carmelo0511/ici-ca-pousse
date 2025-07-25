@@ -15,6 +15,8 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
   // Nouveaux états pour taille et poids
   const [height, setHeight] = React.useState(user.height || '');
   const [weight, setWeight] = React.useState(user.weight || '');
+  // Ajout du surnom
+  const [nickname, setNickname] = React.useState(user.nickname || '');
 
   // Mettre à jour l'état local quand selectedBadge change
   React.useEffect(() => {
@@ -26,6 +28,7 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
     if (isOpen) {
       setHeight(user.height || '');
       setWeight(user.weight || '');
+      setNickname(user.nickname || '');
     }
   }, [isOpen, user.uid]);
 
@@ -57,12 +60,17 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
     }
   };
 
-  // Sauvegarde taille et poids
+  // Sauvegarde taille, poids et surnom
   const handleSavePhysical = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setSuccessMessage('');
+    if (nickname.length > 10) {
+      setError('Le surnom doit faire 10 caractères maximum.');
+      setLoading(false);
+      return;
+    }
     try {
       const userRef = doc(db, 'users', user.uid);
       // Récupérer l'historique actuel
@@ -79,11 +87,11 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
       if (!last || last.weekKey !== weekKey || last.value !== weight) {
         weightHistory = [...weightHistory, { weekKey, value: weight }];
       }
-      await updateDoc(userRef, { height, weight, weightHistory });
+      await updateDoc(userRef, { height, weight, weightHistory, nickname });
       if (onUserUpdate) {
-        onUserUpdate({ ...user, height, weight, weightHistory });
+        onUserUpdate({ ...user, height, weight, weightHistory, nickname });
       }
-      setSuccessMessage('Taille et poids enregistrés !');
+      setSuccessMessage('Profil mis à jour !');
       setTimeout(() => setSuccessMessage(''), 3000);
       if (refreshUserProfile) {
         await refreshUserProfile();
@@ -109,6 +117,9 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
           selectedBadge={localSelectedBadge}
         />
         <div className="mt-2 text-lg font-semibold">{user.displayName || user.email}</div>
+        {user.nickname && (
+          <div className="text-indigo-600 text-sm font-bold mt-1">{user.nickname}</div>
+        )}
         <div className="text-sm text-gray-500">{user.email}</div>
         {/* Affichage taille/poids si renseignés */}
         {(user.height || user.weight) && (
@@ -118,7 +129,7 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
           </div>
         )}
       </div>
-      {/* Formulaire taille/poids */}
+      {/* Formulaire taille/poids et surnom */}
       <form onSubmit={handleSavePhysical} className="mb-4 flex flex-col gap-2 items-center">
         <div className="flex gap-2">
           <div>
@@ -144,6 +155,18 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
               onChange={e => setWeight(e.target.value)}
               className="border rounded px-2 py-1 w-20 text-center"
               placeholder="ex: 70"
+              disabled={loading}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-700">Surnom (max 10)</label>
+            <input
+              type="text"
+              maxLength={10}
+              value={nickname}
+              onChange={e => setNickname(e.target.value)}
+              className="border rounded px-2 py-1 w-24 text-center"
+              placeholder="Surnom"
               disabled={loading}
             />
           </div>
