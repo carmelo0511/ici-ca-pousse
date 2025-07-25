@@ -120,6 +120,20 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     setShowMenu(false);
   };
 
+  // Fonction pour générer un récap des 3 dernières séances
+  const handleRecapLastWorkouts = () => {
+    if (!workouts || workouts.length === 0) return;
+    const last3 = workouts.slice(-3).reverse();
+    const recap = last3.map(w => {
+      const date = w.date;
+      const nbExos = w.exercises?.length || 0;
+      const duration = w.duration || 0;
+      const exos = w.exercises?.map(ex => ex.name).join(', ');
+      return `• ${date} : ${nbExos} exercices (${exos}) - ${duration} min`;
+    }).join('\n');
+    sendMessage('', '', null, null, false, `Voici le récap de tes 3 dernières séances :\n${recap}`);
+  };
+
   const handleSend = async () => {
     if (!input.trim()) return;
     // Contexte enrichi, mais l'utilisateur peut parler de tout
@@ -133,12 +147,18 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-gray-800">Chatbot IA</h2>
       </div>
-      <div className="mb-2">
+      <div className="mb-2 flex gap-2 items-center">
         <button
           onClick={() => setShowMenu(v => !v)}
           className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-green-500 hover:to-blue-600 transition"
         >
           Propose-moi une séance
+        </button>
+        <button
+          onClick={handleRecapLastWorkouts}
+          className="bg-gradient-to-r from-indigo-400 to-purple-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-indigo-500 hover:to-purple-600 transition"
+        >
+          Récap des dernières séances
         </button>
         {showMenu && (
           <div className="absolute z-50 mt-2 p-4 bg-white border rounded-xl shadow-xl flex flex-col gap-3" style={{ minWidth: 220 }}>
