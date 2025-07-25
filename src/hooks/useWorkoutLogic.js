@@ -27,6 +27,8 @@ export default function useWorkoutLogic({
   t,
   addWorkoutXP,
   workouts,
+  setMessages,
+  user,
 }) {
   // Ajout d'un exercice à la séance
   const addExerciseToWorkout = useCallback(
@@ -121,6 +123,16 @@ export default function useWorkoutLogic({
             // Ne pas bloquer la sauvegarde si l'XP échoue
           }
         }
+        
+        // Envoyer un message de félicitations du chatbot
+        try {
+          const { sendCongratsAfterWorkout } = await import('../components/Chatbot/sendCongratsAfterWorkout');
+          sendCongratsAfterWorkout({ user, workout, workouts, setMessages });
+        } catch (error) {
+          console.error("Erreur lors de l'envoi du message de félicitations:", error);
+          // Ne pas bloquer la sauvegarde si le message échoue
+        }
+        
         showToastMsg(t('workout_saved'));
       }
 

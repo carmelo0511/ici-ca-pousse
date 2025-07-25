@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 // Third-party imports
 import { useTranslation } from 'react-i18next';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { db } from './utils/firebase';
 
 // Styles
@@ -124,7 +124,9 @@ function App() {
     showToastMsg,
     t,
     addWorkoutXP,
-    workouts
+    workouts,
+    setMessages,
+    user
   });
 
   const {
