@@ -99,6 +99,9 @@ function App() {
   const { notifications } = useNotifications(user);
   const { t } = useTranslation();
 
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  const { messages, sendMessage, setMessages } = useChatGPT(apiKey);
+
   // Hook personnalisé pour la logique des workouts
   const workoutLogic = useWorkoutLogic({
     exercises,
@@ -224,9 +227,6 @@ function App() {
     setTimeout(() => setShowWeightNotif(false), 400);
     setShowProfileModal(true);
   };
-
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  const { messages, sendMessage, setMessages } = useChatGPT(apiKey);
 
   if (!authChecked || userLoading) {
     return (

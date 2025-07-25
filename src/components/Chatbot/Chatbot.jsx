@@ -56,9 +56,12 @@ function getSetsForIntensity(intensity, exercise) {
   return Array.from({ length: nbSeries }, (_, i) => ({ reps: repsArr[i] || repsArr[repsArr.length - 1], weight: '', duration: 0 }));
 }
 
-const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, setActiveTab }) => {
+const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, setActiveTab, messages: messagesProp, setMessages: setMessagesProp }) => {
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  const { messages, sendMessage, setMessages } = useChatGPT(apiKey);
+  const chatGpt = useChatGPT(apiKey);
+  const messages = messagesProp || chatGpt.messages;
+  const setMessages = setMessagesProp || chatGpt.setMessages;
+  const sendMessage = chatGpt.sendMessage;
   const [input, setInput] = useState('');
   const [sessionType, setSessionType] = useState('fullbody');
   const [intensity, setIntensity] = useState('moyen');
@@ -270,6 +273,8 @@ Chatbot.propTypes = {
   setExercisesFromWorkout: PropTypes.func.isRequired,
   setShowAddExercise: PropTypes.func.isRequired,
   setActiveTab: PropTypes.func,
+  messages: PropTypes.array,
+  setMessages: PropTypes.func,
 };
 
 export default Chatbot;
