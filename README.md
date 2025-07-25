@@ -33,7 +33,10 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Profils enrichis** : Photos de profil, statistiques détaillées
 
 ### 📊 Analytics & Progression
+- **Système de suivi du poids** : Enregistrez votre poids chaque semaine, visualisez votre évolution sur une courbe dédiée, recevez un rappel intelligent pour ne rien oublier.
 - **Statistiques avancées** : Graphiques, comparaisons, historique
+- **Courbe d'évolution du poids** : Suivi visuel de votre poids semaine par semaine, affichée en haut de la page Statistiques
+- **Notification hebdomadaire** : Rappel automatique chaque début de semaine pour mettre à jour votre poids (avec option 'C'est le même')
 - **Suivi des performances** : Records personnels, tendances
 - **Calendrier interactif** : Vue d'ensemble de vos séances
 - **Export de données** : Sauvegarde de vos progrès
@@ -43,6 +46,7 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Formatage localisé** : Dates et unités adaptées automatiquement
 
 ### 📱 PWA & Mobile-First
+- **Header ultra-compact** : Nouveau header moderne, mobile-first, avec titre à gauche et navigation optimisée
 - **Application installable** : Fonctionne hors ligne
 - **Design responsive** : Optimisé mobile et desktop
 - **Performance optimisée** : Chargement rapide, animations fluides
@@ -51,8 +55,9 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - **Notifications push** : Restez informé même hors de l'application
 
 ### 🤖 Chatbot IA
-- **Coach virtuel** : Le chatbot répond à toutes vos questions, que ce soit sur le sport, la motivation, la nutrition, le bien-être ou tout autre sujet.
-- **Contexte personnalisé** : L'IA prend en compte vos dernières séances pour adapter ses réponses, mais vous pouvez discuter de tout.
+- **Coach virtuel** : Le chatbot fonctionne en développement et répond à toutes vos questions (sport, motivation, nutrition, bien-être, etc.).
+- **Contexte personnalisé** : L'IA prend en compte vos dernières séances, votre taille et votre poids pour adapter ses réponses.
+- **Accès aux données utilisateur** : Le chatbot utilise vos informations de profil (taille, poids) pour des conseils personnalisés.
 - **Interface unifiée** : Plus de mode "libre" ou "recommandation" à choisir, tout se fait dans la même interface de chat.
 - **Mode sombre** : Interface adaptée aux thèmes clairs et foncés
 - **Tests dédiés** : Scénarios vérifiant le comportement du chatbot (envoi de message, gestion du contexte, API key, interface unifiée)
@@ -318,25 +323,27 @@ src/tests/
 ## 📈 Roadmap 2025
 
 ### ✅ Complété
-- [x] Système de niveaux et XP
+- [x] Système de niveaux, XP et progression
 - [x] Streak animé avec bonus
-- [x] Leaderboard dynamique
-- [x] Badges et réalisations
-- [x] Défis entre amis
-- [x] Notifications intelligentes
-- [x] PWA installable
-- [x] Photos de profil
-- [x] Suite de tests complète avec 100% couverture sur useAppState
+- [x] Leaderboard dynamique entre amis
+- [x] Badges, réalisations et photos de profil
+- [x] Défis entre amis et notifications intelligentes
+- [x] PWA installable et design mobile-first
+- [x] Header ultra-compact et moderne
+- [x] Suite de tests complète (100% sur useAppState)
+- [x] Chatbot IA (fonctionnel en développement, accès aux données utilisateur, interface unifiée, conseils personnalisés)
+- [x] Système de suivi du poids (courbe d'évolution, notification hebdomadaire intelligente)
 
 ### 🚧 En développement
-- [x] Chatbot IA pour recommandations d'entraînement (mode sombre disponible et tests)
 - [ ] Recommandations d'exercices intelligentes
 - [ ] Analyse de performance avancée
 - [ ] Intégration wearables (Apple Watch, Fitbit)
 
 ### 📋 Planifié
 - [ ] Thèmes personnalisables
-- [ ] Export/import de données
+- [ ] Export/import de données (poids, séances, etc.)
+- [ ] Analyse avancée du poids (tendances, alertes, objectifs)
+- [ ] Suggestions IA ultra-personnalisées (nutrition, récupération, etc.)
 - [ ] Mode compétition avancé
 - [ ] Réseau social enrichi
 

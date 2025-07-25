@@ -7,8 +7,10 @@ import { useWeeklyBadgeUnlock } from '../../hooks/useWeeklyBadgeUnlock';
 import { BADGE_CONFIG } from './Badges';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../utils/firebase';
+import { useAppState } from '../../hooks';
 
 const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) => {
+  const { showToastMsg } = useAppState();
   const [showLocked, setShowLocked] = useState(false);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
   const [selectedBadgeToUnlock, setSelectedBadgeToUnlock] = useState(null);
@@ -32,14 +34,11 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
     if (badgeCount > 0 && unlockedBadges.length > 0) {
       const newBadge = unlockedBadges[unlockedBadges.length - 1];
       if (lastBadgeRef.current !== newBadge.id) {
-        setToast({ 
-          message: `🎉 Nouveau badge débloqué : ${newBadge.name} !`, 
-          type: 'success' 
-        });
+        showToastMsg(`🎉 Nouveau badge débloqué : ${newBadge.name} !`, 'success');
         lastBadgeRef.current = newBadge.id;
       }
     }
-  }, [badgeCount, unlockedBadges]);
+  }, [badgeCount, unlockedBadges, showToastMsg]);
 
   // Notification quand on peut débloquer un badge hebdomadaire
   useEffect(() => {
