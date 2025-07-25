@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import Leaderboard from './Leaderboard';
 import StatsComparison from '../Workout/StatsComparison';
 import { ArrowLeft } from 'lucide-react';
+import { useFriends } from '../../hooks/useFriends';
 
 function LeaderboardView({ user }) {
   const [showComparison, setShowComparison] = useState(false);
+  // Récupère friends et sendInvite pour le leaderboard
+  const { friends, sendInvite } = useFriends(user);
 
   return (
     <div className="max-w-4xl mx-auto">
       {!showComparison ? (
-        <Leaderboard user={user} onShowComparison={() => setShowComparison(true)} />
+        <Leaderboard user={user} onShowComparison={() => setShowComparison(true)} friends={friends} sendInvite={sendInvite} />
       ) : (
         <div className="space-y-4">
           <button

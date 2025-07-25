@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, Plus } from 'lucide-react';
 import { PERIODS, METRICS } from '../../constants/leaderboard';
 import { 
   calculateUserStats, 
@@ -14,7 +14,7 @@ import {
 import BadgeList from '../Badges/Badges';
 import ProfilePicture from '../Profile/ProfilePicture';
 
-function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
+function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvite, friends = [] }) {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState(PERIODS.WEEK);
@@ -118,6 +118,9 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
 
   const exerciseRanking = selectedExercise ? getExerciseRanking(selectedExercise) : [];
 
+  // Ajoute une fonction pour vérifier si un utilisateur est déjà ami
+  const isFriend = (uid) => friends.some(f => f?.uid === uid);
+
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-2xl shadow-lg space-y-4 md:space-y-6">
       {/* En-tête */}
@@ -220,7 +223,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
                           size="sm" 
                           useBadgeAsProfile={true}
                           selectedBadge={user.selectedBadge}
-                          showTeamButton={true}
+                          showTeamButton={false}
                           onTeamClick={() => onShowTeam && onShowTeam(user)}
                         />
                         <div className="min-w-0 flex-1">
@@ -234,6 +237,18 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
                         </div>
                         {user.badges && user.badges.length > 0 && (
                           <BadgeList badges={user.badges} size="sm" maxDisplay={3} />
+                        )}
+                        {user.uid !== currentUser?.uid && !isFriend(user.uid) && (
+                          <button
+                            onClick={async () => {
+                              await sendInvite(user.email);
+                              alert('Invitation envoyée à ' + user.displayName);
+                            }}
+                            className="ml-2 p-2 rounded-full bg-green-100 hover:bg-green-200 text-green-700 border border-green-200 transition"
+                            title="Ajouter en ami"
+                          >
+                            <Plus className="w-5 h-5" />
+                          </button>
                         )}
                       </div>
                       <div className="text-right sm:text-right">
@@ -265,17 +280,26 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam }) {
                           size="sm" 
                           useBadgeAsProfile={true}
                           selectedBadge={user.selectedBadge}
-                          showTeamButton={true}
+                          showTeamButton={false}
                           onTeamClick={() => onShowTeam && onShowTeam(user)}
                         />
                         <div className="min-w-0 flex-1">
                           <div className="font-semibold text-sm md:text-base truncate">{user.displayName}</div>
-                          <div className="text-xs md:text-sm text-gray-600">
-                            {user.stats.workouts || 0} séances • Poids max: {user.stats.maxWeight || 0}kg
-                          </div>
                         </div>
                         {user.badges && user.badges.length > 0 && (
                           <BadgeList badges={user.badges} size="sm" maxDisplay={3} />
+                        )}
+                        {user.uid !== currentUser?.uid && !isFriend(user.uid) && (
+                          <button
+                            onClick={async () => {
+                              await sendInvite(user.email);
+                              alert('Invitation envoyée à ' + user.displayName);
+                            }}
+                            className="ml-2 p-2 rounded-full bg-green-100 hover:bg-green-200 text-green-700 border border-green-200 transition"
+                            title="Ajouter en ami"
+                          >
+                            <Plus className="w-5 h-5" />
+                          </button>
                         )}
                       </div>
                       <div className="text-right sm:text-right">
