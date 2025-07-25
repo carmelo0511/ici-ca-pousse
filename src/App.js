@@ -350,7 +350,13 @@ function App() {
 
             {/* Onglet Chatbot */}
             <PageTransition isActive={activeTab === 'chatbot'}>
-              <Chatbot workouts={workouts} user={user} />
+              <Chatbot 
+                workouts={workouts} 
+                user={user} 
+                setExercisesFromWorkout={setExercisesFromWorkout}
+                setShowAddExercise={setShowAddExercise}
+                setActiveTab={setActiveTab}
+              />
             </PageTransition>
 
             {/* Onglet Amis */}

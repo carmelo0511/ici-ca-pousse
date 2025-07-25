@@ -69,6 +69,26 @@ Application moderne de suivi de séances de sport avec gamification avancée et 
 - "Explique-moi la différence entre cardio et musculation."
 - "Quels sont les bienfaits de la méditation ?"
 
+#### 🏋️ Génération automatique de séances personnalisées
+
+Le chatbot peut désormais générer pour vous une séance complète, prête à être validée dans l’application :
+
+- Cliquez sur **“Propose-moi une séance”** dans l’onglet Chatbot
+- Choisissez le **type de séance** (Full body, Haut du corps, Bas du corps, Push, Pull, Cardio, Abdos, HIIT, Mobilité…)
+- Choisissez l’**intensité** (Facile, Moyen, Difficile)
+- Cliquez sur **Valider**
+- Vous serez automatiquement redirigé vers la page de création de séance, avec :
+  - **4 à 6 exercices** adaptés au type choisi (aléatoires à chaque fois)
+  - **3 à 4 séries** par exercice (aléatoire)
+  - Répétitions ou durée adaptées à l’intensité
+  - Il ne vous reste qu’à remplir les poids utilisés
+
+**Exemple d’utilisation :**
+- “Propose-moi une séance full body difficile” (ou utilisez le menu du chatbot)
+- “Je veux une séance abdos facile”
+
+Vous pouvez aussi continuer à poser toutes vos questions sport, nutrition, motivation, etc. Le chatbot reste votre coach IA personnel !
+
 ## 🏗️ Architecture
 
 ```mermaid
@@ -333,6 +353,7 @@ src/tests/
 - [x] Suite de tests complète (100% sur useAppState)
 - [x] Chatbot IA (fonctionnel en développement, accès aux données utilisateur, interface unifiée, conseils personnalisés)
 - [x] Système de suivi du poids (courbe d'évolution, notification hebdomadaire intelligente)
+- [x] Génération automatique de séances personnalisées par le chatbot (type, intensité, exercices/séries aléatoires)
 
 ### 🚧 En développement
 - [ ] Recommandations d'exercices intelligentes
