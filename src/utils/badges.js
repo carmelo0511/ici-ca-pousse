@@ -271,4 +271,9 @@ export const getBadgeProgress = (badgeId, stats) => {
     default:
       return badge.condition(stats) ? 100 : 0;
   }
+};
+
+// Fonction pour obtenir tous les badges débloqués (alias de getUnlockedBadges)
+export const getBadges = (stats) => {
+  return getUnlockedBadges(stats);
 }; 
