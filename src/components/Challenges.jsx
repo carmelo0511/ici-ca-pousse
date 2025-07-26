@@ -23,7 +23,10 @@ const Challenges = ({ user }) => {
     acceptChallenge,
     declineChallenge,
     cancelChallenge,
-    deleteChallenge
+    deleteChallenge,
+    challengeTypes,
+    challengeDurations,
+    challengeTargets
   } = useChallenges(user);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -31,26 +34,16 @@ const Challenges = ({ user }) => {
   const [challengeDuration, setChallengeDuration] = useState(7);
   const [toast, setToast] = useState(null);
   const [activeTab, setActiveTab] = useState('all'); // 'all', 'sent' ou 'received'
-
-  // Types de défis disponibles
-  const challengeTypes = [
-    { id: 'workouts', label: 'Nombre de séances', icon: '💪' },
-    { id: 'duration', label: 'Temps d\'entraînement', icon: '⏱️' },
-    { id: 'streak', label: 'Série consécutive', icon: '🔥' },
-    { id: 'calories', label: 'Calories brûlées', icon: '🔥' }
-  ];
-
-  // Durées disponibles
-  const durations = [
-    { value: 3, label: '3 jours' },
-    { value: 7, label: '1 semaine' },
-    { value: 14, label: '2 semaines' },
-    { value: 30, label: '1 mois' }
-  ];
+  const [selectedTarget, setSelectedTarget] = useState(null);
 
   const handleCreateChallenge = async () => {
     if (!selectedFriend) {
       setToast({ message: 'Sélectionne un ami', type: 'error' });
+      return;
+    }
+    
+    if (!selectedTarget) {
+      setToast({ message: 'Sélectionne un objectif', type: 'error' });
       return;
     }
 
@@ -58,6 +51,7 @@ const Challenges = ({ user }) => {
       const challengeData = {
         type: challengeType,
         duration: challengeDuration,
+        target: selectedTarget,
         friend: selectedFriend
       };
 
@@ -589,37 +583,106 @@ const Challenges = ({ user }) => {
 
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Type de défi</label>
-            <div className="grid grid-cols-2 gap-2">
-              {challengeTypes.map(type => (
-                <button
-                  key={type.id}
-                  className={`p-3 border rounded-lg text-left transition-all ${
-                    challengeType === type.id 
-                      ? 'border-blue-500 bg-blue-50 shadow-md' 
-                      : 'border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400'
-                  }`}
-                  onClick={() => setChallengeType(type.id)}
-                >
-                  <div className="text-lg">{type.icon}</div>
-                  <div className="text-sm font-medium">{type.label}</div>
-                </button>
-              ))}
+            
+            {/* Catégories de défis */}
+            <div className="mb-3">
+              <div className="flex space-x-2 mb-2">
+                {['base', 'progression', 'regularity', 'variety', 'performance'].map(category => (
+                  <button
+                    key={category}
+                    className={`px-3 py-1 text-xs rounded-full transition-all ${
+                      challengeTypes.some(t => t.category === category && challengeType === t.id)
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                    onClick={() => {
+                      const firstTypeInCategory = challengeTypes.find(t => t.category === category);
+                      if (firstTypeInCategory) {
+                        setChallengeType(firstTypeInCategory.id);
+                        setSelectedTarget(null);
+                      }
+                    }}
+                  >
+                    {category === 'base' && 'Base'}
+                    {category === 'progression' && 'Progression'}
+                    {category === 'regularity' && 'Régularité'}
+                    {category === 'variety' && 'Variété'}
+                    {category === 'performance' && 'Performance'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Types de défis par catégorie */}
+            <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+              {challengeTypes
+                .filter(type => {
+                  const selectedCategory = challengeTypes.find(t => t.id === challengeType)?.category;
+                  return selectedCategory ? type.category === selectedCategory : type.category === 'base';
+                })
+                .map(type => (
+                  <button
+                    key={type.id}
+                    className={`p-3 border rounded-lg text-left transition-all ${
+                      challengeType === type.id 
+                        ? 'border-blue-500 bg-blue-50 shadow-md' 
+                        : 'border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400'
+                    }`}
+                    onClick={() => {
+                      setChallengeType(type.id);
+                      setSelectedTarget(null);
+                    }}
+                  >
+                    <div className="text-lg">{type.icon}</div>
+                    <div className="text-sm font-medium">{type.label}</div>
+                  </button>
+                ))}
             </div>
           </div>
 
+          {/* Sélection de l'objectif */}
+          {challengeType && challengeTargets[challengeType] && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">Objectif</label>
+              <div className="grid grid-cols-3 gap-2">
+                {challengeTargets[challengeType].map(target => (
+                  <button
+                    key={target}
+                    className={`p-2 border rounded-lg text-center transition-all ${
+                      selectedTarget === target 
+                        ? 'border-blue-500 bg-blue-50 shadow-md' 
+                        : 'border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400'
+                    }`}
+                    onClick={() => setSelectedTarget(target)}
+                  >
+                    <div className="text-sm font-medium">{target}</div>
+                    <div className="text-xs text-gray-500">
+                      {formatScore(target, challengeType)}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="mb-6">
             <label className="block text-sm font-medium mb-2">Durée du défi</label>
-            <select 
-              className="w-full p-3 border border-gray-300 rounded-lg"
-              value={challengeDuration}
-              onChange={(e) => setChallengeDuration(Number(e.target.value))}
-            >
-              {durations.map(duration => (
-                <option key={duration.value} value={duration.value}>
-                  {duration.label}
-                </option>
+            <div className="grid grid-cols-2 gap-2">
+              {challengeDurations.map(duration => (
+                <button
+                  key={duration.value}
+                  className={`p-3 border rounded-lg text-center transition-all ${
+                    challengeDuration === duration.value 
+                      ? 'border-blue-500 bg-blue-50 shadow-md' 
+                      : 'border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400'
+                  }`}
+                  onClick={() => setChallengeDuration(duration.value)}
+                >
+                  <div className="text-sm font-medium">{duration.label}</div>
+                  <div className="text-xs text-gray-500">{duration.category}</div>
+                </button>
               ))}
-            </select>
+            </div>
           </div>
 
           <div className="flex space-x-3">

@@ -15,11 +15,64 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
 
   // Types de défis disponibles
   const challengeTypes = [
-    { id: 'workouts', label: 'Nombre de séances', icon: '💪' },
-    { id: 'duration', label: "Temps d'entraînement", icon: '⏱️' },
-    { id: 'streak', label: 'Série consécutive', icon: '🔥' },
-    { id: 'calories', label: 'Calories brûlées', icon: '🔥' }
+    // Défis de base
+    { id: 'workouts', label: 'Nombre de séances', icon: '💪', category: 'base' },
+    { id: 'duration', label: "Temps d'entraînement", icon: '⏱️', category: 'base' },
+    { id: 'streak', label: 'Série consécutive', icon: '🔥', category: 'base' },
+    { id: 'calories', label: 'Calories brûlées', icon: '🔥', category: 'base' },
+    
+    // Défis de progression
+    { id: 'progression', label: 'Progression poids', icon: '📈', category: 'progression' },
+    { id: 'personal_records', label: 'Records personnels', icon: '🏅', category: 'progression' },
+    { id: 'new_exercises', label: 'Nouveaux exercices', icon: '🆕', category: 'progression' },
+    
+    // Défis de régularité
+    { id: 'weekly_consistency', label: 'Régularité hebdo', icon: '📅', category: 'regularity' },
+    { id: 'morning_workouts', label: 'Séances matinales', icon: '🌅', category: 'regularity' },
+    { id: 'weekend_workouts', label: 'Séances weekend', icon: '🎯', category: 'regularity' },
+    
+    // Défis de variété
+    { id: 'muscle_groups', label: 'Groupes musculaires', icon: '🎭', category: 'variety' },
+    { id: 'cardio_sessions', label: 'Séances cardio', icon: '❤️', category: 'variety' },
+    { id: 'strength_sessions', label: 'Séances force', icon: '💪', category: 'variety' },
+    
+    // Défis de performance
+    { id: 'long_workouts', label: 'Séances longues', icon: '⏰', category: 'performance' },
+    { id: 'intensity', label: 'Haute intensité', icon: '⚡', category: 'performance' },
+    { id: 'volume', label: 'Volume d\'entraînement', icon: '📊', category: 'performance' }
   ];
+
+  // Durées disponibles
+  const challengeDurations = [
+    { value: 1, label: '1 jour', category: 'quick' },
+    { value: 3, label: '3 jours', category: 'short' },
+    { value: 7, label: '1 semaine', category: 'standard' },
+    { value: 14, label: '2 semaines', category: 'medium' },
+    { value: 21, label: '3 semaines', category: 'long' },
+    { value: 30, label: '1 mois', category: 'long' },
+    { value: 60, label: '2 mois', category: 'extended' },
+    { value: 90, label: '3 mois', category: 'extended' }
+  ];
+
+  // Objectifs par type de défi
+  const challengeTargets = {
+    workouts: [3, 5, 7, 10, 15, 20],
+    duration: [30, 60, 90, 120, 180, 240], // minutes
+    streak: [3, 5, 7, 10, 14, 21], // jours consécutifs
+    calories: [500, 1000, 1500, 2000, 3000, 5000],
+    progression: [5, 10, 15, 20, 25, 30], // % d'amélioration
+    personal_records: [1, 3, 5, 7, 10, 15], // nombre de records
+    new_exercises: [2, 5, 8, 12, 15, 20], // nouveaux exercices
+    weekly_consistency: [3, 4, 5, 6, 7], // jours par semaine
+    morning_workouts: [2, 3, 4, 5, 6, 7], // séances matinales
+    weekend_workouts: [1, 2, 3, 4], // séances weekend
+    muscle_groups: [3, 4, 5, 6, 7, 8], // groupes musculaires
+    cardio_sessions: [2, 3, 4, 5, 6, 7], // séances cardio
+    strength_sessions: [2, 3, 4, 5, 6, 7], // séances force
+    long_workouts: [45, 60, 75, 90, 105, 120], // minutes
+    intensity: [70, 75, 80, 85, 90, 95], // % d'intensité
+    volume: [1000, 2000, 3000, 5000, 7500, 10000] // volume total
+  };
 
   const loadChallenges = useCallback(async () => {
     if (!user?.uid) return;
@@ -106,16 +159,17 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       const start = typeof challenge.startDate === 'string' ? new Date(challenge.startDate) : challenge.startDate;
       const end = typeof challenge.endDate === 'string' ? new Date(challenge.endDate) : challenge.endDate;
       const filteredWorkouts = getWorkoutsForDateRange(workouts, start, end);
+      
       switch (challenge.type) {
+        // Défis de base
         case 'workouts':
           return filteredWorkouts.length;
         case 'duration':
           return filteredWorkouts.reduce((total, workout) => total + (workout.duration || 0), 0);
-          case 'streak': {
-            // S'assurer que les dates de workout sont bien des objets Date
-            const sortedDates = filteredWorkouts
-              .map(w => parseLocalDate(w.date))
-              .sort((a, b) => a - b);
+        case 'streak': {
+          const sortedDates = filteredWorkouts
+            .map(w => parseLocalDate(w.date))
+            .sort((a, b) => a - b);
           let maxStreak = 0;
           let currentStreak = 0;
           let lastDate = null;
@@ -132,6 +186,177 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
         }
         case 'calories':
           return filteredWorkouts.reduce((total, workout) => total + (workout.calories || 0), 0);
+        
+        // Défis de progression
+        case 'progression': {
+          // Calculer la progression moyenne des poids sur les exercices
+          const exerciseProgressions = {};
+          filteredWorkouts.forEach(workout => {
+            workout.exercises?.forEach(exercise => {
+              if (!exerciseProgressions[exercise.name]) {
+                exerciseProgressions[exercise.name] = [];
+              }
+              exercise.sets?.forEach(set => {
+                if (set.weight) {
+                  exerciseProgressions[exercise.name].push(set.weight);
+                }
+              });
+            });
+          });
+          
+          let totalProgression = 0;
+          let exerciseCount = 0;
+          Object.values(exerciseProgressions).forEach(weights => {
+            if (weights.length > 1) {
+              const firstWeight = weights[0];
+              const lastWeight = weights[weights.length - 1];
+              const progression = ((lastWeight - firstWeight) / firstWeight) * 100;
+              totalProgression += progression;
+              exerciseCount++;
+            }
+          });
+          
+          return exerciseCount > 0 ? Math.round(totalProgression / exerciseCount) : 0;
+        }
+        
+        case 'personal_records': {
+          // Compter les records personnels battus
+          const records = new Set();
+          filteredWorkouts.forEach(workout => {
+            workout.exercises?.forEach(exercise => {
+              exercise.sets?.forEach(set => {
+                if (set.weight && set.reps) {
+                  const record = `${exercise.name}-${set.weight}kg-${set.reps}reps`;
+                  records.add(record);
+                }
+              });
+            });
+          });
+          return records.size;
+        }
+        
+        case 'new_exercises': {
+          // Compter les nouveaux exercices essayés
+          const newExercises = new Set();
+          filteredWorkouts.forEach(workout => {
+            workout.exercises?.forEach(exercise => {
+              newExercises.add(exercise.name);
+            });
+          });
+          return newExercises.size;
+        }
+        
+        // Défis de régularité
+        case 'weekly_consistency': {
+          // Calculer la régularité hebdomadaire moyenne
+          const weeks = {};
+          filteredWorkouts.forEach(workout => {
+            const weekStart = new Date(workout.date);
+            weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+            const weekKey = weekStart.toISOString().split('T')[0];
+            weeks[weekKey] = (weeks[weekKey] || 0) + 1;
+          });
+          
+          const weeklyAverages = Object.values(weeks);
+          return weeklyAverages.length > 0 
+            ? Math.round(weeklyAverages.reduce((a, b) => a + b, 0) / weeklyAverages.length)
+            : 0;
+        }
+        
+        case 'morning_workouts': {
+          // Compter les séances matinales (avant 10h)
+          return filteredWorkouts.filter(workout => {
+            const workoutTime = new Date(workout.date);
+            return workoutTime.getHours() < 10;
+          }).length;
+        }
+        
+        case 'weekend_workouts': {
+          // Compter les séances le weekend
+          return filteredWorkouts.filter(workout => {
+            const workoutDay = new Date(workout.date).getDay();
+            return workoutDay === 0 || workoutDay === 6; // Dimanche ou Samedi
+          }).length;
+        }
+        
+        // Défis de variété
+        case 'muscle_groups': {
+          // Compter les groupes musculaires différents travaillés
+          const muscleGroups = new Set();
+          filteredWorkouts.forEach(workout => {
+            workout.exercises?.forEach(exercise => {
+              if (exercise.type && exercise.type !== 'custom') {
+                muscleGroups.add(exercise.type);
+              }
+            });
+          });
+          return muscleGroups.size;
+        }
+        
+        case 'cardio_sessions': {
+          // Compter les séances cardio
+          return filteredWorkouts.filter(workout => 
+            workout.exercises?.some(exercise => exercise.type === 'cardio')
+          ).length;
+        }
+        
+        case 'strength_sessions': {
+          // Compter les séances de force (non-cardio)
+          return filteredWorkouts.filter(workout => 
+            workout.exercises?.some(exercise => exercise.type !== 'cardio' && exercise.type !== 'custom')
+          ).length;
+        }
+        
+        // Défis de performance
+        case 'long_workouts': {
+          // Compter les séances longues (>45 min)
+          return filteredWorkouts.filter(workout => 
+            (workout.duration || 0) > 45
+          ).length;
+        }
+        
+        case 'intensity': {
+          // Calculer l'intensité moyenne des séances
+          const intensities = filteredWorkouts.map(workout => {
+            if (!workout.exercises?.length) return 0;
+            
+            let totalIntensity = 0;
+            let exerciseCount = 0;
+            
+            workout.exercises.forEach(exercise => {
+              exercise.sets?.forEach(set => {
+                if (set.weight && set.reps) {
+                  // Calcul simple d'intensité basé sur le poids et les reps
+                  const intensity = (set.weight * set.reps) / 100; // Normalisé
+                  totalIntensity += intensity;
+                  exerciseCount++;
+                }
+              });
+            });
+            
+            return exerciseCount > 0 ? (totalIntensity / exerciseCount) * 100 : 0;
+          });
+          
+          return intensities.length > 0 
+            ? Math.round(intensities.reduce((a, b) => a + b, 0) / intensities.length)
+            : 0;
+        }
+        
+        case 'volume': {
+          // Calculer le volume total d'entraînement
+          let totalVolume = 0;
+          filteredWorkouts.forEach(workout => {
+            workout.exercises?.forEach(exercise => {
+              exercise.sets?.forEach(set => {
+                if (set.weight && set.reps) {
+                  totalVolume += set.weight * set.reps;
+                }
+              });
+            });
+          });
+          return Math.round(totalVolume);
+        }
+        
         default:
           return 0;
       }
@@ -156,12 +381,48 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
 
   const formatScore = useCallback((score, type) => {
     switch (type) {
+      // Défis de base
+      case 'workouts':
+        return `${score} séances`;
       case 'duration':
         return `${score} min`;
-      case 'calories':
-        return `${score} cal`;
       case 'streak':
         return `${score} jours`;
+      case 'calories':
+        return `${score} cal`;
+      
+      // Défis de progression
+      case 'progression':
+        return `${score}%`;
+      case 'personal_records':
+        return `${score} records`;
+      case 'new_exercises':
+        return `${score} exercices`;
+      
+      // Défis de régularité
+      case 'weekly_consistency':
+        return `${score} jours/semaine`;
+      case 'morning_workouts':
+        return `${score} séances matinales`;
+      case 'weekend_workouts':
+        return `${score} séances weekend`;
+      
+      // Défis de variété
+      case 'muscle_groups':
+        return `${score} groupes`;
+      case 'cardio_sessions':
+        return `${score} séances cardio`;
+      case 'strength_sessions':
+        return `${score} séances force`;
+      
+      // Défis de performance
+      case 'long_workouts':
+        return `${score} séances longues`;
+      case 'intensity':
+        return `${score}% intensité`;
+      case 'volume':
+        return `${score} kg total`;
+      
       default:
         return score;
     }
@@ -284,6 +545,8 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     acceptChallenge,
     declineChallenge,
     cancelChallenge,
-    challengeTypes
+    challengeTypes,
+    challengeDurations,
+    challengeTargets
   };
 }; 
