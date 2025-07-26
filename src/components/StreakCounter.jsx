@@ -74,16 +74,11 @@ const StreakCounter = ({ streak, className = '' }) => {
           {displayStreak} <span className="text-[10px] font-normal text-gray-500">j</span>
         </span>
         {getStreakTitle(streak) && (
-          <span className={`text-[10px] font-bold ${getStreakColor(streak)} uppercase tracking-wide leading-tight`}>
+          <span className={`text-[8px] font-bold ${getStreakColor(streak)} uppercase tracking-wide leading-tight`}>
             {getStreakTitle(streak)}
           </span>
         )}
       </div>
-      {getStreakMessage(streak) && (
-        <span className={`ml-1 text-[10px] font-semibold ${getStreakColor(streak)}`} style={{ whiteSpace: 'nowrap' }}>
-          {getStreakMessage(streak)}
-        </span>
-      )}
     </div>
   );
 };

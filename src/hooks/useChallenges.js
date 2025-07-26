@@ -383,10 +383,10 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
           return filteredWorkouts.length;
         case 'duration':
           return filteredWorkouts.reduce((total, workout) => total + (workout.duration || 0), 0);
-        case 'streak': {
-          const sortedDates = filteredWorkouts
-            .map(w => parseLocalDate(w.date))
-            .sort((a, b) => a - b);
+          case 'streak': {
+            const sortedDates = filteredWorkouts
+              .map(w => parseLocalDate(w.date))
+              .sort((a, b) => a - b);
           let maxStreak = 0;
           let currentStreak = 0;
           let lastDate = null;
@@ -680,16 +680,16 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
             earnedXP: rewards?.xp,
             earnedBadge: rewards?.badge
           }).then(() => {
-            const challengeName = `${challenge.type} vs ${challenge.receiverName}`;
+          const challengeName = `${challenge.type} vs ${challenge.receiverName}`;
             const xpToAdd = rewards?.xp || 100; // XP de base si pas de récompense calculée
             
             addChallengeWinXP(challengeName, xpToAdd).then(result => {
-              // Défi gagné avec succès
+            // Défi gagné avec succès
               console.log(`Défi gagné ! XP: ${xpToAdd}, Niveau: ${rewards?.name || 'Standard'}`);
-            }).catch(error => {
-              console.error('Erreur lors de l\'ajout d\'XP pour victoire:', error);
-            });
+          }).catch(error => {
+            console.error('Erreur lors de l\'ajout d\'XP pour victoire:', error);
           });
+        });
         }
         
         const rewardText = rewards ? ` ${rewards.badge} +${rewards.xp}XP` : '';
