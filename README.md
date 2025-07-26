@@ -1,4 +1,4 @@
-# 🏋️ Ici Ça Pousse - Application de Fitness Gamifiée
+# 🏋️ Ici Ça Pousse - Application de Fitness Gamifiée avec Coach IA
 
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-10.7.0-orange.svg)](https://firebase.google.com/)
@@ -7,14 +7,53 @@
 [![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)](https://jestjs.io/)
 [![Linting](https://img.shields.io/badge/ESLint-Clean-brightgreen.svg)](https://eslint.org/)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com/)
+[![AI Coach](https://img.shields.io/badge/AI%20Coach-OpenAI-purple.svg)](https://openai.com/)
 
 ## 🌐 Application en ligne
 
 **[ici-ca-pousse.vercel.app](https://ici-ca-pousse.vercel.app)**
 
-Application moderne de suivi de séances de sport avec gamification avancée, fonctionnalités sociales complètes et coach IA intelligent.
+Application moderne de suivi de séances de sport avec gamification avancée, fonctionnalités sociales complètes et **Coach IA intelligent** qui analyse votre historique pour proposer des recommandations personnalisées.
 
 ## 🚀 Fonctionnalités
+
+### 🧠 Coach Lex IA - Assistant Personnel Intelligent
+
+#### 🎯 **Recommandations d'exercices intelligentes**
+- **Analyse de l'historique** : Le coach analyse vos 5 dernières séances
+- **Détection des groupes sous-traités** : Identifie automatiquement les muscles peu travaillés
+- **Évitement des répétitions** : Évite les exercices récents (2 dernières séances)
+- **Adaptation au type de séance** : Filtre selon cardio/HIIT/abdos/etc.
+- **Attribution correcte des groupes musculaires** : Plus d'exercices marqués comme "custom"
+
+#### 🏋️ **Génération automatique de séances personnalisées**
+- **Bouton "Propose-moi une séance"** : Séances adaptées à votre niveau
+- **Types de séances** : Full body, Haut/Bas du corps, Push/Pull, Cardio, Abdos, HIIT, Mobilité
+- **Niveaux d'intensité** : Facile, Moyen, Difficile
+- **Exercices en français** : Tous les exercices traduits (Mountain climbers → Grimpeur)
+- **4-6 exercices** : Sélection intelligente basée sur votre historique
+- **3-4 séries** : Configuration automatique selon l'intensité
+
+#### 📊 **Analyse intelligente des séances**
+- **Bouton "Récap des dernières séances"** : Analyse détaillée de vos 3 dernières séances
+- **Affichage des groupes musculaires** : Chaque exercice avec son groupe associé
+- **Analyse de régularité** : Détection des jours depuis la dernière séance
+- **Recommandations personnalisées** : Conseils adaptés à votre progression
+- **Équilibre musculaire** : Identification des groupes négligés
+
+#### 🧠 **Recommandations IA personnalisées**
+- **Bouton "Recommandations IA"** : Analyse complète de votre profil
+- **Niveau d'activité** : Débutant, intermédiaire, avancé
+- **Analyse de progression** : Évaluation de l'intensité et de la régularité
+- **Conseils adaptés** : Recommandations selon votre historique
+- **Objectifs personnalisés** : Suggestions d'amélioration
+
+#### 💬 **Interface de chat unifiée**
+- **Messages d'accueil automatiques** : "Bonjour [prénom], je suis Coach Lex IA"
+- **Contexte enrichi** : L'IA connaît vos dernières séances, taille, poids
+- **Questions libres** : Sport, nutrition, motivation, bien-être
+- **Messages explicatifs** : Explications des recommandations
+- **Mode sombre/clair** : Interface adaptée à tous les thèmes
 
 ### 🎮 Gamification Avancée
 - **Système de niveaux et XP** : Progression basée sur la durée, variété d'exercices et streaks
@@ -42,6 +81,13 @@ Application moderne de suivi de séances de sport avec gamification avancée, fo
 - **Calendrier interactif** : Vue d'ensemble de vos séances avec bouton de suppression
 - **Export de données** : Sauvegarde de vos progrès
 
+### 🎨 Interface Utilisateur Améliorée
+- **Boutons de suppression visibles** : Suppression d'exercices et de séries avec confirmation
+- **Bouton "Vider la séance"** : Supprime tous les exercices d'une séance en une fois
+- **Confirmations de sécurité** : Popups de confirmation avant suppression
+- **Interface intuitive** : Gestion efficace des séances même quand on n'aime pas la séance proposée
+- **Couleurs optimisées** : Boutons visibles en mode clair et sombre
+
 ### 🌐 Internationalisation
 - **Français / Anglais** : Interface disponible dans deux langues
 - **Formatage localisé** : Dates et unités adaptées automatiquement
@@ -54,51 +100,6 @@ Application moderne de suivi de séances de sport avec gamification avancée, fo
 - **Accessibilité** : Compatible avec les lecteurs d'écran
 - **Mode sombre global** : Commutation instantanée clair/sombre
 - **Notifications push** : Restez informé même hors de l'application
-
-### 🤖 Coach Lex IA - Assistant Personnel Intelligent
-- **Coach virtuel personnalisé** : Coach Lex IA vous accompagne dans votre parcours fitness avec des conseils adaptés
-- **Messages de félicitations automatiques** : Recevez des encouragements personnalisés après chaque séance avec analyse de votre régularité et records
-- **Bulle de chat flottante** : Accès direct au coach depuis n'importe quel onglet avec notifications des nouveaux messages
-- **Contexte personnalisé** : L'IA prend en compte vos dernières séances, votre taille et votre poids pour adapter ses réponses
-- **Accès aux données utilisateur** : Le coach utilise vos informations de profil (taille, poids, prénom) pour des conseils personnalisés
-- **Interface unifiée** : Plus de mode "libre" ou "recommandation" à choisir, tout se fait dans la même interface de chat
-- **Mode sombre** : Interface adaptée aux thèmes clairs et foncés
-- **Tests dédiés** : Scénarios vérifiant le comportement du coach (envoi de message, gestion du contexte, API key, interface unifiée)
-
-**Exemples d'utilisation :**
-- "Comment améliorer ma récupération après l'entraînement ?"
-- "Peux-tu me donner une recette saine ?"
-- "J'ai du mal à rester motivé, des conseils ?"
-- "Explique-moi la différence entre cardio et musculation."
-- "Quels sont les bienfaits de la méditation ?"
-
-#### 🏋️ Génération automatique de séances personnalisées
-
-Le coach peut désormais générer pour vous une séance complète, prête à être validée dans l'application :
-
-- Cliquez sur **"Propose-moi une séance"** dans l'onglet Coach Lex IA
-- Choisissez le **type de séance** (Full body, Haut du corps, Bas du corps, Push, Pull, Cardio, Abdos, HIIT, Mobilité…)
-- Choisissez l'**intensité** (Facile, Moyen, Difficile)
-- Cliquez sur **Valider**
-- Vous serez automatiquement redirigé vers la page de création de séance, avec :
-  - **4 à 6 exercices** adaptés au type choisi (aléatoires à chaque fois)
-  - **3 à 4 séries** par exercice (aléatoire)
-  - Répétitions ou durée adaptées à l'intensité
-  - Il ne vous reste qu'à remplir les poids utilisés
-
-**Exemple d'utilisation :**
-- "Propose-moi une séance full body difficile" (ou utilisez le menu du coach)
-- "Je veux une séance abdos facile"
-
-#### 📊 Récapitulatif intelligent des dernières séances
-
-- **Bouton "Récap des dernières séances"** : Analyse détaillée de vos 3 dernières séances
-- **Format de date lisible** : "23 Juillet 2025" au lieu de "2025-07-23"
-- **Détails complets** : Séries, répétitions, poids pour chaque exercice
-- **Recommandations intelligentes** : Le coach analyse la répartition haut/bas du corps et vous conseille sur la prochaine séance
-- **Messages personnalisés** : Le coach vous appelle par votre prénom
-
-Vous pouvez aussi continuer à poser toutes vos questions sport, nutrition, motivation, etc. Coach Lex IA reste votre coach personnel intelligent !
 
 ## 🏗️ Architecture
 
@@ -378,9 +379,13 @@ src/tests/
 - [x] Boutons d'invitation d'amis dans le leaderboard
 - [x] Bouton de suppression des séances dans le calendrier
 - [x] Code propre avec 0 erreurs ESLint
+- [x] **Recommandations d'exercices intelligentes** (analyse historique, groupes sous-traités)
+- [x] **Traduction complète des exercices en français** (Mountain climbers → Grimpeur)
+- [x] **Attribution correcte des groupes musculaires** (plus d'exercices "custom")
+- [x] **Interface de suppression améliorée** (boutons visibles, confirmations, "Vider la séance")
+- [x] **Analyse intelligente des séances** (régularité, progression, équilibre musculaire)
 
 ### 🚧 En développement
-- [ ] Recommandations d'exercices intelligentes
 - [ ] Analyse de performance avancée
 - [ ] Intégration wearables (Apple Watch, Fitbit)
 
@@ -435,4 +440,25 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 - **Développeur Full-Stack** : [Bryan Nakache](https://github.com/bryannakache)
 - **Technologies** : React, Firebase, PWA, Gamification, IA
 - **Focus** : UX/UI, Performance, Tests, Code Quality
+
+---
+
+## 🎯 Exemples d'utilisation du Coach IA
+
+### 💬 Questions générales
+- "Comment améliorer ma récupération après l'entraînement ?"
+- "Peux-tu me donner une recette saine ?"
+- "J'ai du mal à rester motivé, des conseils ?"
+- "Explique-moi la différence entre cardio et musculation."
+- "Quels sont les bienfaits de la méditation ?"
+
+### 🏋️ Génération de séances
+- "Propose-moi une séance full body difficile"
+- "Je veux une séance abdos facile"
+- "Donne-moi une séance cardio pour perdre du poids"
+
+### 📊 Analyse et conseils
+- "Comment analyser mes progrès ?"
+- "Quels exercices pour renforcer mes épaules ?"
+- "Je me sens fatigué, que faire ?"
 
