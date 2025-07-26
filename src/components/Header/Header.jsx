@@ -40,8 +40,8 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
         <div className="flex flex-row items-center flex-1 min-w-0 gap-1 sm:gap-3">
           {/* Badge niveau circulaire */}
           <div className="flex flex-col items-center min-w-0">
-            <div className="w-7 h-7 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow animate-pop border-2 border-white dark:border-white bg-gradient-to-tr from-green-400 to-purple-500 dark:from-cyan-300 dark:to-green-300">
-              <span className="text-xs sm:text-xl font-extrabold text-black drop-shadow">{level}</span>
+            <div className="w-7 h-7 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow animate-pop border-2 border-white dark:border-white bg-white dark:bg-gray-800">
+              <span className="text-xs sm:text-xl font-extrabold text-black dark:text-white drop-shadow">{level}</span>
             </div>
           </div>
           {/* Barre d'XP moderne */}
@@ -57,8 +57,8 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
             </div>
           </div>
           {/* Streak avec titre */}
-          <div className="flex flex-col items-center min-w-0 mx-1">
-            <StreakCounter streak={streak} className="bg-white/80 dark:bg-gray-800/80 dark:text-white" />
+          <div className="flex flex-col items-center min-w-0">
+            <StreakCounter streak={streak} />
           </div>
           {/* Profil et actions */}
           <div className="flex items-center gap-0.5 sm:gap-2 min-w-0">

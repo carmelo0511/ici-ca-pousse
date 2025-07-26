@@ -55,11 +55,11 @@ const StreakCounter = ({ streak, className = '' }) => {
   }, [streak, displayStreak]);
 
   return (
-    <div className={`flex items-center space-x-1 bg-gradient-to-r from-white/90 to-white/70 rounded-lg px-2 py-1 border border-gray-200 shadow-md backdrop-blur-sm ${className}`} style={{ minWidth: 0 }}>
+    <div className={`flex items-center space-x-1 bg-white/90 dark:bg-gray-800/90 rounded-lg px-2 py-1 border border-white/50 dark:border-gray-700/50 shadow-sm backdrop-blur-sm ${className}`} style={{ minWidth: 0 }}>
       <span className={`text-sm ${getStreakColor(streak)} mr-1`} style={{ minWidth: 16 }}>{getStreakIcon(streak)}</span>
       <div className="flex flex-col items-center">
-        <span className="text-xs font-bold text-gray-800" style={{ letterSpacing: 0.5 }}>
-          {displayStreak} <span className="text-[10px] font-normal text-gray-500">j</span>
+        <span className="text-xs font-bold text-gray-800 dark:text-white" style={{ letterSpacing: 0.5 }}>
+          {displayStreak} <span className="text-[10px] font-normal text-gray-500 dark:text-gray-400">j</span>
         </span>
         {getStreakTitle(streak) && (
           <span className={`text-[8px] font-bold ${getStreakColor(streak)} uppercase tracking-wide leading-tight text-center`}>
