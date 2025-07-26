@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useFriends } from '../../hooks/useFriends';
+import { useNotifications } from '../../hooks/useNotifications';
 import GradientButton from '../GradientButton';
 import FriendProfile from './FriendProfile';
 import BadgeList from '../Badges/Badges';
 import ProfilePicture from './ProfilePicture';
 
 function FriendsList({ user }) {
+  const { notifications, markAsRead } = useNotifications(user);
   const {
     friends,
     pendingInvites,
@@ -48,6 +50,29 @@ function FriendsList({ user }) {
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow-lg space-y-8">
       <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Mes amis</h2>
+      
+      {/* Notifications d'amis */}
+      {notifications.filter(n => n.type === 'friend_invite' && !n.read).length > 0 && (
+        <div className="bg-blue-50 border-l-4 border-l-blue-500 p-4 rounded-lg mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="text-2xl">👥</div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Nouvelles invitations d'amis !</h3>
+                <p className="text-sm text-gray-600">
+                  Tu as {notifications.filter(n => n.type === 'friend_invite' && !n.read).length} invitation(s) d'ami(s)
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => notifications.filter(n => n.type === 'friend_invite' && !n.read).forEach(n => markAsRead(n.id))}
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
+              Marquer comme lu
+            </button>
+          </div>
+        </div>
+      )}
       <form onSubmit={handleSendInvite} className="flex gap-2 mb-4">
         <input
           type="email"

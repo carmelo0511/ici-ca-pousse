@@ -18,8 +18,7 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
     { id: 'friends', icon: User, label: 'Amis', color: 'from-pink-500 to-pink-600', shortcut: 'F' },
     { id: 'leaderboard', icon: Trophy, label: 'Classement', color: 'from-yellow-500 to-yellow-600', shortcut: 'L' },
     { id: 'challenges', icon: Zap, label: 'Défis', color: 'from-gray-800 to-black', shortcut: 'D' },
-    { id: 'badges', icon: Award, label: 'Badges', color: 'from-indigo-500 to-indigo-600', shortcut: 'B' },
-    { id: 'notifications', icon: Bell, label: 'Notifications', color: 'from-red-500 to-red-600', shortcut: 'N' }
+    { id: 'badges', icon: Award, label: 'Badges', color: 'from-indigo-500 to-indigo-600', shortcut: 'B' }
   ];
 
   // Vérifier si on peut faire défiler
@@ -109,8 +108,11 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
                 <span className="truncate w-full">{label}</span>
               </div>
               {/* Indicateur de progression pour certains onglets */}
-              {id === 'notifications' && notifications && notifications.length > 0 && (
+              {id === 'challenges' && notifications && notifications.filter(n => n.type === 'challenge_invite' && !n.read).length > 0 && (
                 <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
+              )}
+              {id === 'friends' && notifications && notifications.filter(n => n.type === 'friend_invite' && !n.read).length > 0 && (
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse"></div>
               )}
             </button>
           ))}

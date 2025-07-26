@@ -21,7 +21,7 @@ import FriendsList from './components/Profile/FriendsList';
 import LeaderboardView from './components/Leaderboard/LeaderboardView';
 import BadgesPage from './components/Badges/BadgesPage';
 import Challenges from './components/Challenges';
-import Notifications from './components/Notifications';
+
 import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
 import Chatbot from './components/Chatbot/Chatbot';
@@ -151,7 +151,7 @@ function App() {
     { id: 'leaderboard', label: 'Classement' },
     { id: 'challenges', label: 'Défis' },
     { id: 'badges', label: 'Badges' },
-    { id: 'notifications', label: 'Notifications' }
+
   ];
 
   // Navigation par gestes et raccourcis clavier
@@ -378,10 +378,7 @@ function App() {
               <BadgesPage workouts={workouts} challenges={challenges} friends={friends} user={user} addBadgeUnlockXP={addBadgeUnlockXP} />
             </PageTransition>
 
-            {/* Onglet Notifications */}
-            <PageTransition isActive={activeTab === 'notifications'}>
-              <Notifications user={user} />
-            </PageTransition>
+            
           </div>
 
           {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}

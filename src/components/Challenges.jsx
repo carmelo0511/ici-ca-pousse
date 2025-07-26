@@ -6,9 +6,11 @@ import GradientButton from './GradientButton';
 import Modal from './Workout/Modal';
 import Toast from './Toast';
 import { createNotification, NOTIFICATION_TYPES } from '../utils/notifications';
+import { useNotifications } from '../hooks/useNotifications';
 
 const Challenges = ({ user }) => {
   const { friends } = useFriends(user);
+  const { notifications, markAsRead, removeNotification } = useNotifications(user);
   const { 
     challenges, 
     createChallenge, 
@@ -281,6 +283,29 @@ const Challenges = ({ user }) => {
           </div>
         </Card>
       </div>
+
+      {/* Notifications de défis */}
+      {notifications.filter(n => n.type === 'challenge_invite' && !n.read).length > 0 && (
+        <Card className="mb-6 border-l-4 border-l-yellow-500 bg-yellow-50">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="text-2xl">⚡</div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Nouveaux défis !</h3>
+                <p className="text-sm text-gray-600">
+                  Tu as {notifications.filter(n => n.type === 'challenge_invite' && !n.read).length} défi(s) en attente
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => notifications.filter(n => n.type === 'challenge_invite' && !n.read).forEach(n => markAsRead(n.id))}
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
+              Marquer comme lu
+            </button>
+          </div>
+        </Card>
+      )}
 
       {/* Statistiques détaillées */}
       {/* Temporairement désactivé - ChallengeStats stats={stats} /> */}
