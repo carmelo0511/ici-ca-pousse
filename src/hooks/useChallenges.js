@@ -316,6 +316,60 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     }
   }, []);
 
+  // Fonction pour calculer le score d'un utilisateur spécifique
+  const calculateUserScore = useCallback((userId, challenge) => {
+    try {
+      if (!userId || !challenge) return 0;
+      
+      // Filtrer les workouts de l'utilisateur pendant la période du défi
+      const startDate = new Date(challenge.startDate);
+      const endDate = new Date(challenge.endDate);
+      
+      const userWorkouts = workouts.filter(workout => {
+        const workoutDate = new Date(workout.date);
+        return workoutDate >= startDate && workoutDate <= endDate;
+      });
+      
+      // Calculer le score selon le type de défi
+      switch (challenge.type) {
+        case 'workouts':
+          return userWorkouts.length;
+          
+        case 'duration':
+          return userWorkouts.reduce((total, workout) => total + (workout.duration || 0), 0);
+          
+        case 'streak':
+          // Calculer la plus longue série consécutive
+          if (userWorkouts.length === 0) return 0;
+          
+          const sortedWorkouts = userWorkouts.sort((a, b) => new Date(a.date) - new Date(b.date));
+          let maxStreak = 1;
+          let currentStreak = 1;
+          
+          for (let i = 1; i < sortedWorkouts.length; i++) {
+            const prevDate = new Date(sortedWorkouts[i-1].date);
+            const currDate = new Date(sortedWorkouts[i].date);
+            const daysDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
+            
+            if (daysDiff === 1) {
+              currentStreak++;
+              maxStreak = Math.max(maxStreak, currentStreak);
+            } else {
+              currentStreak = 1;
+            }
+          }
+          return maxStreak;
+          
+        // Ajouter d'autres types selon besoin...
+        default:
+          return userWorkouts.length;
+      }
+    } catch (error) {
+      console.error('Erreur lors du calcul du score utilisateur:', error);
+      return 0;
+    }
+  }, [workouts]);
+
   const getChallengeScore = useCallback((challenge) => {
     try {
       // S'assurer que les dates sont bien des objets Date
@@ -753,6 +807,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     challengeRewards,
     calculateChallengeLevel,
     calculateChallengeRewards,
-    getNextLevel
+    getNextLevel,
+    calculateUserScore
   };
 }; 

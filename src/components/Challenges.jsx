@@ -222,6 +222,12 @@ const Challenges = ({ user }) => {
     setToast({ message: 'Défi affiché à nouveau', type: 'success' });
   };
 
+  // Fonction pour calculer le score de l'ami
+  const getFriendScore = (challenge) => {
+    const isSentByMe = challenge.senderId === user?.uid;
+    return isSentByMe ? (challenge.friendScore || 0) : (challenge.myScore || 0);
+  };
+
   // Fonction pour afficher les récompenses d'un défi
   const renderChallengeRewards = (challenge) => {
     if (!challenge.target) return null;
@@ -450,7 +456,7 @@ const Challenges = ({ user }) => {
                             {status.text}
                           </div>
                           <div className="text-sm text-gray-600">
-                            {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
+                            {formatScore(myScore, challenge.type)} vs {formatScore(getFriendScore(challenge), challenge.type)}
                           </div>
                           {isStreakChallenge && myScore === 0 && (
                             <div className="text-xs text-red-500 mt-1">Aucune série consécutive pendant la période du défi.</div>
@@ -528,7 +534,7 @@ const Challenges = ({ user }) => {
                         {status.text}
                       </div>
                       <div className="text-sm text-gray-600">
-                        {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
+                        {formatScore(myScore, challenge.type)} vs {formatScore(getFriendScore(challenge), challenge.type)}
                       </div>
                       {challenge.status === 'pending' && (
                         <button
@@ -612,7 +618,7 @@ const Challenges = ({ user }) => {
                             {status.text}
                           </div>
                           <div className="text-sm text-gray-600">
-                            {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
+                            {formatScore(myScore, challenge.type)} vs {formatScore(getFriendScore(challenge), challenge.type)}
                           </div>
                         </>
                       )}
@@ -675,7 +681,7 @@ const Challenges = ({ user }) => {
                         {status.text}
                       </div>
                       <div className="text-sm text-gray-600">
-                        {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
+                        {formatScore(myScore, challenge.type)} vs {formatScore(getFriendScore(challenge), challenge.type)}
                       </div>
                       {isSentByMe && (
                         <button
