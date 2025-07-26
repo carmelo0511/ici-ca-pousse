@@ -263,6 +263,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       receiverId: challengeData.friend.uid,
       receiverName: challengeData.friend.displayName || challengeData.friend.email,
       type: challengeData.type,
+      target: challengeData.target,
       duration: challengeData.duration,
       startDate: new Date().toISOString(),
       endDate: new Date(Date.now() + challengeData.duration * 24 * 60 * 60 * 1000).toISOString(),
@@ -595,8 +596,24 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       const myScore = getChallengeScore(challenge);
       const friendScore = challenge.friendScore || 0;
       
+      // Mettre à jour le score de l'utilisateur actuel dans le défi
+      const isSentByMe = challenge.senderId === user?.uid;
+      const scoreField = isSentByMe ? 'myScore' : 'friendScore';
+      const currentScore = challenge[scoreField] || 0;
+      
+      if (currentScore !== myScore) {
+        // Mettre à jour le score si nécessaire
+        updateChallenge(challenge.id, { [scoreField]: myScore }).catch(error => {
+          console.error('Erreur lors de la mise à jour du score:', error);
+        });
+      }
+      
+      // Déterminer les scores corrects
+      const myFinalScore = isSentByMe ? myScore : friendScore;
+      const friendFinalScore = isSentByMe ? friendScore : myScore;
+      
       // Vérifier si c'est une victoire et ajouter de l'XP avec récompenses
-      if (myScore > friendScore && challenge.status !== 'completed' && addChallengeWinXP) {
+      if (myFinalScore > friendFinalScore && challenge.status !== 'completed' && addChallengeWinXP) {
         // Calculer les récompenses
         const rewards = calculateChallengeRewards(myScore, challenge.type, challenge.target, challenge.duration);
         
@@ -626,7 +643,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
         };
       }
       
-      if (myScore > friendScore) {
+      if (myFinalScore > friendFinalScore) {
         const rewards = calculateChallengeRewards(myScore, challenge.type, challenge.target, challenge.duration);
         const rewardText = rewards ? ` ${rewards.badge} +${rewards.xp}XP` : '';
         return { 
@@ -635,7 +652,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
           rewards: rewards
         };
       }
-      if (friendScore > myScore) return { status: 'defeat', text: 'Défaite 😔' };
+      if (friendFinalScore > myFinalScore) return { status: 'defeat', text: 'Défaite 😔' };
       return { status: 'tie', text: 'Égalité 🤝' };
     }
     return { status: 'active', text: 'En cours...' };

@@ -252,8 +252,9 @@ export const useExperience = (user) => {
   }, [addXP]);
 
   // Ajouter de l'XP pour victoire de défi
-  const addChallengeWinXP = useCallback(async (challengeName) => {
-    return await addXP(XP_REWARDS.CHALLENGE_WIN, `Défi gagné: ${challengeName}`);
+  const addChallengeWinXP = useCallback(async (challengeName, customXP = null) => {
+    const xpToAdd = customXP || XP_REWARDS.CHALLENGE_WIN;
+    return await addXP(xpToAdd, `Défi gagné: ${challengeName}`);
   }, [addXP]);
 
   // Ajouter de l'XP pour palier de streak
