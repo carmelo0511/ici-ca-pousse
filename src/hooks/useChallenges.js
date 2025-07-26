@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   createChallengeInFirebase,
   getChallengesFromFirebase,
@@ -54,17 +54,17 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
   ];
 
   // Système de récompenses par niveau de difficulté
-  const challengeRewards = {
+  const challengeRewards = useMemo(() => ({
     bronze: { xp: 50, badge: '🥉', multiplier: 1, name: 'Bronze' },
     silver: { xp: 100, badge: '🥈', multiplier: 1.2, name: 'Argent' },
     gold: { xp: 200, badge: '🥇', multiplier: 1.5, name: 'Or' },
     platinum: { xp: 400, badge: '💎', multiplier: 2, name: 'Platine' },
     diamond: { xp: 800, badge: '💠', multiplier: 2.5, name: 'Diamant' },
     master: { xp: 1500, badge: '👑', multiplier: 3, name: 'Maître' }
-  };
+  }), []);
 
   // Objectifs par type de défi avec niveaux de difficulté
-  const challengeTargets = {
+  const challengeTargets = useMemo(() => ({
     workouts: [
       { value: 3, level: 'bronze' },
       { value: 5, level: 'silver' },
@@ -182,7 +182,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       { value: 7500, level: 'diamond' },
       { value: 10000, level: 'master' }
     ]
-  };
+  }), []);
 
   // Fonction pour calculer le niveau atteint selon le score
   const calculateChallengeLevel = useCallback((score, type, target) => {
@@ -703,7 +703,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       return { status: 'tie', text: 'Égalité 🤝' };
     }
     return { status: 'active', text: 'En cours...' };
-  }, [getChallengeScore, updateChallenge, addChallengeWinXP, calculateChallengeRewards]);
+  }, [getChallengeScore, updateChallenge, addChallengeWinXP, calculateChallengeRewards, user?.uid]);
 
   const getSentChallenges = useCallback(() => {
     return challenges.filter(challenge => challenge.senderId === user?.uid);
