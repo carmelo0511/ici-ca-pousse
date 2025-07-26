@@ -8,12 +8,39 @@
 [![Linting](https://img.shields.io/badge/ESLint-Clean-brightgreen.svg)](https://eslint.org/)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com/)
 [![AI Coach](https://img.shields.io/badge/AI%20Coach-OpenAI-purple.svg)](https://openai.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/bryannakache/ici-ca-pousse/graphs/commit-activity)
 
 ## 🌐 Application en ligne
 
 **[ici-ca-pousse.vercel.app](https://ici-ca-pousse.vercel.app)**
 
 Application moderne de suivi de séances de sport avec gamification avancée, fonctionnalités sociales complètes et **Coach IA intelligent** qui analyse votre historique pour proposer des recommandations personnalisées.
+
+## ⚡ Quick Start
+
+```bash
+# Cloner le projet
+git clone https://github.com/bryannakache/ici-ca-pousse.git
+cd ici-ca-pousse
+
+# Installer les dépendances
+npm install
+
+# Configurer les variables d'environnement
+cp .env.example .env.local
+# Éditer .env.local avec vos clés Firebase et OpenAI
+
+# Démarrer en mode développement
+npm start
+```
+
+**🚀 En 5 minutes, vous aurez :**
+- ✅ Application fonctionnelle avec authentification Google
+- ✅ Coach IA intelligent pour vos séances
+- ✅ Système de gamification complet
+- ✅ Interface mobile-first responsive
 
 ## 🚀 Fonctionnalités
 
@@ -461,4 +488,15 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 - "Comment analyser mes progrès ?"
 - "Quels exercices pour renforcer mes épaules ?"
 - "Je me sens fatigué, que faire ?"
+
+---
+
+<div align="center">
+
+**⭐ Si ce projet vous plaît, n'oubliez pas de le star sur GitHub ! ⭐**
+
+[![GitHub stars](https://img.shields.io/github/stars/bryannakache/ici-ca-pousse?style=social)](https://github.com/bryannakache/ici-ca-pousse/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/bryannakache/ici-ca-pousse?style=social)](https://github.com/bryannakache/ici-ca-pousse/network/members)
+
+</div>
 
