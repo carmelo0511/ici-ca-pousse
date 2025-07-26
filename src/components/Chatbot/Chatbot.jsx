@@ -165,7 +165,6 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     return getWorkoutSetRepDetails(workouts.slice(-3));
   };
 
-  // Génère une séance conseillée selon le type choisi et l’intensité
   // Fonction pour analyser l'historique et faire des recommandations intelligentes
   const analyzeWorkoutHistory = () => {
     if (!workouts || workouts.length === 0) {
@@ -174,7 +173,9 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
         recentExercises: [],
         frequency: {},
         lastWorkoutDate: null,
-        daysSinceLastWorkout: null
+        daysSinceLastWorkout: null,
+        feelings: {},
+        feelingTrends: {}
       };
     }
 
@@ -187,8 +188,24 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     const muscleGroups = {};
     const recentExercises = [];
     const frequency = {};
+    const feelings = {};
+    const feelingTrends = {};
 
     workouts.slice(-5).forEach(workout => {
+      // Analyser les ressentis
+      if (workout.feeling) {
+        feelings[workout.feeling] = (feelings[workout.feeling] || 0) + 1;
+        
+        // Analyser les tendances de ressentis par type d'exercice
+        workout.exercises?.forEach(exercise => {
+          const muscleGroup = exercise.type || getMuscleGroupForExercise(exercise.name);
+          if (!feelingTrends[muscleGroup]) {
+            feelingTrends[muscleGroup] = [];
+          }
+          feelingTrends[muscleGroup].push(workout.feeling);
+        });
+      }
+
       workout.exercises?.forEach(exercise => {
         const muscleGroup = exercise.type || getMuscleGroupForExercise(exercise.name);
         muscleGroups[muscleGroup] = (muscleGroups[muscleGroup] || 0) + 1;
@@ -201,7 +218,42 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       });
     });
 
-    return { muscleGroups, recentExercises, frequency, lastWorkoutDate, daysSinceLastWorkout };
+    return { muscleGroups, recentExercises, frequency, lastWorkoutDate, daysSinceLastWorkout, feelings, feelingTrends };
+  };
+
+  // Fonction pour analyser les ressentis et donner des conseils personnalisés
+  const analyzeFeelings = () => {
+    if (!workouts || workouts.length === 0) return '';
+
+    const recentWorkouts = workouts.slice(-5);
+    const workoutsWithFeelings = recentWorkouts.filter(w => w.feeling);
+    
+    if (workoutsWithFeelings.length === 0) return '';
+
+    const feelings = workoutsWithFeelings.map(w => w.feeling);
+    const positiveFeelings = ['easy', 'strong', 'energized', 'motivated', 'great', 'good'];
+    const negativeFeelings = ['hard', 'weak', 'demotivated', 'bad', 'terrible'];
+
+    const positiveCount = feelings.filter(f => positiveFeelings.includes(f)).length;
+    const negativeCount = feelings.filter(f => negativeFeelings.includes(f)).length;
+
+    let analysis = `Analyse des ressentis (${workoutsWithFeelings.length} séances) : `;
+    
+    if (positiveCount > negativeCount) {
+      analysis += `Vous vous sentez généralement bien après vos séances (${positiveCount} séances positives). Continuez sur cette lancée !`;
+    } else if (negativeCount > positiveCount) {
+      analysis += `Vous avez eu des difficultés récemment (${negativeCount} séances difficiles). Il serait bon d'ajuster l'intensité ou de prendre plus de repos.`;
+    } else {
+      analysis += `Vos ressentis sont mixtes (${positiveCount} positifs, ${negativeCount} négatifs). Essayons d'optimiser vos séances.`;
+    }
+
+    // Analyser le dernier ressenti
+    const lastFeeling = feelings[feelings.length - 1];
+    if (lastFeeling) {
+      analysis += ` Dernier ressenti : ${lastFeeling}.`;
+    }
+
+    return analysis;
   };
 
   // Fonction pour recommander des exercices intelligemment
@@ -334,7 +386,17 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
         const muscleGroup = ex.type || getMuscleGroupForExercise(ex.name);
         return `  - ${ex.name} (${muscleGroup}) : ${nbSeries} séries, reps : ${reps}, poids : ${poids}`;
       }).join('\n');
-      return `• ${date} :\n${exos}`;
+      
+      // Ajouter le ressenti si disponible
+      let feelingInfo = '';
+      if (w.feeling) {
+        const feelingEmoji = w.feeling === 'easy' || w.feeling === 'strong' || w.feeling === 'energized' || w.feeling === 'motivated' || w.feeling === 'great' || w.feeling === 'good' ? '😊' :
+                           w.feeling === 'medium' || w.feeling === 'tired' || w.feeling === 'ok' ? '😐' :
+                           w.feeling === 'hard' || w.feeling === 'weak' || w.feeling === 'demotivated' || w.feeling === 'bad' || w.feeling === 'terrible' ? '😔' : '💭';
+        feelingInfo = `\n  💭 Ressenti : ${feelingEmoji} ${w.feeling}`;
+      }
+      
+      return `• ${date} :\n${exos}${feelingInfo}`;
     }).join('\n');
 
     // Analyse intelligente et recommandations personnalisées
@@ -365,36 +427,27 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     // Analyser la régularité
     if (analysis.daysSinceLastWorkout !== null) {
       if (analysis.daysSinceLastWorkout === 0) {
-        recommendations.push("🔥 Excellente régularité ! Tu t'entraînes aujourd'hui.");
-      } else if (analysis.daysSinceLastWorkout <= 2) {
-        recommendations.push("👍 Bonne fréquence d'entraînement !");
-      } else if (analysis.daysSinceLastWorkout <= 5) {
-        recommendations.push("⚠️ Attention, ça fait quelques jours. Pense à reprendre !");
+        recommendations.push(`🔥 Excellente régularité ! Séance du jour.`);
+      } else if (analysis.daysSinceLastWorkout === 1) {
+        recommendations.push(`👍 Bon rythme ! Reprise après 1 jour de repos.`);
+      } else if (analysis.daysSinceLastWorkout <= 3) {
+        recommendations.push(`⏰ Rythme correct. ${analysis.daysSinceLastWorkout} jours depuis la dernière séance.`);
       } else {
-        recommendations.push("🚨 Ça fait longtemps ! Il est temps de reprendre l'entraînement.");
+        recommendations.push(`⚠️ Attention : ${analysis.daysSinceLastWorkout} jours depuis la dernière séance. Essaye de maintenir un rythme régulier.`);
       }
     }
-    
-    // Analyser la progression
-    const recentWorkouts = workouts.slice(-5);
-    if (recentWorkouts.length >= 2) {
-      const totalExercises = recentWorkouts.reduce((sum, w) => sum + (w.exercises?.length || 0), 0);
-      const avgExercises = totalExercises / recentWorkouts.length;
-      
-      if (avgExercises >= 5) {
-        recommendations.push("💪 Tes séances sont bien complètes !");
-      } else if (avgExercises < 3) {
-        recommendations.push("📈 Essaie d'ajouter plus d'exercices par séance pour progresser.");
-      }
+
+    // Ajouter l'analyse des ressentis
+    const feelingsAnalysis = analyzeFeelings();
+    if (feelingsAnalysis) {
+      recommendations.push(feelingsAnalysis);
     }
-    
-    // Générer le message final
-    const prenom = user?.displayName ? user.displayName.split(' ')[0] : '';
-    const recommendationsText = recommendations.length > 0 ? '\n\n' + recommendations.join('\n') : '';
+
+    const message = `📊 **Récap des 3 dernières séances :**\n\n${recap}\n\n**Analyse et recommandations :**\n${recommendations.join('\n')}`;
     
     setMessages(prev => [
       ...prev,
-      { role: 'assistant', content: `${prenom ? prenom + ', ' : ''}voici l'analyse de tes 3 dernières séances :\n${recap}${recommendationsText}` }
+      { role: 'assistant', content: message }
     ]);
   };
 
@@ -444,6 +497,37 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       } else {
         recommendation += "⚠️ **Régularité** : Reprends progressivement pour éviter les blessures.\n";
       }
+
+      // Analyser les ressentis et donner des conseils spécifiques
+      const feelingsAnalysis = analyzeFeelings();
+      if (feelingsAnalysis) {
+        recommendation += `\n💭 **Analyse des ressentis** :\n${feelingsAnalysis}\n`;
+        
+        // Conseils spécifiques basés sur les ressentis
+        const recentFeelings = recentWorkouts.filter(w => w.feeling).map(w => w.feeling);
+        if (recentFeelings.length > 0) {
+          const negativeFeelings = recentFeelings.filter(f => 
+            ['hard', 'weak', 'demotivated', 'bad', 'terrible'].includes(f)
+          );
+          const positiveFeelings = recentFeelings.filter(f => 
+            ['easy', 'strong', 'energized', 'motivated', 'great', 'good'].includes(f)
+          );
+          
+          if (negativeFeelings.length > positiveFeelings.length) {
+            recommendation += "🔄 **Conseil** : Tes séances récentes ont été difficiles. Essaie de :\n";
+            recommendation += "• Réduire l'intensité de 10-20%\n";
+            recommendation += "• Augmenter le temps de repos entre les séries\n";
+            recommendation += "• Ajouter plus d'étirements et de mobilité\n";
+            recommendation += "• Prendre un jour de repos supplémentaire si nécessaire\n";
+          } else if (positiveFeelings.length > negativeFeelings.length) {
+            recommendation += "🚀 **Conseil** : Tes séances récentes ont été positives ! Tu peux :\n";
+            recommendation += "• Augmenter progressivement l'intensité\n";
+            recommendation += "• Essayer de nouveaux exercices\n";
+            recommendation += "• Ajouter des exercices plus complexes\n";
+            recommendation += "• Maintenir ce rythme motivant\n";
+          }
+        }
+      }
     }
     
     // Recommandations générales
@@ -452,6 +536,7 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     recommendation += "• Bois suffisamment d'eau\n";
     recommendation += "• Dors 7-8h par nuit pour la récupération\n";
     recommendation += "• Varie tes exercices pour éviter la routine\n";
+    recommendation += "• Écoute ton corps et ajuste selon tes ressentis\n";
     
     setMessages(prev => [
       ...prev,
@@ -461,8 +546,11 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
 
   const handleSend = async () => {
     if (!input.trim()) return;
-    // Contexte enrichi, mais l'utilisateur peut parler de tout
-    const context = `Tu es un assistant personnel sportif et bien-être. Sois motivant, bienveillant et adapte tes réponses à mon niveau. Voici un résumé de mes dernières séances : ${getSummary()} ${getDetails()} ${getWeightDetails()} ${getSetRepDetails()}`;
+    
+    // Contexte enrichi avec analyse des ressentis
+    const feelingsContext = analyzeFeelings();
+    const context = `Tu es un assistant personnel sportif et bien-être. Sois motivant, bienveillant et adapte tes réponses à mon niveau. Voici un résumé de mes dernières séances : ${getSummary()} ${getDetails()} ${getWeightDetails()} ${getSetRepDetails()} ${feelingsContext ? `\n\nAnalyse des ressentis : ${feelingsContext}` : ''}`;
+    
     await sendMessage(input, context, user?.height, user?.weight);
     setInput('');
   };
