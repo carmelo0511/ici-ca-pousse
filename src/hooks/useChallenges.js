@@ -19,7 +19,6 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     { id: 'workouts', label: 'Nombre de séances', icon: '💪', category: 'base' },
     { id: 'duration', label: "Temps d'entraînement", icon: '⏱️', category: 'base' },
     { id: 'streak', label: 'Série consécutive', icon: '🔥', category: 'base' },
-    { id: 'calories', label: 'Calories brûlées', icon: '🔥', category: 'base' },
     
     // Défis de progression
     { id: 'progression', label: 'Progression poids', icon: '📈', category: 'progression' },
@@ -59,7 +58,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     workouts: [3, 5, 7, 10, 15, 20],
     duration: [30, 60, 90, 120, 180, 240], // minutes
     streak: [3, 5, 7, 10, 14, 21], // jours consécutifs
-    calories: [500, 1000, 1500, 2000, 3000, 5000],
+
     progression: [5, 10, 15, 20, 25, 30], // % d'amélioration
     personal_records: [1, 3, 5, 7, 10, 15], // nombre de records
     new_exercises: [2, 5, 8, 12, 15, 20], // nouveaux exercices
@@ -184,8 +183,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
           });
           return maxStreak;
         }
-        case 'calories':
-          return filteredWorkouts.reduce((total, workout) => total + (workout.calories || 0), 0);
+
         
         // Défis de progression
         case 'progression': {
@@ -388,8 +386,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
         return `${score} min`;
       case 'streak':
         return `${score} jours`;
-      case 'calories':
-        return `${score} cal`;
+
       
       // Défis de progression
       case 'progression':
