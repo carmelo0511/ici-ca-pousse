@@ -28,7 +28,11 @@ const Challenges = ({ user }) => {
     deleteChallenge,
     challengeTypes,
     challengeDurations,
-    challengeTargets
+    challengeTargets,
+    challengeRewards,
+    calculateChallengeLevel,
+    calculateChallengeRewards,
+    getNextLevel
   } = useChallenges(user);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -218,6 +222,41 @@ const Challenges = ({ user }) => {
     setToast({ message: 'Défi affiché à nouveau', type: 'success' });
   };
 
+  // Fonction pour afficher les récompenses d'un défi
+  const renderChallengeRewards = (challenge) => {
+    if (!challenge.target) return null;
+    
+    const myScore = getChallengeScore(challenge);
+    const achievedLevel = calculateChallengeLevel(myScore, challenge.type, challenge.target);
+    const nextLevel = getNextLevel(myScore, challenge.type);
+    
+    if (achievedLevel) {
+      const reward = challengeRewards[achievedLevel];
+      return (
+        <div className="flex items-center space-x-2 mt-2">
+          <span className="text-lg">{reward.badge}</span>
+          <span className="text-sm text-green-600 font-medium">+{reward.xp} XP</span>
+          <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">
+            {reward.name}
+          </span>
+        </div>
+      );
+    } else if (nextLevel) {
+      return (
+        <div className="flex items-center space-x-2 mt-2">
+          <span className="text-sm text-gray-500">
+            Prochain: {nextLevel.reward.badge} {nextLevel.reward.name}
+          </span>
+          <span className="text-xs text-gray-400">
+            ({nextLevel.remaining} restant)
+          </span>
+        </div>
+      );
+    }
+    
+    return null;
+  };
+
   return (
     <div className="p-4 w-full min-h-screen h-auto">
       <div className="flex justify-between items-center mb-6">
@@ -383,6 +422,7 @@ const Challenges = ({ user }) => {
                             Période du défi : {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
                           </p>
                         )}
+                        {renderChallengeRewards(challenge)}
                       </div>
                     </div>
                     <div className="text-right">
@@ -772,24 +812,34 @@ const Challenges = ({ user }) => {
           {/* Sélection de l'objectif */}
           {challengeType && challengeTargets[challengeType] && (
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Objectif</label>
-              <div className="grid grid-cols-3 gap-2">
-                {challengeTargets[challengeType].map(target => (
-                  <button
-                    key={target}
-                    className={`p-2 border rounded-lg text-center transition-all ${
-                      selectedTarget === target 
-                        ? 'border-blue-500 bg-blue-50 shadow-md' 
-                        : 'border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400'
-                    }`}
-                    onClick={() => setSelectedTarget(target)}
-                  >
-                    <div className="text-sm font-medium">{target}</div>
-                    <div className="text-xs text-gray-500">
-                      {formatScore(target, challengeType)}
-                    </div>
-                  </button>
-                ))}
+              <label className="block text-sm font-medium mb-2">Objectif et niveau</label>
+              <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+                {challengeTargets[challengeType].map((target, index) => {
+                  const reward = challengeRewards[target.level];
+                  return (
+                    <button
+                      key={index}
+                      className={`p-3 border rounded-lg text-center transition-all ${
+                        selectedTarget === target.value 
+                          ? 'border-blue-500 bg-blue-50 shadow-md' 
+                          : 'border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400'
+                      }`}
+                      onClick={() => setSelectedTarget(target.value)}
+                    >
+                      <div className="text-lg mb-1">{reward.badge}</div>
+                      <div className="text-sm font-medium">{target.value}</div>
+                      <div className="text-xs text-gray-500">
+                        {formatScore(target.value, challengeType)}
+                      </div>
+                      <div className="text-xs text-green-600 font-medium">
+                        +{reward.xp} XP
+                      </div>
+                      <div className="text-xs text-purple-600">
+                        {reward.name}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

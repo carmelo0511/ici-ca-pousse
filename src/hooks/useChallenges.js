@@ -53,25 +53,188 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     { value: 90, label: '3 mois', category: 'extended' }
   ];
 
-  // Objectifs par type de défi
-  const challengeTargets = {
-    workouts: [3, 5, 7, 10, 15, 20],
-    duration: [30, 60, 90, 120, 180, 240], // minutes
-    streak: [3, 5, 7, 10, 14, 21], // jours consécutifs
-
-    progression: [5, 10, 15, 20, 25, 30], // % d'amélioration
-    personal_records: [1, 3, 5, 7, 10, 15], // nombre de records
-    new_exercises: [2, 5, 8, 12, 15, 20], // nouveaux exercices
-    weekly_consistency: [3, 4, 5, 6, 7], // jours par semaine
-    morning_workouts: [2, 3, 4, 5, 6, 7], // séances matinales
-    weekend_workouts: [1, 2, 3, 4], // séances weekend
-    muscle_groups: [3, 4, 5, 6, 7, 8], // groupes musculaires
-    cardio_sessions: [2, 3, 4, 5, 6, 7], // séances cardio
-    strength_sessions: [2, 3, 4, 5, 6, 7], // séances force
-    long_workouts: [45, 60, 75, 90, 105, 120], // minutes
-    intensity: [70, 75, 80, 85, 90, 95], // % d'intensité
-    volume: [1000, 2000, 3000, 5000, 7500, 10000] // volume total
+  // Système de récompenses par niveau de difficulté
+  const challengeRewards = {
+    bronze: { xp: 50, badge: '🥉', multiplier: 1, name: 'Bronze' },
+    silver: { xp: 100, badge: '🥈', multiplier: 1.2, name: 'Argent' },
+    gold: { xp: 200, badge: '🥇', multiplier: 1.5, name: 'Or' },
+    platinum: { xp: 400, badge: '💎', multiplier: 2, name: 'Platine' },
+    diamond: { xp: 800, badge: '💠', multiplier: 2.5, name: 'Diamant' },
+    master: { xp: 1500, badge: '👑', multiplier: 3, name: 'Maître' }
   };
+
+  // Objectifs par type de défi avec niveaux de difficulté
+  const challengeTargets = {
+    workouts: [
+      { value: 3, level: 'bronze' },
+      { value: 5, level: 'silver' },
+      { value: 7, level: 'gold' },
+      { value: 10, level: 'platinum' },
+      { value: 15, level: 'diamond' },
+      { value: 20, level: 'master' }
+    ],
+    duration: [
+      { value: 30, level: 'bronze' },
+      { value: 60, level: 'silver' },
+      { value: 90, level: 'gold' },
+      { value: 120, level: 'platinum' },
+      { value: 180, level: 'diamond' },
+      { value: 240, level: 'master' }
+    ],
+    streak: [
+      { value: 3, level: 'bronze' },
+      { value: 5, level: 'silver' },
+      { value: 7, level: 'gold' },
+      { value: 10, level: 'platinum' },
+      { value: 14, level: 'diamond' },
+      { value: 21, level: 'master' }
+    ],
+    progression: [
+      { value: 5, level: 'bronze' },
+      { value: 10, level: 'silver' },
+      { value: 15, level: 'gold' },
+      { value: 20, level: 'platinum' },
+      { value: 25, level: 'diamond' },
+      { value: 30, level: 'master' }
+    ],
+    personal_records: [
+      { value: 1, level: 'bronze' },
+      { value: 3, level: 'silver' },
+      { value: 5, level: 'gold' },
+      { value: 7, level: 'platinum' },
+      { value: 10, level: 'diamond' },
+      { value: 15, level: 'master' }
+    ],
+    new_exercises: [
+      { value: 2, level: 'bronze' },
+      { value: 5, level: 'silver' },
+      { value: 8, level: 'gold' },
+      { value: 12, level: 'platinum' },
+      { value: 15, level: 'diamond' },
+      { value: 20, level: 'master' }
+    ],
+    weekly_consistency: [
+      { value: 3, level: 'bronze' },
+      { value: 4, level: 'silver' },
+      { value: 5, level: 'gold' },
+      { value: 6, level: 'platinum' },
+      { value: 7, level: 'diamond' }
+    ],
+    morning_workouts: [
+      { value: 2, level: 'bronze' },
+      { value: 3, level: 'silver' },
+      { value: 4, level: 'gold' },
+      { value: 5, level: 'platinum' },
+      { value: 6, level: 'diamond' },
+      { value: 7, level: 'master' }
+    ],
+    weekend_workouts: [
+      { value: 1, level: 'bronze' },
+      { value: 2, level: 'silver' },
+      { value: 3, level: 'gold' },
+      { value: 4, level: 'platinum' }
+    ],
+    muscle_groups: [
+      { value: 3, level: 'bronze' },
+      { value: 4, level: 'silver' },
+      { value: 5, level: 'gold' },
+      { value: 6, level: 'platinum' },
+      { value: 7, level: 'diamond' },
+      { value: 8, level: 'master' }
+    ],
+    cardio_sessions: [
+      { value: 2, level: 'bronze' },
+      { value: 3, level: 'silver' },
+      { value: 4, level: 'gold' },
+      { value: 5, level: 'platinum' },
+      { value: 6, level: 'diamond' },
+      { value: 7, level: 'master' }
+    ],
+    strength_sessions: [
+      { value: 2, level: 'bronze' },
+      { value: 3, level: 'silver' },
+      { value: 4, level: 'gold' },
+      { value: 5, level: 'platinum' },
+      { value: 6, level: 'diamond' },
+      { value: 7, level: 'master' }
+    ],
+    long_workouts: [
+      { value: 45, level: 'bronze' },
+      { value: 60, level: 'silver' },
+      { value: 75, level: 'gold' },
+      { value: 90, level: 'platinum' },
+      { value: 105, level: 'diamond' },
+      { value: 120, level: 'master' }
+    ],
+    intensity: [
+      { value: 70, level: 'bronze' },
+      { value: 75, level: 'silver' },
+      { value: 80, level: 'gold' },
+      { value: 85, level: 'platinum' },
+      { value: 90, level: 'diamond' },
+      { value: 95, level: 'master' }
+    ],
+    volume: [
+      { value: 1000, level: 'bronze' },
+      { value: 2000, level: 'silver' },
+      { value: 3000, level: 'gold' },
+      { value: 5000, level: 'platinum' },
+      { value: 7500, level: 'diamond' },
+      { value: 10000, level: 'master' }
+    ]
+  };
+
+  // Fonction pour calculer le niveau atteint selon le score
+  const calculateChallengeLevel = useCallback((score, type, target) => {
+    const targets = challengeTargets[type] || [];
+    let achievedLevel = null;
+    
+    for (let i = targets.length - 1; i >= 0; i--) {
+      if (score >= targets[i].value) {
+        achievedLevel = targets[i].level;
+        break;
+      }
+    }
+    
+    return achievedLevel;
+  }, []);
+
+  // Fonction pour calculer les récompenses
+  const calculateChallengeRewards = useCallback((score, type, target, duration) => {
+    const achievedLevel = calculateChallengeLevel(score, type, target);
+    if (!achievedLevel) return null;
+    
+    const baseReward = challengeRewards[achievedLevel];
+    const durationMultiplier = Math.min(duration / 7, 2); // Bonus pour les défis longs
+    const finalXP = Math.round(baseReward.xp * baseReward.multiplier * durationMultiplier);
+    
+    return {
+      level: achievedLevel,
+      xp: finalXP,
+      badge: baseReward.badge,
+      name: baseReward.name,
+      multiplier: baseReward.multiplier,
+      durationBonus: durationMultiplier
+    };
+  }, [calculateChallengeLevel]);
+
+  // Fonction pour obtenir le prochain niveau à atteindre
+  const getNextLevel = useCallback((score, type) => {
+    const targets = challengeTargets[type] || [];
+    
+    for (const target of targets) {
+      if (score < target.value) {
+        return {
+          level: target.level,
+          value: target.value,
+          remaining: target.value - score,
+          reward: challengeRewards[target.level]
+        };
+      }
+    }
+    
+    return null; // Niveau maximum atteint
+  }, []);
 
   const loadChallenges = useCallback(async () => {
     if (!user?.uid) return;
@@ -432,26 +595,51 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       const myScore = getChallengeScore(challenge);
       const friendScore = challenge.friendScore || 0;
       
-      // Vérifier si c'est une victoire et ajouter de l'XP
+      // Vérifier si c'est une victoire et ajouter de l'XP avec récompenses
       if (myScore > friendScore && challenge.status !== 'completed' && addChallengeWinXP) {
+        // Calculer les récompenses
+        const rewards = calculateChallengeRewards(myScore, challenge.type, challenge.target, challenge.duration);
+        
         // Marquer le défi comme terminé et ajouter de l'XP
-        updateChallenge(challenge.id, { status: 'completed' }).then(() => {
+        updateChallenge(challenge.id, { 
+          status: 'completed',
+          achievedLevel: rewards?.level,
+          earnedXP: rewards?.xp,
+          earnedBadge: rewards?.badge
+        }).then(() => {
           const challengeName = `${challenge.type} vs ${challenge.receiverName}`;
-          addChallengeWinXP(challengeName).then(result => {
+          const xpToAdd = rewards?.xp || 100; // XP de base si pas de récompense calculée
+          
+          addChallengeWinXP(challengeName, xpToAdd).then(result => {
             // Défi gagné avec succès
+            console.log(`Défi gagné ! XP: ${xpToAdd}, Niveau: ${rewards?.name || 'Standard'}`);
           }).catch(error => {
             console.error('Erreur lors de l\'ajout d\'XP pour victoire:', error);
           });
         });
-        return { status: 'victory', text: 'Victoire ! 🎉' };
+        
+        const rewardText = rewards ? ` ${rewards.badge} +${rewards.xp}XP` : '';
+        return { 
+          status: 'victory', 
+          text: `Victoire ! 🎉${rewardText}`,
+          rewards: rewards
+        };
       }
       
-      if (myScore > friendScore) return { status: 'victory', text: 'Victoire ! 🎉' };
+      if (myScore > friendScore) {
+        const rewards = calculateChallengeRewards(myScore, challenge.type, challenge.target, challenge.duration);
+        const rewardText = rewards ? ` ${rewards.badge} +${rewards.xp}XP` : '';
+        return { 
+          status: 'victory', 
+          text: `Victoire ! 🎉${rewardText}`,
+          rewards: rewards
+        };
+      }
       if (friendScore > myScore) return { status: 'defeat', text: 'Défaite 😔' };
       return { status: 'tie', text: 'Égalité 🤝' };
     }
     return { status: 'active', text: 'En cours...' };
-  }, [getChallengeScore, updateChallenge, addChallengeWinXP]);
+  }, [getChallengeScore, updateChallenge, addChallengeWinXP, calculateChallengeRewards]);
 
   const getSentChallenges = useCallback(() => {
     return challenges.filter(challenge => challenge.senderId === user?.uid);
@@ -544,6 +732,10 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     cancelChallenge,
     challengeTypes,
     challengeDurations,
-    challengeTargets
+    challengeTargets,
+    challengeRewards,
+    calculateChallengeLevel,
+    calculateChallengeRewards,
+    getNextLevel
   };
 }; 
