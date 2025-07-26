@@ -17,7 +17,8 @@ export const createWorkout = (
   duration,
   workoutId = undefined,
   startTime = null,
-  endTime = null
+  endTime = null,
+  feeling = null
 ) => {
   if (!exercises || exercises.length === 0) return null;
 
@@ -64,6 +65,7 @@ export const createWorkout = (
   if (workoutId) workout.id = workoutId;
   if (startTime) workout.startTime = startTime;
   if (endTime) workout.endTime = endTime;
+  if (feeling) workout.feeling = feeling;
 
   return workout;
 };

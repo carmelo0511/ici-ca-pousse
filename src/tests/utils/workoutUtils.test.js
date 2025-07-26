@@ -186,4 +186,73 @@ describe('workoutUtils', () => {
     expect(details).toContain('2024-01-02');
     expect(details).toContain('Bench : 1 série de 8 répétitions à 80 kg');
   });
+
+  describe('createWorkout', () => {
+    const mockExercises = [
+      {
+        id: 1,
+        name: 'Pompes',
+        type: 'pectoraux',
+        sets: [
+          { reps: 10, weight: 0, duration: 0 },
+          { reps: 12, weight: 0, duration: 0 }
+        ]
+      }
+    ];
+
+    it('should create a workout with basic data', () => {
+      const workout = createWorkout(mockExercises, '2024-01-15', 45);
+      
+      expect(workout).toEqual({
+        date: '2024-01-15',
+        exercises: mockExercises,
+        duration: 45,
+        totalSets: 2,
+        totalReps: 22,
+        totalWeight: 0
+      });
+    });
+
+    it('should create a workout with feeling', () => {
+      const workout = createWorkout(mockExercises, '2024-01-15', 45, undefined, null, null, 'easy');
+      
+      expect(workout).toEqual({
+        date: '2024-01-15',
+        exercises: mockExercises,
+        duration: 45,
+        totalSets: 2,
+        totalReps: 22,
+        totalWeight: 0,
+        feeling: 'easy'
+      });
+    });
+
+    it('should create a workout with custom feeling', () => {
+      const workout = createWorkout(mockExercises, '2024-01-15', 45, undefined, null, null, 'Je me sentais très motivé');
+      
+      expect(workout).toEqual({
+        date: '2024-01-15',
+        exercises: mockExercises,
+        duration: 45,
+        totalSets: 2,
+        totalReps: 22,
+        totalWeight: 0,
+        feeling: 'Je me sentais très motivé'
+      });
+    });
+
+    it('should not include feeling if null', () => {
+      const workout = createWorkout(mockExercises, '2024-01-15', 45, undefined, null, null, null);
+      
+      expect(workout).toEqual({
+        date: '2024-01-15',
+        exercises: mockExercises,
+        duration: 45,
+        totalSets: 2,
+        totalReps: 22,
+        totalWeight: 0
+      });
+      expect(workout.feeling).toBeUndefined();
+    });
+  });
 });

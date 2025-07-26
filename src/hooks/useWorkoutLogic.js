@@ -60,7 +60,7 @@ export default function useWorkoutLogic({
   );
 
   // Sauvegarde d'une séance
-  const saveWorkout = useCallback(async () => {
+  const saveWorkout = useCallback(async (feeling = null) => {
     if (!exercises || exercises.length === 0) {
       showToastMsg(t('no_exercises_to_save'), 'error');
       return;
@@ -81,7 +81,8 @@ export default function useWorkoutLogic({
         ? selectedWorkout.id
         : undefined,
       startTime,
-      endTime
+      endTime,
+      feeling
     );
 
     if (!workout) {

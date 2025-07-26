@@ -332,6 +332,63 @@ const CalendarView = ({
                   <div className="text-xs sm:text-sm font-medium text-orange-800">{t('kg_lifted')}</div>
                 </div>
               </div>
+
+              {/* Affichage des ressentis */}
+              {selectedWorkout.feeling && (
+                <div className="mb-8">
+                  <h4 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center space-x-2 mb-4">
+                    <span className="text-2xl">💭</span>
+                    <span>Ressentis après la séance</span>
+                  </h4>
+                  <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-4 sm:p-6 border border-indigo-200">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-3 bg-indigo-100 rounded-full">
+                        <span className="text-2xl">
+                          {selectedWorkout.feeling === 'easy' || selectedWorkout.feeling === 'strong' || selectedWorkout.feeling === 'energized' || selectedWorkout.feeling === 'motivated' || selectedWorkout.feeling === 'great' || selectedWorkout.feeling === 'good' ? '😊' :
+                           selectedWorkout.feeling === 'medium' || selectedWorkout.feeling === 'tired' || selectedWorkout.feeling === 'ok' ? '😐' :
+                           selectedWorkout.feeling === 'hard' || selectedWorkout.feeling === 'weak' || selectedWorkout.feeling === 'demotivated' || selectedWorkout.feeling === 'bad' || selectedWorkout.feeling === 'terrible' ? '😔' : '💭'}
+                        </span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-lg font-semibold text-gray-800 capitalize">
+                          {selectedWorkout.feeling === 'easy' ? t('feeling_easy') :
+                           selectedWorkout.feeling === 'medium' ? t('feeling_medium') :
+                           selectedWorkout.feeling === 'hard' ? t('feeling_hard') :
+                           selectedWorkout.feeling === 'weak' ? t('feeling_weak') :
+                           selectedWorkout.feeling === 'strong' ? t('feeling_strong') :
+                           selectedWorkout.feeling === 'tired' ? t('feeling_tired') :
+                           selectedWorkout.feeling === 'energized' ? t('feeling_energized') :
+                           selectedWorkout.feeling === 'motivated' ? t('feeling_motivated') :
+                           selectedWorkout.feeling === 'demotivated' ? t('feeling_demotivated') :
+                           selectedWorkout.feeling === 'great' ? t('feeling_great') :
+                           selectedWorkout.feeling === 'good' ? t('feeling_good') :
+                           selectedWorkout.feeling === 'ok' ? t('feeling_ok') :
+                           selectedWorkout.feeling === 'bad' ? t('feeling_bad') :
+                           selectedWorkout.feeling === 'terrible' ? t('feeling_terrible') :
+                           selectedWorkout.feeling}
+                        </p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {selectedWorkout.feeling === 'easy' ? 'Séance facile et agréable' :
+                           selectedWorkout.feeling === 'medium' ? 'Séance de difficulté moyenne' :
+                           selectedWorkout.feeling === 'hard' ? 'Séance difficile et intense' :
+                           selectedWorkout.feeling === 'weak' ? 'Vous vous sentiez faible aujourd\'hui' :
+                           selectedWorkout.feeling === 'strong' ? 'Vous vous sentiez fort et puissant' :
+                           selectedWorkout.feeling === 'tired' ? 'Vous étiez fatigué pendant la séance' :
+                           selectedWorkout.feeling === 'energized' ? 'Vous étiez plein d\'énergie' :
+                           selectedWorkout.feeling === 'motivated' ? 'Vous étiez très motivé' :
+                           selectedWorkout.feeling === 'demotivated' ? 'Vous manquiez de motivation' :
+                           selectedWorkout.feeling === 'great' ? 'Excellente séance !' :
+                           selectedWorkout.feeling === 'good' ? 'Bonne séance' :
+                           selectedWorkout.feeling === 'ok' ? 'Séance correcte' :
+                           selectedWorkout.feeling === 'bad' ? 'Séance pas terrible' :
+                           selectedWorkout.feeling === 'terrible' ? 'Séance difficile' :
+                           'Ressenti personnalisé'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="space-y-4">
                 <h4 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center space-x-2">
                   <Dumbbell className="h-5 w-5" />

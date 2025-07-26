@@ -15,7 +15,10 @@ import {
   Activity,
   Shield,
   Zap,
-  Apple
+  Apple,
+  Smile,
+  Meh,
+  Frown
 } from 'lucide-react';
 import { exerciseDatabase } from '../../../utils/exerciseDatabase';
 import Modal from '../Modal';
@@ -62,10 +65,58 @@ function WorkoutList({
   className = '',
 }) {
   const { t } = useTranslation();
-  // Ajout d'un état local pour le nom de l'exercice personnalisé
-  const [customExerciseName, setCustomExerciseName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [favoriteExercises, setFavoriteExercises] = useState([]);
+  const [customExerciseName, setCustomExerciseName] = useState('');
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem('exerciseFavorites');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [showFeelingModal, setShowFeelingModal] = useState(false);
+  const [selectedFeeling, setSelectedFeeling] = useState('');
+  const [customFeeling, setCustomFeeling] = useState('');
+
+  // Options de ressentis prédéfinis
+  const feelingOptions = [
+    { value: 'easy', label: t('feeling_easy'), icon: <Smile className="h-5 w-5" />, color: 'green' },
+    { value: 'medium', label: t('feeling_medium'), icon: <Meh className="h-5 w-5" />, color: 'yellow' },
+    { value: 'hard', label: t('feeling_hard'), icon: <Frown className="h-5 w-5" />, color: 'red' },
+    { value: 'weak', label: t('feeling_weak'), icon: <Frown className="h-5 w-5" />, color: 'orange' },
+    { value: 'strong', label: t('feeling_strong'), icon: <Smile className="h-5 w-5" />, color: 'green' },
+    { value: 'tired', label: t('feeling_tired'), icon: <Meh className="h-5 w-5" />, color: 'gray' },
+    { value: 'energized', label: t('feeling_energized'), icon: <Smile className="h-5 w-5" />, color: 'blue' },
+    { value: 'motivated', label: t('feeling_motivated'), icon: <Smile className="h-5 w-5" />, color: 'purple' },
+    { value: 'demotivated', label: t('feeling_demotivated'), icon: <Frown className="h-5 w-5" />, color: 'gray' },
+    { value: 'great', label: t('feeling_great'), icon: <Smile className="h-5 w-5" />, color: 'green' },
+    { value: 'good', label: t('feeling_good'), icon: <Smile className="h-5 w-5" />, color: 'blue' },
+    { value: 'ok', label: t('feeling_ok'), icon: <Meh className="h-5 w-5" />, color: 'yellow' },
+    { value: 'bad', label: t('feeling_bad'), icon: <Frown className="h-5 w-5" />, color: 'orange' },
+    { value: 'terrible', label: t('feeling_terrible'), icon: <Frown className="h-5 w-5" />, color: 'red' },
+  ];
+
+  // Fonction pour gérer la sauvegarde avec ressentis
+  const handleSaveWorkout = () => {
+    if (exercises.length === 0) {
+      saveWorkout();
+      return;
+    }
+    setShowFeelingModal(true);
+  };
+
+  // Fonction pour confirmer la sauvegarde avec ressentis
+  const confirmSaveWorkout = () => {
+    let feeling = null;
+    if (selectedFeeling === 'custom' && customFeeling.trim()) {
+      feeling = customFeeling.trim();
+    } else if (selectedFeeling && selectedFeeling !== 'none') {
+      feeling = selectedFeeling;
+    }
+    saveWorkout(feeling);
+    setShowFeelingModal(false);
+    setSelectedFeeling('');
+    setCustomFeeling('');
+  };
+
+  // Fonction pour obtenir le dernier poids d'un exercice
   const getLastWeightFor = useCallback(
     (name) => getLastExerciseWeight(workouts || [], name, selectedDate),
     [workouts, selectedDate]
@@ -78,18 +129,18 @@ function WorkoutList({
       // Ecoute temps réel
       const unsubscribe = onSnapshot(favRef, (docSnap) => {
         if (docSnap.exists()) {
-          setFavoriteExercises(docSnap.data().exercises || []);
+          setFavorites(docSnap.data().exercises || []);
         } else {
-          setFavoriteExercises([]);
+          setFavorites([]);
         }
       });
       return unsubscribe;
     } else {
       // Fallback localStorage
       try {
-        setFavoriteExercises(JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVORITE_EXERCISES) || '[]'));
+        setFavorites(JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVORITE_EXERCISES) || '[]'));
       } catch {
-        setFavoriteExercises([]);
+        setFavorites([]);
       }
     }
   }, [user]);
@@ -98,11 +149,11 @@ function WorkoutList({
   useEffect(() => {
     if (user) {
       const favRef = doc(db, 'favorites', user.uid);
-      setDoc(favRef, { exercises: favoriteExercises }, { merge: true });
+      setDoc(favRef, { exercises: favorites }, { merge: true });
     } else {
-      localStorage.setItem(STORAGE_KEYS.FAVORITE_EXERCISES, JSON.stringify(favoriteExercises));
+      localStorage.setItem(STORAGE_KEYS.FAVORITE_EXERCISES, JSON.stringify(favorites));
     }
-  }, [favoriteExercises, user]);
+  }, [favorites, user]);
 
   // Migration favoris locaux -> cloud
   useEffect(() => {
@@ -117,7 +168,7 @@ function WorkoutList({
   }, [user]);
 
   const toggleFavorite = useCallback((exercise) => {
-    setFavoriteExercises((prev) =>
+    setFavorites((prev) =>
       prev.includes(exercise)
         ? prev.filter((e) => e !== exercise)
         : [...prev, exercise]
@@ -138,14 +189,14 @@ function WorkoutList({
   // Exercices favoris du groupe sélectionné (filtrés)
   const favoriteInGroup = useMemo(() => (
     selectedMuscleGroup
-      ? filteredExercises.filter(ex => favoriteExercises.includes(ex))
+      ? filteredExercises.filter(ex => favorites.includes(ex))
       : []
-  ), [selectedMuscleGroup, filteredExercises, favoriteExercises]);
+  ), [selectedMuscleGroup, filteredExercises, favorites]);
   const nonFavoriteInGroup = useMemo(() => (
     selectedMuscleGroup
-      ? filteredExercises.filter(ex => !favoriteExercises.includes(ex))
+      ? filteredExercises.filter(ex => !favorites.includes(ex))
       : []
-  ), [selectedMuscleGroup, filteredExercises, favoriteExercises]);
+  ), [selectedMuscleGroup, filteredExercises, favorites]);
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
@@ -331,7 +382,7 @@ function WorkoutList({
                 <span className="font-medium">Vider la séance</span>
               </button>
             )}
-            <GradientButton icon={Target} from="green-500" to="emerald-600" onClick={saveWorkout}>
+            <GradientButton icon={Target} from="green-500" to="emerald-600" onClick={handleSaveWorkout}>
               {t('finish_workout')}
             </GradientButton>
           </div>
@@ -631,6 +682,99 @@ function WorkoutList({
               </div>
             </>
           )}
+        </div>
+      </Modal>
+
+      {/* Modal de ressenti */}
+      <Modal isOpen={showFeelingModal} onClose={() => setShowFeelingModal(false)}>
+        <div className="flex flex-col items-center justify-center gap-6 p-6">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+              {t('workout_feeling')}
+            </h3>
+            <p className="text-gray-600">Partagez vos ressentis après cette séance</p>
+          </div>
+          
+          {/* Options de ressentis prédéfinis */}
+          <div className="grid grid-cols-3 gap-3 w-full max-w-lg">
+            {feelingOptions.map((feeling) => (
+              <button
+                key={feeling.value}
+                onClick={() => {
+                  setSelectedFeeling(feeling.value);
+                  setCustomFeeling('');
+                }}
+                className={`p-4 rounded-xl flex flex-col items-center justify-center transition-all duration-200 ${
+                  selectedFeeling === feeling.value
+                    ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg transform scale-105'
+                    : 'bg-white hover:bg-gray-50 border border-gray-200 hover:border-indigo-300'
+                }`}
+              >
+                <div className={`p-2 rounded-full mb-2 ${
+                  selectedFeeling === feeling.value 
+                    ? 'bg-white/20' 
+                    : `bg-${feeling.color}-100 text-${feeling.color}-600`
+                }`}>
+                  {feeling.icon}
+                </div>
+                <span className={`text-xs font-medium ${
+                  selectedFeeling === feeling.value ? 'text-white' : 'text-gray-700'
+                }`}>
+                  {feeling.label}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Option personnalisée */}
+          <div className="w-full max-w-lg">
+            <div className="flex items-center gap-3 mb-3">
+              <button
+                onClick={() => {
+                  setSelectedFeeling('custom');
+                  setCustomFeeling('');
+                }}
+                className={`p-3 rounded-lg flex items-center gap-2 transition-all duration-200 ${
+                  selectedFeeling === 'custom'
+                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white'
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                }`}
+              >
+                <span className="text-sm font-medium">💭 Ressenti personnalisé</span>
+              </button>
+            </div>
+            
+            {selectedFeeling === 'custom' && (
+              <input
+                type="text"
+                value={customFeeling}
+                onChange={e => setCustomFeeling(e.target.value)}
+                placeholder={t('feeling_placeholder')}
+                className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full text-center font-medium focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
+                autoFocus
+              />
+            )}
+          </div>
+
+          {/* Boutons d'action */}
+          <div className="flex gap-3 w-full max-w-lg">
+            <button
+              onClick={() => {
+                setShowFeelingModal(false);
+                setSelectedFeeling('');
+                setCustomFeeling('');
+              }}
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+            >
+              Annuler
+            </button>
+            <button
+              onClick={confirmSaveWorkout}
+              className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+            >
+              {t('finish_workout')}
+            </button>
+          </div>
         </div>
       </Modal>
     </div>
