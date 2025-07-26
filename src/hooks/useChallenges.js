@@ -669,38 +669,29 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       const friendFinalScore = friendScore; // Toujours le score stocké de l'autre utilisateur
       
       // Vérifier si c'est une victoire et ajouter de l'XP avec récompenses
-      if (myFinalScore > friendFinalScore && challenge.status !== 'completed' && addChallengeWinXP) {
-        // Calculer les récompenses
-        const rewards = calculateChallengeRewards(myScore, challenge.type, challenge.target, challenge.duration);
-        
-        // Marquer le défi comme terminé et ajouter de l'XP
-        updateChallenge(challenge.id, { 
-          status: 'completed',
-          achievedLevel: rewards?.level,
-          earnedXP: rewards?.xp,
-          earnedBadge: rewards?.badge
-        }).then(() => {
-          const challengeName = `${challenge.type} vs ${challenge.receiverName}`;
-          const xpToAdd = rewards?.xp || 100; // XP de base si pas de récompense calculée
-          
-          addChallengeWinXP(challengeName, xpToAdd).then(result => {
-            // Défi gagné avec succès
-            console.log(`Défi gagné ! XP: ${xpToAdd}, Niveau: ${rewards?.name || 'Standard'}`);
-          }).catch(error => {
-            console.error('Erreur lors de l\'ajout d\'XP pour victoire:', error);
-          });
-        });
-        
-        const rewardText = rewards ? ` ${rewards.badge} +${rewards.xp}XP` : '';
-        return { 
-          status: 'victory', 
-          text: `Victoire ! 🎉${rewardText}`,
-          rewards: rewards
-        };
-      }
-      
       if (myFinalScore > friendFinalScore) {
         const rewards = calculateChallengeRewards(myScore, challenge.type, challenge.target, challenge.duration);
+        
+        // Si le défi n'est pas encore marqué comme terminé, le marquer et ajouter de l'XP
+        if (challenge.status !== 'completed' && addChallengeWinXP) {
+          updateChallenge(challenge.id, { 
+            status: 'completed',
+            achievedLevel: rewards?.level,
+            earnedXP: rewards?.xp,
+            earnedBadge: rewards?.badge
+          }).then(() => {
+            const challengeName = `${challenge.type} vs ${challenge.receiverName}`;
+            const xpToAdd = rewards?.xp || 100; // XP de base si pas de récompense calculée
+            
+            addChallengeWinXP(challengeName, xpToAdd).then(result => {
+              // Défi gagné avec succès
+              console.log(`Défi gagné ! XP: ${xpToAdd}, Niveau: ${rewards?.name || 'Standard'}`);
+            }).catch(error => {
+              console.error('Erreur lors de l\'ajout d\'XP pour victoire:', error);
+            });
+          });
+        }
+        
         const rewardText = rewards ? ` ${rewards.badge} +${rewards.xp}XP` : '';
         return { 
           status: 'victory', 

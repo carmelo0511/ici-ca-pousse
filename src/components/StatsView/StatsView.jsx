@@ -110,6 +110,16 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
             <Zap className="h-12 w-12 text-indigo-200" />
           </div>
         </div>
+
+        <div className="bg-orange-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-orange-100 text-sm font-medium">Groupe préféré</p>
+              <p className="text-2xl font-bold">{getMostWorkedMuscleGroup(workouts)}</p>
+            </div>
+            <Dumbbell className="h-12 w-12 text-orange-200" />
+          </div>
+        </div>
       </div>
 
       {/* Habitudes d'entraînement */}
@@ -197,6 +207,116 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
       )}
+
+      {/* Section Recommandations */}
+      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
+          <Target className="h-6 w-6" />
+          <span>Recommandations personnalisées</span>
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Recommandation basée sur la fréquence */}
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6">
+            <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
+              <span>📊</span>
+              <span>Fréquence d'entraînement</span>
+            </h4>
+            {workouts.length === 0 ? (
+              <p className="text-gray-600">Commencez par faire votre première séance !</p>
+            ) : workouts.length < 5 ? (
+              <p className="text-gray-600">Excellent début ! Continuez à vous entraîner régulièrement.</p>
+            ) : workouts.length < 15 ? (
+              <p className="text-gray-600">Bonne régularité ! Essayez d'ajouter une séance par semaine.</p>
+            ) : (
+              <p className="text-gray-600">Impressionnant ! Vous êtes très régulier dans vos entraînements.</p>
+            )}
+          </div>
+
+          {/* Recommandation basée sur le groupe musculaire */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6">
+            <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
+              <span>💪</span>
+              <span>Équilibre musculaire</span>
+            </h4>
+            {(() => {
+              const muscleCount = {};
+              workouts.forEach(w => {
+                w.exercises.forEach(ex => {
+                  if (ex.type) {
+                    muscleCount[ex.type] = (muscleCount[ex.type] || 0) + 1;
+                  }
+                });
+              });
+              const muscleGroups = Object.keys(muscleCount);
+              
+              if (muscleGroups.length < 3) {
+                return <p className="text-gray-600">Diversifiez vos entraînements en travaillant différents groupes musculaires.</p>;
+              } else if (muscleGroups.length < 5) {
+                return <p className="text-gray-600">Bon équilibre ! Continuez à varier vos exercices.</p>;
+              } else {
+                return <p className="text-gray-600">Excellent équilibre musculaire ! Vous travaillez tous les groupes.</p>;
+              }
+            })()}
+          </div>
+
+          {/* Recommandation basée sur la durée */}
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6">
+            <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
+              <span>⏱️</span>
+              <span>Durée des séances</span>
+            </h4>
+            {stats.avgDuration < 30 ? (
+              <p className="text-gray-600">Vos séances sont courtes. Essayez d'augmenter progressivement la durée.</p>
+            ) : stats.avgDuration < 60 ? (
+              <p className="text-gray-600">Durée équilibrée ! Parfait pour maintenir votre forme.</p>
+            ) : (
+              <p className="text-gray-600">Séances intenses ! Assurez-vous de bien récupérer entre les entraînements.</p>
+            )}
+          </div>
+
+          {/* Recommandation basée sur le moment */}
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6">
+            <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
+              <span>🌅</span>
+              <span>Moment d'entraînement</span>
+            </h4>
+            {preferredTime.name === 'Matin' ? (
+              <p className="text-gray-600">Entraînement matinal ! Excellent pour booster votre métabolisme.</p>
+            ) : preferredTime.name === 'Après-midi' ? (
+              <p className="text-gray-600">Séances d'après-midi ! Bon moment pour des performances optimales.</p>
+            ) : preferredTime.name === 'Soir' ? (
+              <p className="text-gray-600">Entraînement du soir ! Pensez à bien vous étirer avant de dormir.</p>
+            ) : (
+              <p className="text-gray-600">Séances nocturnes ! Assurez-vous de bien vous reposer après.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Recommandation générale */}
+        <div className="mt-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6">
+          <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
+            <span>🎯</span>
+            <span>Objectif du mois</span>
+          </h4>
+          {(() => {
+            const thisMonth = new Date().getMonth();
+            const thisYear = new Date().getFullYear();
+            const monthWorkouts = workouts.filter(w => {
+              const workoutDate = new Date(w.date);
+              return workoutDate.getMonth() === thisMonth && workoutDate.getFullYear() === thisYear;
+            });
+            
+            if (monthWorkouts.length < 8) {
+              return <p className="text-gray-600">Objectif : Faites au moins 8 séances ce mois-ci pour maintenir votre progression !</p>;
+            } else if (monthWorkouts.length < 12) {
+              return <p className="text-gray-600">Objectif : Essayez d'atteindre 12 séances ce mois-ci pour optimiser vos résultats !</p>;
+            } else {
+              return <p className="text-gray-600">Félicitations ! Vous avez dépassé l'objectif du mois. Continuez ainsi !</p>;
+            }
+          })()}
+        </div>
+      </div>
     </div>
   );
 };

@@ -111,11 +111,14 @@ const Challenges = ({ user }) => {
     ).length;
     const activeChallenges = totalChallenges - completedChallenges;
     
-    // Pour l'instant, on compte les défis avec status 'completed' comme victoires
-    // TODO: Implémenter un calcul plus précis des victoires
-    const victories = challenges.filter(challenge => 
-      challenge.status === 'completed'
-    ).length;
+    // Calculer les vraies victoires en vérifiant les scores
+    const victories = challenges.filter(challenge => {
+      if (challenge.status !== 'completed') return false;
+      
+      const myScore = getChallengeScore(challenge);
+      const friendScore = getFriendScore(challenge);
+      return myScore > friendScore;
+    }).length;
     
     const winRate = totalChallenges > 0 ? Math.round((victories / totalChallenges) * 100) : 0;
     
