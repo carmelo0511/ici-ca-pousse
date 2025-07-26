@@ -443,3 +443,50 @@ export function getWorkoutSetRepDetails(workouts) {
     })
     .join('; ');
 }
+
+// Groupe les séances par semaine
+export function groupWorkoutsByWeek(workouts) {
+  if (!Array.isArray(workouts)) return {};
+  
+  const weeks = {};
+  workouts.forEach(workout => {
+    const date = parseLocalDate(workout.date);
+    if (!date) return;
+    
+    // Obtenir le lundi de la semaine
+    const dayOfWeek = date.getDay();
+    const monday = new Date(date);
+    monday.setDate(date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1));
+    monday.setHours(0, 0, 0, 0);
+    
+    const weekKey = monday.toISOString().slice(0, 10);
+    
+    if (!weeks[weekKey]) {
+      weeks[weekKey] = [];
+    }
+    weeks[weekKey].push(workout);
+  });
+  
+  return weeks;
+}
+
+// Prépare les données pour le graphique de progression hebdomadaire
+export function getWeeklyWorkoutData(workouts) {
+  if (!Array.isArray(workouts)) return [];
+  
+  const weeks = groupWorkoutsByWeek(workouts);
+  const sortedWeeks = Object.keys(weeks).sort();
+  
+  return sortedWeeks.slice(-8).map(weekKey => {
+    const weekDate = new Date(weekKey);
+    const weekLabel = weekDate.toLocaleDateString('fr-FR', { 
+      day: 'numeric', 
+      month: 'short'
+    });
+    
+    return {
+      week: weekLabel,
+      count: weeks[weekKey].length
+    };
+  });
+}
