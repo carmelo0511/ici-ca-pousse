@@ -21,6 +21,7 @@ import FriendsList from './components/Profile/FriendsList';
 import LeaderboardView from './components/Leaderboard/LeaderboardView';
 import BadgesPage from './components/Badges/BadgesPage';
 import Challenges from './components/Challenges';
+import DailyChallenges from './components/DailyChallenges';
 
 import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
@@ -43,6 +44,7 @@ import {
   useKeyboardNavigation,
   useNotifications
 } from './hooks';
+import { useDailyChallenges } from './hooks/useDailyChallenges';
 
 // Utils
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
@@ -93,8 +95,9 @@ function App() {
     clearExercises,
     setExercisesFromWorkout,
   } = useExercises();
-  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP } = useExperience(user);
+  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP, addXP } = useExperience(user);
   const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
+  const { dailyChallenges, todayChallenges, loading: dailyChallengesLoading, completeDailyChallenge } = useDailyChallenges(user, workouts, addXP);
   const { friends } = useFriends(user, addFriendXP);
   const { notifications } = useNotifications(user);
   const { t } = useTranslation();
@@ -371,6 +374,18 @@ function App() {
             {/* Onglet Défis */}
             <PageTransition isActive={activeTab === 'challenges'}>
               <Challenges user={user} />
+            </PageTransition>
+
+            {/* Onglet Défis Quotidiens */}
+            <PageTransition isActive={activeTab === 'daily'}>
+              <div className="p-4 w-full min-h-screen h-auto">
+                <DailyChallenges
+                  dailyChallenges={dailyChallenges}
+                  todayChallenges={todayChallenges}
+                  loading={dailyChallengesLoading}
+                  completeDailyChallenge={completeDailyChallenge}
+                />
+              </div>
             </PageTransition>
 
             {/* Onglet Badges */}
