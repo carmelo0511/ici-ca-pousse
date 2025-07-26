@@ -111,13 +111,13 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-teal-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-pink-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-teal-100 text-sm font-medium">Groupe préféré</p>
+              <p className="text-pink-100 text-sm font-medium">Groupe préféré</p>
               <p className="text-2xl font-bold">{getMostWorkedMuscleGroup(workouts)}</p>
             </div>
-            <Dumbbell className="h-12 w-12 text-teal-200" />
+            <Dumbbell className="h-12 w-12 text-pink-200" />
           </div>
         </div>
       </div>
