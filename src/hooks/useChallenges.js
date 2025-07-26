@@ -663,8 +663,10 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       }
       
       // Déterminer les scores corrects
-      const myFinalScore = isSentByMe ? myScore : friendScore;
-      const friendFinalScore = isSentByMe ? friendScore : myScore;
+      // myScore = score calculé en temps réel de l'utilisateur actuel
+      // friendScore = score stocké de l'autre utilisateur
+      const myFinalScore = myScore; // Toujours le score calculé de l'utilisateur actuel
+      const friendFinalScore = friendScore; // Toujours le score stocké de l'autre utilisateur
       
       // Vérifier si c'est une victoire et ajouter de l'XP avec récompenses
       if (myFinalScore > friendFinalScore && challenge.status !== 'completed' && addChallengeWinXP) {
