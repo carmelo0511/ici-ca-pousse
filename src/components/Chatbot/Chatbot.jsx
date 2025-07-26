@@ -557,22 +557,22 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-gray-800">Coach Lex IA</h2>
       </div>
-      <div className="mb-2 flex gap-2 items-center">
+      <div className="mb-2 flex flex-wrap gap-1 items-center">
         <button
           onClick={() => setShowMenu(v => !v)}
-          className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-green-500 hover:to-blue-600 transition text-sm whitespace-nowrap"
+          className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-3 py-2 rounded shadow font-semibold hover:from-green-500 hover:to-blue-600 transition text-xs whitespace-nowrap"
         >
           Propose-moi une séance
         </button>
         <button
           onClick={handleRecapLastWorkouts}
-          className="bg-gradient-to-r from-indigo-400 to-purple-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-indigo-500 hover:to-purple-600 transition text-sm whitespace-nowrap"
+          className="bg-gradient-to-r from-indigo-400 to-purple-500 text-white px-3 py-2 rounded shadow font-semibold hover:from-indigo-500 hover:to-purple-600 transition text-xs whitespace-nowrap"
         >
           Récap des dernières séances
         </button>
         <button
           onClick={() => handlePersonalizedRecommendation()}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-purple-600 hover:to-pink-600 transition text-sm whitespace-nowrap"
+          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 rounded shadow font-semibold hover:from-purple-600 hover:to-pink-600 transition text-xs whitespace-nowrap"
         >
           🧠 Recommandations IA
         </button>
