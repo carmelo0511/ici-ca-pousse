@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../utils/firebase';
 
 // Types de défis quotidiens
@@ -90,7 +90,7 @@ export const useDailyChallenges = (user, workouts, addXP) => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, generateDailyChallenges]);
 
   // Générer de nouveaux défis quotidiens
   const generateDailyChallenges = useCallback(async () => {
@@ -132,7 +132,7 @@ export const useDailyChallenges = (user, workouts, addXP) => {
     } catch (error) {
       console.error('Erreur lors de la génération des défis quotidiens:', error);
     }
-  }, [user, workouts]);
+  }, [user, workouts, analyzeUserHistory, selectPersonalizedChallenges]);
 
   // Analyser l'historique de l'utilisateur
   const analyzeUserHistory = useCallback((workouts) => {
@@ -203,7 +203,6 @@ export const useDailyChallenges = (user, workouts, addXP) => {
   // Sélectionner des défis personnalisés
   const selectPersonalizedChallenges = useCallback((userStats) => {
     const challenges = [];
-    const availableTypes = Object.keys(DAILY_CHALLENGE_TYPES);
     
     // Défi de base : toujours inclure
     challenges.push({
