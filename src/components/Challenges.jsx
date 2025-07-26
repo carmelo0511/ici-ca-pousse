@@ -33,8 +33,9 @@ const Challenges = ({ user }) => {
   const [challengeType, setChallengeType] = useState('workouts');
   const [challengeDuration, setChallengeDuration] = useState(7);
   const [toast, setToast] = useState(null);
-  const [activeTab, setActiveTab] = useState('all'); // 'all', 'sent' ou 'received'
+  const [activeTab, setActiveTab] = useState('all'); // 'all', 'sent', 'received' ou 'completed'
   const [selectedTarget, setSelectedTarget] = useState(null);
+  const [hiddenChallenges, setHiddenChallenges] = useState(new Set());
 
   const handleCreateChallenge = async () => {
     if (!selectedFriend) {
@@ -201,6 +202,20 @@ const Challenges = ({ user }) => {
     }
   };
 
+  const handleHideChallenge = (challengeId) => {
+    setHiddenChallenges(prev => new Set([...prev, challengeId]));
+    setToast({ message: 'Défi masqué de la vue active', type: 'success' });
+  };
+
+  const handleShowChallenge = (challengeId) => {
+    setHiddenChallenges(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(challengeId);
+      return newSet;
+    });
+    setToast({ message: 'Défi affiché à nouveau', type: 'success' });
+  };
+
   return (
     <div className="p-4 w-full min-h-screen h-auto">
       <div className="flex justify-between items-center mb-6">
@@ -220,7 +235,7 @@ const Challenges = ({ user }) => {
               : 'text-gray-600 hover:text-gray-800'
           }`}
         >
-          Tous mes défis ({allUserChallenges.length})
+          Actifs ({getActiveChallenges().length})
         </button>
         <button
           onClick={() => setActiveTab('sent')}
@@ -241,6 +256,16 @@ const Challenges = ({ user }) => {
           }`}
         >
           Reçus ({receivedChallenges.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('completed')}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+            activeTab === 'completed'
+              ? 'bg-white text-indigo-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-800'
+          }`}
+        >
+          Terminés ({getCompletedChallenges().length})
         </button>
       </div>
 
@@ -304,22 +329,28 @@ const Challenges = ({ user }) => {
       {/* Statistiques détaillées */}
       {/* Temporairement désactivé - ChallengeStats stats={stats} /> */}
 
-      {activeTab === 'all' ? (
-        // Tous les défis
-        allUserChallenges.length === 0 ? (
-          <Card>
-            <div className="text-center py-8">
-              <div className="text-4xl mb-4">🏆</div>
-              <h3 className="text-lg font-semibold mb-2">Aucun défi</h3>
-              <p className="text-gray-600 mb-4">Crée ton premier défi ou attends d'en recevoir un !</p>
-              <GradientButton onClick={() => setShowCreateModal(true)}>
-                Créer un défi
-              </GradientButton>
-            </div>
-          </Card>
-        ) : (
+      {/* Onglet Actifs */}
+      {activeTab === 'all' && (() => {
+        const activeChallenges = getActiveChallenges().filter(challenge => !hiddenChallenges.has(challenge.id));
+        
+        if (activeChallenges.length === 0) {
+          return (
+            <Card>
+              <div className="text-center py-8">
+                <div className="text-4xl mb-4">🏆</div>
+                <h3 className="text-lg font-semibold mb-2">Aucun défi actif</h3>
+                <p className="text-gray-600 mb-4">Crée ton premier défi ou attends d'en recevoir un !</p>
+                <GradientButton onClick={() => setShowCreateModal(true)}>
+                  Créer un défi
+                </GradientButton>
+              </div>
+            </Card>
+          );
+        }
+        
+        return (
           <div className="space-y-4">
-            {allUserChallenges.map(challenge => {
+            {activeChallenges.map(challenge => {
               const myScore = getChallengeScore(challenge);
               const status = getChallengeStatus(challenge);
               const isSentByMe = challenge.senderId === user?.uid;
@@ -391,12 +422,20 @@ const Challenges = ({ user }) => {
                             </button>
                           )}
                           {isSentByMe && (
-                            <button
-                              onClick={() => handleDeleteChallenge(challenge.id)}
-                              className="mt-2 text-xs text-red-600 hover:text-red-800"
-                            >
-                              Supprimer le défi
-                            </button>
+                            <div className="flex flex-col space-y-1 mt-2">
+                              <button
+                                onClick={() => handleHideChallenge(challenge.id)}
+                                className="text-xs text-gray-600 hover:text-gray-800"
+                              >
+                                Masquer de la vue active
+                              </button>
+                              <button
+                                onClick={() => handleDeleteChallenge(challenge.id)}
+                                className="text-xs text-red-600 hover:text-red-800"
+                              >
+                                Supprimer définitivement
+                              </button>
+                            </div>
                           )}
                         </>
                       )}
@@ -406,9 +445,11 @@ const Challenges = ({ user }) => {
               );
             })}
           </div>
-        )
-      ) : activeTab === 'sent' ? (
-        // Défis envoyés
+        );
+      })()}
+
+      {/* Onglet Envoyés */}
+      {activeTab === 'sent' && (
         sentChallenges.length === 0 ? (
           <Card>
             <div className="text-center py-8">
@@ -470,8 +511,10 @@ const Challenges = ({ user }) => {
             })}
           </div>
         )
-      ) : (
-        // Défis reçus
+      )}
+
+      {/* Onglet Reçus */}
+      {activeTab === 'received' && (
         receivedChallenges.length === 0 ? (
           <Card>
             <div className="text-center py-8">
@@ -531,14 +574,6 @@ const Challenges = ({ user }) => {
                           </div>
                         </>
                       )}
-                      {challenge.status === 'pending' && (
-                        <button
-                          onClick={() => handleDeleteChallenge(challenge.id)}
-                          className="mt-2 text-xs text-red-600 hover:text-red-800"
-                        >
-                          Supprimer le défi
-                        </button>
-                      )}
                     </div>
                   </div>
                 </Card>
@@ -547,6 +582,98 @@ const Challenges = ({ user }) => {
           </div>
         )
       )}
+
+      {/* Onglet Terminés */}
+      {activeTab === 'completed' && (() => {
+        const completedChallenges = getCompletedChallenges();
+        const hiddenCompletedChallenges = completedChallenges.filter(challenge => hiddenChallenges.has(challenge.id));
+        
+        if (completedChallenges.length === 0) {
+          return (
+            <Card>
+              <div className="text-center py-8">
+                <div className="text-4xl mb-4">🏁</div>
+                <h3 className="text-lg font-semibold mb-2">Aucun défi terminé</h3>
+                <p className="text-gray-600 mb-4">Termine tes premiers défis pour les voir ici !</p>
+              </div>
+            </Card>
+          );
+        }
+        
+        return (
+          <div className="space-y-4">
+            {/* Défis terminés visibles */}
+            {completedChallenges.filter(challenge => !hiddenChallenges.has(challenge.id)).map(challenge => {
+              const myScore = getChallengeScore(challenge);
+              const status = getChallengeStatus(challenge);
+              const isSentByMe = challenge.senderId === user?.uid;
+              
+              return (
+                <Card key={challenge.id} className="bg-gray-50">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="text-2xl">{getChallengeIcon(challenge.type)}</div>
+                      <div>
+                        <h3 className="font-semibold">
+                          {isSentByMe 
+                            ? `Défi vs ${challenge.receiverName || 'Utilisateur'}`
+                            : `Défi de ${challenge.senderName || 'Un ami'}`
+                          }
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          {getChallengeTypeLabel(challenge.type)} • {challenge.duration} jours
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Terminé le {new Date(challenge.endDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`font-bold ${getStatusColor(status.status)}`}>
+                        {status.text}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {formatScore(myScore, challenge.type)} vs {formatScore(challenge.friendScore || 0, challenge.type)}
+                      </div>
+                      {isSentByMe && (
+                        <button
+                          onClick={() => handleDeleteChallenge(challenge.id)}
+                          className="mt-2 text-xs text-red-600 hover:text-red-800"
+                        >
+                          Supprimer définitivement
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+            
+            {/* Défis terminés masqués */}
+            {hiddenCompletedChallenges.length > 0 && (
+              <Card className="bg-blue-50 border-l-4 border-l-blue-500">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="text-2xl">👁️</div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Défis masqués</h3>
+                      <p className="text-sm text-gray-600">
+                        {hiddenCompletedChallenges.length} défi(s) terminé(s) masqué(s)
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => hiddenCompletedChallenges.forEach(challenge => handleShowChallenge(challenge.id))}
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                  >
+                    Afficher tous
+                  </button>
+                </div>
+              </Card>
+            )}
+          </div>
+        );
+      })()}
 
       {/* Modal de création de défi */}
       <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)}>
