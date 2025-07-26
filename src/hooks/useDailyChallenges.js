@@ -272,7 +272,7 @@ export const useDailyChallenges = (user, workouts, addXP) => {
 
   // Vérifier la progression des défis
   const checkDailyProgress = useCallback(() => {
-    if (!workouts || workouts.length === 0) return;
+    if (!workouts || workouts.length === 0 || !dailyChallenges.length) return;
 
     const today = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD
     const todayWorkouts = workouts.filter(workout => 
@@ -338,7 +338,7 @@ export const useDailyChallenges = (user, workouts, addXP) => {
     });
 
     setDailyChallenges(updatedChallenges);
-  }, [dailyChallenges, workouts]);
+  }, [workouts, dailyChallenges]);
 
   // Marquer un défi comme terminé
   const completeDailyChallenge = useCallback(async (challengeId) => {

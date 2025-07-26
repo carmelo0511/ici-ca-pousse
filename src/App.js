@@ -347,7 +347,7 @@ function App() {
 
             {/* Onglet Statistiques */}
             <PageTransition isActive={activeTab === 'stats'}>
-            <StatsView stats={getStats()} workouts={workouts} user={user} />
+            <StatsView stats={getStats()} workouts={workouts} user={user} onEditWorkout={handleEditWorkout} />
             </PageTransition>
 
             {/* Onglet Chatbot */}
