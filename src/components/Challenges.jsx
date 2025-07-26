@@ -20,6 +20,8 @@ const Challenges = ({ user }) => {
     getSentChallenges,
     getReceivedChallenges,
     getAllUserChallenges,
+    getActiveChallenges,
+    getCompletedChallenges,
     acceptChallenge,
     declineChallenge,
     cancelChallenge,
