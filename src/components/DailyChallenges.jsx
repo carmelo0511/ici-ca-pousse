@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from './Card';
-import { GradientButton } from './GradientButton';
+import GradientButton from './GradientButton';
 import { CheckCircle, Clock, Target, Zap } from 'lucide-react';
 
 const DailyChallenges = ({ dailyChallenges, todayChallenges, loading, completeDailyChallenge }) => {
