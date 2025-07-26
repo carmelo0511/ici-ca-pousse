@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, Bell, ChevronLeft, ChevronRight, Bot, Target } from 'lucide-react';
+import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, Bell, ChevronLeft, ChevronRight, Bot } from 'lucide-react';
 // import { useTranslation } from 'react-i18next'; // Temporarily disabled for CI
 import PropTypes from 'prop-types';
 
@@ -18,7 +18,7 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
     { id: 'friends', icon: User, label: 'Amis', color: 'from-pink-500 to-pink-600', shortcut: 'F' },
     { id: 'leaderboard', icon: Trophy, label: 'Classement', color: 'from-yellow-500 to-yellow-600', shortcut: 'L' },
     { id: 'challenges', icon: Zap, label: 'Défis', color: 'from-gray-800 to-black', shortcut: 'D' },
-    { id: 'daily', icon: Target, label: 'Quotidiens', color: 'from-orange-500 to-orange-600', shortcut: 'Q' },
+
     { id: 'badges', icon: Award, label: 'Badges', color: 'from-indigo-500 to-indigo-600', shortcut: 'B' }
   ];
 

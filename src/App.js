@@ -44,7 +44,7 @@ import {
   useKeyboardNavigation,
   useNotifications
 } from './hooks';
-import { useDailyChallenges } from './hooks/useDailyChallenges';
+
 
 // Utils
 import { migrateLocalWorkoutsToCloud } from './utils/storage';
@@ -97,7 +97,7 @@ function App() {
   } = useExercises();
   const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP, addXP } = useExperience(user);
   const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
-  const { dailyChallenges, todayChallenges, loading: dailyChallengesLoading, completeDailyChallenge } = useDailyChallenges(user, workouts, addXP);
+
   const { friends } = useFriends(user, addFriendXP);
   const { notifications } = useNotifications(user);
   const { t } = useTranslation();
@@ -153,8 +153,7 @@ function App() {
     { id: 'friends', label: 'Amis' },
     { id: 'leaderboard', label: 'Classement' },
     { id: 'challenges', label: 'Défis' },
-    { id: 'badges', label: 'Badges' },
-
+    { id: 'badges', label: 'Badges' }
   ];
 
   // Navigation par gestes et raccourcis clavier
@@ -376,17 +375,7 @@ function App() {
               <Challenges user={user} />
             </PageTransition>
 
-            {/* Onglet Défis Quotidiens */}
-            <PageTransition isActive={activeTab === 'daily'}>
-              <div className="p-4 w-full min-h-screen h-auto">
-                <DailyChallenges
-                  dailyChallenges={dailyChallenges}
-                  todayChallenges={todayChallenges}
-                  loading={dailyChallengesLoading}
-                  completeDailyChallenge={completeDailyChallenge}
-                />
-              </div>
-            </PageTransition>
+
 
             {/* Onglet Badges */}
             <PageTransition isActive={activeTab === 'badges'}>
