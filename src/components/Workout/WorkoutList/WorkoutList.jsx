@@ -217,16 +217,11 @@ function WorkoutList({
                     className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg"
                   />
                   <button
-                    onClick={() => {
-                      if (window.confirm(`Supprimer l'exercice "${exercise.name}" ?`)) {
-                        removeExerciseFromWorkout(exercise.id);
-                      }
-                    }}
-                    className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-1"
+                    onClick={() => removeExerciseFromWorkout(exercise.id)}
+                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
                     title="Supprimer l'exercice"
                   >
                     <X className="h-4 w-4" />
-                    <span className="text-sm font-medium">Supprimer</span>
                   </button>
                 </div>
               </div>
@@ -305,11 +300,7 @@ function WorkoutList({
                           {set.reps * set.weight} kg
                         </span>
                         <button
-                          onClick={() => {
-                            if (window.confirm(`Supprimer la série ${setIndex + 1} ?`)) {
-                              removeSet(exercise.id, setIndex);
-                            }
-                          }}
+                          onClick={() => removeSet(exercise.id, setIndex)}
                           className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
                           title="Supprimer la série"
                         >
