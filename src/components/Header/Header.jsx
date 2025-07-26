@@ -1,10 +1,11 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Flame, Sun, Moon } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
 import ProfileSettings from '../Profile/ProfileSettings';
 import ProfilePicture from '../Profile/ProfilePicture';
+import StreakCounter from '../StreakCounter';
 import { useExperience } from '../../hooks/useExperience.js';
 import { STORAGE_KEYS } from '../../constants';
 
@@ -79,12 +80,9 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
               <span className="ml-2 text-[9px] sm:text-xs font-bold text-black dark:text-white">{Math.round(xpPercent)}%</span>
             </div>
           </div>
-          {/* Streak */}
+          {/* Streak avec titre */}
           <div className="flex flex-col items-center min-w-0 mx-1">
-            <div className="flex items-center gap-0.5 bg-black/10 dark:bg-white/20 px-1 py-0.5 rounded-full shadow">
-              <Flame className="h-3 w-3 sm:h-4 sm:w-4 text-orange-400 animate-pulse" />
-              <span className="text-[10px] sm:text-xs font-semibold text-black dark:text-white">{streak}</span>
-            </div>
+            <StreakCounter streak={streak} className="bg-white/80 dark:bg-gray-800/80 dark:text-white" />
           </div>
           {/* Profil et actions */}
           <div className="flex items-center gap-0.5 sm:gap-2 min-w-0">

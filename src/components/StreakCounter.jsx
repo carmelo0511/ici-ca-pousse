@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Flame } from 'lucide-react';
 import PropTypes from 'prop-types';
 
 function getStreakMessage(streak) {
@@ -68,24 +67,22 @@ const StreakCounter = ({ streak, className = '' }) => {
   }, [streak, displayStreak]);
 
   return (
-    <div className={`flex flex-col bg-gradient-to-r from-white/90 to-white/70 rounded-xl px-3 py-2 border border-gray-200 shadow-lg backdrop-blur-sm ${className}`} style={{ minWidth: 0 }}>
-      <div className="flex items-center space-x-2">
-        <span className={`text-lg ${getStreakColor(streak)} mr-1`} style={{ minWidth: 20 }}>{getStreakIcon(streak)}</span>
-        <span className="text-base font-bold text-gray-800" style={{ letterSpacing: 0.5 }}>
-          {displayStreak} <span className="text-xs font-normal text-gray-500">jours</span>
+    <div className={`flex items-center space-x-1 bg-gradient-to-r from-white/90 to-white/70 rounded-lg px-2 py-1 border border-gray-200 shadow-md backdrop-blur-sm ${className}`} style={{ minWidth: 0 }}>
+      <span className={`text-sm ${getStreakColor(streak)} mr-1`} style={{ minWidth: 16 }}>{getStreakIcon(streak)}</span>
+      <div className="flex flex-col items-start">
+        <span className="text-xs font-bold text-gray-800" style={{ letterSpacing: 0.5 }}>
+          {displayStreak} <span className="text-[10px] font-normal text-gray-500">j</span>
         </span>
-        {getStreakMessage(streak) && (
-          <span className={`ml-2 text-xs font-semibold ${getStreakColor(streak)}`} style={{ whiteSpace: 'nowrap' }}>
-            {getStreakMessage(streak)}
+        {getStreakTitle(streak) && (
+          <span className={`text-[10px] font-bold ${getStreakColor(streak)} uppercase tracking-wide leading-tight`}>
+            {getStreakTitle(streak)}
           </span>
         )}
       </div>
-      {getStreakTitle(streak) && (
-        <div className="mt-1">
-          <span className={`text-xs font-bold ${getStreakColor(streak)} uppercase tracking-wide`}>
-            {getStreakTitle(streak)}
-          </span>
-        </div>
+      {getStreakMessage(streak) && (
+        <span className={`ml-1 text-[10px] font-semibold ${getStreakColor(streak)}`} style={{ whiteSpace: 'nowrap' }}>
+          {getStreakMessage(streak)}
+        </span>
       )}
     </div>
   );
