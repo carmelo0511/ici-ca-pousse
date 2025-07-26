@@ -25,7 +25,17 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
   const avgDurationByTime = getAverageDurationByTime(workouts);
 
   // Préparer les données pour la courbe de poids
-  const weightData = (user?.weightHistory || []).map(w => ({ week: w.weekKey, weight: Number(w.value) })).filter(w => w.weight > 0);
+  const weightData = (user?.weightHistory || [])
+    .map(w => ({ 
+      week: w.weekKey, 
+      weekFormatted: new Date(w.weekKey).toLocaleDateString('fr-FR', { 
+        day: '2-digit', 
+        month: '2-digit' 
+      }),
+      weight: Number(w.value) 
+    }))
+    .filter(w => w.weight > 0)
+    .sort((a, b) => new Date(a.week) - new Date(b.week));
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
@@ -48,9 +58,12 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={weightData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="week" fontSize={12} />
+              <XAxis dataKey="weekFormatted" fontSize={12} />
               <YAxis domain={['auto', 'auto']} tickCount={6} />
-              <Tooltip />
+              <Tooltip 
+                formatter={(value, name) => [value + ' kg', 'Poids']}
+                labelFormatter={(label) => `Semaine du ${label}`}
+              />
               <Line type="monotone" dataKey="weight" stroke="#6366f1" strokeWidth={2} dot={{ r: 4, fill: '#6366f1' }} activeDot={{ r: 6 }}>
                 <LabelList position="top" offset={12} fontSize={12} />
               </Line>

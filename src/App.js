@@ -203,7 +203,10 @@ function App() {
     const checkWeightNotif = async () => {
       // Date de la semaine courante (lundi)
       const now = new Date();
-      const monday = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+      const dayOfWeek = now.getDay(); // 0 = dimanche, 1 = lundi, ..., 6 = samedi
+      const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Si dimanche, on remonte de 6 jours
+      const monday = new Date(now);
+      monday.setDate(now.getDate() + daysToMonday);
       monday.setHours(0,0,0,0);
       const weekKey = monday.toISOString().slice(0,10);
       const weightHistory = user.weightHistory || [];
@@ -225,7 +228,10 @@ function App() {
     setTimeout(() => setShowWeightNotif(false), 400);
     // Date de la semaine courante (lundi)
     const now = new Date();
-    const monday = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+    const dayOfWeek = now.getDay(); // 0 = dimanche, 1 = lundi, ..., 6 = samedi
+    const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Si dimanche, on remonte de 6 jours
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + daysToMonday);
     monday.setHours(0,0,0,0);
     const weekKey = monday.toISOString().slice(0,10);
     const weightHistory = user.weightHistory || [];
