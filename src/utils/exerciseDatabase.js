@@ -25,12 +25,12 @@ export const exerciseDatabase = {
     'Mollets debout', 'Mollets assis', 'Hack squat', 'Goblet squat'
   ],
   abdos: [
-    'Crunch', 'Planche', 'Relevé de jambes', 'Russian twist', 'Mountain climbers',
+    'Crunch', 'Planche', 'Relevé de jambes', 'Russian twist', 'Grimpeur',
     'Bicycle crunch', 'Dead bug', 'Hanging knee raise'
   ],
   cardio: [
     'Course à pied', 'Vélo', 'Elliptique', 'Rameur', 'Tapis de course', 'Vélo spinning',
-    'Stepper', 'Corde à sauter', 'Burpees', 'Jumping jacks', 'High knees', 'Montées de genoux',
+    'Stepper', 'Corde à sauter', 'Burpees', 'Sauts étoiles', 'Genoux hauts', 'Montées de genoux',
     'Sprint', 'Marche rapide', 'Natation', 'Aquabike', 'HIIT', 'Tabata'
   ]
 };
