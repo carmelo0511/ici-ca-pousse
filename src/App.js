@@ -95,7 +95,7 @@ function App() {
     clearExercises,
     setExercisesFromWorkout,
   } = useExercises();
-  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP } = useExperience(user);
+  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP, recalculateStreak } = useExperience(user);
   const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
 
   const { friends } = useFriends(user, addFriendXP);
@@ -178,6 +178,23 @@ function App() {
       }
     }
   }, [user, setShowMigratePrompt]);
+
+  // Recalculer le streak au chargement si nécessaire
+  useEffect(() => {
+    if (user && workouts.length > 0) {
+      // Recalculer le streak une fois par jour au maximum
+      const lastRecalculation = localStorage.getItem('lastStreakRecalculation');
+      const today = new Date().toDateString();
+      
+      if (lastRecalculation !== today) {
+        recalculateStreak(workouts).then(() => {
+          localStorage.setItem('lastStreakRecalculation', today);
+        }).catch(error => {
+          console.error('Erreur lors du recalcul automatique du streak:', error);
+        });
+      }
+    }
+  }, [user, workouts, recalculateStreak]);
 
   // Notification hebdo poids
   useEffect(() => {

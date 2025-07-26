@@ -146,21 +146,34 @@ export const useExperience = (user) => {
     const newLevelName = getLevelName(newLevel);
     const levelUp = newLevel > currentExp.level;
 
-    // Calcul streak
+    // Calcul streak amélioré
     let newStreak = 1;
     let streakIncreased = false;
-      if (previousWorkouts.length > 0) {
-        const lastWorkoutDate = parseLocalDate(previousWorkouts[0].date);
-        const currentWorkoutDate = parseLocalDate(workout.date);
-        const daysDiff = Math.floor((currentWorkoutDate - lastWorkoutDate) / (1000 * 60 * 60 * 24));
-        if (daysDiff === 1) {
-          newStreak = currentExp.streak + 1;
+    
+    if (previousWorkouts.length > 0) {
+      const lastWorkoutDate = parseLocalDate(previousWorkouts[0].date);
+      const currentWorkoutDate = parseLocalDate(workout.date);
+      const daysDiff = Math.floor((currentWorkoutDate - lastWorkoutDate) / (1000 * 60 * 60 * 24));
+      
+      if (daysDiff === 1) {
+        // Jour consécutif - incrémenter le streak
+        newStreak = currentExp.streak + 1;
         streakIncreased = true;
       } else if (daysDiff === 0) {
-        newStreak = currentExp.streak; // même jour, ne pas incrémenter
+        // Même jour - maintenir le streak actuel
+        newStreak = currentExp.streak;
+      } else if (daysDiff === 2) {
+        // Un jour manqué - maintenir le streak (grâce)
+        newStreak = currentExp.streak + 1;
+        streakIncreased = true;
       } else {
-        newStreak = 1; // streak reset
+        // Plus d'un jour manqué - reset du streak
+        newStreak = 1;
       }
+    } else {
+      // Premier workout - commencer le streak
+      newStreak = 1;
+      streakIncreased = true;
     }
 
     try {
@@ -299,6 +312,66 @@ export const useExperience = (user) => {
     }
   }, [user]);
 
+  // Fonction pour recalculer et corriger le streak actuel
+  const recalculateStreak = useCallback(async (workouts) => {
+    if (!user?.uid || !workouts || workouts.length === 0) return 0;
+    
+    try {
+      // Trier les workouts par date (plus récent en premier)
+      const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      let currentStreak = 0;
+      let lastDate = null;
+      
+      for (let i = 0; i < sortedWorkouts.length; i++) {
+        const workoutDate = parseLocalDate(sortedWorkouts[i].date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (i === 0) {
+          // Premier workout (le plus récent)
+          const daysDiff = Math.floor((today - workoutDate) / (1000 * 60 * 60 * 24));
+          
+          if (daysDiff <= 1) {
+            // Workout aujourd'hui ou hier
+            currentStreak = 1;
+            lastDate = workoutDate;
+          } else {
+            // Workout trop ancien, pas de streak
+            break;
+          }
+        } else {
+          // Workouts suivants
+          const daysDiff = Math.floor((lastDate - workoutDate) / (1000 * 60 * 60 * 24));
+          
+          if (daysDiff === 1) {
+            // Jour consécutif
+            currentStreak++;
+            lastDate = workoutDate;
+          } else if (daysDiff === 2) {
+            // Un jour manqué (grâce)
+            currentStreak++;
+            lastDate = workoutDate;
+          } else if (daysDiff === 0) {
+            // Même jour, continuer
+            lastDate = workoutDate;
+          } else {
+            // Plus d'un jour manqué, arrêter le streak
+            break;
+          }
+        }
+      }
+      
+      // Mettre à jour le streak dans la base de données
+      await updateStreak(currentStreak);
+      return currentStreak;
+      
+    } catch (error) {
+      console.error('Erreur lors du recalcul du streak:', error);
+      return 0;
+    }
+  }, [user, updateStreak]);
+
   useEffect(() => {
     let unsubscribe = null;
     if (user?.uid) {
@@ -320,6 +393,7 @@ export const useExperience = (user) => {
     loading,
     addWorkoutXP,
     updateStreak,
+    recalculateStreak,
     loadExperience,
     calculateWorkoutXP,
     getLevelName,
