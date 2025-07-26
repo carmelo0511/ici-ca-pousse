@@ -64,7 +64,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
         <div className="flex flex-row items-center flex-1 min-w-0 gap-1 sm:gap-3">
           {/* Badge niveau circulaire */}
           <div className="flex flex-col items-center min-w-0">
-            <div className="w-7 h-7 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow animate-pop border-2 border-white dark:border-white bg-gradient-to-tr from-green-400 to-blue-500 dark:from-cyan-300 dark:to-green-300">
+            <div className="w-7 h-7 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow animate-pop border-2 border-white dark:border-white bg-gradient-to-tr from-green-400 to-purple-500 dark:from-cyan-300 dark:to-green-300">
               <span className="text-xs sm:text-xl font-extrabold text-black drop-shadow">{level}</span>
             </div>
           </div>
@@ -73,7 +73,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
             <div className="flex items-center w-full">
               <div className="relative w-20 h-1.5 sm:w-40 sm:h-3 bg-black/10 dark:bg-white/30 rounded-full overflow-hidden shadow-inner">
                 <div
-                  className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-green-400 to-blue-500 dark:from-cyan-300 dark:to-green-300 transition-all duration-700"
+                  className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-green-400 to-purple-500 dark:from-cyan-300 dark:to-green-300 transition-all duration-700"
                   style={{ width: `${xpPercent}%` }}
                 ></div>
               </div>
@@ -102,7 +102,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
                 className="relative flex items-center justify-center w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 border-indigo-400 bg-white hover:bg-indigo-50 transition-all shadow group"
                 aria-label="Modifier le profil"
               >
-                <span className="absolute -inset-1 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 opacity-60 blur-sm animate-halo"></span>
+                <span className="absolute -inset-1 rounded-full bg-gradient-to-tr from-green-400 to-purple-500 opacity-60 blur-sm animate-halo"></span>
                 <ProfilePicture 
                   user={localUser} 
                   size="xs" 
