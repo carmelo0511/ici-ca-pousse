@@ -7,6 +7,8 @@
 [![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)](https://jestjs.io/)
 [![Linting](https://img.shields.io/badge/ESLint-Clean-brightgreen.svg)](https://eslint.org/)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com/)
+[![Analytics](https://img.shields.io/badge/Analytics-Vercel-blue.svg)](https://vercel.com/analytics)
+[![Speed Insights](https://img.shields.io/badge/Speed%20Insights-Vercel-green.svg)](https://vercel.com/speed-insights)
 [![AI Coach](https://img.shields.io/badge/AI%20Coach-OpenAI-purple.svg)](https://openai.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
@@ -127,6 +129,13 @@ npm start
 - **Mode sombre/clair** : Bulle flottante pour changer de thème instantanément
 - **Header moderne** : Design épuré avec cercle de niveau blanc et streak intégrée
 - **Poids décimal** : Support des poids avec virgules (ex: 70.5 kg)
+
+### 📊 Monitoring & Analytics
+- **Vercel Analytics** : Suivi des visiteurs, pages vues, taux de rebond en temps réel
+- **Vercel Speed Insights** : Métriques de performance (FCP, LCP, CLS, TTFB)
+- **Monitoring automatique** : Collecte de données dès le déploiement
+- **Optimisation continue** : Amélioration basée sur les métriques réelles
+- **Dashboard intégré** : Visualisation des performances dans Vercel
 
 ### 🌐 Internationalisation
 - **Français / Anglais** : Interface disponible dans deux langues
@@ -430,6 +439,7 @@ src/tests/
 - [x] **Poids décimal** (support des poids avec virgules)
 - [x] **Header optimisé** (cercle de niveau blanc, streak intégrée)
 - [x] **Dates corrigées** (calcul correct des semaines pour l'évolution du poids)
+- [x] **Vercel Analytics & Speed Insights** (monitoring des performances et analytics)
 
 ### 🚧 En développement
 - [ ] Analyse de performance avancée
@@ -484,7 +494,7 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 ## 👨‍💻 Développeur
 
 - **Développeur Full-Stack** : [Bryan Nakache](https://github.com/bryannakache)
-- **Technologies** : React, Firebase, PWA, Gamification, IA
+- **Technologies** : React, Firebase, PWA, Gamification, IA, Vercel Analytics, Speed Insights
 - **Focus** : UX/UI, Performance, Tests, Code Quality
 
 ---
