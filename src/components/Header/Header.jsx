@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Sun, Moon } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
@@ -7,36 +6,13 @@ import ProfileSettings from '../Profile/ProfileSettings';
 import ProfilePicture from '../Profile/ProfilePicture';
 import StreakCounter from '../StreakCounter';
 import { useExperience } from '../../hooks/useExperience.js';
-import { STORAGE_KEYS } from '../../constants';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate, refreshUserProfile }) => {
   const [showProfile, setShowProfile] = useState(false);
   const [localUser, setLocalUser] = useState(user);
-  const [theme, setTheme] = useState('light');
 
   // Ajout du hook d'expérience
   const { experience } = useExperience(user);
-
-  // Dark mode: détecte le mode système à l'init
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.THEME);
-    if (saved) {
-      setTheme(saved);
-      document.body.classList.toggle('dark', saved === 'dark');
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
-      document.body.classList.toggle('dark', prefersDark);
-    }
-  }, []);
-
-  // Applique la classe dark/light sur le body à chaque changement
-  useEffect(() => {
-    document.body.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem(STORAGE_KEYS.THEME, theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
 
   // Mettre à jour l'utilisateur local quand user change
   useEffect(() => {
@@ -86,15 +62,6 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
           </div>
           {/* Profil et actions */}
           <div className="flex items-center gap-0.5 sm:gap-2 min-w-0">
-            {/* Switch dark mode */}
-            <button
-              onClick={toggleTheme}
-              className="flex items-center justify-center w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 border-indigo-300 bg-white/80 dark:bg-gray-800 hover:bg-indigo-100 dark:hover:bg-gray-700 transition-all shadow"
-              aria-label="Basculer le mode sombre"
-              title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
-            >
-              {theme === 'dark' ? <Sun className="h-4 w-4 sm:h-6 sm:w-6 text-yellow-400" /> : <Moon className="h-4 w-4 sm:h-6 sm:w-6 text-gray-700" />}
-            </button>
             {/* Avatar utilisateur avec halo coloré */}
             {localUser && (
               <button

@@ -151,10 +151,11 @@ const ProfileSettings = ({ user, workouts = [], challenges = [], isOpen, onClose
               type="number"
               min="0"
               max="500"
+              step="0.1"
               value={weight}
               onChange={e => setWeight(e.target.value)}
               className="border rounded px-2 py-1 w-20 text-center"
-              placeholder="ex: 70"
+              placeholder="ex: 70.5"
               disabled={loading}
             />
           </div>

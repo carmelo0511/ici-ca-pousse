@@ -221,6 +221,70 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     return { muscleGroups, recentExercises, frequency, lastWorkoutDate, daysSinceLastWorkout, feelings, feelingTrends };
   };
 
+  // Fonction pour analyser la progression des poids
+  const analyzeWeightProgress = () => {
+    if (!workouts || workouts.length < 2) return null;
+    
+    // Analyser les 4 dernières semaines
+    const fourWeeksAgo = new Date();
+    fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
+    const recentWorkouts = workouts.filter(w => new Date(w.date) >= fourWeeksAgo);
+    
+    if (recentWorkouts.length < 2) return null;
+    
+    // Calculer la progression des poids par exercice
+    const exerciseProgress = {};
+    
+    recentWorkouts.forEach(workout => {
+      workout.exercises?.forEach(exercise => {
+        if (!exerciseProgress[exercise.name]) {
+          exerciseProgress[exercise.name] = [];
+        }
+        
+        exercise.sets?.forEach(set => {
+          if (set.weight && parseFloat(set.weight) > 0) {
+            exerciseProgress[exercise.name].push({
+              weight: parseFloat(set.weight),
+              date: new Date(workout.date)
+            });
+          }
+        });
+      });
+    });
+    
+    // Analyser la progression
+    let progressSummary = [];
+    let totalProgress = 0;
+    let exerciseCount = 0;
+    
+    Object.entries(exerciseProgress).forEach(([exerciseName, weights]) => {
+      if (weights.length >= 2) {
+        const sortedWeights = weights.sort((a, b) => a.date - b.date);
+        const firstWeight = sortedWeights[0].weight;
+        const lastWeight = sortedWeights[sortedWeights.length - 1].weight;
+        const progress = lastWeight - firstWeight;
+        
+        if (progress !== 0) {
+          progressSummary.push(`${exerciseName}: ${progress > 0 ? '+' : ''}${progress.toFixed(1)}kg`);
+          totalProgress += progress;
+          exerciseCount++;
+        }
+      }
+    });
+    
+    if (progressSummary.length > 0) {
+      const avgProgress = totalProgress / exerciseCount;
+      const summary = progressSummary.slice(0, 5).join(', '); // Afficher jusqu'à 5 exercices
+      return {
+        details: summary,
+        average: avgProgress.toFixed(1),
+        count: exerciseCount
+      };
+    }
+    
+    return null;
+  };
+
   // Fonction pour analyser les ressentis et donner des conseils personnalisés
   const analyzeFeelings = () => {
     if (!workouts || workouts.length === 0) return '';
@@ -541,6 +605,131 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     ]);
   };
 
+  // Fonction pour analyser la progression de l'utilisateur
+  const handleGoalsAndProgress = () => {
+    const analysis = analyzeWorkoutHistory();
+    const prenom = user?.displayName ? user.displayName.split(' ')[0] : '';
+    
+    let progressAnalysis = `${prenom ? prenom + ', ' : ''}voici ton analyse de progression :\n\n`;
+    
+    if (!workouts || workouts.length === 0) {
+      progressAnalysis += "📈 **Nouveau débutant** :\n";
+      progressAnalysis += "• **Progression actuelle** : Aucune séance encore\n";
+      progressAnalysis += "• **Prochain objectif** : Commencer ta première séance\n";
+      progressAnalysis += "• **Focus** : Technique et régularité\n\n";
+    } else {
+      // Analyser la progression sur les 4 dernières semaines
+      const fourWeeksAgo = new Date();
+      fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
+      const recentWorkouts = workouts.filter(w => new Date(w.date) >= fourWeeksAgo);
+      
+      // Calculer les métriques de progression
+      const totalWorkouts = recentWorkouts.length;
+      const avgExercises = recentWorkouts.reduce((sum, w) => sum + (w.exercises?.length || 0), 0) / totalWorkouts;
+      const avgDuration = recentWorkouts.reduce((sum, w) => sum + (w.duration || 0), 0) / totalWorkouts;
+      
+      // Analyser la progression des poids
+      const weightProgress = analyzeWeightProgress();
+      
+      progressAnalysis += "📊 **Progression (4 dernières semaines)** :\n";
+      progressAnalysis += `• **Séances** : ${totalWorkouts} séances (${Math.round(totalWorkouts/4*7)}/semaine)\n`;
+      progressAnalysis += `• **Exercices/séance** : ${Math.round(avgExercises)} exercices en moyenne\n`;
+      progressAnalysis += `• **Durée moyenne** : ${Math.round(avgDuration)} minutes\n`;
+      
+      if (weightProgress) {
+        progressAnalysis += `• **Progression poids** : ${weightProgress.details}\n`;
+        progressAnalysis += `• **Progression moyenne** : ${weightProgress.average}kg par exercice\n`;
+        progressAnalysis += `• **Exercices avec progression** : ${weightProgress.count} exercices\n`;
+      }
+      
+      // Section dédiée à la progression des poids
+      if (weightProgress) {
+        progressAnalysis += `\n🏋️ **Progression des poids détaillée** :\n`;
+        progressAnalysis += `• **Progression totale** : ${weightProgress.average}kg en moyenne\n`;
+        if (parseFloat(weightProgress.average) > 0) {
+          progressAnalysis += `• **Statut** : ⬆️ Tu progresses bien en force !\n`;
+        } else if (parseFloat(weightProgress.average) < 0) {
+          progressAnalysis += `• **Statut** : ⬇️ Tu as peut-être réduit l'intensité\n`;
+        } else {
+          progressAnalysis += `• **Statut** : ➡️ Progression stable\n`;
+        }
+        progressAnalysis += `• **Détail** : ${weightProgress.details}\n`;
+      }
+      
+      // Analyser la progression de fréquence
+      const allWorkouts = workouts.length;
+      const weeksSinceStart = Math.max(1, Math.floor((new Date() - new Date(workouts[0].date)) / (1000 * 60 * 60 * 24 * 7)));
+      const avgWeeklyWorkouts = allWorkouts / weeksSinceStart;
+      
+      progressAnalysis += `• **Progression globale** : ${allWorkouts} séances en ${weeksSinceStart} semaines\n`;
+      progressAnalysis += `• **Moyenne hebdomadaire** : ${avgWeeklyWorkouts.toFixed(1)} séances/semaine\n`;
+      
+      // Analyser la progression récente vs globale
+      const recentWeeklyAvg = totalWorkouts / 4;
+      if (recentWeeklyAvg > avgWeeklyWorkouts) {
+        progressAnalysis += `• **Tendance** : ⬆️ Tu t'améliores ! (${recentWeeklyAvg.toFixed(1)} vs ${avgWeeklyWorkouts.toFixed(1)})\n`;
+      } else if (recentWeeklyAvg < avgWeeklyWorkouts) {
+        progressAnalysis += `• **Tendance** : ⬇️ Tu as ralenti (${recentWeeklyAvg.toFixed(1)} vs ${avgWeeklyWorkouts.toFixed(1)})\n`;
+      } else {
+        progressAnalysis += `• **Tendance** : ➡️ Stable (${recentWeeklyAvg.toFixed(1)} séances/semaine)\n`;
+      }
+      
+      // Analyser la progression des ressentis
+      const feelingsAnalysis = analyzeFeelings();
+      if (feelingsAnalysis) {
+        progressAnalysis += `\n💭 **Progression des ressentis** :\n${feelingsAnalysis}\n`;
+      }
+      
+      // Analyser la progression des groupes musculaires
+      const muscleGroups = analysis.muscleGroups;
+      const allGroups = ['pectoraux', 'dos', 'épaules', 'biceps', 'triceps', 'jambes', 'abdos', 'cardio'];
+      const workedGroups = allGroups.filter(group => muscleGroups[group] && muscleGroups[group] >= 2);
+      const weakGroups = allGroups.filter(group => !muscleGroups[group] || muscleGroups[group] < 2);
+      
+      progressAnalysis += `\n💪 **Progression musculaire** :\n`;
+      progressAnalysis += `• **Groupes travaillés** : ${workedGroups.length}/8 groupes musculaires\n`;
+      if (workedGroups.length > 0) {
+        progressAnalysis += `• **Développés** : ${workedGroups.join(', ')}\n`;
+      }
+      if (weakGroups.length > 0) {
+        progressAnalysis += `• **À développer** : ${weakGroups.join(', ')}\n`;
+      }
+      
+      // Progression de l'intensité
+      const recentIntensity = recentWorkouts.reduce((sum, w) => {
+        const workoutIntensity = w.exercises?.reduce((exSum, ex) => {
+          const setIntensity = ex.sets?.reduce((setSum, set) => {
+            return setSum + (set.reps || 0) * (parseFloat(set.weight) || 0);
+          }, 0) || 0;
+          return exSum + setIntensity;
+        }, 0) || 0;
+        return sum + workoutIntensity;
+      }, 0) / totalWorkouts;
+      
+      progressAnalysis += `\n🔥 **Progression d'intensité** :\n`;
+      progressAnalysis += `• **Intensité moyenne** : ${Math.round(recentIntensity)} points/séance\n`;
+      
+      // Conseils de progression
+      progressAnalysis += "\n🚀 **Conseils pour progresser** :\n";
+      if (avgExercises < 4) {
+        progressAnalysis += "• Ajoute 1-2 exercices par séance\n";
+      }
+      if (avgDuration < 30) {
+        progressAnalysis += "• Augmente progressivement la durée\n";
+      }
+      if (weakGroups.length > 0) {
+        progressAnalysis += "• Travaille les groupes musculaires négligés\n";
+      }
+      progressAnalysis += "• Varie les intensités (facile/moyen/difficile)\n";
+      progressAnalysis += "• Suis tes ressentis pour ajuster\n";
+    }
+    
+    setMessages(prev => [
+      ...prev,
+      { role: 'assistant', content: progressAnalysis }
+    ]);
+  };
+
   const handleSend = async () => {
     if (!input.trim()) return;
     
@@ -574,7 +763,13 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
           onClick={() => handlePersonalizedRecommendation()}
           className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 rounded shadow font-semibold hover:from-purple-600 hover:to-pink-600 transition text-xs whitespace-nowrap"
         >
-          🧠 Recommandations IA
+          🧠 Conseils IA
+        </button>
+        <button
+          onClick={() => handleGoalsAndProgress()}
+          className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-700 hover:to-indigo-700 transition text-xs whitespace-nowrap"
+        >
+          📈 Progression
         </button>
         {showMenu && (
           <div className="absolute z-50 mt-2 p-4 bg-white border rounded-xl shadow-xl flex flex-col gap-3" style={{ minWidth: 220 }}>

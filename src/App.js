@@ -28,6 +28,7 @@ import PageTransition from './components/PageTransition';
 import Chatbot from './components/Chatbot/Chatbot';
 import ProfileSettings from './components/Profile/ProfileSettings';
 import ChatbotBubble from './components/Chatbot/ChatbotBubble';
+import ThemeToggleBubble from './components/ThemeToggleBubble';
 import useChatGPT from './hooks/useChatGPT';
 
 // Hooks
@@ -421,6 +422,7 @@ function App() {
             sendMessage={sendMessage}
             setMessages={setMessages}
           />
+          <ThemeToggleBubble />
         </div>
       </div>
     </>
