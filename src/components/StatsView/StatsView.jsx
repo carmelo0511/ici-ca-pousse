@@ -111,13 +111,13 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-orange-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-teal-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-orange-100 text-sm font-medium">Groupe préféré</p>
+              <p className="text-teal-100 text-sm font-medium">Groupe préféré</p>
               <p className="text-2xl font-bold">{getMostWorkedMuscleGroup(workouts)}</p>
             </div>
-            <Dumbbell className="h-12 w-12 text-orange-200" />
+            <Dumbbell className="h-12 w-12 text-teal-200" />
           </div>
         </div>
       </div>
@@ -222,15 +222,26 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <span>📊</span>
               <span>Fréquence d'entraînement</span>
             </h4>
-            {workouts.length === 0 ? (
-              <p className="text-gray-600">Commencez par faire votre première séance !</p>
-            ) : workouts.length < 5 ? (
-              <p className="text-gray-600">Excellent début ! Continuez à vous entraîner régulièrement.</p>
-            ) : workouts.length < 15 ? (
-              <p className="text-gray-600">Bonne régularité ! Essayez d'ajouter une séance par semaine.</p>
-            ) : (
-              <p className="text-gray-600">Impressionnant ! Vous êtes très régulier dans vos entraînements.</p>
-            )}
+            {(() => {
+              const recentWorkouts = workouts.filter(w => {
+                const workoutDate = new Date(w.date);
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                return workoutDate >= thirtyDaysAgo;
+              });
+              
+              if (workouts.length === 0) {
+                return <p className="text-gray-600">Commencez par faire votre première séance !</p>;
+              } else if (recentWorkouts.length < 4) {
+                return <p className="text-gray-600">Augmentez votre fréquence : visez 3-4 séances par semaine pour de meilleurs résultats.</p>;
+              } else if (recentWorkouts.length < 8) {
+                return <p className="text-gray-600">Bonne régularité ! Maintenez ce rythme pour progresser constamment.</p>;
+              } else if (recentWorkouts.length < 12) {
+                return <p className="text-gray-600">Excellent rythme ! Vous êtes sur la bonne voie pour atteindre vos objectifs.</p>;
+              } else {
+                return <p className="text-gray-600">Impressionnant ! Votre régularité est exemplaire. Continuez ainsi !</p>;
+              }
+            })()}
           </div>
 
           {/* Recommandation basée sur le groupe musculaire */}
@@ -241,21 +252,31 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
             </h4>
             {(() => {
               const muscleCount = {};
-              workouts.forEach(w => {
+              const recentWorkouts = workouts.filter(w => {
+                const workoutDate = new Date(w.date);
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                return workoutDate >= thirtyDaysAgo;
+              });
+              
+              recentWorkouts.forEach(w => {
                 w.exercises.forEach(ex => {
                   if (ex.type) {
                     muscleCount[ex.type] = (muscleCount[ex.type] || 0) + 1;
                   }
                 });
               });
+              
               const muscleGroups = Object.keys(muscleCount);
               
-              if (muscleGroups.length < 3) {
-                return <p className="text-gray-600">Diversifiez vos entraînements en travaillant différents groupes musculaires.</p>;
-              } else if (muscleGroups.length < 5) {
-                return <p className="text-gray-600">Bon équilibre ! Continuez à varier vos exercices.</p>;
+              if (muscleGroups.length < 2) {
+                return <p className="text-gray-600">Diversifiez vos entraînements ! Ajoutez des exercices pour d'autres groupes musculaires.</p>;
+              } else if (muscleGroups.length < 4) {
+                return <p className="text-gray-600">Bon équilibre ! Essayez d'ajouter 1-2 groupes musculaires supplémentaires.</p>;
+              } else if (muscleGroups.length < 6) {
+                return <p className="text-gray-600">Excellent équilibre ! Vous travaillez une bonne variété de muscles.</p>;
               } else {
-                return <p className="text-gray-600">Excellent équilibre musculaire ! Vous travaillez tous les groupes.</p>;
+                return <p className="text-gray-600">Parfait ! Votre programme est très équilibré et complet.</p>;
               }
             })()}
           </div>
@@ -266,13 +287,28 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <span>⏱️</span>
               <span>Durée des séances</span>
             </h4>
-            {stats.avgDuration < 30 ? (
-              <p className="text-gray-600">Vos séances sont courtes. Essayez d'augmenter progressivement la durée.</p>
-            ) : stats.avgDuration < 60 ? (
-              <p className="text-gray-600">Durée équilibrée ! Parfait pour maintenir votre forme.</p>
-            ) : (
-              <p className="text-gray-600">Séances intenses ! Assurez-vous de bien récupérer entre les entraînements.</p>
-            )}
+            {(() => {
+              const recentWorkouts = workouts.filter(w => {
+                const workoutDate = new Date(w.date);
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                return workoutDate >= thirtyDaysAgo;
+              });
+              
+              const recentAvgDuration = recentWorkouts.length > 0 
+                ? recentWorkouts.reduce((total, w) => total + (w.duration || 0), 0) / recentWorkouts.length 
+                : stats.avgDuration;
+              
+              if (recentAvgDuration < 25) {
+                return <p className="text-gray-600">Séances courtes : augmentez progressivement à 30-45 min pour de meilleurs résultats.</p>;
+              } else if (recentAvgDuration < 45) {
+                return <p className="text-gray-600">Durée équilibrée ! Parfait pour maintenir votre forme et progresser.</p>;
+              } else if (recentAvgDuration < 75) {
+                return <p className="text-gray-600">Séances intenses ! Excellente intensité pour maximiser vos gains.</p>;
+              } else {
+                return <p className="text-gray-600">Séances très longues ! Assurez-vous de bien récupérer et de varier l'intensité.</p>;
+              }
+            })()}
           </div>
 
           {/* Recommandation basée sur le moment */}
@@ -281,15 +317,40 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <span>🌅</span>
               <span>Moment d'entraînement</span>
             </h4>
-            {preferredTime.name === 'Matin' ? (
-              <p className="text-gray-600">Entraînement matinal ! Excellent pour booster votre métabolisme.</p>
-            ) : preferredTime.name === 'Après-midi' ? (
-              <p className="text-gray-600">Séances d'après-midi ! Bon moment pour des performances optimales.</p>
-            ) : preferredTime.name === 'Soir' ? (
-              <p className="text-gray-600">Entraînement du soir ! Pensez à bien vous étirer avant de dormir.</p>
-            ) : (
-              <p className="text-gray-600">Séances nocturnes ! Assurez-vous de bien vous reposer après.</p>
-            )}
+            {(() => {
+              const recentWorkouts = workouts.filter(w => {
+                const workoutDate = new Date(w.date);
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                return workoutDate >= thirtyDaysAgo;
+              });
+              
+              const timeDistribution = { morning: 0, afternoon: 0, evening: 0, night: 0 };
+              recentWorkouts.forEach(w => {
+                if (w.startTime) {
+                  const hour = parseInt(w.startTime.split(':')[0]);
+                  if (hour >= 5 && hour < 12) timeDistribution.morning++;
+                  else if (hour >= 12 && hour < 18) timeDistribution.afternoon++;
+                  else if (hour >= 18 && hour < 22) timeDistribution.evening++;
+                  else timeDistribution.night++;
+                }
+              });
+              
+              const totalWithTime = Object.values(timeDistribution).reduce((a, b) => a + b, 0);
+              const preferredTimeRecent = totalWithTime > 0 ? 
+                Object.entries(timeDistribution).reduce((a, b) => a[1] > b[1] ? a : b)[0] : 
+                preferredTime.name.toLowerCase();
+              
+              if (preferredTimeRecent === 'morning' || preferredTimeRecent === 'matin') {
+                return <p className="text-gray-600">Entraînement matinal ! Excellent pour booster votre métabolisme et commencer la journée en forme.</p>;
+              } else if (preferredTimeRecent === 'afternoon' || preferredTimeRecent === 'après-midi') {
+                return <p className="text-gray-600">Séances d'après-midi ! Moment optimal pour des performances maximales et une récupération efficace.</p>;
+              } else if (preferredTimeRecent === 'evening' || preferredTimeRecent === 'soir') {
+                return <p className="text-gray-600">Entraînement du soir ! Pensez à bien vous étirer et à manger léger après la séance.</p>;
+              } else {
+                return <p className="text-gray-600">Séances nocturnes ! Assurez-vous de bien vous reposer et d'éviter les stimulants après l'entraînement.</p>;
+              }
+            })()}
           </div>
         </div>
 
@@ -307,12 +368,17 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               return workoutDate.getMonth() === thisMonth && workoutDate.getFullYear() === thisYear;
             });
             
-            if (monthWorkouts.length < 8) {
-              return <p className="text-gray-600">Objectif : Faites au moins 8 séances ce mois-ci pour maintenir votre progression !</p>;
+            const daysElapsed = new Date().getDate();
+            const progressPercentage = (monthWorkouts.length / Math.max(1, Math.floor(daysElapsed / 7) * 3)) * 100;
+            
+            if (monthWorkouts.length < 4) {
+              return <p className="text-gray-600">Objectif : Faites au moins 8 séances ce mois-ci pour maintenir votre progression ! ({Math.round(progressPercentage)}% de l'objectif)</p>;
+            } else if (monthWorkouts.length < 8) {
+              return <p className="text-gray-600">Objectif : Essayez d'atteindre 12 séances ce mois-ci pour optimiser vos résultats ! ({Math.round(progressPercentage)}% de l'objectif)</p>;
             } else if (monthWorkouts.length < 12) {
-              return <p className="text-gray-600">Objectif : Essayez d'atteindre 12 séances ce mois-ci pour optimiser vos résultats !</p>;
+              return <p className="text-gray-600">Excellent ! Visez 16 séances ce mois-ci pour maximiser vos gains ! ({Math.round(progressPercentage)}% de l'objectif)</p>;
             } else {
-              return <p className="text-gray-600">Félicitations ! Vous avez dépassé l'objectif du mois. Continuez ainsi !</p>;
+              return <p className="text-gray-600">Félicitations ! Vous avez dépassé l'objectif du mois. Continuez ainsi ! ({Math.round(progressPercentage)}% de l'objectif)</p>;
             }
           })()}
         </div>
