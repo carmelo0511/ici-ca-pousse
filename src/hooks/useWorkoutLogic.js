@@ -107,6 +107,11 @@ export default function useWorkoutLogic({
                 `🎉 Niveau ${result.newLevel} atteint ! ${result.newLevelName}`,
                 'success'
               );
+            } else if (result && result.streakMilestoneReached) {
+              showToastMsg(
+                `🏆 PALIER STREAK ATTEINT ! ${result.newStreak} jours +${result.milestoneXP} XP !`,
+                'success'
+              );
             } else if (result && result.streakIncreased) {
               showToastMsg(
                 `🔥 Streak +1 ! ${result.newStreak} jours !`,

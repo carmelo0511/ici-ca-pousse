@@ -47,41 +47,53 @@ export const BADGE_CONFIG = {
     color: 'bg-pink-100 text-pink-800 border-pink-200'
   },
   
-  // Badges de séries
-  [BADGE_TYPES.STREAK_5]: {
-    name: 'Série de 5',
+  // Badges de séries améliorés
+  [BADGE_TYPES.STREAK_1]: {
+    name: 'Débutant Motivé',
     icon: '🔥',
-    description: '5 séances consécutives',
+    description: 'Premier jour de streak !',
     color: 'bg-orange-100 text-orange-800 border-orange-200'
   },
-  [BADGE_TYPES.STREAK_10]: {
-    name: 'Série de 10',
+  [BADGE_TYPES.STREAK_3]: {
+    name: 'Momentum',
     icon: '🔥🔥',
-    description: '10 séances consécutives',
-    color: 'bg-red-100 text-red-800 border-red-200'
+    description: '3 jours consécutifs',
+    color: 'bg-pink-100 text-pink-800 border-pink-200'
   },
-  [BADGE_TYPES.STREAK_20]: {
-    name: 'Série de 20',
+  [BADGE_TYPES.STREAK_7]: {
+    name: 'Feu Sacré',
     icon: '🔥🔥🔥',
-    description: '20 séances consécutives',
-    color: 'bg-red-100 text-red-800 border-red-200'
+    description: '7 jours consécutifs',
+    color: 'bg-purple-100 text-purple-800 border-purple-200'
+  },
+  [BADGE_TYPES.STREAK_14]: {
+    name: 'Régularité d\'Acier',
+    icon: '🎯',
+    description: '14 jours consécutifs',
+    color: 'bg-blue-100 text-blue-800 border-blue-200'
+  },
+  [BADGE_TYPES.STREAK_21]: {
+    name: 'Habitude de Champion',
+    icon: '💪',
+    description: '21 jours consécutifs',
+    color: 'bg-green-100 text-green-800 border-green-200'
   },
   [BADGE_TYPES.STREAK_30]: {
-    name: 'Série de 30',
-    icon: '🔥🔥🔥🔥',
-    description: '30 séances consécutives',
-    color: 'bg-red-100 text-red-800 border-red-200'
+    name: 'Incroyable Détermination',
+    icon: '🌟',
+    description: '30 jours consécutifs',
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200'
   },
   [BADGE_TYPES.STREAK_50]: {
-    name: 'Série de 50',
-    icon: '🔥🔥🔥🔥🔥',
-    description: '50 séances consécutives',
-    color: 'bg-red-100 text-red-800 border-red-200'
+    name: 'Mythe de la Musculation',
+    icon: '⚡',
+    description: '50 jours consécutifs',
+    color: 'bg-orange-100 text-orange-800 border-orange-200'
   },
   [BADGE_TYPES.STREAK_100]: {
-    name: 'Série de 100',
-    icon: '🔥🔥🔥🔥🔥🔥',
-    description: '100 séances consécutives',
+    name: 'Légende du Fitness',
+    icon: '👑',
+    description: '100 jours consécutifs',
     color: 'bg-red-100 text-red-800 border-red-200'
   },
   

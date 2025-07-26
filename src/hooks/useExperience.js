@@ -149,6 +149,8 @@ export const useExperience = (user) => {
     // Calcul streak amélioré
     let newStreak = 1;
     let streakIncreased = false;
+    let streakMilestoneReached = false;
+    let milestoneXP = 0;
     
     if (previousWorkouts.length > 0) {
       const lastWorkoutDate = parseLocalDate(previousWorkouts[0].date);
@@ -174,6 +176,53 @@ export const useExperience = (user) => {
       // Premier workout - commencer le streak
       newStreak = 1;
       streakIncreased = true;
+    }
+    
+    // Vérifier les paliers de streak pour les récompenses
+    if (streakIncreased) {
+      const oldStreak = currentExp.streak;
+      const newStreakValue = newStreak;
+      
+      // Palier 1 jour (premier streak)
+      if (oldStreak === 0 && newStreakValue >= 1) {
+        streakMilestoneReached = true;
+        milestoneXP = 50; // Bonus pour le premier jour
+      }
+      // Palier 3 jours
+      else if (oldStreak < 3 && newStreakValue >= 3) {
+        streakMilestoneReached = true;
+        milestoneXP = 100;
+      }
+      // Palier 7 jours
+      else if (oldStreak < 7 && newStreakValue >= 7) {
+        streakMilestoneReached = true;
+        milestoneXP = 200;
+      }
+      // Palier 14 jours
+      else if (oldStreak < 14 && newStreakValue >= 14) {
+        streakMilestoneReached = true;
+        milestoneXP = 300;
+      }
+      // Palier 21 jours
+      else if (oldStreak < 21 && newStreakValue >= 21) {
+        streakMilestoneReached = true;
+        milestoneXP = 500;
+      }
+      // Palier 30 jours
+      else if (oldStreak < 30 && newStreakValue >= 30) {
+        streakMilestoneReached = true;
+        milestoneXP = 1000;
+      }
+      // Palier 50 jours
+      else if (oldStreak < 50 && newStreakValue >= 50) {
+        streakMilestoneReached = true;
+        milestoneXP = 2000;
+      }
+      // Palier 100 jours
+      else if (oldStreak < 100 && newStreakValue >= 100) {
+        streakMilestoneReached = true;
+        milestoneXP = 5000;
+      }
     }
 
     try {
@@ -201,7 +250,9 @@ export const useExperience = (user) => {
         newLevel,
         newLevelName,
         streakIncreased,
-        newStreak
+        newStreak,
+        streakMilestoneReached,
+        milestoneXP
       };
     } catch (error) {
       console.error("Erreur lors de l'ajout d'XP:", error);
