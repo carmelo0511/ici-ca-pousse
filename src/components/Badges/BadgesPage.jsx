@@ -47,6 +47,13 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
         message: `🎁 Tu peux débloquer un badge de ton choix cette semaine !`, 
         type: 'success' 
       });
+      
+      // Auto-dismiss après 5 secondes
+      const timer = setTimeout(() => {
+        setToast(null);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
     }
   }, [canUnlock, unlockLoading]);
 
