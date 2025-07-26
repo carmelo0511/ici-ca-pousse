@@ -487,9 +487,9 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
         </button>
         <button
           onClick={() => handlePersonalizedRecommendation()}
-          className="bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-orange-500 hover:to-red-600 transition"
+          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-purple-600 hover:to-pink-600 transition border-2 border-purple-300"
         >
-          Recommandations IA
+          🧠 Recommandations IA
         </button>
         {showMenu && (
           <div className="absolute z-50 mt-2 p-4 bg-white border rounded-xl shadow-xl flex flex-col gap-3" style={{ minWidth: 220 }}>
