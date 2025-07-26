@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, Bell, ChevronLeft, ChevronRight, Bot } from 'lucide-react';
+import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, Bell, ChevronLeft, ChevronRight, Bot, Target } from 'lucide-react';
 // import { useTranslation } from 'react-i18next'; // Temporarily disabled for CI
 import PropTypes from 'prop-types';
 
