@@ -5,6 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from './utils/firebase';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Styles
 import './App.css';
@@ -429,6 +431,10 @@ function App() {
             setMessages={setMessages}
           />
           <ThemeToggleBubble />
+          
+          {/* Vercel Analytics et Speed Insights */}
+          <Analytics />
+          <SpeedInsights />
         </div>
       </div>
     </>
