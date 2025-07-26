@@ -21,7 +21,7 @@ import FriendsList from './components/Profile/FriendsList';
 import LeaderboardView from './components/Leaderboard/LeaderboardView';
 import BadgesPage from './components/Badges/BadgesPage';
 import Challenges from './components/Challenges';
-import DailyChallenges from './components/DailyChallenges';
+
 
 import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
@@ -95,7 +95,7 @@ function App() {
     clearExercises,
     setExercisesFromWorkout,
   } = useExercises();
-  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP, addXP } = useExperience(user);
+  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP } = useExperience(user);
   const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
 
   const { friends } = useFriends(user, addFriendXP);
