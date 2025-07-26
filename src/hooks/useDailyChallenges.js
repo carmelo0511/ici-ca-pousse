@@ -274,9 +274,9 @@ export const useDailyChallenges = (user, workouts, addXP) => {
   const checkDailyProgress = useCallback(() => {
     if (!workouts || workouts.length === 0) return;
 
-    const today = new Date().toDateString();
+    const today = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD
     const todayWorkouts = workouts.filter(workout => 
-      new Date(workout.date).toDateString() === today
+      workout.date === today
     );
 
     const updatedChallenges = dailyChallenges.map(challenge => {
@@ -316,8 +316,9 @@ export const useDailyChallenges = (user, workouts, addXP) => {
 
         case 'daily_morning':
           const morningWorkouts = todayWorkouts.filter(workout => {
-            const workoutTime = new Date(workout.date);
-            return workoutTime.getHours() < 10;
+            if (!workout.startTime) return false;
+            const [hours] = workout.startTime.split(':');
+            return parseInt(hours) < 10;
           });
           progress = morningWorkouts.length;
           completed = progress >= challenge.target;
