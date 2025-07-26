@@ -10,7 +10,7 @@ import { useNotifications } from '../hooks/useNotifications';
 
 const Challenges = ({ user }) => {
   const { friends } = useFriends(user);
-  const { notifications, markAsRead, removeNotification } = useNotifications(user);
+  const { notifications, markAsRead } = useNotifications(user);
   const { 
     challenges, 
     createChallenge, 
@@ -19,7 +19,6 @@ const Challenges = ({ user }) => {
     getChallengeStatus,
     getSentChallenges,
     getReceivedChallenges,
-    getAllUserChallenges,
     getActiveChallenges,
     getCompletedChallenges,
     acceptChallenge,
@@ -31,7 +30,6 @@ const Challenges = ({ user }) => {
     challengeTargets,
     challengeRewards,
     calculateChallengeLevel,
-    calculateChallengeRewards,
     getNextLevel
   } = useChallenges(user);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -134,7 +132,6 @@ const Challenges = ({ user }) => {
   const stats = getChallengeStats();
   const sentChallenges = getSentChallenges();
   const receivedChallenges = getReceivedChallenges();
-  const allUserChallenges = getAllUserChallenges();
 
   // Handlers pour les actions sur les défis
   const handleAcceptChallenge = async (challengeId) => {

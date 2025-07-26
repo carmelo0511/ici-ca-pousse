@@ -1,18 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-function getStreakMessage(streak) {
-  if (streak >= 100) return '🔥 LÉGENDAIRE !';
-  if (streak >= 50) return '⚡ MYTHIQUE !';
-  if (streak >= 30) return '🌟 INCROYABLE !';
-  if (streak >= 21) return '💪 HABITUDE !';
-  if (streak >= 14) return '🎯 RÉGULIER !';
-  if (streak >= 7) return '🔥 EN FEU !';
-  if (streak >= 3) return '🔥 CONTINUE !';
-  if (streak >= 1) return '🔥 COMMENCE !';
-  return '';
-}
-
 function getStreakTitle(streak) {
   if (streak >= 100) return 'LÉGENDE DU FITNESS';
   if (streak >= 50) return 'MYTHE DE LA MUSCULATION';

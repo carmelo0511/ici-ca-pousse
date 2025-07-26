@@ -197,7 +197,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     }
     
     return achievedLevel;
-  }, []);
+  }, [challengeTargets]);
 
   // Fonction pour calculer les récompenses
   const calculateChallengeRewards = useCallback((score, type, target, duration) => {
@@ -216,7 +216,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
       multiplier: baseReward.multiplier,
       durationBonus: durationMultiplier
     };
-  }, [calculateChallengeLevel]);
+  }, [calculateChallengeLevel, challengeRewards]);
 
   // Fonction pour obtenir le prochain niveau à atteindre
   const getNextLevel = useCallback((score, type) => {
@@ -234,7 +234,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
     }
     
     return null; // Niveau maximum atteint
-  }, []);
+  }, [challengeTargets, challengeRewards]);
 
   const loadChallenges = useCallback(async () => {
     if (!user?.uid) return;
@@ -707,17 +707,17 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
 
   const getSentChallenges = useCallback(() => {
     return challenges.filter(challenge => challenge.senderId === user?.uid);
-  }, [challenges, user]);
+  }, [challenges, user?.uid]);
 
   const getReceivedChallenges = useCallback(() => {
     return challenges.filter(challenge => challenge.receiverId === user?.uid);
-  }, [challenges, user]);
+  }, [challenges, user?.uid]);
 
   const getAllUserChallenges = useCallback(() => {
     return challenges.filter(challenge =>
       challenge.senderId === user?.uid || challenge.receiverId === user?.uid
     );
-  }, [challenges, user]);
+  }, [challenges, user?.uid]);
 
   const acceptChallenge = useCallback(async (challengeId) => {
     try {

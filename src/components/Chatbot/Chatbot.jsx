@@ -353,8 +353,6 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     // Ajouter des recommandations spécifiques
     const muscleGroups = Object.keys(analysis.muscleGroups);
     if (muscleGroups.length > 0) {
-      const mostWorked = Object.entries(analysis.muscleGroups)
-        .sort(([,a], [,b]) => b - a)[0][0];
       explanation += `\n🎯 Cette séance équilibre ton entraînement en ciblant des groupes moins travaillés récemment.`;
     }
 
@@ -468,7 +466,6 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       // Analyser la progression
       const recentWorkouts = workouts.slice(-7);
       const avgExercises = recentWorkouts.reduce((sum, w) => sum + (w.exercises?.length || 0), 0) / recentWorkouts.length;
-      const avgDuration = recentWorkouts.reduce((sum, w) => sum + (w.duration || 0), 0) / recentWorkouts.length;
       
       if (avgExercises < 4) {
         recommendation += "📈 **Progression** : Tes séances sont courtes. Essaie d'ajouter 1-2 exercices.\n";
