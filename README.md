@@ -68,6 +68,13 @@ npm start
 - **Recommandations personnalisées** : Conseils adaptés à votre progression
 - **Équilibre musculaire** : Identification des groupes négligés
 
+#### 📈 **Analyse de progression avancée**
+- **Bouton "📈 Progression"** : Analyse détaillée de votre évolution
+- **Progression des poids** : Suivi des charges par exercice sur 4 semaines
+- **Analyse des performances** : Tendances, améliorations, points d'attention
+- **Recommandations ciblées** : Conseils basés sur vos données réelles
+- **Visualisation des progrès** : Graphiques et statistiques détaillées
+
 #### 🧠 **Recommandations IA personnalisées**
 - **Bouton "Recommandations IA"** : Analyse complète de votre profil
 - **Niveau d'activité** : Débutant, intermédiaire, avancé
@@ -81,6 +88,7 @@ npm start
 - **Questions libres** : Sport, nutrition, motivation, bien-être
 - **Messages explicatifs** : Explications des recommandations
 - **Mode sombre/clair** : Interface adaptée à tous les thèmes
+- **Bulle flottante** : Accès au coach depuis tous les onglets
 
 ### 🎮 Gamification Avancée
 - **Système de niveaux et XP** : Progression basée sur la durée, variété d'exercices et streaks
@@ -102,11 +110,13 @@ npm start
 ### 📊 Analytics & Progression
 - **Système de suivi du poids** : Enregistrez votre poids chaque semaine, visualisez votre évolution sur une courbe dédiée, recevez un rappel intelligent pour ne rien oublier.
 - **Statistiques avancées** : Graphiques, comparaisons, historique
-- **Courbe d'évolution du poids** : Suivi visuel de votre poids semaine par semaine, affichée en haut de la page Statistiques
+- **Courbe d'évolution du poids** : Suivi visuel de votre poids semaine par semaine, affichée en haut de la page Statistiques avec dates formatées en français
 - **Notification hebdomadaire** : Rappel automatique chaque début de semaine pour mettre à jour votre poids (avec option 'C'est le même')
 - **Suivi des performances** : Records personnels, tendances
 - **Calendrier interactif** : Vue d'ensemble de vos séances avec bouton de suppression
 - **Export de données** : Sauvegarde de vos progrès
+- **Ressentis après séance** : Enregistrez vos sensations (facile, difficile, fatigué, motivé, etc.)
+- **Analyse des ressentis** : Le coach IA analyse vos ressentis pour améliorer ses conseils
 
 ### 🎨 Interface Utilisateur Améliorée
 - **Boutons de suppression visibles** : Suppression d'exercices et de séries avec confirmation
@@ -114,6 +124,9 @@ npm start
 - **Confirmations de sécurité** : Popups de confirmation avant suppression
 - **Interface intuitive** : Gestion efficace des séances même quand on n'aime pas la séance proposée
 - **Couleurs optimisées** : Boutons visibles en mode clair et sombre
+- **Mode sombre/clair** : Bulle flottante pour changer de thème instantanément
+- **Header moderne** : Design épuré avec cercle de niveau blanc et streak intégrée
+- **Poids décimal** : Support des poids avec virgules (ex: 70.5 kg)
 
 ### 🌐 Internationalisation
 - **Français / Anglais** : Interface disponible dans deux langues
@@ -411,6 +424,12 @@ src/tests/
 - [x] **Attribution correcte des groupes musculaires** (plus d'exercices "custom")
 - [x] **Interface de suppression améliorée** (boutons visibles, confirmations, "Vider la séance")
 - [x] **Analyse intelligente des séances** (régularité, progression, équilibre musculaire)
+- [x] **Analyse de progression avancée** (bouton "📈 Progression" avec analyse détaillée des poids)
+- [x] **Système de ressentis** (enregistrement des sensations après chaque séance)
+- [x] **Mode sombre/clair** (bulle flottante pour changer de thème)
+- [x] **Poids décimal** (support des poids avec virgules)
+- [x] **Header optimisé** (cercle de niveau blanc, streak intégrée)
+- [x] **Dates corrigées** (calcul correct des semaines pour l'évolution du poids)
 
 ### 🚧 En développement
 - [ ] Analyse de performance avancée
@@ -472,22 +491,27 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 
 ## 🎯 Exemples d'utilisation du Coach IA
 
-### 💬 Questions générales
+#### 💬 Questions générales
 - "Comment améliorer ma récupération après l'entraînement ?"
 - "Peux-tu me donner une recette saine ?"
 - "J'ai du mal à rester motivé, des conseils ?"
 - "Explique-moi la différence entre cardio et musculation."
 - "Quels sont les bienfaits de la méditation ?"
 
-### 🏋️ Génération de séances
+#### 🏋️ Génération de séances
 - "Propose-moi une séance full body difficile"
 - "Je veux une séance abdos facile"
 - "Donne-moi une séance cardio pour perdre du poids"
 
-### 📊 Analyse et conseils
+#### 📊 Analyse et conseils
 - "Comment analyser mes progrès ?"
 - "Quels exercices pour renforcer mes épaules ?"
 - "Je me sens fatigué, que faire ?"
+
+#### 📈 Progression et performance
+- "Analyse ma progression sur les derniers mois"
+- "Quels sont mes points forts et mes axes d'amélioration ?"
+- "Comment optimiser mes séances pour progresser plus vite ?"
 
 ---
 
