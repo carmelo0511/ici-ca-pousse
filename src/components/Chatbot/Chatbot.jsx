@@ -560,19 +560,19 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       <div className="mb-2 flex gap-2 items-center">
         <button
           onClick={() => setShowMenu(v => !v)}
-          className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-green-500 hover:to-blue-600 transition"
+          className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-green-500 hover:to-blue-600 transition text-sm whitespace-nowrap"
         >
           Propose-moi une séance
         </button>
         <button
           onClick={handleRecapLastWorkouts}
-          className="bg-gradient-to-r from-indigo-400 to-purple-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-indigo-500 hover:to-purple-600 transition"
+          className="bg-gradient-to-r from-indigo-400 to-purple-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-indigo-500 hover:to-purple-600 transition text-sm whitespace-nowrap"
         >
           Récap des dernières séances
         </button>
         <button
           onClick={() => handlePersonalizedRecommendation()}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-purple-600 hover:to-pink-600 transition"
+          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-purple-600 hover:to-pink-600 transition text-sm whitespace-nowrap"
         >
           🧠 Recommandations IA
         </button>
