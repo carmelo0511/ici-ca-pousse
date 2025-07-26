@@ -572,7 +572,7 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
         </button>
         <button
           onClick={() => handlePersonalizedRecommendation()}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-purple-600 hover:to-pink-600 transition border-2 border-purple-300"
+          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded shadow font-semibold hover:from-purple-600 hover:to-pink-600 transition"
         >
           🧠 Recommandations IA
         </button>
