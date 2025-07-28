@@ -84,53 +84,53 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-green-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-100 text-sm font-medium">{t('total_sets')}</p>
+              <p className="text-blue-100 text-sm font-medium">{t('total_sets')}</p>
               <p className="text-4xl font-bold">{stats.totalSets}</p>
             </div>
-            <Dumbbell className="h-12 w-12 text-green-200" />
+            <Dumbbell className="h-12 w-12 text-blue-200" />
           </div>
         </div>
 
-        <div className="bg-purple-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-purple-100 text-sm font-medium">{t('total_reps')}</p>
+              <p className="text-blue-100 text-sm font-medium">{t('total_reps')}</p>
               <p className="text-4xl font-bold">{stats.totalReps}</p>
             </div>
-            <TrendingUp className="h-12 w-12 text-purple-200" />
+            <TrendingUp className="h-12 w-12 text-blue-200" />
           </div>
         </div>
 
-        <div className="bg-red-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-red-100 text-sm font-medium">{t('avg_duration')}</p>
+              <p className="text-blue-100 text-sm font-medium">{t('avg_duration')}</p>
               <p className="text-4xl font-bold">{stats.avgDuration} min</p>
             </div>
-            <Clock className="h-12 w-12 text-red-200" />
+            <Clock className="h-12 w-12 text-blue-200" />
           </div>
         </div>
 
-        <div className="bg-indigo-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-indigo-100 text-sm font-medium">{t('regularity')}</p>
+              <p className="text-blue-100 text-sm font-medium">{t('regularity')}</p>
               <p className="text-4xl font-bold">{workouts.length > 0 ? '💪' : '🔥'}</p>
             </div>
-            <Zap className="h-12 w-12 text-indigo-200" />
+            <Zap className="h-12 w-12 text-blue-200" />
           </div>
         </div>
 
-        <div className="bg-pink-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-pink-100 text-sm font-medium">Groupe préféré</p>
+              <p className="text-blue-100 text-sm font-medium">Groupe préféré</p>
               <p className="text-2xl font-bold">{getMostWorkedMuscleGroup(workouts)}</p>
             </div>
-            <Dumbbell className="h-12 w-12 text-pink-200" />
+            <Dumbbell className="h-12 w-12 text-blue-200" />
           </div>
         </div>
       </div>
@@ -145,7 +145,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Moment préféré */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
               <h4 className="text-lg font-semibold text-gray-800 mb-3">Moment préféré</h4>
               <div className="flex items-center space-x-3">
                 <span className="text-3xl">{preferredTime.icon}</span>
@@ -201,20 +201,20 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                 <div className="font-bold text-blue-800">{avgDurationByTime.morning} min</div>
                 <div className="text-sm text-blue-600">Matin</div>
               </div>
-              <div className="bg-yellow-100 rounded-xl p-4 text-center">
+              <div className="bg-blue-100 rounded-xl p-4 text-center">
                 <div className="text-2xl mb-1">☀️</div>
-                <div className="font-bold text-yellow-800">{avgDurationByTime.afternoon} min</div>
-                <div className="text-sm text-yellow-600">Après-midi</div>
+                <div className="font-bold text-blue-800">{avgDurationByTime.afternoon} min</div>
+                <div className="text-sm text-blue-600">Après-midi</div>
               </div>
-              <div className="bg-orange-100 rounded-xl p-4 text-center">
+              <div className="bg-blue-100 rounded-xl p-4 text-center">
                 <div className="text-2xl mb-1">🌆</div>
-                <div className="font-bold text-orange-800">{avgDurationByTime.evening} min</div>
-                <div className="text-sm text-orange-600">Soir</div>
+                <div className="font-bold text-blue-800">{avgDurationByTime.evening} min</div>
+                <div className="text-sm text-blue-600">Soir</div>
               </div>
-              <div className="bg-purple-100 rounded-xl p-4 text-center">
+              <div className="bg-blue-100 rounded-xl p-4 text-center">
                 <div className="text-2xl mb-1">🌙</div>
-                <div className="font-bold text-purple-800">{avgDurationByTime.night} min</div>
-                <div className="text-sm text-purple-600">Nuit</div>
+                <div className="font-bold text-blue-800">{avgDurationByTime.night} min</div>
+                <div className="text-sm text-blue-600">Nuit</div>
               </div>
             </div>
           </div>
@@ -230,7 +230,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Recommandation basée sur la fréquence */}
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>📊</span>
               <span>Fréquence d'entraînement</span>
@@ -258,7 +258,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur le groupe musculaire */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>💪</span>
               <span>Équilibre musculaire</span>
@@ -295,7 +295,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur la durée */}
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>⏱️</span>
               <span>Durée des séances</span>
@@ -325,7 +325,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur le moment */}
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>🌅</span>
               <span>Moment d'entraînement</span>
