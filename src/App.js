@@ -29,6 +29,7 @@ import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
 
 import ProfileSettings from './components/Profile/ProfileSettings';
+import ProfilePage from './components/Profile/ProfilePage';
 import ChatbotBubble from './components/Chatbot/ChatbotBubble';
 import ThemeToggleBubble from './components/ThemeToggleBubble';
 
@@ -59,7 +60,6 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
   const [showWeightNotif, setShowWeightNotif] = useState(false);
   const [isFading, setIsFading] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
   
   // Hook personnalisé pour l'état global
   const appState = useAppState();
@@ -311,7 +311,7 @@ function App() {
   const handleUpdateWeight = () => {
     setIsFading(true);
     setTimeout(() => setShowWeightNotif(false), 400);
-    setShowProfileModal(true);
+    setActiveTab('profile');
   };
 
   if (!authChecked || userLoading) {
@@ -357,19 +357,7 @@ function App() {
           </div>
         </div>
       )}
-      {/* Modal profil global */}
-      {user && (
-        <ProfileSettings
-          user={user}
-          workouts={workouts}
-          challenges={challenges}
-          isOpen={showProfileModal}
-          onClose={() => setShowProfileModal(false)}
-          onUserUpdate={refreshUserProfile}
-          addBadgeUnlockXP={addBadgeUnlockXP}
-          refreshUserProfile={refreshUserProfile}
-        />
-      )}
+
       <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
         <div id="main-content" className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
           <Header 
@@ -478,17 +466,11 @@ function App() {
 
             {/* Onglet Profil */}
             <PageTransition isActive={activeTab === 'profile'}>
-              <ProfileSettings 
+              <ProfilePage 
                 user={user} 
                 workouts={workouts} 
                 challenges={challenges} 
-                isOpen={true} 
-                onClose={() => setActiveTab('workout')}
-                onUserUpdate={(updatedUser) => {
-                  // Mettre à jour l'utilisateur dans l'état global
-                  // Note: setUser n'est plus disponible car on utilise useUserProfile
-                  // Les changements sont gérés automatiquement par le hook
-                }}
+                onUserUpdate={refreshUserProfile}
                 addBadgeUnlockXP={addBadgeUnlockXP}
                 refreshUserProfile={refreshUserProfile}
               />

@@ -72,6 +72,16 @@ export const useKeyboardNavigation = (activeTab, setActiveTab, tabs) => {
           e.preventDefault();
           setActiveTab('badges');
           break;
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          setActiveTab('profile');
+          break;
+        case 't':
+        case 'T':
+          e.preventDefault();
+          setActiveTab('templates');
+          break;
         case 'n':
         case 'N':
           e.preventDefault();

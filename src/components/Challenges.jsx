@@ -265,8 +265,13 @@ const Challenges = ({ user }) => {
 
   return (
     <div className="p-4 w-full min-h-screen h-auto">
+      {/* En-tête */}
+      <div className="pt-6 mb-6 pl-6">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Défis</h2>
+        <p className="text-gray-600 mt-1">Affrontez vos amis dans des défis sportifs</p>
+      </div>
+      
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Défis</h1>
         <GradientButton onClick={() => setShowCreateModal(true)}>
           Créer un défi
         </GradientButton>
@@ -387,9 +392,6 @@ const Challenges = ({ user }) => {
                 <div className="text-4xl mb-4">🏆</div>
                 <h3 className="text-lg font-semibold mb-2">Aucun défi actif</h3>
                 <p className="text-gray-600 mb-4">Crée ton premier défi ou attends d'en recevoir un !</p>
-                <GradientButton onClick={() => setShowCreateModal(true)}>
-                  Créer un défi
-                </GradientButton>
               </div>
             </Card>
           );
@@ -504,9 +506,6 @@ const Challenges = ({ user }) => {
               <div className="text-4xl mb-4">🏆</div>
               <h3 className="text-lg font-semibold mb-2">Aucun défi envoyé</h3>
               <p className="text-gray-600 mb-4">Crée ton premier défi avec un ami !</p>
-              <GradientButton onClick={() => setShowCreateModal(true)}>
-                Créer un défi
-              </GradientButton>
             </div>
           </Card>
         ) : (

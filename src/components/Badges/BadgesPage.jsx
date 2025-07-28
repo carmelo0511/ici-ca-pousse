@@ -165,8 +165,13 @@ const BadgesPage = ({ workouts, challenges, friends, user, addBadgeUnlockXP }) =
 
   return (
     <div className="p-4 w-full min-h-screen h-auto">
+      {/* En-tête */}
+      <div className="pt-6 mb-6 pl-6">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Badges</h2>
+        <p className="text-gray-600 mt-1">Débloquez des récompenses en progressant</p>
+      </div>
+      
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Badges</h1>
         <div className="flex items-center space-x-2">
           <span className="text-sm text-gray-600">
             {unlockedBadges.length}/{allBadges.length} débloqués

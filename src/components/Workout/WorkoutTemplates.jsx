@@ -276,12 +276,9 @@ const WorkoutTemplates = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
-      <div className="flex items-center space-x-3 mb-4">
-        <Bookmark className="h-6 w-6 text-indigo-600" />
-        <h2 className="text-2xl font-bold text-gray-800">Mes Templates</h2>
-        <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
-          {templates.length}
-        </span>
+      <div className="pt-6 mb-6 pl-6">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Mes Templates</h2>
+        <p className="text-gray-600 mt-1">Gérez vos séances favorites</p>
       </div>
 
       {/* Boutons d'action principaux */}
@@ -557,7 +554,7 @@ const WorkoutTemplates = ({
       {/* Modal créer template depuis zéro */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
+          <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6" style={{ height: '90vh' }}>
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold text-gray-800">Créer un nouveau template</h3>
               <button

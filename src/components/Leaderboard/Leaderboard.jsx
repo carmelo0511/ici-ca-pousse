@@ -127,10 +127,12 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-2xl shadow-lg space-y-4 md:space-y-6">
       {/* En-tête */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-        <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          🏆 Leaderboard
-        </h2>
+      <div className="pt-6 mb-6 pl-6">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Classement</h2>
+        <p className="text-gray-600 mt-1">Comparez vos performances avec les autres</p>
+      </div>
+      
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
         {onShowComparison && (
           <button
             onClick={onShowComparison}

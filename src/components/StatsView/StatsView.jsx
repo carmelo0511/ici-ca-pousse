@@ -41,7 +41,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
     <div className={`p-6 space-y-8 ${className}`}>
       <div>
         <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          {t('stats_title')}
+          Statistiques
         </h2>
         <p className="text-gray-600 mt-1">{t('stats_subtitle')}</p>
       </div>

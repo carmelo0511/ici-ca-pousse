@@ -4,17 +4,17 @@ export default function useChatGPT(apiKey) {
   const [messages, setMessages] = useState([]);
 
   // Ajout d'un flag 'welcome' pour le message d'accueil
-  const sendMessage = async (content, context = null, height = null, weight = null, welcome = false) => {
+  const sendMessage = async (content, context = null, height = null, weight = null, goal = null, welcome = false) => {
     if (welcome) {
       setMessages([{ role: 'assistant', content: 'Bonjour, je suis Coach Lex IA' }]);
       return;
     }
-    // Ajout d'un contexte système personnalisé si height/weight sont fournis
+    // Ajout d'un contexte système personnalisé si height/weight/goal sont fournis
     let systemContext = context || '';
-    if (height || weight) {
+    if (height || weight || goal) {
       systemContext =
         (systemContext ? systemContext + '\n' : '') +
-        `L'utilisateur mesure${height ? ` ${height} cm` : ''}${height && weight ? ' et' : ''}${weight ? ` pèse ${weight} kg` : ''}. Prends cela en compte dans tes conseils.`;
+        `L'utilisateur mesure${height ? ` ${height} cm` : ''}${height && weight ? ' et' : ''}${weight ? ` pèse ${weight} kg` : ''}${(height || weight) && goal ? ' et a pour objectif' : ''}${goal ? ` ${goal}` : ''}. Prends cela en compte dans tes conseils.`;
     }
     const userMessage = { role: 'user', content };
     // Historique pour l'API : inclut le message système si besoin

@@ -737,7 +737,7 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     const feelingsContext = analyzeFeelings();
     const context = `Tu es un assistant personnel sportif et bien-être. Sois motivant, bienveillant et adapte tes réponses à mon niveau. Voici un résumé de mes dernières séances : ${getSummary()} ${getDetails()} ${getWeightDetails()} ${getSetRepDetails()} ${feelingsContext ? `\n\nAnalyse des ressentis : ${feelingsContext}` : ''}`;
     
-    await sendMessage(input, context, user?.height, user?.weight);
+    await sendMessage(input, context, user?.height, user?.weight, user?.goal);
     setInput('');
   };
 
