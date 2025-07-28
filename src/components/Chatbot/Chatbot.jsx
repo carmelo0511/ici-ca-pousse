@@ -520,6 +520,49 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     
     let recommendation = `${prenom ? prenom + ', ' : ''}voici mes recommandations personnalisées :\n\n`;
     
+    // Conseils spécifiques selon l'objectif
+    if (user?.goal) {
+      recommendation += `🎯 **Ton objectif : ${user.goal}**\n\n`;
+      
+      switch (user.goal) {
+        case 'Perte de poids':
+          recommendation += "🔥 **Stratégie perte de poids** :\n";
+          recommendation += "• Privilégie les exercices cardio (30-45 min)\n";
+          recommendation += "• HIIT et circuits training pour brûler plus de calories\n";
+          recommendation += "• Exercices polyarticulaires (squats, burpees, mountain climbers)\n";
+          recommendation += "• Rythme soutenu avec peu de repos entre les séries\n";
+          recommendation += "• 4-5 séances par semaine pour maximiser la dépense calorique\n\n";
+          break;
+          
+        case 'Prise de masse':
+          recommendation += "💪 **Stratégie prise de masse** :\n";
+          recommendation += "• Focus sur les exercices de musculation avec charges\n";
+          recommendation += "• Séries de 8-12 répétitions pour l'hypertrophie\n";
+          recommendation += "• Repos de 2-3 minutes entre les séries\n";
+          recommendation += "• Exercices de base : squats, deadlifts, bench press\n";
+          recommendation += "• 3-4 séances par semaine avec récupération\n\n";
+          break;
+          
+        case 'Endurance':
+          recommendation += "❤️ **Stratégie endurance** :\n";
+          recommendation += "• Séances cardio longues (45-60 min)\n";
+          recommendation += "• Course à pied, vélo, natation, rameur\n";
+          recommendation += "• Intensité modérée mais soutenue\n";
+          recommendation += "• Séries de 15-20 répétitions en musculation\n";
+          recommendation += "• 4-5 séances par semaine\n\n";
+          break;
+          
+        case 'Performance':
+          recommendation += "⚡ **Stratégie performance** :\n";
+          recommendation += "• Entraînement fonctionnel et cross-training\n";
+          recommendation += "• Exercices explosifs et plyométriques\n";
+          recommendation += "• Séries courtes et intenses (5-8 répétitions)\n";
+          recommendation += "• Travail de la puissance et de la vitesse\n";
+          recommendation += "• 3-4 séances par semaine avec récupération\n\n";
+          break;
+      }
+    }
+    
     // Analyser le niveau d'activité
     if (!workouts || workouts.length === 0) {
       recommendation += "🎯 **Débutant** : Commence par des séances courtes (20-30 min) avec des exercices de base.\n";
@@ -611,6 +654,11 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
     const prenom = user?.displayName ? user.displayName.split(' ')[0] : '';
     
     let progressAnalysis = `${prenom ? prenom + ', ' : ''}voici ton analyse de progression :\n\n`;
+    
+    // Afficher l'objectif actuel
+    if (user?.goal) {
+      progressAnalysis += `🎯 **Ton objectif actuel : ${user.goal}**\n\n`;
+    }
     
     if (!workouts || workouts.length === 0) {
       progressAnalysis += "📈 **Nouveau débutant** :\n";
