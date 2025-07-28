@@ -275,6 +275,7 @@ export async function getUserProfile(userId) {
         height: userData.height,
         weight: userData.weight,
         weightHistory: userData.weightHistory || [],
+        goal: userData.goal || '',
         createdAt: userData.createdAt,
         updatedAt: userData.updatedAt,
         nickname: userData.nickname || ''
