@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, ChevronLeft, ChevronRight, Bot } from 'lucide-react';
+import { Calendar, BarChart3, Dumbbell, User, Trophy, Zap, Award, ChevronLeft, ChevronRight, Bookmark } from 'lucide-react';
 // import { useTranslation } from 'react-i18next'; // Temporarily disabled for CI
 import PropTypes from 'prop-types';
 
@@ -10,15 +10,29 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
   const [canScrollRight, setCanScrollRight] = useState(false);
   const scrollContainerRef = React.useRef(null);
 
+  // Mapping des couleurs pour les gradients
+  const getGradientClasses = (colorKey) => {
+    const gradients = {
+      'from-blue-500 to-blue-600': 'bg-gradient-to-r from-blue-500 to-blue-600',
+      'from-green-500 to-green-600': 'bg-gradient-to-r from-green-500 to-green-600',
+      'from-purple-500 to-purple-600': 'bg-gradient-to-r from-purple-500 to-purple-600',
+      'from-rose-500 to-pink-600': 'bg-gradient-to-r from-rose-500 to-pink-600',
+      'from-indigo-500 to-indigo-600': 'bg-gradient-to-r from-indigo-500 to-indigo-600',
+      'from-pink-500 to-pink-600': 'bg-gradient-to-r from-pink-500 to-pink-600',
+      'from-yellow-500 to-yellow-600': 'bg-gradient-to-r from-yellow-500 to-yellow-600',
+      'from-gray-800 to-black': 'bg-gradient-to-r from-gray-800 to-black',
+    };
+    return gradients[colorKey] || gradients['from-indigo-500 to-indigo-600'];
+  };
+
   const navItems = [
     { id: 'workout', icon: Dumbbell, label: 'Séance', color: 'from-blue-500 to-blue-600', shortcut: 'W' },
     { id: 'calendar', icon: Calendar, label: 'Calendrier', color: 'from-green-500 to-green-600', shortcut: 'C' },
     { id: 'stats', icon: BarChart3, label: 'Statistiques', color: 'from-purple-500 to-purple-600', shortcut: 'S' },
-    { id: 'chatbot', icon: Bot, label: 'Chatbot', color: 'from-indigo-500 to-indigo-600', shortcut: 'A' },
+    { id: 'templates', icon: Bookmark, label: 'Templates', color: 'from-indigo-500 to-indigo-600', shortcut: 'T' },
     { id: 'friends', icon: User, label: 'Amis', color: 'from-pink-500 to-pink-600', shortcut: 'F' },
     { id: 'leaderboard', icon: Trophy, label: 'Classement', color: 'from-yellow-500 to-yellow-600', shortcut: 'L' },
     { id: 'challenges', icon: Zap, label: 'Défis', color: 'from-gray-800 to-black', shortcut: 'D' },
-
     { id: 'badges', icon: Award, label: 'Badges', color: 'from-indigo-500 to-indigo-600', shortcut: 'B' }
   ];
 
@@ -98,7 +112,7 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
               onClick={() => setActiveTab(id)}
               className={`group relative flex-shrink-0 py-1.5 px-2.5 md:py-2 md:px-4 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 max-w-[90px] md:max-w-[120px] truncate text-ellipsis text-center active:scale-95 ${
                 activeTab === id
-                  ? `bg-gradient-to-r ${color} text-white shadow-lg transform scale-105 border-2 border-white/20`
+                  ? `${getGradientClasses(color)} text-white shadow-lg transform scale-105 border-2 border-white/20`
                   : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:shadow-md transform hover:scale-105 bg-white'
               }`}
               aria-current={activeTab === id ? 'page' : undefined}

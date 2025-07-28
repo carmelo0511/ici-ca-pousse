@@ -23,15 +23,15 @@ import FriendsList from './components/Profile/FriendsList';
 import LeaderboardView from './components/Leaderboard/LeaderboardView';
 import BadgesPage from './components/Badges/BadgesPage';
 import Challenges from './components/Challenges';
-
+import WorkoutTemplates from './components/Workout/WorkoutTemplates';
 
 import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
-import Chatbot from './components/Chatbot/Chatbot';
+
 import ProfileSettings from './components/Profile/ProfileSettings';
 import ChatbotBubble from './components/Chatbot/ChatbotBubble';
 import ThemeToggleBubble from './components/ThemeToggleBubble';
-import useChatGPT from './hooks/useChatGPT';
+
 
 // Hooks
 import {
@@ -45,7 +45,8 @@ import {
   useExperience,
   useSwipeNavigation,
   useKeyboardNavigation,
-  useNotifications
+  useNotifications,
+  useWorkoutTemplates
 } from './hooks';
 
 
@@ -98,6 +99,7 @@ function App() {
     clearExercises,
     setExercisesFromWorkout,
   } = useExercises();
+  const { templates, addTemplate, updateTemplate, deleteTemplate, saveCurrentWorkoutAsTemplate } = useWorkoutTemplates(user);
   const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP, recalculateStreak } = useExperience(user);
   const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
 
@@ -105,8 +107,8 @@ function App() {
   const { notifications } = useNotifications(user);
   const { t } = useTranslation();
 
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  const { messages, sendMessage, setMessages } = useChatGPT(apiKey);
+
+
 
   // Hook personnalisé pour la logique des workouts
   const workoutLogic = useWorkoutLogic({
@@ -134,7 +136,7 @@ function App() {
     t,
     addWorkoutXP,
     workouts,
-    setMessages,
+
     user
   });
 
@@ -147,12 +149,62 @@ function App() {
     handleDeleteWorkout,
   } = workoutLogic;
 
+  // Fonctions pour gérer les templates
+  const handleSaveTemplate = (exercises) => {
+    // Basculer vers l'onglet templates avec les exercices à sauvegarder
+    setActiveTab('templates');
+    showToastMsg('Onglet Templates ouvert - vous pouvez maintenant sauvegarder votre séance !');
+  };
+
+  const handleDeleteTemplate = async (templateId) => {
+    try {
+      await deleteTemplate(templateId);
+      showToastMsg('Template supprimé avec succès !');
+    } catch (error) {
+      console.error('Erreur suppression template:', error);
+      showToastMsg('Erreur lors de la suppression du template', 'error');
+    }
+  };
+
+  const handleEditTemplate = async (templateId, updatedTemplate) => {
+    try {
+      await updateTemplate(templateId, updatedTemplate);
+      showToastMsg('Template modifié avec succès !');
+    } catch (error) {
+      console.error('Erreur modification template:', error);
+      showToastMsg('Erreur lors de la modification du template', 'error');
+    }
+  };
+
+  const handleLoadTemplate = (template) => {
+    // Convertir le template en exercices pour la séance actuelle
+    const templateExercises = template.exercises.map((exercise, index) => ({
+      id: Date.now() + index,
+      name: exercise.name,
+      type: exercise.type,
+      sets: exercise.sets.map((set, setIndex) => ({
+        id: Date.now() + index * 100 + setIndex,
+        reps: set.reps || 0,
+        weight: set.weight || 0,
+        duration: set.duration || 0
+      }))
+    }));
+
+    // Vider les exercices actuels et charger le template
+    clearExercises();
+    setExercisesFromWorkout(templateExercises);
+
+    // Basculer vers l'onglet séance
+    setActiveTab('workout');
+    showToastMsg(`Template "${template.name}" chargé !`);
+  };
+
   // Configuration des onglets pour la navigation
   const tabs = [
     { id: 'workout', label: 'Séance' },
     { id: 'calendar', label: 'Calendrier' },
     { id: 'stats', label: 'Statistiques' },
-    { id: 'chatbot', label: 'Chatbot' },
+    { id: 'templates', label: 'Templates' },
     { id: 'friends', label: 'Amis' },
     { id: 'leaderboard', label: 'Classement' },
     { id: 'challenges', label: 'Défis' },
@@ -353,6 +405,7 @@ function App() {
                 setSelectedMuscleGroup={setSelectedMuscleGroup}
                 addExerciseToWorkout={addExerciseToWorkout}
                 removeExerciseFromWorkout={removeExerciseFromWorkout}
+                onSaveTemplate={handleSaveTemplate}
               />
             </PageTransition>
 
@@ -375,16 +428,22 @@ function App() {
             <StatsView stats={getStats()} workouts={workouts} user={user} />
             </PageTransition>
 
-            {/* Onglet Chatbot */}
-            <PageTransition isActive={activeTab === 'chatbot'}>
-              <Chatbot 
-                workouts={workouts} 
-                user={user} 
-                setExercisesFromWorkout={setExercisesFromWorkout}
-                setShowAddExercise={setShowAddExercise}
-                setActiveTab={setActiveTab}
+            {/* Onglet Templates */}
+            <PageTransition isActive={activeTab === 'templates'}>
+              <WorkoutTemplates
+                templates={templates}
+                addTemplate={addTemplate}
+                onSaveTemplate={handleSaveTemplate}
+                onDeleteTemplate={handleDeleteTemplate}
+                onLoadTemplate={handleLoadTemplate}
+                onEditTemplate={handleEditTemplate}
+                saveCurrentWorkoutAsTemplate={saveCurrentWorkoutAsTemplate}
+                exercises={exercises}
+                showToastMsg={showToastMsg}
               />
             </PageTransition>
+
+
 
             {/* Onglet Amis */}
             <PageTransition isActive={activeTab === 'friends'}>
@@ -426,9 +485,6 @@ function App() {
             setExercisesFromWorkout={setExercisesFromWorkout}
             setShowAddExercise={setShowAddExercise}
             setActiveTab={setActiveTab}
-            messages={messages}
-            sendMessage={sendMessage}
-            setMessages={setMessages}
           />
           <ThemeToggleBubble />
           

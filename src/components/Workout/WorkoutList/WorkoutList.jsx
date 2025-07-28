@@ -18,7 +18,8 @@ import {
   Apple,
   Smile,
   Meh,
-  Frown
+  Frown,
+  Bookmark
 } from 'lucide-react';
 import { exerciseDatabase } from '../../../utils/exerciseDatabase';
 import Modal from '../Modal';
@@ -27,6 +28,23 @@ import Card from '../../Card';
 import IconButton from '../../IconButton';
 import PropTypes from 'prop-types';
 import { getLastExerciseWeight } from '../../../utils/workoutUtils';
+
+// Fonction pour mapper les couleurs aux classes Tailwind complètes
+function getGradientClasses(from, to) {
+  const colorMap = {
+    'emerald-500-teal-600': 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700',
+    'red-500-pink-600': 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700',
+    'purple-500-violet-600': 'bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700',
+    'blue-400-indigo-500': 'bg-gradient-to-r from-blue-400 to-indigo-500 hover:from-blue-500 hover:to-indigo-600',
+    'indigo-500-purple-600': 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700',
+    'green-500-emerald-600': 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700',
+    'yellow-500-orange-600': 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700',
+    'pink-500-rose-600': 'bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700',
+  };
+  
+  const key = `${from}-${to}`;
+  return colorMap[key] || `bg-gradient-to-r from-${from} to-${to}`;
+}
 
 function getMuscleIcon(muscle) {
   switch (muscle) {
@@ -61,6 +79,7 @@ function WorkoutList({
   setSelectedMuscleGroup,
   addExerciseToWorkout,
   removeExerciseFromWorkout,
+  onSaveTemplate,
   user,
   className = '',
 }) {
@@ -365,26 +384,78 @@ function WorkoutList({
             </Card>
           ))}
 
-          <div className="flex flex-row gap-4 justify-center items-center mt-4">
-            <GradientButton icon={Plus} from="gray-100" to="gray-200" className="text-gray-700 border border-gray-200" onClick={() => setShowAddExercise(true)}>
-              {t('add_exercise')}
-            </GradientButton>
-            {exercises.length > 0 && (
+          <div className="space-y-3 mt-4">
+            {/* Première ligne : Ajouter exercice + Vider séance */}
+            <div className="flex gap-3 justify-center">
               <button
-                onClick={() => {
-                  if (window.confirm('Supprimer tous les exercices de cette séance ?')) {
-                    exercises.forEach(exercise => removeExerciseFromWorkout(exercise.id));
-                  }
+                onClick={() => setShowAddExercise(true)}
+                className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                style={{
+                  background: 'linear-gradient(to right, #10b981, #0d9488)',
                 }}
-                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
               >
-                <X className="h-4 w-4" />
-                <span className="font-medium">Vider la séance</span>
+                <Plus className="h-5 w-5" />
+                {t('add_exercise')}
               </button>
+              {exercises.length > 0 && (
+                <button
+                  onClick={() => {
+                    if (window.confirm('Supprimer tous les exercices de cette séance ?')) {
+                      exercises.forEach(exercise => removeExerciseFromWorkout(exercise.id));
+                    }
+                  }}
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  style={{
+                    background: 'linear-gradient(to right, #ef4444, #ec4899)',
+                  }}
+                >
+                  <X className="h-5 w-5" />
+                  <span className="font-medium">Vider la séance</span>
+                </button>
+              )}
+            </div>
+
+            {/* Deuxième ligne : Template + Terminer séance */}
+            {exercises.length > 0 && (
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => onSaveTemplate()}
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  style={{
+                    background: 'linear-gradient(to right, #a855f7, #7c3aed)',
+                  }}
+                >
+                  <Bookmark className="h-5 w-5" />
+                  Sauvegarder en template
+                </button>
+                <button
+                  onClick={handleSaveWorkout}
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  style={{
+                    background: 'linear-gradient(to right, #10b981, #0d9488)',
+                  }}
+                >
+                  <Target className="h-5 w-5" />
+                  {t('finish_workout')}
+                </button>
+              </div>
             )}
-            <GradientButton icon={Target} from="green-500" to="emerald-600" onClick={handleSaveWorkout}>
-              {t('finish_workout')}
-            </GradientButton>
+
+            {/* Si pas d'exercices, afficher seulement Terminer séance */}
+            {exercises.length === 0 && (
+              <div className="flex justify-center">
+                <button
+                  onClick={handleSaveWorkout}
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 max-w-xs"
+                  style={{
+                    background: 'linear-gradient(to right, #10b981, #0d9488)',
+                  }}
+                >
+                  <Target className="h-5 w-5" />
+                  {t('finish_workout')}
+                </button>
+              </div>
+            )}
           </div>
 
           <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border-blue-100">
@@ -800,6 +871,7 @@ WorkoutList.propTypes = {
   setSelectedMuscleGroup: PropTypes.func,
   addExerciseToWorkout: PropTypes.func,
   removeExerciseFromWorkout: PropTypes.func,
+  onSaveTemplate: PropTypes.func,
   user: PropTypes.object, // Added user prop type
   className: PropTypes.string,
 };
