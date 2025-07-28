@@ -262,7 +262,7 @@ function WorkoutList({
           <p className="text-gray-600 mb-6 max-w-[90%] mx-auto break-words overflow-wrap break-word truncate max-w-full">
             {t('start_workout')}
           </p>
-          <GradientButton icon={Plus} onClick={() => setShowAddExercise(true)}>
+          <GradientButton icon={Plus} onClick={() => setShowAddExercise(true)} from="blue-500" to="blue-600">
             {t('add_exercise')}
           </GradientButton>
         </Card>
