@@ -132,7 +132,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
   return (
     <div className="space-y-6">
       <div className="pt-6 mb-6 pl-6">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Mon Profil</h2>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Mon Profil</h2>
         <p className="text-gray-600 mt-1">Gérez vos informations personnelles</p>
       </div>
       

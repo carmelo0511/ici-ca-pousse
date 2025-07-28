@@ -36,7 +36,7 @@ function Auth({ className = '' }) {
   if (user) {
     return (
       <div className={`max-w-md mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center ${className}`}>
-        <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Bienvenue !</h2>
+        <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Bienvenue !</h2>
         <p className="mb-4 text-gray-700">Connecté en tant que <span className="font-semibold">{user.email || user.displayName}</span></p>
         <GradientButton onClick={handleSignOut} from="blue-500" to="blue-600" ariaLabel="Se déconnecter">Se déconnecter</GradientButton>
       </div>
@@ -45,7 +45,7 @@ function Auth({ className = '' }) {
 
   return (
     <div className={`max-w-md mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg ${className}`}>
-      <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent text-center">
+      <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent text-center">
         Connexion
       </h2>
       {error && <div className="text-red-500 text-sm text-center mb-4" role="alert">{error}</div>}

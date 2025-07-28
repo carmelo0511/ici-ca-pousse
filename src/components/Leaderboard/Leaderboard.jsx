@@ -128,7 +128,7 @@ function Leaderboard({ user: currentUser, onShowComparison, onShowTeam, sendInvi
     <div className="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-2xl shadow-lg space-y-4 md:space-y-6">
       {/* En-tête */}
       <div className="pt-6 mb-6 pl-6">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Classement</h2>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">Classement</h2>
         <p className="text-gray-600 mt-1">Comparez vos performances avec les autres</p>
       </div>
       

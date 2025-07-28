@@ -74,7 +74,7 @@ const CalendarView = ({
     <div className={`p-6 space-y-8 ${className}`}>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
             {t('calendar')}
           </h2>
           <p className="text-gray-600 mt-1">{t('calendar_subtitle')}</p>
