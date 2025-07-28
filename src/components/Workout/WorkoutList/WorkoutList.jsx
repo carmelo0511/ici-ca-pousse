@@ -296,7 +296,7 @@ function WorkoutList({
                   <IconButton
                     icon={Plus}
                     onClick={() => addSet(exercise.id)}
-                    className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg"
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg"
                   />
                   <button
                     onClick={() => removeExerciseFromWorkout(exercise.id)}
@@ -413,7 +413,7 @@ function WorkoutList({
                       exercises.forEach(exercise => removeExerciseFromWorkout(exercise.id));
                     }
                   }}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
                 >
                   <X className="h-5 w-5" />
                   <span className="font-medium">Vider la séance</span>
