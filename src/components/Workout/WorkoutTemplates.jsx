@@ -28,7 +28,10 @@ const WorkoutTemplates = ({
   exercises = [],
   className = '',
   showToastMsg,
-  addTemplate
+  addTemplate,
+  cleanProblematicTemplates,
+  deleteAllTemplates,
+  forceDeleteTemplate
 }) => {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -76,11 +79,16 @@ const WorkoutTemplates = ({
     }
 
     try {
-      await onEditTemplate(editingTemplate.id, {
-        ...editingTemplate,
+      const updatedTemplate = {
         name: templateName.trim(),
-        description: templateDescription.trim()
-      });
+        description: templateDescription.trim(),
+        exercises: editingTemplate.exercises,
+        totalExercises: editingTemplate.exercises?.length || 0,
+        totalSets: editingTemplate.exercises?.reduce((acc, ex) => acc + (ex.sets?.length || 0), 0) || 0,
+        createdAt: editingTemplate.createdAt || new Date().toISOString()
+      };
+      
+      await onEditTemplate(editingTemplate.id, updatedTemplate);
       setShowEditModal(false);
       setTemplateName('');
       setTemplateDescription('');
@@ -276,8 +284,8 @@ const WorkoutTemplates = ({
         </span>
       </div>
 
-      {/* Boutons d'action */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+      {/* Boutons d'action principaux */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <button
           onClick={() => setShowCreateModal(true)}
           className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
@@ -303,38 +311,16 @@ const WorkoutTemplates = ({
         )}
       </div>
 
+
+
       {/* Liste des templates */}
       {templates.length === 0 ? (
         <Card className="text-center py-12">
           <Bookmark className="h-16 w-16 text-gray-300 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-600 mb-2">Aucun template</h3>
           <p className="text-gray-500 mb-6">
-            Créez votre premier template en sauvegardant une séance ou en créant un template depuis zéro
+            Utilisez les boutons ci-dessus pour créer votre premier template
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-              style={{
-                background: 'linear-gradient(to right, #22c55e, #10b981)',
-              }}
-            >
-              <Plus className="h-5 w-5" />
-              Créer un template
-            </button>
-            {exercises.length > 0 && (
-              <button
-                onClick={() => setShowSaveModal(true)}
-                className="flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                style={{
-                  background: 'linear-gradient(to right, #6366f1, #9333ea)',
-                }}
-              >
-                <Save className="h-5 w-5" />
-                Sauvegarder la séance
-              </button>
-            )}
-          </div>
         </Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -369,12 +355,37 @@ const WorkoutTemplates = ({
                   <IconButton
                     icon={Trash2}
                     onClick={() => {
-                      console.log('Tentative suppression template:', template.id, template.name);
+                      console.log('Tentative suppression template:', template.id, template.name, 'Type ID:', typeof template.id);
                       handleDeleteTemplate(template.id);
                     }}
                     className="text-red-600 hover:text-red-700"
-                    title="Supprimer"
+                    title={`Supprimer (ID: ${template.id}, Type: ${typeof template.id})`}
                   />
+                  
+                                     {/* Bouton suppression forcée pour templates problématiques */}
+                   {typeof template.id === 'number' && (
+                     <button
+                       onClick={async () => {
+                         if (window.confirm(`🗑️ FORCER la suppression du template "${template.name}" ?\n\nID: ${template.id} (type: ${typeof template.id})\n\nCette action est irréversible !`)) {
+                           try {
+                             await forceDeleteTemplate(template.id);
+                             if (showToastMsg) {
+                               showToastMsg(`Template "${template.name}" supprimé !`);
+                             }
+                           } catch (error) {
+                             console.error('Erreur suppression forcée:', error);
+                             if (showToastMsg) {
+                               showToastMsg('Erreur lors de la suppression forcée', 'error');
+                             }
+                           }
+                         }
+                       }}
+                       className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors border border-red-300"
+                       title="🗑️ Template problématique - Suppression forcée"
+                     >
+                       💥
+                     </button>
+                   )}
                 </div>
               </div>
 
@@ -892,6 +903,9 @@ WorkoutTemplates.propTypes = {
   className: PropTypes.string,
   showToastMsg: PropTypes.func,
   addTemplate: PropTypes.func.isRequired,
+  cleanProblematicTemplates: PropTypes.func.isRequired,
+  deleteAllTemplates: PropTypes.func.isRequired,
+  forceDeleteTemplate: PropTypes.func.isRequired,
 };
 
 export default WorkoutTemplates; 

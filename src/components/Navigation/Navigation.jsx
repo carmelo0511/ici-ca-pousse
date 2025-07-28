@@ -31,6 +31,7 @@ const Navigation = ({ activeTab, setActiveTab, notifications = [], className = '
     { id: 'stats', icon: BarChart3, label: 'Statistiques', color: 'from-purple-500 to-purple-600', shortcut: 'S' },
     { id: 'templates', icon: Bookmark, label: 'Templates', color: 'from-indigo-500 to-indigo-600', shortcut: 'T' },
     { id: 'friends', icon: User, label: 'Amis', color: 'from-pink-500 to-pink-600', shortcut: 'F' },
+    { id: 'profile', icon: User, label: 'Profil', color: 'from-emerald-500 to-emerald-600', shortcut: 'P' },
     { id: 'leaderboard', icon: Trophy, label: 'Classement', color: 'from-yellow-500 to-yellow-600', shortcut: 'L' },
     { id: 'challenges', icon: Zap, label: 'Défis', color: 'from-gray-800 to-black', shortcut: 'D' },
     { id: 'badges', icon: Award, label: 'Badges', color: 'from-indigo-500 to-indigo-600', shortcut: 'B' }

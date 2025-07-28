@@ -99,7 +99,7 @@ function App() {
     clearExercises,
     setExercisesFromWorkout,
   } = useExercises();
-  const { templates, addTemplate, updateTemplate, deleteTemplate, saveCurrentWorkoutAsTemplate } = useWorkoutTemplates(user);
+  const { templates, addTemplate, updateTemplate, deleteTemplate, saveCurrentWorkoutAsTemplate, cleanProblematicTemplates, deleteAllTemplates, forceDeleteTemplate } = useWorkoutTemplates(user);
   const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP, recalculateStreak } = useExperience(user);
   const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
 
@@ -211,6 +211,7 @@ function App() {
     { id: 'stats', label: 'Statistiques' },
     { id: 'templates', label: 'Templates' },
     { id: 'friends', label: 'Amis' },
+    { id: 'profile', label: 'Profil' },
     { id: 'leaderboard', label: 'Classement' },
     { id: 'challenges', label: 'Défis' },
     { id: 'badges', label: 'Badges' }
@@ -443,6 +444,9 @@ function App() {
                 onLoadTemplate={handleLoadTemplate}
                 onEditTemplate={handleEditTemplate}
                 saveCurrentWorkoutAsTemplate={saveCurrentWorkoutAsTemplate}
+                cleanProblematicTemplates={cleanProblematicTemplates}
+                deleteAllTemplates={deleteAllTemplates}
+                forceDeleteTemplate={forceDeleteTemplate}
                 exercises={exercises}
                 showToastMsg={showToastMsg}
               />
@@ -470,6 +474,24 @@ function App() {
             {/* Onglet Badges */}
             <PageTransition isActive={activeTab === 'badges'}>
               <BadgesPage workouts={workouts} challenges={challenges} friends={friends} user={user} addBadgeUnlockXP={addBadgeUnlockXP} />
+            </PageTransition>
+
+            {/* Onglet Profil */}
+            <PageTransition isActive={activeTab === 'profile'}>
+              <ProfileSettings 
+                user={user} 
+                workouts={workouts} 
+                challenges={challenges} 
+                isOpen={true} 
+                onClose={() => setActiveTab('workout')}
+                onUserUpdate={(updatedUser) => {
+                  // Mettre à jour l'utilisateur dans l'état global
+                  // Note: setUser n'est plus disponible car on utilise useUserProfile
+                  // Les changements sont gérés automatiquement par le hook
+                }}
+                addBadgeUnlockXP={addBadgeUnlockXP}
+                refreshUserProfile={refreshUserProfile}
+              />
             </PageTransition>
 
             

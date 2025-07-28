@@ -22,20 +22,20 @@ const ChatbotBubble = (props) => {
 
   return (
     <>
-      {/* Bulle flottante */}
-      <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 1000 }}>
+      {/* Bouton texte flottant en bas à gauche */}
+      <div style={{ position: 'fixed', left: 24, bottom: 24, zIndex: 1000 }}>
         {!open && (
           <button
             onClick={() => setOpen(true)}
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full shadow-lg p-4 flex items-center justify-center relative hover:scale-105 transition-all"
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl"
             aria-label="Ouvrir Coach Lex IA"
           >
-            <MessageCircle className="w-7 h-7" />
-            {unread && <span className="absolute top-1 right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>}
+            <span className="font-semibold text-sm tracking-wide">LEX IA</span>
+            {unread && <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>}
           </button>
         )}
         {open && (
-          <div className="fixed bottom-24 right-6 w-[350px] max-w-[95vw] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50 animate-fade-in">
+          <div className="fixed bottom-20 left-6 w-[350px] max-w-[95vw] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50 animate-fade-in">
             <div className="flex justify-between items-center p-3 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-t-2xl">
               <span className="font-bold text-indigo-700 text-lg">Coach Lex IA</span>
               <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-red-500 p-1 rounded-full">

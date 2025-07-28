@@ -30,18 +30,17 @@ const ThemeToggleBubble = () => {
 
   return (
     <>
-      {/* Bulle flottante simple */}
-      <div style={{ position: 'fixed', bottom: 24, right: 100, zIndex: 1000 }}>
+      {/* Bouton texte flottant en bas à gauche - à côté du chatbot */}
+      <div style={{ position: 'fixed', left: 120, bottom: 24, zIndex: 999 }}>
         <button
           onClick={toggleTheme}
-          className="bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-full shadow-lg p-4 flex items-center justify-center relative hover:scale-105 transition-all"
+          className="bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl"
           aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
           title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
         >
-          {theme === 'dark' ?
-            <Sun className="w-7 h-7 text-yellow-300" /> :
-            <Moon className="w-7 h-7 text-blue-200" />
-          }
+          <span className="font-semibold text-sm tracking-wide">
+            {theme === 'dark' ? '☀️ CLAIR' : '🌙 SOMBRE'}
+          </span>
         </button>
       </div>
     </>

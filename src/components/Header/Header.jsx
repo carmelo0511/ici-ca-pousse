@@ -2,13 +2,10 @@ import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
-import ProfileSettings from '../Profile/ProfileSettings';
-import ProfilePicture from '../Profile/ProfilePicture';
 import StreakCounter from '../StreakCounter';
 import { useExperience } from '../../hooks/useExperience.js';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate, refreshUserProfile }) => {
-  const [showProfile, setShowProfile] = useState(false);
   const [localUser, setLocalUser] = useState(user);
 
   // Ajout du hook d'expérience
@@ -60,57 +57,21 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
           <div className="flex flex-col items-center min-w-0">
             <StreakCounter streak={streak} />
           </div>
-          {/* Profil et actions */}
-          <div className="flex items-center gap-0.5 sm:gap-2 min-w-0">
-            {/* Avatar utilisateur avec halo coloré */}
-            {localUser && (
-              <button
-                onClick={() => setShowProfile(true)}
-                className="relative flex items-center justify-center w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 border-indigo-400 bg-white hover:bg-indigo-50 transition-all shadow group"
-                aria-label="Modifier le profil"
-              >
-                <span className="absolute -inset-1 rounded-full bg-gradient-to-tr from-green-400 to-purple-500 opacity-60 blur-sm animate-halo"></span>
-                <ProfilePicture 
-                  user={localUser} 
-                  size="xs" 
-                  useBadgeAsProfile={!!localUser.selectedBadge}
-                  selectedBadge={localUser.selectedBadge}
-                />
-              </button>
-            )}
-            {/* Bouton Sign Out */}
-            {user && (
-              <button
-                onClick={handleSignOut}
-                className="px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-lg font-semibold border border-red-400 bg-red-50 text-red-600 hover:bg-red-100 transition-all text-[10px] sm:text-sm shadow"
-                aria-label="Déconnexion"
-              >
-                <span className="hidden sm:inline">Déconnexion</span>
-                <span className="sm:hidden">⎋</span>
-              </button>
-            )}
-          </div>
+          {/* Bouton Sign Out */}
+          {user && (
+            <button
+              onClick={handleSignOut}
+              className="px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-lg font-semibold border border-red-400 bg-red-50 text-red-600 hover:bg-red-100 transition-all text-[10px] sm:text-sm shadow"
+              aria-label="Déconnexion"
+            >
+              <span className="hidden sm:inline">Déconnexion</span>
+              <span className="sm:hidden">⎋</span>
+            </button>
+          )}
         </div>
       </div>
       {/* Titre centré sur mobile (supprimé pour compacité) */}
-      {/* Modale de profil */}
-      {localUser && (
-        <ProfileSettings 
-          user={localUser} 
-          workouts={workouts} 
-          challenges={challenges} 
-          isOpen={showProfile} 
-          onClose={() => setShowProfile(false)}
-          onUserUpdate={(updatedUser) => {
-            setLocalUser(updatedUser);
-            if (onUserUpdate) {
-              onUserUpdate(updatedUser);
-            }
-          }}
-          addBadgeUnlockXP={addBadgeUnlockXP}
-          refreshUserProfile={refreshUserProfile}
-        />
-      )}
+
     </header>
   );
 });
