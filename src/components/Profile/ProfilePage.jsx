@@ -92,7 +92,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
       if (!last || last.weekKey !== weekKey || last.value !== weight) {
         weightHistory = [...weightHistory, { weekKey, value: weight }];
       }
-      await updateDoc(userRef, { height, weight, weightHistory, nickname, goal: currentGoal });
+      await updateDoc(userRef, { height, weight, weightHistory, nickname, goal: user.goal });
       setSuccessMessage('Profil mis à jour !');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (e) {
