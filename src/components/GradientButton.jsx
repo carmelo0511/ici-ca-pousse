@@ -19,6 +19,11 @@ const GradientButton = ({
   
   // Mapping des couleurs pour les gradients - tous en bleu sauf rouge pour suppression
   const getGradientClasses = (fromColor, toColor) => {
+    // Si les couleurs sont directement blue-500 et blue-600, les utiliser
+    if (fromColor === 'blue-500' && toColor === 'blue-600') {
+      return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700';
+    }
+    
     const gradients = {
       'blue-400-indigo-500': 'bg-gradient-to-r from-blue-400 to-indigo-500 hover:from-blue-500 hover:to-indigo-600',
       'red-500-pink-600': 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700',
@@ -31,7 +36,7 @@ const GradientButton = ({
     };
     
     const key = `${fromColor}-${toColor}`;
-    return gradients[key] || gradients['blue-500-blue-600'];
+    return gradients[key] || 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700';
   };
 
   return (
