@@ -29,22 +29,7 @@ import IconButton from '../../IconButton';
 import PropTypes from 'prop-types';
 import { getLastExerciseWeight } from '../../../utils/workoutUtils';
 
-// Fonction pour mapper les couleurs aux classes Tailwind complètes
-function getGradientClasses(from, to) {
-  const colorMap = {
-    'emerald-500-teal-600': 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700',
-    'red-500-pink-600': 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700',
-    'purple-500-violet-600': 'bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700',
-    'blue-400-indigo-500': 'bg-gradient-to-r from-blue-400 to-indigo-500 hover:from-blue-500 hover:to-indigo-600',
-    'indigo-500-purple-600': 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700',
-    'green-500-emerald-600': 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700',
-    'yellow-500-orange-600': 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700',
-    'pink-500-rose-600': 'bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700',
-  };
-  
-  const key = `${from}-${to}`;
-  return colorMap[key] || `bg-gradient-to-r from-${from} to-${to}`;
-}
+
 
 function getMuscleIcon(muscle) {
   switch (muscle) {

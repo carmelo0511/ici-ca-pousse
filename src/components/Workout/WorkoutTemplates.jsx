@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
   Bookmark,
@@ -39,7 +38,6 @@ const WorkoutTemplates = ({
   const [templateDescription, setTemplateDescription] = useState('');
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [newTemplateExercises, setNewTemplateExercises] = useState([]);
-  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [customExerciseName, setCustomExerciseName] = useState('');
   const [favorites, setFavorites] = useState(() => {
@@ -180,14 +178,12 @@ const WorkoutTemplates = ({
     };
     setNewTemplateExercises([...newTemplateExercises, newExercise]);
     setShowAddExerciseModal(false);
-    setSelectedMuscleGroup(null);
     setSearchTerm('');
     setCustomExerciseName('');
   };
 
   const openAddExerciseModal = () => {
     setShowAddExerciseModal(true);
-    setSelectedMuscleGroup(null);
     setSearchTerm('');
     setCustomExerciseName('');
   };
@@ -741,7 +737,6 @@ const WorkoutTemplates = ({
               <button
                 onClick={() => {
                   setShowAddExerciseModal(false);
-                  setSelectedMuscleGroup(null);
                   setSearchTerm('');
                   setCustomExerciseName('');
                 }}
