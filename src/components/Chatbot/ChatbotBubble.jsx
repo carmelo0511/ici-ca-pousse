@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import Chatbot from './Chatbot';
 
 // Props : user, workouts, setExercisesFromWorkout, setShowAddExercise, setActiveTab

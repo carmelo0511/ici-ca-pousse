@@ -6,15 +6,12 @@ import StreakCounter from '../StreakCounter';
 import { useExperience } from '../../hooks/useExperience.js';
 
 const Header = memo(({ workoutCount, className = '', user, workouts = [], challenges = [], addBadgeUnlockXP, onUserUpdate, refreshUserProfile }) => {
-  const [localUser, setLocalUser] = useState(user);
+  // localUser supprimé car non utilisé
 
   // Ajout du hook d'expérience
   const { experience } = useExperience(user);
 
-  // Mettre à jour l'utilisateur local quand user change
-  useEffect(() => {
-    setLocalUser(user);
-  }, [user]);
+  // Suppression de l'effet car localUser n'est plus utilisé
 
   const handleSignOut = async () => {
     await signOut(auth);

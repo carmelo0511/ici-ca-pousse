@@ -560,6 +560,12 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
           recommendation += "• Travail de la puissance et de la vitesse\n";
           recommendation += "• 3-4 séances par semaine avec récupération\n\n";
           break;
+        default:
+          recommendation += "🎯 **Stratégie générale** :\n";
+          recommendation += "• Varie tes exercices pour un entraînement équilibré\n";
+          recommendation += "• Maintiens une bonne régularité (3-4 séances/semaine)\n";
+          recommendation += "• Écoute ton corps et ajuste selon tes ressentis\n\n";
+          break;
       }
     }
     

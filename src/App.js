@@ -28,7 +28,7 @@ import WorkoutTemplates from './components/Workout/WorkoutTemplates';
 import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
 
-import ProfileSettings from './components/Profile/ProfileSettings';
+// ProfileSettings remplacé par ProfilePage
 import ProfilePage from './components/Profile/ProfilePage';
 import ChatbotBubble from './components/Chatbot/ChatbotBubble';
 import ThemeToggleBubble from './components/ThemeToggleBubble';

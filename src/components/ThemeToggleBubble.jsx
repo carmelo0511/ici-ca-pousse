@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon } from 'lucide-react';
+// Sun et Moon supprimés car non utilisés
 import { STORAGE_KEYS } from '../constants';
 
 const ThemeToggleBubble = () => {
