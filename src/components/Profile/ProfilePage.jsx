@@ -116,6 +116,11 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, { goal: selectedGoal });
       
+      // Rafraîchir l'objet user pour que l'objectif persiste après refresh
+      if (refreshUserProfile) {
+        await refreshUserProfile();
+      }
+      
       setSuccessMessage('Objectif mis à jour !');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (e) {
@@ -125,7 +130,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, refreshUserProfile]);
 
   return (
     <div className="space-y-6">
@@ -152,10 +157,10 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
         <div className="mt-2 text-sm text-gray-700 flex flex-col items-center">
           {user.height && <div>Taille : <span className="font-semibold">{user.height} cm</span></div>}
           {user.weight && <div>Poids : <span className="font-semibold">{user.weight} kg</span></div>}
-          {(currentGoal || user.goal) && (
+          {(user.goal || currentGoal) && (
             <div className="text-indigo-600 flex items-center mt-1">
               <Target className="h-4 w-4 mr-1" />
-              <span className="font-semibold">{currentGoal || user.goal}</span>
+              <span className="font-semibold">{user.goal || currentGoal}</span>
             </div>
           )}
         </div>
@@ -224,7 +229,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
                                 <button
                         onClick={() => handleSaveGoal('Perte de poids')}
                                     className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
-                          (currentGoal || user.goal) === 'Perte de poids'
+                          (user.goal || currentGoal) === 'Perte de poids'
                             ? 'border-indigo-500 bg-indigo-50'
                             : 'border-gray-200 bg-white hover:border-indigo-400'
                         }`}
@@ -240,7 +245,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
           <button
             onClick={() => handleSaveGoal('Prise de masse')}
                                     className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
-                          (currentGoal || user.goal) === 'Prise de masse'
+                          (user.goal || currentGoal) === 'Prise de masse'
                             ? 'border-indigo-500 bg-indigo-50'
                             : 'border-gray-200 bg-white hover:border-indigo-400'
                         }`}
@@ -256,7 +261,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
           <button
             onClick={() => handleSaveGoal('Endurance')}
                                     className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
-                          (currentGoal || user.goal) === 'Endurance'
+                          (user.goal || currentGoal) === 'Endurance'
                             ? 'border-indigo-500 bg-indigo-50'
                             : 'border-gray-200 bg-white hover:border-indigo-400'
                         }`}
@@ -270,9 +275,9 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
           </button>
 
           <button
-            onClick={() => handleSaveGoal('Performance')}
-                                    className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
-                          (currentGoal || user.goal) === 'Performance'
+                        onClick={() => handleSaveGoal('Performance')}
+                                     className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
+                          (user.goal || currentGoal) === 'Performance'
                             ? 'border-indigo-500 bg-indigo-50'
                             : 'border-gray-200 bg-white hover:border-indigo-400'
                         }`}
@@ -286,7 +291,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
           </button>
         </div>
         
-                            {(currentGoal || user.goal) && (
+                            {(user.goal || currentGoal) && (
           <button
             onClick={() => handleSaveGoal('')}
             className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium w-full"
