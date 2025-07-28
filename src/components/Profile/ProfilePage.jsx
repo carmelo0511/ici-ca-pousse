@@ -18,7 +18,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
   // Ajout du surnom
   const [nickname, setNickname] = React.useState(user.nickname || '');
                 // Ajout de l'objectif
-              const [currentGoal, setCurrentGoal] = React.useState('');
+              const [currentGoal, setCurrentGoal] = React.useState(user.goal || '');
   
   // Mettre à jour l'état local quand selectedBadge change
   React.useEffect(() => {
@@ -31,12 +31,9 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
       setHeight(user.height || '');
       setWeight(user.weight || '');
       setNickname(user.nickname || '');
-      // Initialiser currentGoal avec user.goal si disponible
-      if (user.goal && !currentGoal) {
-        setCurrentGoal(user.goal);
-      }
+      setCurrentGoal(user.goal || '');
     }
-  }, [user, currentGoal]);
+  }, [user]);
 
   const handleBadgeSelect = async (badgeId) => {
     setLoading(true);
@@ -119,11 +116,6 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, { goal: selectedGoal });
       
-      // Rafraîchir l'objet user pour que le chatbot ait accès à l'objectif
-      if (refreshUserProfile) {
-        await refreshUserProfile();
-      }
-      
       setSuccessMessage('Objectif mis à jour !');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (e) {
@@ -133,7 +125,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
     } finally {
       setLoading(false);
     }
-  }, [user, refreshUserProfile]);
+  }, [user]);
 
   return (
     <div className="space-y-6">
@@ -160,10 +152,10 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
         <div className="mt-2 text-sm text-gray-700 flex flex-col items-center">
           {user.height && <div>Taille : <span className="font-semibold">{user.height} cm</span></div>}
           {user.weight && <div>Poids : <span className="font-semibold">{user.weight} kg</span></div>}
-          {currentGoal && (
+          {(currentGoal || user.goal) && (
             <div className="text-indigo-600 flex items-center mt-1">
               <Target className="h-4 w-4 mr-1" />
-              <span className="font-semibold">{currentGoal}</span>
+              <span className="font-semibold">{currentGoal || user.goal}</span>
             </div>
           )}
         </div>
