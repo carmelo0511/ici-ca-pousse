@@ -34,7 +34,7 @@ const ThemeToggleBubble = () => {
       <div style={{ position: 'fixed', left: 120, bottom: 24, zIndex: 999 }}>
         <button
           onClick={toggleTheme}
-          className="bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl"
+          className="bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl border border-white/30"
           aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
           title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
         >

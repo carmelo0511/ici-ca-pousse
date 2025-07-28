@@ -41,7 +41,7 @@ const Header = memo(({ workoutCount, className = '', user, workouts = [], challe
           {/* Barre d'XP moderne */}
           <div className="flex flex-col items-center min-w-0 flex-1 mx-1">
             <div className="flex items-center w-full">
-              <div className="relative w-20 h-1.5 sm:w-40 sm:h-3 bg-black/10 dark:bg-white/30 rounded-full overflow-hidden shadow-inner">
+              <div className="relative w-20 h-1.5 sm:w-40 sm:h-3 bg-black/10 dark:bg-white/50 rounded-full overflow-hidden shadow-inner border border-white/20">
                 <div
                   className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-green-400 to-purple-500 dark:from-cyan-300 dark:to-green-300 transition-all duration-700"
                   style={{ width: `${xpPercent}%` }}

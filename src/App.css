@@ -366,6 +366,29 @@ body.dark, .dark .min-h-screen, .dark .w-full {
 .dark, .dark * {
   color: #fff !important;
 }
+
+/* Amélioration de la visibilité des boutons flottants en mode sombre */
+.dark .border-white\/30 {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.dark .border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Amélioration de la barre d'expérience en mode sombre */
+.dark .bg-white\/50 {
+  background-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Amélioration des ombres en mode sombre */
+.dark .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(255, 255, 255, 0.1), 0 10px 10px -5px rgba(255, 255, 255, 0.04) !important;
+}
 .dark .bg-white,
 .dark .bg-white\/90,
 .dark .bg-gray-50,
