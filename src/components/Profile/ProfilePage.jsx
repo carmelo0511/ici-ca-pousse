@@ -31,8 +31,12 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
       setHeight(user.height || '');
       setWeight(user.weight || '');
       setNickname(user.nickname || '');
+      // Initialiser currentGoal avec user.goal si disponible
+      if (user.goal && !currentGoal) {
+        setCurrentGoal(user.goal);
+      }
     }
-  }, [user]);
+  }, [user, currentGoal]);
 
   const handleBadgeSelect = async (badgeId) => {
     setLoading(true);
@@ -115,6 +119,11 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, { goal: selectedGoal });
       
+      // Rafraîchir l'objet user pour que le chatbot ait accès à l'objectif
+      if (refreshUserProfile) {
+        await refreshUserProfile();
+      }
+      
       setSuccessMessage('Objectif mis à jour !');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (e) {
@@ -124,7 +133,7 @@ const ProfilePage = ({ user, workouts = [], challenges = [], onUserUpdate, addBa
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, refreshUserProfile]);
 
   return (
     <div className="space-y-6">

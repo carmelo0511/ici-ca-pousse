@@ -86,7 +86,7 @@ npm start
 
 #### 💬 **Interface de chat unifiée**
 - **Messages d'accueil automatiques** : "Bonjour [prénom], je suis Coach Lex IA"
-- **Contexte enrichi** : L'IA connaît vos dernières séances, taille, poids
+- **Contexte enrichi** : L'IA connaît vos dernières séances, taille, poids et objectif personnel
 - **Questions libres** : Sport, nutrition, motivation, bien-être
 - **Messages explicatifs** : Explications des recommandations
 - **Mode sombre/clair** : Interface adaptée à tous les thèmes
@@ -101,6 +101,8 @@ npm start
 ### 🔐 Authentification & Profil
 - **Connexion Google** : Authentification rapide et sécurisée
 - **Gestion du profil** : Photo, pseudo, surnom personnalisé et badge sélectionné
+- **Objectifs personnalisés** : Définissez votre objectif (Perte de poids, Prise de masse, Endurance, Performance)
+- **Profil intégré** : Onglet profil complet avec objectifs, taille, poids et surnom
 - **Notifications en temps réel** : Suivi des invitations et rappels
 
 ### 👥 Social & Défis
@@ -121,6 +123,8 @@ npm start
 - **Analyse des ressentis** : Le coach IA analyse vos ressentis pour améliorer ses conseils
 
 ### 🎨 Interface Utilisateur Améliorée
+- **Navigation harmonisée** : Onglets avec titres uniformes (couleur violette, sans emojis)
+- **Profil intégré** : Onglet profil complet remplaçant la modal
 - **Boutons de suppression visibles** : Suppression d'exercices et de séries avec confirmation
 - **Bouton "Vider la séance"** : Supprime tous les exercices d'une séance en une fois
 - **Confirmations de sécurité** : Popups de confirmation avant suppression
@@ -129,6 +133,7 @@ npm start
 - **Mode sombre/clair** : Bulle flottante pour changer de thème instantanément
 - **Header moderne** : Design épuré avec cercle de niveau blanc et streak intégrée
 - **Poids décimal** : Support des poids avec virgules (ex: 70.5 kg)
+- **Modales scrollables** : Templates et création de templates avec défilement
 
 ### 📊 Monitoring & Analytics
 - **Vercel Analytics** : Suivi des visiteurs, pages vues, taux de rebond en temps réel
