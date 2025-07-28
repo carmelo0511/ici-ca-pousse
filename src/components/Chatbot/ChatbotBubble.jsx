@@ -27,7 +27,7 @@ const ChatbotBubble = (props) => {
         {!open && (
           <button
             onClick={() => setOpen(true)}
-            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl"
+            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl border border-white/20"
             aria-label="Ouvrir Coach Lex IA"
           >
             <span className="font-semibold text-sm tracking-wide">LEX IA</span>

@@ -296,7 +296,7 @@ function WorkoutList({
                   <IconButton
                     icon={Plus}
                     onClick={() => addSet(exercise.id)}
-                    className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg"
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg border border-white/20"
                   />
                   <button
                     onClick={() => removeExerciseFromWorkout(exercise.id)}
@@ -401,7 +401,7 @@ function WorkoutList({
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setShowAddExercise(true)}
-                className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs border border-white/20"
               >
                 <Plus className="h-5 w-5" />
                 {t('add_exercise')}
@@ -426,14 +426,14 @@ function WorkoutList({
               <div className="flex gap-3 justify-center">
                 <button
                   onClick={() => setShowSaveTemplateModal(true)}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs border border-white/20"
                 >
                   <Bookmark className="h-5 w-5" />
                   Sauvegarder en template
                 </button>
                 <button
                   onClick={handleSaveWorkout}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs border border-white/20"
                 >
                   <Target className="h-5 w-5" />
                   {t('finish_workout')}
@@ -446,7 +446,7 @@ function WorkoutList({
               <div className="flex justify-center">
                 <button
                   onClick={handleSaveWorkout}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 max-w-xs border border-white/20"
                 >
                   <Target className="h-5 w-5" />
                   {t('finish_workout')}

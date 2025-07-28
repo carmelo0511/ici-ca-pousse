@@ -74,7 +74,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
       {/* Statistiques principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">{t('total_workouts')}</p>
@@ -84,7 +84,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">{t('total_sets')}</p>
@@ -94,7 +94,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">{t('total_reps')}</p>
@@ -104,7 +104,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">{t('avg_duration')}</p>
@@ -114,7 +114,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">{t('regularity')}</p>
@@ -124,7 +124,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto">
+        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">Groupe préféré</p>
@@ -145,7 +145,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Moment préféré */}
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
               <h4 className="text-lg font-semibold text-gray-800 mb-3">Moment préféré</h4>
               <div className="flex items-center space-x-3">
                 <span className="text-3xl">{preferredTime.icon}</span>
@@ -196,22 +196,22 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           <div className="mt-6">
             <h4 className="text-lg font-semibold text-gray-800 mb-3">Durée moyenne par moment</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-blue-100 rounded-xl p-4 text-center">
+              <div className="bg-blue-100 rounded-xl p-4 text-center border border-white/20">
                 <div className="text-2xl mb-1">🌅</div>
                 <div className="font-bold text-blue-800">{avgDurationByTime.morning} min</div>
                 <div className="text-sm text-blue-600">Matin</div>
               </div>
-              <div className="bg-blue-100 rounded-xl p-4 text-center">
+              <div className="bg-blue-100 rounded-xl p-4 text-center border border-white/20">
                 <div className="text-2xl mb-1">☀️</div>
                 <div className="font-bold text-blue-800">{avgDurationByTime.afternoon} min</div>
                 <div className="text-sm text-blue-600">Après-midi</div>
               </div>
-              <div className="bg-blue-100 rounded-xl p-4 text-center">
+              <div className="bg-blue-100 rounded-xl p-4 text-center border border-white/20">
                 <div className="text-2xl mb-1">🌆</div>
                 <div className="font-bold text-blue-800">{avgDurationByTime.evening} min</div>
                 <div className="text-sm text-blue-600">Soir</div>
               </div>
-              <div className="bg-blue-100 rounded-xl p-4 text-center">
+              <div className="bg-blue-100 rounded-xl p-4 text-center border border-white/20">
                 <div className="text-2xl mb-1">🌙</div>
                 <div className="font-bold text-blue-800">{avgDurationByTime.night} min</div>
                 <div className="text-sm text-blue-600">Nuit</div>
@@ -230,7 +230,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Recommandation basée sur la fréquence */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>📊</span>
               <span>Fréquence d'entraînement</span>
@@ -258,7 +258,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur le groupe musculaire */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>💪</span>
               <span>Équilibre musculaire</span>
@@ -295,7 +295,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur la durée */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>⏱️</span>
               <span>Durée des séances</span>
@@ -325,7 +325,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur le moment */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>🌅</span>
               <span>Moment d'entraînement</span>

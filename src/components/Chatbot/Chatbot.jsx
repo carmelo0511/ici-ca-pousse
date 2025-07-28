@@ -803,25 +803,25 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
       <div className="mb-2 flex flex-wrap gap-1 items-center">
         <button
           onClick={() => setShowMenu(v => !v)}
-          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-xs whitespace-nowrap"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-xs whitespace-nowrap border border-white/20"
         >
           Propose-moi une séance
         </button>
         <button
           onClick={handleRecapLastWorkouts}
-          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-xs whitespace-nowrap"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-xs whitespace-nowrap border border-white/20"
         >
           Récap des dernières séances
         </button>
         <button
           onClick={() => handlePersonalizedRecommendation()}
-          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-xs whitespace-nowrap"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-xs whitespace-nowrap border border-white/20"
         >
           🧠 Conseils IA
         </button>
         <button
           onClick={() => handleGoalsAndProgress()}
-          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-xs whitespace-nowrap"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-xs whitespace-nowrap border border-white/20"
         >
           📈 Progression
         </button>
@@ -849,7 +849,7 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
             </select>
             <button
               onClick={handleSuggestWorkout}
-              className="mt-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded font-semibold shadow hover:from-blue-600 hover:to-blue-700 transition"
+              className="mt-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded font-semibold shadow hover:from-blue-600 hover:to-blue-700 transition border border-white/20"
             >
               Valider
             </button>

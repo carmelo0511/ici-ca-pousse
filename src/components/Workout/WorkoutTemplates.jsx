@@ -285,17 +285,17 @@ const WorkoutTemplates = ({
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20"
         >
           <Plus className="h-5 w-5" />
           Créer un template
         </button>
         
         {exercises.length > 0 && (
-          <button
-            onClick={() => setShowSaveModal(true)}
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-          >
+                  <button
+          onClick={() => setShowSaveModal(true)}
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20"
+        >
             <Save className="h-5 w-5" />
             Sauvegarder la séance
           </button>
@@ -722,7 +722,7 @@ const WorkoutTemplates = ({
                 </button>
                 <button
                   onClick={handleCreateTemplate}
-                  className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20"
                 >
                   Créer le template
                 </button>

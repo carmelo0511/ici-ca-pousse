@@ -40,7 +40,7 @@ const GradientButton = ({
       onClick={onClick}
       aria-label={ariaLabel}
       disabled={disabled}
-      className={`${getGradientClasses(from, to)} text-white ${sizeClasses} ${radius} flex items-center space-x-3 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:opacity-50 ${className}`}
+      className={`${getGradientClasses(from, to)} text-white ${sizeClasses} ${radius} flex items-center space-x-3 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:opacity-50 border border-white/20 ${className}`}
       {...props}
     >
       {Icon && <Icon className="h-5 w-5" />}
