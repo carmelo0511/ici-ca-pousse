@@ -3,16 +3,11 @@
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-10.7.0-orange.svg)](https://firebase.google.com/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)](https://web.dev/progressive-web-apps/)
-[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)](https://jestjs.io/)
-[![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)](https://jestjs.io/)
+[![Tests](https://img.shields.io/badge/coverage-85%25-brightgreen)](https://jestjs.io/)
 [![Linting](https://img.shields.io/badge/ESLint-Clean-brightgreen.svg)](https://eslint.org/)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com/)
-[![Analytics](https://img.shields.io/badge/Analytics-Vercel-blue.svg)](https://vercel.com/analytics)
-[![Speed Insights](https://img.shields.io/badge/Speed%20Insights-Vercel-green.svg)](https://vercel.com/speed-insights)
 [![AI Coach](https://img.shields.io/badge/AI%20Coach-OpenAI-purple.svg)](https://openai.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/bryannakache/ici-ca-pousse/graphs/commit-activity)
 
 ## 🌐 Application en ligne
 
@@ -37,12 +32,6 @@ cp .env.example .env.local
 # Démarrer en mode développement
 npm start
 ```
-
-**🚀 En 5 minutes, vous aurez :**
-- ✅ Application fonctionnelle avec authentification Google
-- ✅ Coach IA intelligent pour vos séances
-- ✅ Système de gamification complet
-- ✅ Interface mobile-first responsive
 
 ## 🚀 Fonctionnalités
 
@@ -123,7 +112,7 @@ npm start
 - **Analyse des ressentis** : Le coach IA analyse vos ressentis pour améliorer ses conseils
 
 ### 🎨 Interface Utilisateur Améliorée
-- **Navigation harmonisée** : Onglets avec titres uniformes (couleur violette, sans emojis)
+- **Navigation harmonisée** : Onglets avec titres uniformes (couleur bleue, sans emojis)
 - **Profil intégré** : Onglet profil complet remplaçant la modal
 - **Boutons de suppression visibles** : Suppression d'exercices et de séries avec confirmation
 - **Bouton "Vider la séance"** : Supprime tous les exercices d'une séance en une fois
@@ -134,6 +123,8 @@ npm start
 - **Header moderne** : Design épuré avec cercle de niveau blanc et streak intégrée
 - **Poids décimal** : Support des poids avec virgules (ex: 70.5 kg)
 - **Modales scrollables** : Templates et création de templates avec défilement
+- **Harmonisation des couleurs** : Tous les boutons en bleu (sauf suppression en rouge)
+- **Mode sombre amélioré** : Bordures blanches pour meilleure visibilité
 
 ### 📊 Monitoring & Analytics
 - **Vercel Analytics** : Suivi des visiteurs, pages vues, taux de rebond en temps réel
@@ -196,28 +187,6 @@ graph TB
     A -.-> V
     M -.-> X
     Z --> A
-```
-
-### 📁 Structure du Projet
-
-```
-src/
-├── components/
-│   ├── common/           # Composants réutilisables
-│   ├── features/         # Fonctionnalités métier
-│   │   ├── auth/
-│   │   ├── workout/
-│   │   ├── badges/
-│   │   ├── challenges/
-│   │   ├── leaderboard/
-│   │   ├── profile/
-│   │   ├── stats/
-│   │   └── Chatbot/      # Coach Lex IA
-│   └── layout/           # Composants de mise en page
-├── hooks/                # Hooks personnalisés
-├── utils/                # Utilitaires
-├── constants/            # Constantes
-└── App.js               # Point d'entrée
 ```
 
 ## 🛠️ Installation & Développement
@@ -332,31 +301,6 @@ service firebase.storage {
 }
 ```
 
-### 5. Fichiers de configuration Firebase
-Le projet contient plusieurs fichiers de configuration Firebase utiles :
-
-- **`firebase-storage-rules.txt`** : Règles Storage complètes pour les photos de profil
-- **`firebase-firestore-rules-default.txt`** : Règles Firestore par défaut (accès complet)
-- **`firebase-storage-rules-default.txt`** : Règles Storage par défaut (accès complet)
-- **`FIREBASE_SETUP.md`** : Guide détaillé de configuration Firebase
-- **`REFACTORING_NOTES.md`** : Notes sur l'architecture et les refactorings
-- **`ARCHITECTURE.md`** : Documentation de l'architecture du projet
-
-**⚠️ Note** : Les fichiers `*-default.txt` contiennent des règles moins sécurisées pour le développement. Utilisez les règles sécurisées en production.
-
-## 🚀 Déploiement
-
-### Déploiement automatique (recommandé)
-1. Connectez votre repo GitHub à Vercel
-2. Configurez les variables d'environnement dans Vercel
-3. Déploiement automatique à chaque push
-
-### Déploiement manuel
-```bash
-npm run build
-# Uploadez le dossier build/ sur votre hébergeur
-```
-
 ## 🧪 Tests
 
 > **Couverture actuelle :**
@@ -378,9 +322,6 @@ Le projet dispose d'une suite de tests moderne et extensible :
   - `workoutUtils` (calculs, analyse, formatage, badges)
   - `leaderboardUtils` (classements, stats, labels)
 
-**Nouveau** :
-- Coach Lex IA a été mis à jour pour accepter toutes les questions dans une interface unique, et les tests vérifient ce comportement (interface, contexte, gestion des erreurs, personnalisation).
-
 ### Lancement des tests
 ```bash
 # Tests unitaires et d'intégration
@@ -389,28 +330,6 @@ npm test
 # Tests avec couverture
 npm run test:coverage
 ```
-
-### Structure des Tests
-```
-src/tests/
-├── hooks/           # Tests des hooks personnalisés
-│   ├── useAppState.test.js
-│   ├── useExercises.test.js
-│   └── useChatGPT.test.js
-├── components/      # Tests des composants
-│   └── Chatbot.test.js
-└── utils/           # Tests des utilitaires
-    ├── workoutUtils.test.js
-    └── leaderboardUtils.test.js
-```
-
-### Couverture détaillée
-- **Statements** : 85.49%
-- **Branches** : 59.45%
-- **Functions** : 93.1%
-- **Lines** : 89.56%
-
-**Note** : La couverture a été maintenue grâce à la suite de tests complète et aux tests pour Coach Lex IA et les hooks principaux.
 
 ## 📈 Roadmap 2025
 
@@ -445,6 +364,12 @@ src/tests/
 - [x] **Header optimisé** (cercle de niveau blanc, streak intégrée)
 - [x] **Dates corrigées** (calcul correct des semaines pour l'évolution du poids)
 - [x] **Vercel Analytics & Speed Insights** (monitoring des performances et analytics)
+- [x] **Objectifs personnalisés** (Perte de poids, Prise de masse, Endurance, Performance)
+- [x] **Profil intégré** (onglet profil complet avec objectifs, taille, poids)
+- [x] **Harmonisation des couleurs** (tous les boutons en bleu, suppression en rouge)
+- [x] **Mode sombre amélioré** (bordures blanches pour meilleure visibilité)
+- [x] **Modales scrollables** (templates et création de templates)
+- [x] **Navigation harmonisée** (titres uniformes en bleu)
 
 ### 🚧 En développement
 - [ ] Analyse de performance avancée
