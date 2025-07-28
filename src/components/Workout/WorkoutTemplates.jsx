@@ -286,9 +286,6 @@ const WorkoutTemplates = ({
         <button
           onClick={() => setShowCreateModal(true)}
           className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-          style={{
-            background: 'linear-gradient(to right, #3b82f6, #2563eb)',
-          }}
         >
           <Plus className="h-5 w-5" />
           Créer un template
@@ -297,10 +294,7 @@ const WorkoutTemplates = ({
         {exercises.length > 0 && (
           <button
             onClick={() => setShowSaveModal(true)}
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-            style={{
-              background: 'linear-gradient(to right, #6366f1, #4f46e5)',
-            }}
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <Save className="h-5 w-5" />
             Sauvegarder la séance
@@ -728,10 +722,7 @@ const WorkoutTemplates = ({
                 </button>
                 <button
                   onClick={handleCreateTemplate}
-                  className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                  style={{
-                    background: 'linear-gradient(to right, #22c55e, #10b981)',
-                  }}
+                  className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                 >
                   Créer le template
                 </button>

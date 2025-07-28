@@ -269,13 +269,13 @@ const CalendarView = ({
                               <Edit3 className="h-4 w-4" />
                               {t('edit')}
                             </button>
-                            <button
-                              onClick={() => deleteWorkout(w.id)}
-                              className="flex items-center gap-2 bg-gradient-to-r from-red-400 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-red-500 hover:to-pink-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              Supprimer
-                            </button>
+                                            <button
+                  onClick={() => deleteWorkout(w.id)}
+                  className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-red-600 hover:to-red-700 transition-all text-sm sm:text-base max-w-full whitespace-nowrap"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Supprimer
+                </button>
                           </div>
                         </div>
                       ))}
@@ -298,7 +298,7 @@ const CalendarView = ({
               <div className="flex flex-wrap gap-2 ml-auto">
                 <button
                   onClick={() => deleteWorkout(selectedWorkout.id)}
-                  className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-3 sm:px-4 py-2 rounded-xl font-medium flex items-center space-x-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 text-sm sm:text-base"
+                  className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 sm:px-4 py-2 rounded-xl font-medium flex items-center space-x-2 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 text-sm sm:text-base"
                 >
                   <Trash2 className="h-4 w-4" />
                   <span>Supprimer</span>

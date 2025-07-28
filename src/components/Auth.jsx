@@ -38,7 +38,7 @@ function Auth({ className = '' }) {
       <div className={`max-w-md mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center ${className}`}>
         <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Bienvenue !</h2>
         <p className="mb-4 text-gray-700">Connecté en tant que <span className="font-semibold">{user.email || user.displayName}</span></p>
-        <GradientButton onClick={handleSignOut} from="red-500" to="red-700" ariaLabel="Se déconnecter">Se déconnecter</GradientButton>
+        <GradientButton onClick={handleSignOut} from="blue-500" to="blue-600" ariaLabel="Se déconnecter">Se déconnecter</GradientButton>
       </div>
     );
   }
@@ -51,8 +51,8 @@ function Auth({ className = '' }) {
       {error && <div className="text-red-500 text-sm text-center mb-4" role="alert">{error}</div>}
       <GradientButton
         type="button"
-        from="yellow-400"
-        to="orange-500"
+        from="blue-500"
+        to="blue-600"
         className="w-full flex items-center justify-center gap-2"
         onClick={handleGoogleSignIn}
         disabled={googleLoading}
