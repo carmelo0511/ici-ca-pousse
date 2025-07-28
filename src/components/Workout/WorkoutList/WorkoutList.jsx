@@ -78,6 +78,9 @@ function WorkoutList({
   const [showFeelingModal, setShowFeelingModal] = useState(false);
   const [selectedFeeling, setSelectedFeeling] = useState('');
   const [customFeeling, setCustomFeeling] = useState('');
+  const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false);
+  const [templateName, setTemplateName] = useState('');
+  const [templateDescription, setTemplateDescription] = useState('');
 
   // Options de ressentis prédéfinis
   const feelingOptions = [
@@ -104,6 +107,30 @@ function WorkoutList({
       return;
     }
     setShowFeelingModal(true);
+  };
+
+  // Fonction pour gérer la sauvegarde directe en template
+  const handleSaveAsTemplate = async () => {
+    if (!templateName.trim()) {
+      alert('Veuillez donner un nom au template');
+      return;
+    }
+
+    if (exercises.length === 0) {
+      alert('Aucun exercice à sauvegarder');
+      return;
+    }
+
+    try {
+      await onSaveTemplate(exercises, templateName.trim(), templateDescription.trim());
+      setShowSaveTemplateModal(false);
+      setTemplateName('');
+      setTemplateDescription('');
+      // Message de succès géré par le parent (App.js)
+    } catch (error) {
+      console.error('Erreur sauvegarde template:', error);
+      alert('Erreur lors de la sauvegarde du template');
+    }
   };
 
   // Fonction pour confirmer la sauvegarde avec ressentis
@@ -404,7 +431,7 @@ function WorkoutList({
             {exercises.length > 0 && (
               <div className="flex gap-3 justify-center">
                 <button
-                  onClick={() => onSaveTemplate()}
+                  onClick={() => setShowSaveTemplateModal(true)}
                   className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
                   style={{
                     background: 'linear-gradient(to right, #a855f7, #7c3aed)',
@@ -833,6 +860,86 @@ function WorkoutList({
           </div>
         </div>
       </Modal>
+
+      {/* Modal sauvegarder en template */}
+      {showSaveTemplateModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-800">Sauvegarder en template</h3>
+              <button
+                onClick={() => {
+                  setShowSaveTemplateModal(false);
+                  setTemplateName('');
+                  setTemplateDescription('');
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nom du template *
+                </label>
+                <input
+                  type="text"
+                  value={templateName}
+                  onChange={(e) => setTemplateName(e.target.value)}
+                  className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-indigo-500 focus:outline-none"
+                  placeholder="Ex: Séance pectoraux"
+                  maxLength={50}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description (optionnel)
+                </label>
+                <textarea
+                  value={templateDescription}
+                  onChange={(e) => setTemplateDescription(e.target.value)}
+                  className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-indigo-500 focus:outline-none"
+                  placeholder="Description du template..."
+                  rows={3}
+                  maxLength={200}
+                />
+              </div>
+
+              <div className="bg-blue-50 rounded-lg p-3">
+                <div className="flex items-center space-x-2 text-sm text-blue-800">
+                  <Star className="h-4 w-4" />
+                  <span>Cette séance contient {exercises.length} exercices</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowSaveTemplateModal(false);
+                  setTemplateName('');
+                  setTemplateDescription('');
+                }}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleSaveAsTemplate}
+                className="flex-1 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-200"
+                style={{
+                  background: 'linear-gradient(to right, #a855f7, #7c3aed)',
+                }}
+              >
+                Sauvegarder
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

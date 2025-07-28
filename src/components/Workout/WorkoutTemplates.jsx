@@ -267,40 +267,40 @@ const WorkoutTemplates = ({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* Header avec boutons */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-3">
-          <Bookmark className="h-6 w-6 text-indigo-600" />
-          <h2 className="text-2xl font-bold text-gray-800">Mes Templates</h2>
-          <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
-            {templates.length}
-          </span>
-        </div>
+      {/* Header */}
+      <div className="flex items-center space-x-3 mb-4">
+        <Bookmark className="h-6 w-6 text-indigo-600" />
+        <h2 className="text-2xl font-bold text-gray-800">Mes Templates</h2>
+        <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
+          {templates.length}
+        </span>
+      </div>
+
+      {/* Boutons d'action */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+          style={{
+            background: 'linear-gradient(to right, #22c55e, #10b981)',
+          }}
+        >
+          <Plus className="h-5 w-5" />
+          Créer un template
+        </button>
         
-        <div className="flex gap-3">
+        {exercises.length > 0 && (
           <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+            onClick={() => setShowSaveModal(true)}
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
             style={{
-              background: 'linear-gradient(to right, #22c55e, #10b981)',
+              background: 'linear-gradient(to right, #6366f1, #9333ea)',
             }}
           >
-            <Plus className="h-5 w-5" />
-            Créer un template
+            <Save className="h-5 w-5" />
+            Sauvegarder la séance
           </button>
-          
-          {exercises.length > 0 && (
-            <GradientButton
-              icon={Save}
-              from="indigo-500"
-              to="purple-600"
-              onClick={() => setShowSaveModal(true)}
-              className="text-white"
-            >
-              Sauvegarder la séance
-            </GradientButton>
-          )}
-        </div>
+        )}
       </div>
 
       {/* Liste des templates */}
@@ -314,7 +314,7 @@ const WorkoutTemplates = ({
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
               style={{
                 background: 'linear-gradient(to right, #22c55e, #10b981)',
               }}
@@ -323,21 +323,24 @@ const WorkoutTemplates = ({
               Créer un template
             </button>
             {exercises.length > 0 && (
-              <GradientButton
-                icon={Save}
-                from="indigo-500"
-                to="purple-600"
+              <button
                 onClick={() => setShowSaveModal(true)}
-                className="text-white"
+                className="flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                style={{
+                  background: 'linear-gradient(to right, #6366f1, #9333ea)',
+                }}
               >
+                <Save className="h-5 w-5" />
                 Sauvegarder la séance
-              </GradientButton>
+              </button>
             )}
           </div>
         </Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {templates.map((template) => (
+          {templates.map((template) => {
+            console.log('Template affiché:', template.id, template.name, typeof template.id);
+            return (
             <Card key={template.id} className="p-6 hover:shadow-lg transition-shadow duration-200">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
@@ -365,7 +368,10 @@ const WorkoutTemplates = ({
                   />
                   <IconButton
                     icon={Trash2}
-                    onClick={() => handleDeleteTemplate(template.id)}
+                    onClick={() => {
+                      console.log('Tentative suppression template:', template.id, template.name);
+                      handleDeleteTemplate(template.id);
+                    }}
                     className="text-red-600 hover:text-red-700"
                     title="Supprimer"
                   />
@@ -401,7 +407,8 @@ const WorkoutTemplates = ({
                 Charger ce template
               </GradientButton>
             </Card>
-          ))}
+            );
+          })}
         </div>
       )}
 

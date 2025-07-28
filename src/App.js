@@ -150,10 +150,15 @@ function App() {
   } = workoutLogic;
 
   // Fonctions pour gérer les templates
-  const handleSaveTemplate = (exercises) => {
-    // Basculer vers l'onglet templates avec les exercices à sauvegarder
-    setActiveTab('templates');
-    showToastMsg('Onglet Templates ouvert - vous pouvez maintenant sauvegarder votre séance !');
+  const handleSaveTemplate = async (exercises, name, description = '') => {
+    try {
+      await saveCurrentWorkoutAsTemplate(exercises, name, description);
+      setActiveTab('templates'); // Basculer vers l'onglet Templates
+      showToastMsg('Template sauvegardé avec succès !');
+    } catch (error) {
+      console.error('Erreur sauvegarde template:', error);
+      showToastMsg('Erreur lors de la sauvegarde du template', 'error');
+    }
   };
 
   const handleDeleteTemplate = async (templateId) => {

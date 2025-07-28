@@ -37,8 +37,10 @@ export const useWorkoutTemplates = (user) => {
         // Migrer chaque template vers Firestore
         localTemplates.forEach(async (template) => {
           try {
+            const cleanedTemplate = { ...template };
+            delete cleanedTemplate.id; // Supprimer l'ID local pour que Firestore génère le sien
             await addDoc(collection(db, 'workoutTemplates'), { 
-              ...template, 
+              ...cleanedTemplate, 
               userId: user.uid,
               createdAt: new Date().toISOString()
             });
