@@ -210,11 +210,11 @@ function App() {
     { id: 'calendar', label: 'Calendrier' },
     { id: 'stats', label: 'Statistiques' },
     { id: 'templates', label: 'Templates' },
-    { id: 'friends', label: 'Amis' },
     { id: 'profile', label: 'Profil' },
     { id: 'leaderboard', label: 'Classement' },
     { id: 'challenges', label: 'Défis' },
-    { id: 'badges', label: 'Badges' }
+    { id: 'badges', label: 'Badges' },
+    { id: 'friends', label: 'Amis' }
   ];
 
   // Navigation par gestes et raccourcis clavier

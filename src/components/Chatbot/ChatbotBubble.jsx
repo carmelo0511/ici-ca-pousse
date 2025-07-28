@@ -27,7 +27,7 @@ const ChatbotBubble = (props) => {
         {!open && (
           <button
             onClick={() => setOpen(true)}
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl"
+            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl"
             aria-label="Ouvrir Coach Lex IA"
           >
             <span className="font-semibold text-sm tracking-wide">LEX IA</span>
@@ -36,8 +36,8 @@ const ChatbotBubble = (props) => {
         )}
         {open && (
           <div className="fixed bottom-20 left-6 w-[350px] max-w-[95vw] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50 animate-fade-in">
-            <div className="flex justify-between items-center p-3 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-t-2xl">
-              <span className="font-bold text-indigo-700 text-lg">Coach Lex IA</span>
+            <div className="flex justify-between items-center p-3 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl">
+              <span className="font-bold text-blue-700 text-lg">Coach Lex IA</span>
               <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-red-500 p-1 rounded-full">
                 <X className="w-5 h-5" />
               </button>

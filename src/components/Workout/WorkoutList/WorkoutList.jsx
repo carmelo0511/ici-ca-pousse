@@ -401,9 +401,9 @@ function WorkoutList({
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setShowAddExercise(true)}
-                className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
                 style={{
-                  background: 'linear-gradient(to right, #10b981, #0d9488)',
+                  background: 'linear-gradient(to right, #3b82f6, #2563eb)',
                 }}
               >
                 <Plus className="h-5 w-5" />
@@ -442,9 +442,9 @@ function WorkoutList({
                 </button>
                 <button
                   onClick={handleSaveWorkout}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
                   style={{
-                    background: 'linear-gradient(to right, #10b981, #0d9488)',
+                    background: 'linear-gradient(to right, #3b82f6, #2563eb)',
                   }}
                 >
                   <Target className="h-5 w-5" />
@@ -458,9 +458,9 @@ function WorkoutList({
               <div className="flex justify-center">
                 <button
                   onClick={handleSaveWorkout}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 max-w-xs"
                   style={{
-                    background: 'linear-gradient(to right, #10b981, #0d9488)',
+                    background: 'linear-gradient(to right, #3b82f6, #2563eb)',
                   }}
                 >
                   <Target className="h-5 w-5" />
