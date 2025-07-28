@@ -300,10 +300,10 @@ function WorkoutList({
                   />
                   <button
                     onClick={() => removeExerciseFromWorkout(exercise.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-md transition-all duration-200 shadow-sm hover:shadow-md"
+                    className="bg-red-500 hover:bg-red-600 text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
                     title="Supprimer l'exercice"
                   >
-                    <X className="h-3.5 w-3.5" />
+                    <X className="h-3 w-3" />
                   </button>
                 </div>
               </div>
@@ -383,10 +383,10 @@ function WorkoutList({
                         </span>
                         <button
                           onClick={() => removeSet(exercise.id, setIndex)}
-                          className="bg-red-500 hover:bg-red-600 text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md"
+                          className="bg-red-500 hover:bg-red-600 text-white p-0.5 rounded transition-all duration-200 shadow-sm hover:shadow-md w-6 h-6 flex items-center justify-center"
                           title="Supprimer la série"
                         >
-                          <X className="h-3 w-3" />
+                          <X className="h-2.5 w-2.5" />
                         </button>
                       </>
                     )}
@@ -401,7 +401,7 @@ function WorkoutList({
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setShowAddExercise(true)}
-                className="flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
               >
                 <Plus className="h-5 w-5" />
                 {t('add_exercise')}
@@ -413,7 +413,7 @@ function WorkoutList({
                       exercises.forEach(exercise => removeExerciseFromWorkout(exercise.id));
                     }
                   }}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
                 >
                   <X className="h-5 w-5" />
                   <span className="font-medium">Vider la séance</span>
@@ -426,14 +426,14 @@ function WorkoutList({
               <div className="flex gap-3 justify-center">
                 <button
                   onClick={() => setShowSaveTemplateModal(true)}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
                 >
                   <Bookmark className="h-5 w-5" />
                   Sauvegarder en template
                 </button>
                 <button
                   onClick={handleSaveWorkout}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
                 >
                   <Target className="h-5 w-5" />
                   {t('finish_workout')}
@@ -446,7 +446,7 @@ function WorkoutList({
               <div className="flex justify-center">
                 <button
                   onClick={handleSaveWorkout}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 max-w-xs"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 max-w-xs"
                 >
                   <Target className="h-5 w-5" />
                   {t('finish_workout')}
