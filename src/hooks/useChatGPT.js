@@ -38,7 +38,7 @@ export default function useChatGPT(apiKey) {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-4-turbo-preview',
           messages: apiHistory,
         }),
       });
