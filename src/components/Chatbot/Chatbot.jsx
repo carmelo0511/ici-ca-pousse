@@ -120,6 +120,7 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
   const messages = messagesProp || chatGpt.messages;
   const setMessages = setMessagesProp || chatGpt.setMessages;
   const sendMessage = chatGpt.sendMessage;
+  const { isLoading, clearCache, getCacheStats, cacheStats } = chatGpt;
   const [input, setInput] = useState('');
   const [sessionType, setSessionType] = useState('fullbody');
   const [intensity, setIntensity] = useState('moyen');
@@ -825,6 +826,13 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
         >
           📈 Progression
         </button>
+        <button
+          onClick={clearCache}
+          className="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-3 py-2 rounded shadow font-semibold hover:from-gray-600 hover:to-gray-700 transition text-xs whitespace-nowrap border border-white/20"
+          title={`Cache: ${cacheStats.size}/${cacheStats.maxSize} (${Math.round(cacheStats.averageAccesses)} accès moy.)`}
+        >
+          🗑️ Cache
+        </button>
         {showMenu && (
           <div className="absolute z-50 mt-2 p-4 bg-white border rounded-xl shadow-xl flex flex-col gap-3" style={{ minWidth: 220 }}>
             <label className="font-semibold text-gray-700">Type de séance</label>
@@ -887,9 +895,10 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
         />
         <button
           onClick={handleSend}
-          className="btn-gradient text-white px-5 py-2 rounded text-lg"
+          disabled={isLoading}
+          className={`btn-gradient text-white px-5 py-2 rounded text-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          Envoyer
+          {isLoading ? '⏳...' : 'Envoyer'}
         </button>
       </div>
     </div>
