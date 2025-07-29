@@ -81,9 +81,9 @@ export function getLeaderboardRanking(usersStats, metric) {
       
       // Mapper les métriques aux bonnes propriétés
       if (metric === METRICS.WORKOUTS) {
-        value = user.stats.workouts || 0;
+        value = user.stats?.workouts || 0;
       } else if (metric === METRICS.MAX_WEIGHT) {
-        value = user.stats.maxWeight || 0;
+        value = user.stats?.maxWeight || 0;
       }
       
       return {

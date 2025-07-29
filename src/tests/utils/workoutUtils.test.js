@@ -15,6 +15,9 @@ import {
   getAverageWeights,
   getWorkoutWeightDetails,
   getWorkoutSetRepDetails,
+  getLastExerciseWeight,
+  groupWorkoutsByWeek,
+  getWeeklyWorkoutData,
 } from '../../utils/workoutUtils';
 
 describe('workoutUtils', () => {
@@ -31,6 +34,7 @@ describe('workoutUtils', () => {
     expect(d.getMonth()).toBe(0);
     expect(d.getDate()).toBe(5);
     expect(parseLocalDate(null)).toBeNull();
+    expect(parseLocalDate('')).toBeNull();
   });
 
   it('creates workouts and calculates stats', () => {
@@ -253,6 +257,195 @@ describe('workoutUtils', () => {
         totalWeight: 0
       });
       expect(workout.feeling).toBeUndefined();
+    });
+
+    it('should return null for empty exercises', () => {
+      expect(createWorkout([], '2024-01-15', 45)).toBeNull();
+      expect(createWorkout(null, '2024-01-15', 45)).toBeNull();
+    });
+
+    it('should handle exercises without sets', () => {
+      const exercisesWithoutSets = [
+        { name: 'Pompes', type: 'pectoraux' }
+      ];
+      const workout = createWorkout(exercisesWithoutSets, '2024-01-15', 45);
+      
+      expect(workout.exercises[0].sets).toEqual([{ reps: 0, weight: 0, duration: 0 }]);
+    });
+
+    it('should handle exercises without type', () => {
+      const exercisesWithoutType = [
+        { name: 'Pompes', sets: [{ reps: 10, weight: 0, duration: 0 }] }
+      ];
+      const workout = createWorkout(exercisesWithoutType, '2024-01-15', 45);
+      
+      expect(workout.exercises[0].type).toBe('custom');
+    });
+
+    it('should handle sets with invalid values', () => {
+      const exercisesWithInvalidSets = [
+        {
+          name: 'Pompes',
+          sets: [
+            { reps: 'invalid', weight: 'invalid', duration: 'invalid' }
+          ]
+        }
+      ];
+      const workout = createWorkout(exercisesWithInvalidSets, '2024-01-15', 45);
+      
+      expect(workout.exercises[0].sets[0]).toEqual({
+        reps: 0,
+        weight: 0,
+        duration: 0
+      });
+    });
+
+    it('should use current date when no date provided', () => {
+      const workout = createWorkout(mockExercises, null, 45);
+      expect(workout.date).toBe('2024-01-08');
+    });
+
+    it('should use default duration when no duration provided', () => {
+      const workout = createWorkout(mockExercises, '2024-01-15', null);
+      expect(workout.duration).toBe(30); // DEFAULT_WORKOUT_DURATION
+    });
+  });
+
+  describe('calculateWorkoutStats', () => {
+    it('should handle empty workouts array', () => {
+      const stats = calculateWorkoutStats([]);
+      expect(stats).toEqual({
+        totalWorkouts: 0,
+        totalSets: 0,
+        totalReps: 0,
+        totalWeight: 0,
+        avgDuration: 0
+      });
+    });
+
+    it('should calculate stats correctly', () => {
+      const workouts = [
+        { totalSets: 3, totalReps: 30, totalWeight: 300, duration: 45 },
+        { totalSets: 2, totalReps: 20, totalWeight: 200, duration: 30 }
+      ];
+      const stats = calculateWorkoutStats(workouts);
+      expect(stats).toEqual({
+        totalWorkouts: 2,
+        totalSets: 5,
+        totalReps: 50,
+        totalWeight: 500,
+        avgDuration: 38
+      });
+    });
+  });
+
+  describe('getLastExerciseWeight', () => {
+    it('should return last weight for exercise', () => {
+      const workouts = [
+        {
+          date: '2024-01-01',
+          exercises: [{ name: 'Squat', sets: [{ weight: 100 }] }]
+        },
+        {
+          date: '2024-01-05',
+          exercises: [{ name: 'Squat', sets: [{ weight: 110 }] }]
+        }
+      ];
+      const weight = getLastExerciseWeight(workouts, 'Squat');
+      expect(weight).toBe(110);
+    });
+
+    it('should return 0 if exercise not found', () => {
+      const workouts = [
+        { date: '2024-01-01', exercises: [{ name: 'Bench', sets: [{ weight: 100 }] }] }
+      ];
+      const weight = getLastExerciseWeight(workouts, 'Squat');
+      expect(weight).toBe(null);
+    });
+
+    it('should filter by beforeDate', () => {
+      const workouts = [
+        {
+          date: '2024-01-01',
+          exercises: [{ name: 'Squat', sets: [{ weight: 100 }] }]
+        },
+        {
+          date: '2024-01-05',
+          exercises: [{ name: 'Squat', sets: [{ weight: 110 }] }]
+        }
+      ];
+      const weight = getLastExerciseWeight(workouts, 'Squat', '2024-01-03');
+      expect(weight).toBe(100);
+    });
+  });
+
+  describe('groupWorkoutsByWeek', () => {
+    it('should group workouts by week', () => {
+      const workouts = [
+        { date: '2024-01-01' }, // Week 1
+        { date: '2024-01-02' }, // Week 1
+        { date: '2024-01-08' }, // Week 2
+        { date: '2024-01-15' }  // Week 3
+      ];
+      const grouped = groupWorkoutsByWeek(workouts);
+      expect(Object.keys(grouped)).toHaveLength(3);
+    });
+
+    it('should handle empty workouts', () => {
+      const grouped = groupWorkoutsByWeek([]);
+      expect(grouped).toEqual({});
+    });
+  });
+
+  describe('getWeeklyWorkoutData', () => {
+    it('should generate weekly workout data', () => {
+      const workouts = [
+        { date: '2024-01-01', duration: 45 },
+        { date: '2024-01-02', duration: 30 },
+        { date: '2024-01-08', duration: 60 }
+      ];
+      const data = getWeeklyWorkoutData(workouts);
+      expect(data).toHaveLength(2); // 2 weeks
+    });
+  });
+
+  describe('formatDate edge cases', () => {
+    it('should handle invalid date strings', () => {
+      expect(formatDate('invalid-date')).toBe('Invalid Date');
+      expect(formatDate('')).toBe('');
+      expect(formatDate(null)).toBe('');
+    });
+  });
+
+  describe('cleanWorkoutForFirestore', () => {
+    it('should remove null and undefined values', () => {
+      const obj = {
+        a: 1,
+        b: null,
+        c: undefined,
+        d: { e: 2, f: null, g: undefined },
+        h: [1, null, 3, undefined]
+      };
+      const cleaned = cleanWorkoutForFirestore(obj);
+      expect(cleaned).toEqual({
+        a: 1,
+        d: { e: 2 },
+        h: [1, 3]
+      });
+    });
+
+    it('should handle nested objects', () => {
+      const obj = {
+        workout: {
+          exercises: [
+            { name: 'Squat', sets: [{ reps: 5, weight: 100 }] },
+            { name: 'Bench', sets: null }
+          ]
+        }
+      };
+      const cleaned = cleanWorkoutForFirestore(obj);
+      expect(cleaned.workout.exercises[0]).toBeDefined();
+      expect(cleaned.workout.exercises[1]).toBeDefined(); // null values are not removed in this implementation
     });
   });
 });

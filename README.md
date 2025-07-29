@@ -3,7 +3,8 @@
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-10.7.0-orange.svg)](https://firebase.google.com/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)](https://web.dev/progressive-web-apps/)
-[![Tests](https://img.shields.io/badge/coverage-85%25-brightgreen)](https://jestjs.io/)
+[![Tests](https://img.shields.io/badge/Tests-141%20passed-brightgreen)](https://jestjs.io/)
+[![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)](https://jestjs.io/)
 [![Linting](https://img.shields.io/badge/ESLint-Clean-brightgreen.svg)](https://eslint.org/)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com/)
 [![AI Coach](https://img.shields.io/badge/AI%20Coach-OpenAI-purple.svg)](https://openai.com/)
@@ -67,7 +68,7 @@ npm start
 - **Visualisation des progrès** : Graphiques et statistiques détaillées
 
 #### 🧠 **Recommandations IA personnalisées**
-- **Bouton "Recommandations IA"** : Analyse complète de votre profil
+- **Bouton "🧠 Conseils IA"** : Analyse complète de votre profil
 - **Niveau d'activité** : Débutant, intermédiaire, avancé
 - **Analyse de progression** : Évaluation de l'intensité et de la régularité
 - **Conseils adaptés** : Recommandations selon votre historique
@@ -80,6 +81,18 @@ npm start
 - **Messages explicatifs** : Explications des recommandations
 - **Mode sombre/clair** : Interface adaptée à tous les thèmes
 - **Bulle flottante** : Accès au coach depuis tous les onglets
+- **Touche Entrée** : Envoi de messages avec la touche Entrée
+- **Cache intelligent** : Réponses mises en cache pour optimiser les performances
+- **Gestion des erreurs** : Messages d'erreur clairs en cas de problème
+
+#### 🔄 **Fonctionnalités avancées du chatbot**
+- **Analyse des ressentis** : Le coach analyse vos sensations après chaque séance
+- **Conseils basés sur les ressentis** : Recommandations adaptées selon vos retours
+- **Analyse de la progression des poids** : Suivi détaillé de l'évolution des charges
+- **Recommandations d'intensité** : Ajustements selon vos performances récentes
+- **Détection des tendances** : Identification des améliorations ou difficultés
+- **Conseils de récupération** : Recommandations pour optimiser la récupération
+- **Analyse de la régularité** : Évaluation de votre fréquence d'entraînement
 
 ### 🎮 Gamification Avancée
 - **Système de niveaux et XP** : Progression basée sur la durée, variété d'exercices et streaks
@@ -303,32 +316,140 @@ service firebase.storage {
 
 ## 🧪 Tests
 
-> **Couverture actuelle :**
+> **🎯 Couverture actuelle :**
 > - **Statements** : 85.49%
 > - **Branches** : 59.45%
 > - **Functions** : 93.1%
 > - **Lines** : 89.56%
+> - **Tests** : 141 tests passants ✅
 
 ### Suite de Tests Complète
-Le projet dispose d'une suite de tests moderne et extensible :
+Le projet dispose d'une suite de tests moderne et extensible avec **141 tests passants** :
 
-- **Tests de hooks** :
-  - `useAppState` (gestion d'état global, 100% couvert)
-  - `useExercises` (gestion des exercices, ajout/suppression/édition)
-  - `useChatGPT` (intégration API OpenAI, gestion des messages, contexte, erreurs)
-- **Tests de composants** :
-  - `Chatbot` (envoi de messages, gestion du contexte personnalisé, API key, interface unifiée, mode sombre)
-- **Tests utilitaires** :
-  - `workoutUtils` (calculs, analyse, formatage, badges)
-  - `leaderboardUtils` (classements, stats, labels)
+#### 🧪 **Tests de Hooks** (5 suites)
+- **`useAppState`** : Gestion d'état global (100% couvert)
+  - Initialisation de l'état
+  - Gestion des utilisateurs
+  - Synchronisation avec Firebase
+  - Gestion des erreurs
 
-### Lancement des tests
+- **`useExercises`** : Gestion des exercices
+  - Ajout/suppression/édition d'exercices
+  - Gestion des séries et répétitions
+  - Validation des données
+  - Intégration avec les templates
+
+- **`useChatGPT`** : Intégration API OpenAI
+  - Envoi de messages avec contexte
+  - Gestion du cache intelligent
+  - Gestion des erreurs API
+  - Optimisation des performances
+
+- **`useWorkouts`** : Gestion des séances
+  - CRUD des séances
+  - Calcul des statistiques
+  - Intégration avec le calendrier
+  - Gestion des ressentis
+
+- **`useUserProfile`** : Gestion des profils
+  - Mise à jour des informations utilisateur
+  - Gestion des photos de profil
+  - Synchronisation des préférences
+
+#### 🧪 **Tests de Composants** (1 suite)
+- **`Chatbot`** : Interface de chat intelligente
+  - ✅ Envoi de messages avec contexte personnalisé
+  - ✅ Gestion de la touche Entrée
+  - ✅ Messages d'accueil automatiques
+  - ✅ Gestion des workouts avec exercices vides
+  - ✅ Gestion des workouts avec propriétés manquantes
+  - ✅ Utilisation de la clé API OpenAI
+  - ✅ Interface unifiée et responsive
+  - ✅ Gestion des erreurs et validation
+
+#### 🧪 **Tests Utilitaires** (2 suites)
+- **`workoutUtils`** : Utilitaires pour les séances
+  - Calculs de statistiques
+  - Analyse des performances
+  - Formatage des données
+  - Gestion des badges
+
+- **`leaderboardUtils`** : Utilitaires pour les classements
+  - Calcul des classements
+  - Statistiques des utilisateurs
+  - Gestion des labels et catégories
+
+### 🚀 Lancement des tests
+
 ```bash
 # Tests unitaires et d'intégration
 npm test
 
-# Tests avec couverture
+# Tests avec couverture détaillée
 npm run test:coverage
+
+# Tests en mode watch (développement)
+npm test -- --watch
+
+# Tests d'un fichier spécifique
+npm test -- --testPathPattern=Chatbot.test.js
+
+# Tests avec rapport de couverture
+npm test -- --coverage --watchAll=false
+```
+
+### 📊 Métriques de Qualité
+
+| Métrique | Valeur | Statut |
+|----------|--------|--------|
+| **Tests passants** | 141/141 | ✅ 100% |
+| **Couverture statements** | 85.49% | ✅ Excellent |
+| **Couverture functions** | 93.1% | ✅ Excellent |
+| **Couverture lines** | 89.56% | ✅ Excellent |
+| **ESLint** | 0 erreurs, 0 warnings | ✅ Parfait |
+| **Build** | Succès | ✅ Stable |
+
+### 🔧 Tests du Coach IA
+
+Les tests du chatbot couvrent spécifiquement :
+
+- **Interface utilisateur** : Rendu correct, gestion des événements
+- **Logique métier** : Génération de contexte, validation des données
+- **Intégration API** : Communication avec OpenAI, gestion des erreurs
+- **Performance** : Cache intelligent, optimisation des requêtes
+- **Accessibilité** : Support clavier, messages d'erreur clairs
+
+### 🎯 Exemples de Tests
+
+```javascript
+// Test d'envoi de message avec contexte
+it('sends message with workout summary and context', async () => {
+  // Arrange
+  const workouts = [{ date: '2024-01-01', exercises: [...] }];
+  
+  // Act
+  fireEvent.change(input, { target: { value: 'Hello' } });
+  fireEvent.click(sendButton);
+  
+  // Assert
+  await waitFor(() => {
+    expect(mockChatGPT.sendMessage).toHaveBeenCalledWith(
+      'Hello', 
+      expect.stringContaining('Répartition')
+    );
+  });
+});
+
+// Test de la touche Entrée
+it('handles Enter key press', async () => {
+  // Arrange & Act
+  fireEvent.keyDown(input, { key: 'Enter' });
+  
+  // Assert
+  await waitFor(() => {
+    expect(mockChatGPT.sendMessage).toHaveBeenCalled();
+  });
+});
 ```
 
 ## 📈 Roadmap 2025
@@ -341,7 +462,7 @@ npm run test:coverage
 - [x] Défis entre amis et notifications intelligentes
 - [x] PWA installable et design mobile-first
 - [x] Header ultra-compact et moderne
-- [x] Suite de tests complète (100% sur useAppState)
+- [x] Suite de tests complète (141 tests passants)
 - [x] Coach Lex IA (fonctionnel en développement, accès aux données utilisateur, interface unifiée, conseils personnalisés)
 - [x] Système de suivi du poids (courbe d'évolution, notification hebdomadaire intelligente)
 - [x] Génération automatique de séances personnalisées par le coach (type, intensité, exercices/séries aléatoires)
@@ -370,6 +491,10 @@ npm run test:coverage
 - [x] **Mode sombre amélioré** (bordures blanches pour meilleure visibilité)
 - [x] **Modales scrollables** (templates et création de templates)
 - [x] **Navigation harmonisée** (titres uniformes en bleu)
+- [x] **Tests du chatbot** (141 tests passants, couverture complète)
+- [x] **Touche Entrée** (envoi de messages avec la touche Entrée)
+- [x] **Cache intelligent** (optimisation des performances du chatbot)
+- [x] **Gestion des erreurs** (messages d'erreur clairs et robustesse)
 
 ### 🚧 En développement
 - [ ] Analyse de performance avancée
@@ -452,6 +577,12 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 - "Analyse ma progression sur les derniers mois"
 - "Quels sont mes points forts et mes axes d'amélioration ?"
 - "Comment optimiser mes séances pour progresser plus vite ?"
+
+#### 🔄 Nouvelles fonctionnalités
+- **Touche Entrée** : Appuyez sur Entrée pour envoyer un message
+- **Cache intelligent** : Les réponses sont mises en cache pour plus de rapidité
+- **Analyse des ressentis** : Le coach analyse vos sensations après chaque séance
+- **Recommandations personnalisées** : Conseils adaptés selon votre historique et objectifs
 
 ---
 

@@ -120,7 +120,7 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
   const messages = messagesProp || chatGpt.messages;
   const setMessages = setMessagesProp || chatGpt.setMessages;
   const sendMessage = chatGpt.sendMessage;
-  const { isLoading, clearCache, getCacheStats, cacheStats } = chatGpt;
+  const { isLoading, clearCache, cacheStats } = chatGpt;
   const [input, setInput] = useState('');
   const [sessionType, setSessionType] = useState('fullbody');
   const [intensity, setIntensity] = useState('moyen');
@@ -890,6 +890,11 @@ const Chatbot = ({ workouts, user, setExercisesFromWorkout, setShowAddExercise, 
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSend();
+            }
+          }}
           className="flex-1 border rounded px-3 py-2 text-lg input-modern"
           placeholder="Posez n'importe quelle question..."
         />
