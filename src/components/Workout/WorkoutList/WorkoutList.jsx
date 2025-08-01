@@ -811,6 +811,8 @@ function WorkoutList({
           setShowAddExercise(false);
           setSelectedMuscleGroup(null);
         }}
+        maxWidth="max-w-2xl"
+        className="lg:max-w-3xl xl:max-w-4xl"
       >
         <div className="flex justify-between items-center mb-6 flex-shrink-0">
           <div className="flex items-center space-x-3">
@@ -832,29 +834,29 @@ function WorkoutList({
 
         <div className="overflow-y-auto flex-1 pr-2">
           {!selectedMuscleGroup ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
               {Object.entries(exerciseDatabase).map(
                 ([muscle, exerciseList]) => (
                   <button
                     key={muscle}
                     onClick={() => setSelectedMuscleGroup(muscle)}
-                    className="bg-gradient-to-br from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-2xl p-6 border border-gray-200 hover:border-indigo-300 transition-all duration-200 hover:shadow-lg transform hover:scale-105"
+                    className="bg-gradient-to-br from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-2xl p-4 sm:p-6 border border-gray-200 hover:border-indigo-300 transition-all duration-200 hover:shadow-lg transform hover:scale-105"
                   >
-                    <div className="flex flex-col items-center space-y-4">
-                      <div
-                        className={`p-4 rounded-2xl ${muscle === 'cardio' ? 'bg-red-500' : 'bg-indigo-500'} shadow-lg`}
-                      >
-                        {getMuscleIcon(muscle)}
+                                          <div className="flex flex-col items-center space-y-3 sm:space-y-4">
+                        <div
+                          className={`p-3 sm:p-4 rounded-2xl ${muscle === 'cardio' ? 'bg-red-500' : 'bg-indigo-500'} shadow-lg`}
+                        >
+                          {getMuscleIcon(muscle)}
+                        </div>
+                        <div className="text-center">
+                          <h4 className="font-bold text-gray-800 capitalize text-lg sm:text-xl mb-1 sm:mb-2">
+                            {t(muscle)}
+                          </h4>
+                          <p className="text-xs sm:text-sm text-gray-600">
+                            {exerciseList.length} exercices
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-center">
-                        <h4 className="font-bold text-gray-800 capitalize text-xl mb-2">
-                          {t(muscle)}
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          {exerciseList.length} exercices
-                        </p>
-                      </div>
-                    </div>
                   </button>
                 )
               )}
@@ -1187,7 +1189,9 @@ function WorkoutList({
       )}
 
       {/* Encart explicatif du Coach IA */}
-      <LexIA className="mt-8" />
+      <div className="flex justify-center">
+        <LexIA className="mt-8" />
+      </div>
     </div>
   );
 }

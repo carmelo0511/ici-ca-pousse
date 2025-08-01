@@ -4,7 +4,7 @@ import { Bot, MessageCircle, ArrowRight } from 'lucide-react';
 const LexIA = ({ className = '' }) => {
   return (
     <div 
-      className={`bg-gray-100 rounded-xl p-6 border border-gray-200 shadow-sm ${className}`}
+      className={`bg-gray-100 rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm max-w-2xl mx-auto ${className}`}
       data-testid="ia-info-box"
     >
       <div className="flex items-center space-x-3 mb-4">
@@ -23,22 +23,22 @@ const LexIA = ({ className = '' }) => {
         
         <ul className="space-y-2 text-sm">
           <li className="flex items-start space-x-2">
-            <span className="text-blue-500 mt-0.5">•</span>
+            <span className="text-blue-500 mt-0.5 flex-shrink-0">•</span>
             <span>Générer des plans d'entraînement selon vos objectifs (prise de masse, sèche, entretien…)</span>
           </li>
           <li className="flex items-start space-x-2">
-            <span className="text-blue-500 mt-0.5">•</span>
+            <span className="text-blue-500 mt-0.5 flex-shrink-0">•</span>
             <span>Poser des questions sur votre progression ou vos performances</span>
           </li>
           <li className="flex items-start space-x-2">
-            <span className="text-blue-500 mt-0.5">•</span>
+            <span className="text-blue-500 mt-0.5 flex-shrink-0">•</span>
             <span>Recevoir des conseils motivationnels ou adaptés à votre niveau</span>
           </li>
         </ul>
         
-        <div className="bg-white rounded-lg p-4 border border-gray-200 mt-4">
+        <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 mt-4">
           <div className="flex items-center space-x-2 mb-2">
-            <MessageCircle className="h-4 w-4 text-green-600" />
+            <MessageCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
             <span className="text-sm font-medium text-gray-800">💬 Exemple :</span>
           </div>
           <p className="text-sm text-gray-700 italic">
@@ -47,7 +47,7 @@ const LexIA = ({ className = '' }) => {
         </div>
         
         <div className="flex items-center space-x-2 text-sm text-gray-600 mt-4">
-          <ArrowRight className="h-4 w-4 text-blue-500" />
+          <ArrowRight className="h-4 w-4 text-blue-500 flex-shrink-0" />
           <span>Le Coach IA s'appuie sur vos données passées pour répondre de façon personnalisée.</span>
         </div>
       </div>
