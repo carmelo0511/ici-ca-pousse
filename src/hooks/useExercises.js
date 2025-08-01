@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { exerciseDatabase } from '../utils/exerciseDatabase';
-import { load, save } from '../utils/storage';
+import { exerciseDatabase } from '../utils/workout/exerciseDatabase';
+import { load, save } from '../utils/firebase/storage';
 import { STORAGE_KEYS } from '../constants';
 
 export const useExercises = () => {

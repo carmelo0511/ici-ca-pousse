@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 function isIOS() {
   return (
-    /iphone|ipad|ipod/i.test(window.navigator.userAgent) &&
-    !window.MSStream
+    /iphone|ipad|ipod/i.test(window.navigator.userAgent) && !window.MSStream
   );
 }
 function isInStandaloneMode() {
@@ -50,11 +49,11 @@ const PWAInstallButton = () => {
       <Download className="h-4 w-4 md:h-5 md:w-5" />
       <span>
         {i18n.language === 'fr'
-          ? "Installer l’application sur ce navigateur"
-          : "Install this app in your browser"}
+          ? 'Installer l’application sur ce navigateur'
+          : 'Install this app in your browser'}
       </span>
     </button>
   );
 };
 
-export default PWAInstallButton; 
+export default PWAInstallButton;

@@ -6,7 +6,8 @@ const MigrationPrompt = ({ onMigrate, onIgnore }) => (
     <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md text-center">
       <h2 className="text-2xl font-bold mb-4">Migration des données</h2>
       <p className="mb-6">
-        Des séances locales ont été détectées. Voulez-vous les transférer sur votre compte cloud pour les retrouver sur tous vos appareils ?
+        Des séances locales ont été détectées. Voulez-vous les transférer sur
+        votre compte cloud pour les retrouver sur tous vos appareils ?
       </p>
       <button
         className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 mb-2 border border-white/20"
@@ -14,10 +15,7 @@ const MigrationPrompt = ({ onMigrate, onIgnore }) => (
       >
         Migrer mes séances locales vers le cloud
       </button>
-      <button
-        className="text-gray-500 underline mt-2"
-        onClick={onIgnore}
-      >
+      <button className="text-gray-500 underline mt-2" onClick={onIgnore}>
         Ignorer
       </button>
     </div>
@@ -29,4 +27,4 @@ MigrationPrompt.propTypes = {
   onIgnore: PropTypes.func.isRequired,
 };
 
-export default MigrationPrompt; 
+export default MigrationPrompt;

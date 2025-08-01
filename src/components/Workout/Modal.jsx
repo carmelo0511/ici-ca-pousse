@@ -1,7 +1,17 @@
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 
-const Modal = ({ isOpen, onClose, children, className = '', maxWidth = 'max-w-lg', padding = 'p-6', radius = 'rounded-3xl', ariaLabel = 'Modal', ...props }) => {
+const Modal = ({
+  isOpen,
+  onClose,
+  children,
+  className = '',
+  maxWidth = 'max-w-lg',
+  padding = 'p-6',
+  radius = 'rounded-3xl',
+  ariaLabel = 'Modal',
+  ...props
+}) => {
   const modalRef = useRef(null);
   useEffect(() => {
     if (isOpen && modalRef.current) {
@@ -10,7 +20,12 @@ const Modal = ({ isOpen, onClose, children, className = '', maxWidth = 'max-w-lg
   }, [isOpen]);
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-stretch bg-black/50 backdrop-blur-sm p-2 sm:p-4" role="dialog" aria-modal="true" aria-label={ariaLabel}>
+    <div
+      className="fixed inset-0 z-50 flex items-stretch bg-black/50 backdrop-blur-sm p-2 sm:p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={ariaLabel}
+    >
       <div
         ref={modalRef}
         tabIndex={-1}
@@ -24,7 +39,9 @@ const Modal = ({ isOpen, onClose, children, className = '', maxWidth = 'max-w-lg
         >
           <span aria-hidden="true">&times;</span>
         </button>
-        <div className="w-full h-full overflow-y-auto flex-1 min-h-0 pr-2">{children}</div>
+        <div className="w-full h-full overflow-y-auto flex-1 min-h-0 pr-2">
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -41,4 +58,4 @@ Modal.propTypes = {
   ariaLabel: PropTypes.string,
 };
 
-export default Modal; 
+export default Modal;

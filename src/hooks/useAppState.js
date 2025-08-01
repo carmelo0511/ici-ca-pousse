@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { load, save } from '../utils/storage';
+import { load, save } from '../utils/firebase/storage';
 import { STORAGE_KEYS } from '../constants';
 
 export default function useAppState() {

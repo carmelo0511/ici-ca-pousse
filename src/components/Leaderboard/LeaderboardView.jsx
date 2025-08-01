@@ -12,7 +12,12 @@ function LeaderboardView({ user }) {
   return (
     <div className="max-w-4xl mx-auto">
       {!showComparison ? (
-        <Leaderboard user={user} onShowComparison={() => setShowComparison(true)} friends={friends} sendInvite={sendInvite} />
+        <Leaderboard
+          user={user}
+          onShowComparison={() => setShowComparison(true)}
+          friends={friends}
+          sendInvite={sendInvite}
+        />
       ) : (
         <div className="space-y-4">
           <button
@@ -29,4 +34,4 @@ function LeaderboardView({ user }) {
   );
 }
 
-export default LeaderboardView; 
+export default LeaderboardView;

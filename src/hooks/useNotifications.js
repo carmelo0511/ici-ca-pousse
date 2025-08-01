@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { db } from '../utils/firebase';
+import { db } from '../utils/firebase/index.js';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { 
-  markNotificationAsRead, 
-  deleteNotification, 
+import {
+  markNotificationAsRead,
+  deleteNotification,
   markAllNotificationsAsRead,
-  formatNotificationDate 
+  formatNotificationDate,
 } from '../utils/notifications';
 
 export const useNotifications = (user) => {
@@ -23,43 +23,53 @@ export const useNotifications = (user) => {
 
     setLoading(true);
     const userRef = doc(db, 'users', user.uid);
-    
-    const unsubscribe = onSnapshot(userRef, (doc) => {
-      if (doc.exists()) {
-        const userData = doc.data();
-        const userNotifications = userData.notifications || [];
-        
-        // Trier par date (plus récentes en premier)
-        const sortedNotifications = userNotifications.sort((a, b) => 
-          new Date(b.timestamp) - new Date(a.timestamp)
-        );
-        
-        setNotifications(sortedNotifications);
-        setUnreadCount(sortedNotifications.filter(n => !n.read).length);
-      } else {
-        setNotifications([]);
-        setUnreadCount(0);
+
+    const unsubscribe = onSnapshot(
+      userRef,
+      (doc) => {
+        if (doc.exists()) {
+          const userData = doc.data();
+          const userNotifications = userData.notifications || [];
+
+          // Trier par date (plus récentes en premier)
+          const sortedNotifications = userNotifications.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          );
+
+          setNotifications(sortedNotifications);
+          setUnreadCount(sortedNotifications.filter((n) => !n.read).length);
+        } else {
+          setNotifications([]);
+          setUnreadCount(0);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Erreur lors de l'écoute des notifications:", error);
+        setLoading(false);
       }
-      setLoading(false);
-    }, (error) => {
-      console.error('Erreur lors de l\'écoute des notifications:', error);
-      setLoading(false);
-    });
+    );
 
     return () => unsubscribe();
   }, [user]);
 
   // Marquer une notification comme lue
-  const markAsRead = useCallback(async (notificationId) => {
-    if (!user) return;
-    await markNotificationAsRead(user.uid, notificationId);
-  }, [user]);
+  const markAsRead = useCallback(
+    async (notificationId) => {
+      if (!user) return;
+      await markNotificationAsRead(user.uid, notificationId);
+    },
+    [user]
+  );
 
   // Supprimer une notification
-  const removeNotification = useCallback(async (notificationId) => {
-    if (!user) return;
-    await deleteNotification(user.uid, notificationId);
-  }, [user]);
+  const removeNotification = useCallback(
+    async (notificationId) => {
+      if (!user) return;
+      await deleteNotification(user.uid, notificationId);
+    },
+    [user]
+  );
 
   // Marquer toutes les notifications comme lues
   const markAllAsRead = useCallback(async () => {
@@ -69,14 +79,14 @@ export const useNotifications = (user) => {
 
   // Obtenir les notifications non lues
   const getUnreadNotifications = useCallback(() => {
-    return notifications.filter(notification => !notification.read);
+    return notifications.filter((notification) => !notification.read);
   }, [notifications]);
 
   // Obtenir les notifications récentes (dernières 24h)
   const getRecentNotifications = useCallback(() => {
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    return notifications.filter(notification => 
-      new Date(notification.timestamp) > oneDayAgo
+    return notifications.filter(
+      (notification) => new Date(notification.timestamp) > oneDayAgo
     );
   }, [notifications]);
 
@@ -85,7 +95,8 @@ export const useNotifications = (user) => {
     return {
       ...notification,
       formattedDate: formatNotificationDate(notification.timestamp),
-      isRecent: new Date(notification.timestamp) > new Date(Date.now() - 5 * 60 * 1000) // 5 minutes
+      isRecent:
+        new Date(notification.timestamp) > new Date(Date.now() - 5 * 60 * 1000), // 5 minutes
     };
   }, []);
 
@@ -98,6 +109,6 @@ export const useNotifications = (user) => {
     markAllAsRead,
     getUnreadNotifications,
     getRecentNotifications,
-    formatNotification
+    formatNotification,
   };
-}; 
+};

@@ -1,7 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
-import { db } from '../utils/firebase';
-import { collection, doc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove, query, where, onSnapshot } from 'firebase/firestore';
-import { getUserProfile as getUserProfileFromFirebase } from '../utils/firebase';
+import { db } from '../utils/firebase/index.js';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  query,
+  where,
+  onSnapshot,
+} from 'firebase/firestore';
+import { getUserProfile as getUserProfileFromFirebase } from '../utils/firebase/index.js';
 
 export function useFriends(currentUser, addFriendXP) {
   const [friends, setFriends] = useState([]);
@@ -76,7 +87,7 @@ export function useFriends(currentUser, addFriendXP) {
     const targetUid = targetDoc.id;
     // Ajoute l'invitation dans pendingInvites du destinataire
     await updateDoc(doc(db, 'users', targetUid), {
-      pendingInvites: arrayUnion(currentUser.uid)
+      pendingInvites: arrayUnion(currentUser.uid),
     });
   };
 
@@ -86,24 +97,25 @@ export function useFriends(currentUser, addFriendXP) {
     // Ajoute chacun dans la liste d'amis de l'autre
     await updateDoc(doc(db, 'users', currentUser.uid), {
       friends: arrayUnion(uid),
-      pendingInvites: arrayRemove(uid)
+      pendingInvites: arrayRemove(uid),
     });
     await updateDoc(doc(db, 'users', uid), {
-      friends: arrayUnion(currentUser.uid)
+      friends: arrayUnion(currentUser.uid),
     });
-    
+
     // Ajouter de l'XP pour l'ajout d'ami
     if (addFriendXP) {
       try {
         const friendProfile = await getUserProfile(uid);
-        const friendName = friendProfile?.displayName || friendProfile?.email || 'Nouvel ami';
+        const friendName =
+          friendProfile?.displayName || friendProfile?.email || 'Nouvel ami';
         await addFriendXP(friendName);
         // Ami ajouté avec succès
       } catch (error) {
-        console.error('Erreur lors de l\'ajout d\'XP pour ami:', error);
+        console.error("Erreur lors de l'ajout d'XP pour ami:", error);
       }
     }
-    
+
     // Pas besoin d'appeler refreshFriends() car onSnapshot sen charge
   };
 
@@ -111,7 +123,7 @@ export function useFriends(currentUser, addFriendXP) {
   const declineInvite = async (uid) => {
     if (!currentUser) return;
     await updateDoc(doc(db, 'users', currentUser.uid), {
-      pendingInvites: arrayRemove(uid)
+      pendingInvites: arrayRemove(uid),
     });
     // Pas besoin d'appeler refreshFriends() car onSnapshot sen charge
   };
@@ -120,10 +132,10 @@ export function useFriends(currentUser, addFriendXP) {
   const removeFriend = async (uid) => {
     if (!currentUser) return;
     await updateDoc(doc(db, 'users', currentUser.uid), {
-      friends: arrayRemove(uid)
+      friends: arrayRemove(uid),
     });
     await updateDoc(doc(db, 'users', uid), {
-      friends: arrayRemove(currentUser.uid)
+      friends: arrayRemove(currentUser.uid),
     });
     // Pas besoin d'appeler refreshFriends() car onSnapshot sen charge
   };
@@ -150,6 +162,6 @@ export function useFriends(currentUser, addFriendXP) {
     acceptInvite,
     declineInvite,
     removeFriend,
-    refreshFriends
+    refreshFriends,
   };
-} 
+}

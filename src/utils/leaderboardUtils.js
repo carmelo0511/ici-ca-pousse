@@ -1,12 +1,12 @@
 // Utilitaires pour le leaderboard avancé
 import { PERIODS, METRICS, ALLOWED_EXERCISES } from '../constants/leaderboard';
-import { parseLocalDate } from './workoutUtils';
+import { parseLocalDate } from './workout/workoutUtils';
 
 // Obtenir la date de début selon la période
 export function getStartDate(period) {
   const now = new Date();
   const start = new Date(now);
-  
+
   switch (period) {
     case PERIODS.WEEK:
       start.setDate(now.getDate() - 7);
@@ -22,14 +22,14 @@ export function getStartDate(period) {
     default:
       start.setDate(now.getDate() - 7);
   }
-  
+
   return start;
 }
 
 // Filtrer les workouts par période
 export function filterWorkoutsByPeriod(workouts, period) {
   const startDate = getStartDate(period);
-  return workouts.filter(workout => {
+  return workouts.filter((workout) => {
     const workoutDate = parseLocalDate(workout.date);
     return workoutDate >= startDate;
   });
@@ -38,31 +38,31 @@ export function filterWorkoutsByPeriod(workouts, period) {
 // Calculer les statistiques pour un utilisateur
 export function calculateUserStats(workouts, period = PERIODS.ALL_TIME) {
   const filteredWorkouts = filterWorkoutsByPeriod(workouts, period);
-  
+
   const stats = {
     workouts: filteredWorkouts.length,
     maxWeight: 0,
-    exerciseStats: {}
+    exerciseStats: {},
   };
 
   // Calculer les totaux
-  filteredWorkouts.forEach(workout => {
+  filteredWorkouts.forEach((workout) => {
     // Statistiques par exercice (seulement les exercices autorisés)
-    workout.exercises?.forEach(exercise => {
+    workout.exercises?.forEach((exercise) => {
       if (!ALLOWED_EXERCISES.includes(exercise.name)) return;
-      
+
       if (!stats.exerciseStats[exercise.name]) {
         stats.exerciseStats[exercise.name] = {
           name: exercise.name,
           count: 0,
-          maxWeight: 0
+          maxWeight: 0,
         };
       }
 
       const exerciseStat = stats.exerciseStats[exercise.name];
       exerciseStat.count++;
 
-      exercise.sets.forEach(set => {
+      exercise.sets.forEach((set) => {
         const weight = set.weight || 0;
         exerciseStat.maxWeight = Math.max(exerciseStat.maxWeight, weight);
         stats.maxWeight = Math.max(stats.maxWeight, weight);
@@ -76,16 +76,16 @@ export function calculateUserStats(workouts, period = PERIODS.ALL_TIME) {
 // Obtenir le classement pour une métrique donnée
 export function getLeaderboardRanking(usersStats, metric) {
   return usersStats
-    .map(user => {
+    .map((user) => {
       let value = 0;
-      
+
       // Mapper les métriques aux bonnes propriétés
       if (metric === METRICS.WORKOUTS) {
         value = user.stats?.workouts || 0;
       } else if (metric === METRICS.MAX_WEIGHT) {
         value = user.stats?.maxWeight || 0;
       }
-      
+
       return {
         uid: user.uid,
         displayName: user.displayName,
@@ -94,14 +94,15 @@ export function getLeaderboardRanking(usersStats, metric) {
         photoURL: user.photoURL,
         selectedBadge: user.selectedBadge,
         badges: user.badges,
-        nickname: user.nickname || ''
+        nickname: user.nickname || '',
       };
     })
     .sort((a, b) => b.value - a.value)
     .map((user, index) => ({
       ...user,
       rank: index + 1,
-      medal: index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : null
+      medal:
+        index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : null,
     }));
 }
 
@@ -148,4 +149,4 @@ export function getMetricLabel(metric) {
 // Obtenir la liste des exercices autorisés
 export function getAllowedExercises() {
   return ALLOWED_EXERCISES;
-} 
+}

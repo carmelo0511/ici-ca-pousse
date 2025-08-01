@@ -18,13 +18,13 @@ export const useSwipeNavigation = (activeTab, setActiveTab, tabs) => {
 
   const onTouchEnd = useCallback(() => {
     if (!touchStart.current || !touchEnd.current) return;
-    
+
     const distance = touchStart.current - touchEnd.current;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
     if (isLeftSwipe || isRightSwipe) {
-      const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
+      const currentIndex = tabs.findIndex((tab) => tab.id === activeTab);
       let newIndex;
 
       if (isLeftSwipe && currentIndex < tabs.length - 1) {
@@ -57,4 +57,4 @@ export const useSwipeNavigation = (activeTab, setActiveTab, tabs) => {
   }, [onTouchEnd]);
 
   return null;
-}; 
+};

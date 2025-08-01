@@ -1,9 +1,9 @@
 import { useMemo, useEffect, useState } from 'react';
 import { BADGE_TYPES } from '../constants/badges';
-import { saveUserBadges } from '../utils/firebase';
+import { saveUserBadges } from '../utils/firebase/index.js';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../utils/firebase';
-import { parseLocalDate } from '../utils/workoutUtils';
+import { db } from '../utils/firebase/index.js';
+import { parseLocalDate } from '../utils/workout/workoutUtils';
 
 // Fonction pour calculer les badges d'un utilisateur
 export function calculateUserBadges(workouts = [], challenges = [], user) {
@@ -49,9 +49,9 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
 
   // Badges de poids
   let maxWeight = 0;
-  workouts.forEach(workout => {
-    workout.exercises?.forEach(exercise => {
-      exercise.sets?.forEach(set => {
+  workouts.forEach((workout) => {
+    workout.exercises?.forEach((exercise) => {
+      exercise.sets?.forEach((set) => {
         if (set.weight > maxWeight) {
           maxWeight = set.weight;
         }
@@ -78,8 +78,10 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   // Badges de régularité hebdomadaire
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-  const recentWorkouts = workouts.filter(w => parseLocalDate(w.date) >= oneWeekAgo);
-  
+  const recentWorkouts = workouts.filter(
+    (w) => parseLocalDate(w.date) >= oneWeekAgo
+  );
+
   if (recentWorkouts.length >= 3) badges.push(BADGE_TYPES.WEEKLY_3);
   if (recentWorkouts.length >= 5) badges.push(BADGE_TYPES.WEEKLY_5);
   if (recentWorkouts.length >= 7) badges.push(BADGE_TYPES.WEEKLY_7);
@@ -87,17 +89,20 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   // Badges de régularité mensuelle
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-  const monthlyWorkouts = workouts.filter(w => parseLocalDate(w.date) >= oneMonthAgo);
-  
+  const monthlyWorkouts = workouts.filter(
+    (w) => parseLocalDate(w.date) >= oneMonthAgo
+  );
+
   if (monthlyWorkouts.length >= 10) badges.push(BADGE_TYPES.MONTHLY_10);
   if (monthlyWorkouts.length >= 20) badges.push(BADGE_TYPES.MONTHLY_20);
   if (monthlyWorkouts.length >= 30) badges.push(BADGE_TYPES.MONTHLY_30);
 
   // Badges de défis
-  const wonChallenges = challenges.filter(challenge => 
-    challenge.winnerId === user?.uid && challenge.status === 'completed'
+  const wonChallenges = challenges.filter(
+    (challenge) =>
+      challenge.winnerId === user?.uid && challenge.status === 'completed'
   );
-  
+
   if (wonChallenges.length >= 1) badges.push(BADGE_TYPES.CHALLENGE_WINNER);
   if (wonChallenges.length >= 5) badges.push(BADGE_TYPES.CHALLENGE_5);
   if (wonChallenges.length >= 10) badges.push(BADGE_TYPES.CHALLENGE_10);
@@ -106,32 +111,34 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
 
   // Badges d'exercices spécifiques
   const exerciseCounts = {};
-  workouts.forEach(workout => {
-    workout.exercises?.forEach(exercise => {
+  workouts.forEach((workout) => {
+    workout.exercises?.forEach((exercise) => {
       exerciseCounts[exercise.name] = (exerciseCounts[exercise.name] || 0) + 1;
     });
   });
 
-  if (exerciseCounts['Développé couché'] >= 10) badges.push(BADGE_TYPES.BENCH_MASTER);
+  if (exerciseCounts['Développé couché'] >= 10)
+    badges.push(BADGE_TYPES.BENCH_MASTER);
   if (exerciseCounts['Squat'] >= 10) badges.push(BADGE_TYPES.SQUAT_MASTER);
-  if (exerciseCounts['Soulevé de terre'] >= 10) badges.push(BADGE_TYPES.DEADLIFT_MASTER);
+  if (exerciseCounts['Soulevé de terre'] >= 10)
+    badges.push(BADGE_TYPES.DEADLIFT_MASTER);
   if (exerciseCounts['Tractions'] >= 10) badges.push(BADGE_TYPES.PULLUP_MASTER);
   if (exerciseCounts['Pompes'] >= 10) badges.push(BADGE_TYPES.PUSHUP_MASTER);
 
   // Badges de temps
-  const earlyWorkouts = workouts.filter(w => {
+  const earlyWorkouts = workouts.filter((w) => {
     const hour = parseLocalDate(w.date).getHours();
     return hour < 8;
   });
   if (earlyWorkouts.length >= 5) badges.push(BADGE_TYPES.EARLY_BIRD);
 
-  const nightWorkouts = workouts.filter(w => {
+  const nightWorkouts = workouts.filter((w) => {
     const hour = parseLocalDate(w.date).getHours();
     return hour >= 22;
   });
   if (nightWorkouts.length >= 5) badges.push(BADGE_TYPES.NIGHT_OWL);
 
-  const weekendWorkouts = workouts.filter(w => {
+  const weekendWorkouts = workouts.filter((w) => {
     const day = parseLocalDate(w.date).getDay();
     return day === 0 || day === 6;
   });
@@ -145,10 +152,14 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
 
   // Badges de saison (simplifiés)
   const currentMonth = new Date().getMonth();
-  if (currentMonth >= 2 && currentMonth <= 4) badges.push(BADGE_TYPES.SPRING_TRAINER);
-  if (currentMonth >= 5 && currentMonth <= 7) badges.push(BADGE_TYPES.SUMMER_WARRIOR);
-  if (currentMonth >= 8 && currentMonth <= 10) badges.push(BADGE_TYPES.AUTUMN_STRENGTH);
-  if (currentMonth === 11 || currentMonth <= 1) badges.push(BADGE_TYPES.WINTER_CHAMPION);
+  if (currentMonth >= 2 && currentMonth <= 4)
+    badges.push(BADGE_TYPES.SPRING_TRAINER);
+  if (currentMonth >= 5 && currentMonth <= 7)
+    badges.push(BADGE_TYPES.SUMMER_WARRIOR);
+  if (currentMonth >= 8 && currentMonth <= 10)
+    badges.push(BADGE_TYPES.AUTUMN_STRENGTH);
+  if (currentMonth === 11 || currentMonth <= 1)
+    badges.push(BADGE_TYPES.WINTER_CHAMPION);
 
   // Badges de variété
   const uniqueExercises = Object.keys(exerciseCounts).length;
@@ -156,7 +167,8 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   if (uniqueExercises >= 20) badges.push(BADGE_TYPES.VARIETY_KING);
 
   // Badges de motivation (simplifiés)
-  if (workouts.length >= 50 && maxStreak >= 10) badges.push(BADGE_TYPES.MOTIVATION_MASTER);
+  if (workouts.length >= 50 && maxStreak >= 10)
+    badges.push(BADGE_TYPES.MOTIVATION_MASTER);
   if (workouts.length >= 100) badges.push(BADGE_TYPES.CONSISTENCY_KING);
   if (workouts.length >= 25) badges.push(BADGE_TYPES.PROGRESS_MAKER);
 
@@ -170,7 +182,8 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
 
   // Badges d'équipe/solo
   if (challenges.length > 0) badges.push(BADGE_TYPES.TEAM_PLAYER);
-  if (workouts.length >= 50 && challenges.length === 0) badges.push(BADGE_TYPES.SOLO_CHAMPION);
+  if (workouts.length >= 50 && challenges.length === 0)
+    badges.push(BADGE_TYPES.SOLO_CHAMPION);
 
   // Badges de routine
   if (workouts.length >= 100) badges.push(BADGE_TYPES.ROUTINE_MASTER);
@@ -178,7 +191,7 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
 
   // Badges d'anime japonais
   // Naruto Runner - Course rapide
-  const fastWorkouts = workouts.filter(w => {
+  const fastWorkouts = workouts.filter((w) => {
     const duration = w.duration || 0;
     return duration < 30; // Séances de moins de 30 minutes
   });
@@ -191,36 +204,43 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   if (challenges.length >= 10) badges.push(BADGE_TYPES.ONE_PIECE_NAVIGATOR);
 
   // Attack on Titan Soldier - Courage face aux défis
-  const difficultChallenges = challenges.filter(c => c.duration >= 30);
-  if (difficultChallenges.length >= 5) badges.push(BADGE_TYPES.ATTACK_ON_TITAN_SOLDIER);
+  const difficultChallenges = challenges.filter((c) => c.duration >= 30);
+  if (difficultChallenges.length >= 5)
+    badges.push(BADGE_TYPES.ATTACK_ON_TITAN_SOLDIER);
 
   // Demon Slayer Hashira - Techniques avancées
   if (uniqueExercises >= 15) badges.push(BADGE_TYPES.DEMON_SLAYER_HASHIRA);
 
   // My Hero Academia Hero - Héros en devenir
-  if (workouts.length >= 50 && maxStreak >= 15) badges.push(BADGE_TYPES.MY_HERO_ACADEMIA_HERO);
+  if (workouts.length >= 50 && maxStreak >= 15)
+    badges.push(BADGE_TYPES.MY_HERO_ACADEMIA_HERO);
 
   // Pokemon Trainer - Collectionneur de badges
-  const totalBadgesEarned = workouts.length >= 10 ? 1 : 0 + 
-                           (maxStreak >= 5 ? 1 : 0) + 
-                           (maxWeight >= 100 ? 1 : 0) + 
-                           (challenges.length >= 5 ? 1 : 0) +
-                           (uniqueExercises >= 5 ? 1 : 0) +
-                           (workouts.length >= 25 ? 1 : 0) +
-                           (workouts.length >= 50 ? 1 : 0) +
-                           (workouts.length >= 100 ? 1 : 0) +
-                           (wonChallenges.length >= 5 ? 1 : 0) +
-                           (earlyWorkouts.length >= 5 ? 1 : 0);
+  const totalBadgesEarned =
+    workouts.length >= 10
+      ? 1
+      : 0 +
+        (maxStreak >= 5 ? 1 : 0) +
+        (maxWeight >= 100 ? 1 : 0) +
+        (challenges.length >= 5 ? 1 : 0) +
+        (uniqueExercises >= 5 ? 1 : 0) +
+        (workouts.length >= 25 ? 1 : 0) +
+        (workouts.length >= 50 ? 1 : 0) +
+        (workouts.length >= 100 ? 1 : 0) +
+        (wonChallenges.length >= 5 ? 1 : 0) +
+        (earlyWorkouts.length >= 5 ? 1 : 0);
   if (totalBadgesEarned >= 10) badges.push(BADGE_TYPES.POKEMON_TRAINER);
 
   // Sailor Moon Guardian - Protectrice de la motivation
-  if (workouts.length >= 100 && maxStreak >= 20) badges.push(BADGE_TYPES.SAILOR_MOON_GUARDIAN);
+  if (workouts.length >= 100 && maxStreak >= 20)
+    badges.push(BADGE_TYPES.SAILOR_MOON_GUARDIAN);
 
   // Bleach Soul Reaper - Maître de la discipline
   if (workouts.length >= 200) badges.push(BADGE_TYPES.BLEACH_SOUL_REAPER);
 
   // Fullmetal Alchemist - Transmutation parfaite
-  if (maxWeight >= 150 && workouts.length >= 75) badges.push(BADGE_TYPES.FULLMETAL_ALCHEMIST);
+  if (maxWeight >= 150 && workouts.length >= 75)
+    badges.push(BADGE_TYPES.FULLMETAL_ALCHEMIST);
 
   // Death Note Detective - Stratégie et planification
   if (challenges.length >= 20) badges.push(BADGE_TYPES.DEATH_NOTE_DETECTIVE);
@@ -232,16 +252,19 @@ export function calculateUserBadges(workouts = [], challenges = [], user) {
   if (workouts.length >= 150) badges.push(BADGE_TYPES.HUNTER_X_HUNTER_HUNTER);
 
   // Fairy Tail Mage - Magie de l'amitié
-  if (challenges.length >= 15 && wonChallenges.length >= 10) badges.push(BADGE_TYPES.FAIRY_TAIL_MAGE);
+  if (challenges.length >= 15 && wonChallenges.length >= 10)
+    badges.push(BADGE_TYPES.FAIRY_TAIL_MAGE);
 
   // Sword Art Online Player - Maître du virtuel
   if (workouts.length >= 300) badges.push(BADGE_TYPES.SWORD_ART_ONLINE_PLAYER);
 
   // JoJo Bizarre Adventure - Style et pose parfaits
-  if (maxWeight >= 100 && uniqueExercises >= 10) badges.push(BADGE_TYPES.JOJO_BIZARRE_ADVENTURE);
+  if (maxWeight >= 100 && uniqueExercises >= 10)
+    badges.push(BADGE_TYPES.JOJO_BIZARRE_ADVENTURE);
 
   // Evangelion Pilot - Synchronisation parfaite
-  if (workouts.length >= 250 && maxStreak >= 30) badges.push(BADGE_TYPES.EVANGELION_PILOT);
+  if (workouts.length >= 250 && maxStreak >= 30)
+    badges.push(BADGE_TYPES.EVANGELION_PILOT);
 
   // Ghost in the Shell - Conscience augmentée
   if (workouts.length >= 400) badges.push(BADGE_TYPES.GHOST_IN_THE_SHELL);
@@ -272,7 +295,7 @@ export function useBadges(workouts, challenges, user, addBadgeUnlockXP) {
         setLoading(true);
         const userRef = doc(db, 'users', user.uid);
         const userDoc = await getDoc(userRef);
-        
+
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setStoredBadges(userData.badges || []);
@@ -316,23 +339,26 @@ export function useBadges(workouts, challenges, user, addBadgeUnlockXP) {
     if (user && user.uid && allBadges.length > 0 && !loading) {
       // Vérifier si les badges ont changé par rapport à ceux stockés
       const currentBadges = user.badges || [];
-      const hasChanged = allBadges.length !== currentBadges.length || 
-                        !allBadges.every(badge => currentBadges.includes(badge));
-      
+      const hasChanged =
+        allBadges.length !== currentBadges.length ||
+        !allBadges.every((badge) => currentBadges.includes(badge));
+
       if (hasChanged) {
-        saveUserBadges(user.uid, allBadges).catch(error => {
+        saveUserBadges(user.uid, allBadges).catch((error) => {
           console.error('Erreur lors de la sauvegarde des badges:', error);
         });
-        
+
         // Ajouter de l'XP pour les nouveaux badges débloqués
         if (addBadgeUnlockXP) {
-          const newBadges = allBadges.filter(badge => !currentBadges.includes(badge));
+          const newBadges = allBadges.filter(
+            (badge) => !currentBadges.includes(badge)
+          );
           newBadges.forEach(async (badge) => {
             try {
               await addBadgeUnlockXP(badge);
               // Badge débloqué avec succès
             } catch (error) {
-              console.error('Erreur lors de l\'ajout d\'XP pour badge:', error);
+              console.error("Erreur lors de l'ajout d'XP pour badge:", error);
             }
           });
         }
@@ -345,6 +371,6 @@ export function useBadges(workouts, challenges, user, addBadgeUnlockXP) {
     badgeCount,
     hasBadge: (badgeType) => allBadges.includes(badgeType),
     selectedBadge: user?.selectedBadge || null,
-    loading
+    loading,
   };
-} 
+}

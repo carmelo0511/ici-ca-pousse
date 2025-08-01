@@ -9,7 +9,7 @@ export const badges = {
     description: 'Complète ta première séance',
     icon: '🎯',
     color: 'bg-blue-500',
-    condition: (stats) => stats.totalWorkouts >= 1
+    condition: (stats) => stats.totalWorkouts >= 1,
   },
   workoutStreak: {
     id: 'workoutStreak',
@@ -17,15 +17,15 @@ export const badges = {
     description: '7 séances consécutives',
     icon: '🔥',
     color: 'bg-orange-500',
-    condition: (stats) => stats.currentStreak >= 7
+    condition: (stats) => stats.currentStreak >= 7,
   },
   workoutMaster: {
     id: 'workoutMaster',
-    name: 'Maître de l\'Entraînement',
+    name: "Maître de l'Entraînement",
     description: '50 séances complétées',
     icon: '💪',
     color: 'bg-purple-500',
-    condition: (stats) => stats.totalWorkouts >= 50
+    condition: (stats) => stats.totalWorkouts >= 50,
   },
   workoutLegend: {
     id: 'workoutLegend',
@@ -33,7 +33,7 @@ export const badges = {
     description: '100 séances complétées',
     icon: '👑',
     color: 'bg-yellow-500',
-    condition: (stats) => stats.totalWorkouts >= 100
+    condition: (stats) => stats.totalWorkouts >= 100,
   },
 
   // Badges de défis
@@ -43,7 +43,7 @@ export const badges = {
     description: 'Crée ton premier défi',
     icon: '⚔️',
     color: 'bg-green-500',
-    condition: (stats) => stats.totalChallenges >= 1
+    condition: (stats) => stats.totalChallenges >= 1,
   },
   challengeWinner: {
     id: 'challengeWinner',
@@ -51,7 +51,7 @@ export const badges = {
     description: 'Gagne ton premier défi',
     icon: '🏆',
     color: 'bg-yellow-500',
-    condition: (stats) => stats.challengeVictories >= 1
+    condition: (stats) => stats.challengeVictories >= 1,
   },
   challengeMaster: {
     id: 'challengeMaster',
@@ -59,7 +59,7 @@ export const badges = {
     description: 'Gagne 10 défis',
     icon: '👑',
     color: 'bg-purple-500',
-    condition: (stats) => stats.challengeVictories >= 10
+    condition: (stats) => stats.challengeVictories >= 10,
   },
   perfectWinRate: {
     id: 'perfectWinRate',
@@ -67,7 +67,8 @@ export const badges = {
     description: '100% de taux de victoire (min 5 défis)',
     icon: '⭐',
     color: 'bg-red-500',
-    condition: (stats) => stats.challengeWinRate === 100 && stats.totalChallenges >= 5
+    condition: (stats) =>
+      stats.challengeWinRate === 100 && stats.totalChallenges >= 5,
   },
 
   // Badges de performance
@@ -77,7 +78,7 @@ export const badges = {
     description: 'Séance de plus de 2h',
     icon: '🏃',
     color: 'bg-indigo-500',
-    condition: (stats) => stats.longestWorkout >= 120
+    condition: (stats) => stats.longestWorkout >= 120,
   },
   calorieBurner: {
     id: 'calorieBurner',
@@ -85,7 +86,7 @@ export const badges = {
     description: 'Brûle 1000 calories en une séance',
     icon: '🔥',
     color: 'bg-red-500',
-    condition: (stats) => stats.maxCalories >= 1000
+    condition: (stats) => stats.maxCalories >= 1000,
   },
   consistency: {
     id: 'consistency',
@@ -93,7 +94,7 @@ export const badges = {
     description: 'Séances 3 jours de suite',
     icon: '📅',
     color: 'bg-green-500',
-    condition: (stats) => stats.currentStreak >= 3
+    condition: (stats) => stats.currentStreak >= 3,
   },
 
   // Badges sociaux
@@ -103,15 +104,15 @@ export const badges = {
     description: 'Ajoute 5 amis',
     icon: '🦋',
     color: 'bg-pink-500',
-    condition: (stats) => stats.totalFriends >= 5
+    condition: (stats) => stats.totalFriends >= 5,
   },
   teamPlayer: {
     id: 'teamPlayer',
-    name: 'Joueur d\'Équipe',
+    name: "Joueur d'Équipe",
     description: 'Participe à 5 défis',
     icon: '🤝',
     color: 'bg-blue-500',
-    condition: (stats) => stats.totalChallenges >= 5
+    condition: (stats) => stats.totalChallenges >= 5,
   },
 
   // Badges spéciaux
@@ -121,7 +122,7 @@ export const badges = {
     description: 'Séance avant 7h du matin',
     icon: '🌅',
     color: 'bg-yellow-400',
-    condition: (stats) => stats.earlyWorkouts >= 1
+    condition: (stats) => stats.earlyWorkouts >= 1,
   },
   nightOwl: {
     id: 'nightOwl',
@@ -129,7 +130,7 @@ export const badges = {
     description: 'Séance après 22h',
     icon: '🦉',
     color: 'bg-gray-700',
-    condition: (stats) => stats.lateWorkouts >= 1
+    condition: (stats) => stats.lateWorkouts >= 1,
   },
   weekendWarrior: {
     id: 'weekendWarrior',
@@ -137,8 +138,8 @@ export const badges = {
     description: 'Séances 3 weekends de suite',
     icon: '⚔️',
     color: 'bg-orange-500',
-    condition: (stats) => stats.weekendStreak >= 3
-  }
+    condition: (stats) => stats.weekendStreak >= 3,
+  },
 };
 
 // Fonction pour calculer les statistiques nécessaires aux badges
@@ -155,7 +156,7 @@ export const calculateBadgeStats = (workouts, challenges, friends) => {
       totalChallenges: challenges?.length || 0,
       challengeVictories: 0,
       challengeWinRate: 0,
-      totalFriends: friends?.length || 0
+      totalFriends: friends?.length || 0,
     };
   }
 
@@ -173,7 +174,7 @@ export const calculateBadgeStats = (workouts, challenges, friends) => {
       workoutDate.getMonth(),
       workoutDate.getDate()
     );
-    
+
     if (!lastDate || (lastDate - workoutDay) / (1000 * 60 * 60 * 24) === 1) {
       currentStreak++;
       lastDate = workoutDay;
@@ -183,15 +184,15 @@ export const calculateBadgeStats = (workouts, challenges, friends) => {
   }
 
   // Calcul des autres stats
-  const longestWorkout = Math.max(...workouts.map(w => w.duration || 0));
-  const maxCalories = Math.max(...workouts.map(w => w.calories || 0));
-  
-  const earlyWorkouts = workouts.filter(w => {
+  const longestWorkout = Math.max(...workouts.map((w) => w.duration || 0));
+  const maxCalories = Math.max(...workouts.map((w) => w.calories || 0));
+
+  const earlyWorkouts = workouts.filter((w) => {
     const hour = parseLocalDate(w.date).getHours();
     return hour < 7;
   }).length;
 
-  const lateWorkouts = workouts.filter(w => {
+  const lateWorkouts = workouts.filter((w) => {
     const hour = parseLocalDate(w.date).getHours();
     return hour >= 22;
   }).length;
@@ -201,12 +202,16 @@ export const calculateBadgeStats = (workouts, challenges, friends) => {
 
   // Stats des défis
   const totalChallenges = challenges?.length || 0;
-  const completedChallenges = challenges?.filter(c => new Date() > new Date(c.endDate)) || [];
-  const challengeVictories = completedChallenges.filter(c => {
+  const completedChallenges =
+    challenges?.filter((c) => new Date() > new Date(c.endDate)) || [];
+  const challengeVictories = completedChallenges.filter((c) => {
     // Logique simplifiée pour déterminer la victoire
     return Math.random() > 0.5; // Simulation
   }).length;
-  const challengeWinRate = completedChallenges.length > 0 ? Math.round((challengeVictories / completedChallenges.length) * 100) : 0;
+  const challengeWinRate =
+    completedChallenges.length > 0
+      ? Math.round((challengeVictories / completedChallenges.length) * 100)
+      : 0;
 
   return {
     totalWorkouts: workouts.length,
@@ -219,33 +224,33 @@ export const calculateBadgeStats = (workouts, challenges, friends) => {
     totalChallenges,
     challengeVictories,
     challengeWinRate,
-    totalFriends: friends?.length || 0
+    totalFriends: friends?.length || 0,
   };
 };
 
 // Fonction pour obtenir les badges débloqués
 export const getUnlockedBadges = (stats) => {
   const unlockedBadges = [];
-  
-  Object.values(badges).forEach(badge => {
+
+  Object.values(badges).forEach((badge) => {
     if (badge.condition(stats)) {
       unlockedBadges.push(badge);
     }
   });
-  
+
   return unlockedBadges;
 };
 
 // Fonction pour obtenir les badges verrouillés
 export const getLockedBadges = (stats) => {
   const lockedBadges = [];
-  
-  Object.values(badges).forEach(badge => {
+
+  Object.values(badges).forEach((badge) => {
     if (!badge.condition(stats)) {
       lockedBadges.push(badge);
     }
   });
-  
+
   return lockedBadges;
 };
 
@@ -276,4 +281,4 @@ export const getBadgeProgress = (badgeId, stats) => {
 // Fonction pour obtenir tous les badges débloqués (alias de getUnlockedBadges)
 export const getBadges = (stats) => {
   return getUnlockedBadges(stats);
-}; 
+};

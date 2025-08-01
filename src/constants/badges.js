@@ -71,7 +71,7 @@ export const BADGE_TYPES = {
   ROUTINE_MASTER: 'routine_master',
   VARIETY_KING: 'variety_king',
   SPECIALIST: 'specialist',
-  
+
   // Badges d'anime japonais
   NARUTO_RUNNER: 'naruto_runner',
   DRAGON_BALL_WARRIOR: 'dragon_ball_warrior',
@@ -92,7 +92,7 @@ export const BADGE_TYPES = {
   EVANGELION_PILOT: 'evangelion_pilot',
   GHOST_IN_THE_SHELL: 'ghost_in_the_shell',
   AKIRA_PSYCHIC: 'akira_psychic',
-  COWBOY_BEBOP_BOUNTY: 'cowboy_bebop_bounty'
+  COWBOY_BEBOP_BOUNTY: 'cowboy_bebop_bounty',
 };
 
 // Catégories de badges
@@ -109,8 +109,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.STREAK_5,
       BADGE_TYPES.WORKOUTS_10,
       BADGE_TYPES.WEEKLY_3,
-      BADGE_TYPES.BRONZE_MEMBER
-    ]
+      BADGE_TYPES.BRONZE_MEMBER,
+    ],
   },
   PROGRESS: {
     id: 'progress',
@@ -127,8 +127,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.WEIGHT_50,
       BADGE_TYPES.WEIGHT_75,
       BADGE_TYPES.SILVER_MEMBER,
-      BADGE_TYPES.PROGRESS_MAKER
-    ]
+      BADGE_TYPES.PROGRESS_MAKER,
+    ],
   },
   STRENGTH: {
     id: 'strength',
@@ -151,8 +151,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.DRAGON_BALL_WARRIOR,
       BADGE_TYPES.JOJO_BIZARRE_ADVENTURE,
       BADGE_TYPES.FULLMETAL_ALCHEMIST,
-      BADGE_TYPES.AKIRA_PSYCHIC
-    ]
+      BADGE_TYPES.AKIRA_PSYCHIC,
+    ],
   },
   ENDURANCE: {
     id: 'endurance',
@@ -172,8 +172,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.ENDURANCE_KING,
       BADGE_TYPES.SPEED_DEMON,
       BADGE_TYPES.NARUTO_RUNNER,
-      BADGE_TYPES.EVANGELION_PILOT
-    ]
+      BADGE_TYPES.EVANGELION_PILOT,
+    ],
   },
   CHALLENGES: {
     id: 'challenges',
@@ -189,8 +189,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.ONE_PIECE_NAVIGATOR,
       BADGE_TYPES.ATTACK_ON_TITAN_SOLDIER,
       BADGE_TYPES.FAIRY_TAIL_MAGE,
-      BADGE_TYPES.DEATH_NOTE_DETECTIVE
-    ]
+      BADGE_TYPES.DEATH_NOTE_DETECTIVE,
+    ],
   },
   LIFESTYLE: {
     id: 'lifestyle',
@@ -206,8 +206,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.SUMMER_WARRIOR,
       BADGE_TYPES.AUTUMN_STRENGTH,
       BADGE_TYPES.WINTER_CHAMPION,
-      BADGE_TYPES.COWBOY_BEBOP_BOUNTY
-    ]
+      BADGE_TYPES.COWBOY_BEBOP_BOUNTY,
+    ],
   },
   MOTIVATION: {
     id: 'motivation',
@@ -221,8 +221,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.GOLDEN_MEMBER,
       BADGE_TYPES.PLATINUM_MEMBER,
       BADGE_TYPES.SAILOR_MOON_GUARDIAN,
-      BADGE_TYPES.BLEACH_SOUL_REAPER
-    ]
+      BADGE_TYPES.BLEACH_SOUL_REAPER,
+    ],
   },
   SKILLS: {
     id: 'skills',
@@ -239,8 +239,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.TOKYO_GHOUL_INVESTIGATOR,
       BADGE_TYPES.HUNTER_X_HUNTER_HUNTER,
       BADGE_TYPES.SWORD_ART_ONLINE_PLAYER,
-      BADGE_TYPES.GHOST_IN_THE_SHELL
-    ]
+      BADGE_TYPES.GHOST_IN_THE_SHELL,
+    ],
   },
   ANIME: {
     id: 'anime',
@@ -267,8 +267,8 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.EVANGELION_PILOT,
       BADGE_TYPES.GHOST_IN_THE_SHELL,
       BADGE_TYPES.AKIRA_PSYCHIC,
-      BADGE_TYPES.COWBOY_BEBOP_BOUNTY
-    ]
+      BADGE_TYPES.COWBOY_BEBOP_BOUNTY,
+    ],
   },
   RECORDS: {
     id: 'records',
@@ -281,7 +281,7 @@ export const BADGE_CATEGORIES = {
       BADGE_TYPES.TEAM_PLAYER,
       BADGE_TYPES.SOLO_CHAMPION,
       BADGE_TYPES.WEEKLY_GOAL,
-      BADGE_TYPES.MONTHLY_GOAL
-    ]
-  }
-}; 
+      BADGE_TYPES.MONTHLY_GOAL,
+    ],
+  },
+};

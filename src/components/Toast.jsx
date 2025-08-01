@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Toast = ({ show, message, type = 'success', className = '', ...props }) => {
+const Toast = ({
+  show,
+  message,
+  type = 'success',
+  className = '',
+  ...props
+}) => {
   if (!show) return null;
   return (
     <div
@@ -22,4 +28,4 @@ Toast.propTypes = {
   className: PropTypes.string,
 };
 
-export default Toast; 
+export default Toast;

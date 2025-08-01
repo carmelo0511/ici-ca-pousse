@@ -3,28 +3,28 @@ import { Camera, User } from 'lucide-react';
 import { BADGE_CONFIG } from '../Badges/Badges';
 
 // Composant pour afficher une photo de profil
-function ProfilePicture({ 
-  user, 
-  size = 'md', 
-  showBadges = false, 
-  badges = [], 
+function ProfilePicture({
+  user,
+  size = 'md',
+  showBadges = false,
+  badges = [],
   onClick = null,
   className = '',
   useBadgeAsProfile = false,
   selectedBadge = null,
   showTeamButton = false,
-  onTeamClick = null
+  onTeamClick = null,
 }) {
   const [imageError, setImageError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const sizeClasses = {
     xs: 'w-8 h-8 text-xs',
     sm: 'w-10 h-10 text-sm',
     md: 'w-12 h-12 text-base',
     lg: 'w-16 h-16 text-lg',
     xl: 'w-20 h-20 text-xl',
-    '2xl': 'w-24 h-24 text-2xl'
+    '2xl': 'w-24 h-24 text-2xl',
   };
 
   const badgeSizeMap = {
@@ -33,17 +33,20 @@ function ProfilePicture({
     md: 'sm',
     lg: 'sm',
     xl: 'md',
-    '2xl': 'lg'
+    '2xl': 'lg',
   };
 
   const hasProfilePicture = user?.photoURL && !imageError;
   const displayName = user?.displayName || user?.email || 'Utilisateur';
-  
+
   // Vérifier si on utilise un badge comme photo de profil
   const badgeConfig = selectedBadge && BADGE_CONFIG[selectedBadge];
 
   const handleImageError = () => {
-    console.warn('Erreur lors du chargement de la photo de profil:', user?.photoURL);
+    console.warn(
+      'Erreur lors du chargement de la photo de profil:',
+      user?.photoURL
+    );
     setImageError(true);
   };
 
@@ -58,7 +61,7 @@ function ProfilePicture({
   return (
     <div className={`relative inline-block ${className}`}>
       {/* Photo de profil */}
-      <div 
+      <div
         className={`
           ${sizeClasses[size]} 
           ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}
@@ -89,7 +92,9 @@ function ProfilePicture({
             )}
           </>
         ) : (
-          <User className={`${size === 'xs' ? 'w-4 h-4' : size === 'sm' ? 'w-5 h-5' : size === 'md' ? 'w-6 h-6' : size === 'lg' ? 'w-8 h-8' : size === 'xl' ? 'w-10 h-10' : 'w-12 h-12'} text-gray-500`} />
+          <User
+            className={`${size === 'xs' ? 'w-4 h-4' : size === 'sm' ? 'w-5 h-5' : size === 'md' ? 'w-6 h-6' : size === 'lg' ? 'w-8 h-8' : size === 'xl' ? 'w-10 h-10' : 'w-12 h-12'} text-gray-500`}
+          />
         )}
       </div>
 
@@ -97,7 +102,9 @@ function ProfilePicture({
       {showBadges && badges && badges.length > 0 && (
         <div className="absolute -bottom-1 -right-1">
           <div className="bg-white rounded-full p-0.5 shadow-sm">
-            <div className={`${sizeClasses[badgeSizeMap[size]]} bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xs`}>
+            <div
+              className={`${sizeClasses[badgeSizeMap[size]]} bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xs`}
+            >
               {badges.length > 9 ? '9+' : badges.length}
             </div>
           </div>
@@ -139,8 +146,9 @@ function ProfilePictureEditor({ user, onPhotoChange, className = '' }) {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) { // 5MB max
-      alert('L\'image doit faire moins de 5MB');
+    if (file.size > 5 * 1024 * 1024) {
+      // 5MB max
+      alert("L'image doit faire moins de 5MB");
       return;
     }
 
@@ -149,12 +157,14 @@ function ProfilePictureEditor({ user, onPhotoChange, className = '' }) {
       await onPhotoChange(file);
     } catch (error) {
       console.error('Erreur lors du changement de photo:', error);
-      
+
       // Messages d'erreur plus spécifiques
       if (error.code === 'storage/unauthorized') {
-        alert('Erreur d\'autorisation. Vérifiez que vous êtes connecté.');
+        alert("Erreur d'autorisation. Vérifiez que vous êtes connecté.");
       } else if (error.code === 'storage/cors') {
-        alert('Erreur CORS. Les règles Firebase Storage doivent être configurées.');
+        alert(
+          'Erreur CORS. Les règles Firebase Storage doivent être configurées.'
+        );
       } else {
         alert(`Erreur lors du changement de photo: ${error.message}`);
       }
@@ -166,7 +176,7 @@ function ProfilePictureEditor({ user, onPhotoChange, className = '' }) {
   return (
     <div className={`relative inline-block ${className}`}>
       <ProfilePicture user={user} size="xl" />
-      
+
       <label className="absolute bottom-0 right-0 w-8 h-8 bg-indigo-600 hover:bg-indigo-700 rounded-full flex items-center justify-center cursor-pointer transition-colors shadow-lg">
         <Camera className="w-4 h-4 text-white" />
         <input
@@ -188,4 +198,4 @@ function ProfilePictureEditor({ user, onPhotoChange, className = '' }) {
 }
 
 export { ProfilePicture, ProfilePictureEditor };
-export default ProfilePicture; 
+export default ProfilePicture;

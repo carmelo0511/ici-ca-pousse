@@ -4,11 +4,15 @@ export const useKeyboardNavigation = (activeTab, setActiveTab, tabs) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       // Ignorer si l'utilisateur tape dans un champ de saisie
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.contentEditable === 'true') {
+      if (
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.contentEditable === 'true'
+      ) {
         return;
       }
 
-      const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
+      const currentIndex = tabs.findIndex((tab) => tab.id === activeTab);
 
       switch (e.key) {
         case 'ArrowLeft':
@@ -95,4 +99,4 @@ export const useKeyboardNavigation = (activeTab, setActiveTab, tabs) => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [activeTab, setActiveTab, tabs]);
-}; 
+};

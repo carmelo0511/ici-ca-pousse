@@ -1,68 +1,64 @@
-
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Code coverage report for src/components/PWAInstallButton.jsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
     <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style type='text/css'>
-        .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
-        }
+    <style type="text/css">
+      .coverage-summary .sorter {
+        background-image: url(../../sort-arrow-sprite.png);
+      }
     </style>
-</head>
-    
-<body>
-<div class='wrapper'>
-    <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/components</a> PWAInstallButton.jsx</h1>
-        <div class='clearfix'>
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
-            </div>
-        
-            
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="pad1">
+        <h1>
+          <a href="../../index.html">All files</a> /
+          <a href="index.html">src/components</a> PWAInstallButton.jsx
+        </h1>
+        <div class="clearfix">
+          <div class="fl pad1y space-right2">
+            <span class="strong">0% </span>
+            <span class="quiet">Statements</span>
+            <span class="fraction">0/10</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">0% </span>
+            <span class="quiet">Branches</span>
+            <span class="fraction">0/17</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">0% </span>
+            <span class="quiet">Functions</span>
+            <span class="fraction">0/3</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">0% </span>
+            <span class="quiet">Lines</span>
+            <span class="fraction">0/9</span>
+          </div>
         </div>
         <p class="quiet">
-            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+          Press <em>n</em> or <em>j</em> to go to the next uncovered block,
+          <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
         <template id="filterTemplate">
-            <div class="quiet">
-                Filter:
-                <input type="search" id="fileSearch">
-            </div>
+          <div class="quiet">
+            Filter:
+            <input type="search" id="fileSearch" />
+          </div>
         </template>
-    </div>
-    <div class='status-line low'></div>
-    <pre><table class="coverage">
+      </div>
+      <div class="status-line low"></div>
+      <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -133,7 +129,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,6 +160,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,8 +184,7 @@ import { useTranslation } from 'react-i18next';
 &nbsp;
 function <span class="fstat-no" title="function not covered" >isIOS(</span>) {
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    /iphone|ipad|ipod/i.test(window.navigator.userAgent) &amp;&amp;
-    !window.MSStream
+    /iphone|ipad|ipod/i.test(window.navigator.userAgent) &amp;&amp; !window.MSStream
   );
 }
 function <span class="fstat-no" title="function not covered" >isInStandaloneMode(</span>) {
@@ -207,7 +202,7 @@ const PWAInstallButton = <span class="cstat-no" title="statement not covered" ><
 <span class="cstat-no" title="statement not covered" >  if (isIOS() &amp;&amp; !isInStandaloneMode() &amp;&amp; !isInstalled) {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;div
-        className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 text-sm md:text-base pulse-soft"
+        className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 text-sm md:text-base pulse-soft border border-white/30"
         style={{ maxWidth: 320 }}
       &gt;
         &lt;Download className="h-4 w-4 md:h-5 md:w-5" /&gt;
@@ -226,37 +221,44 @@ const PWAInstallButton = <span class="cstat-no" title="statement not covered" ><
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;button
       onClick={installApp}
-      className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 text-sm md:text-base hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 pulse-soft"
+      className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 text-sm md:text-base hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 pulse-soft border border-white/30"
       aria-label={t('install_app')}
       style={{ maxWidth: 320 }}
     &gt;
       &lt;Download className="h-4 w-4 md:h-5 md:w-5" /&gt;
       &lt;span&gt;
         {i18n.language === 'fr'
-          ? "Installer l’application sur ce navigateur"
-          : "Install this app in your browser"}
+          ? 'Installer l’application sur ce navigateur'
+          : 'Install this app in your browser'}
       &lt;/span&gt;
     &lt;/button&gt;
   );
 };
 &nbsp;
-export default PWAInstallButton; </pre></td></tr></table></pre>
+export default PWAInstallButton;
+&nbsp;</pre></td></tr></table></pre>
 
-                <div class='push'></div><!-- for sticky footer -->
-            </div><!-- /wrapper -->
-            <div class='footer quiet pad2 space-top1 center small'>
-                Code coverage generated by
-                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-19T23:54:04.842Z
-            </div>
-        <script src="../../prettify.js"></script>
-        <script>
-            window.onload = function () {
-                prettyPrint();
-            };
-        </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
-    </body>
+      <div class="push"></div>
+      <!-- for sticky footer -->
+    </div>
+    <!-- /wrapper -->
+    <div class="footer quiet pad2 space-top1 center small">
+      Code coverage generated by
+      <a
+        href="https://istanbul.js.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >istanbul</a
+      >
+      at 2025-08-01T22:21:52.886Z
+    </div>
+    <script src="../../prettify.js"></script>
+    <script>
+      window.onload = function () {
+        prettyPrint();
+      };
+    </script>
+    <script src="../../sorter.js"></script>
+    <script src="../../block-navigation.js"></script>
+  </body>
 </html>
-    

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { auth } from '../utils/firebase';
-import { getUserProfile, ensureUserProfile } from '../utils/firebase';
+import { auth } from '../utils/firebase/index.js';
+import { getUserProfile, ensureUserProfile } from '../utils/firebase/index.js';
 
 export function useUserProfile() {
   const [userProfile, setUserProfile] = useState(null);
@@ -42,4 +42,4 @@ export function useUserProfile() {
   }, [fetchProfile]);
 
   return { user: userProfile, loading, refreshUserProfile };
-} 
+}

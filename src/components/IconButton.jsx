@@ -1,6 +1,12 @@
 import React from 'react';
 
-const IconButton = ({ icon: Icon, className = '', onClick, title, ...props }) => (
+const IconButton = ({
+  icon: Icon,
+  className = '',
+  onClick,
+  title,
+  ...props
+}) => (
   <button
     onClick={onClick}
     className={`p-2 rounded-lg flex items-center justify-center transition-all duration-200 ${className}`}
@@ -11,4 +17,4 @@ const IconButton = ({ icon: Icon, className = '', onClick, title, ...props }) =>
   </button>
 );
 
-export default IconButton; 
+export default IconButton;

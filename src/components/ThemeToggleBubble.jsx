@@ -15,7 +15,9 @@ const ThemeToggleBubble = () => {
       setTheme(saved);
       document.body.classList.toggle('dark', saved === 'dark');
     } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
       setTheme(prefersDark ? 'dark' : 'light');
       document.body.classList.toggle('dark', prefersDark);
     }
@@ -35,7 +37,9 @@ const ThemeToggleBubble = () => {
         <button
           onClick={toggleTheme}
           className="bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg px-4 py-2 flex items-center justify-center relative hover:shadow-xl transition-all duration-300 rounded-xl border border-white/30"
-          aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+          aria-label={
+            theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'
+          }
           title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
         >
           <span className="font-semibold text-sm tracking-wide">
@@ -47,4 +51,4 @@ const ThemeToggleBubble = () => {
   );
 };
 
-export default ThemeToggleBubble; 
+export default ThemeToggleBubble;

@@ -8,8 +8,7 @@ export function usePWA() {
   // iOS detection
   function isIOS() {
     return (
-      /iphone|ipad|ipod/i.test(window.navigator.userAgent) &&
-      !window.MSStream
+      /iphone|ipad|ipod/i.test(window.navigator.userAgent) && !window.MSStream
     );
   }
   function isInStandaloneMode() {
@@ -49,7 +48,10 @@ export function usePWA() {
     }
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt
+      );
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, []);
@@ -67,4 +69,4 @@ export function usePWA() {
   };
 
   return { isInstallable, isInstalled, installApp };
-} 
+}

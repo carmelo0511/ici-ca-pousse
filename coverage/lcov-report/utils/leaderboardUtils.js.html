@@ -1,68 +1,64 @@
-
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Code coverage report for utils/leaderboardUtils.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style type='text/css'>
-        .coverage-summary .sorter {
-            background-image: url(../sort-arrow-sprite.png);
-        }
+    <style type="text/css">
+      .coverage-summary .sorter {
+        background-image: url(../sort-arrow-sprite.png);
+      }
     </style>
-</head>
-    
-<body>
-<div class='wrapper'>
-    <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">utils</a> leaderboardUtils.js</h1>
-        <div class='clearfix'>
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">83.63% </span>
-                <span class="quiet">Statements</span>
-                <span class='fraction'>46/55</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">69.23% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>27/39</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>15/15</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
-                <span class="quiet">Lines</span>
-                <span class='fraction'>45/54</span>
-            </div>
-        
-            
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="pad1">
+        <h1>
+          <a href="../index.html">All files</a> /
+          <a href="index.html">utils</a> leaderboardUtils.js
+        </h1>
+        <div class="clearfix">
+          <div class="fl pad1y space-right2">
+            <span class="strong">80% </span>
+            <span class="quiet">Statements</span>
+            <span class="fraction">44/55</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">71.79% </span>
+            <span class="quiet">Branches</span>
+            <span class="fraction">28/39</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">80% </span>
+            <span class="quiet">Functions</span>
+            <span class="fraction">12/15</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">81.48% </span>
+            <span class="quiet">Lines</span>
+            <span class="fraction">44/54</span>
+          </div>
         </div>
         <p class="quiet">
-            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+          Press <em>n</em> or <em>j</em> to go to the next uncovered block,
+          <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
         <template id="filterTemplate">
-            <div class="quiet">
-                Filter:
-                <input type="search" id="fileSearch">
-            </div>
+          <div class="quiet">
+            Filter:
+            <input type="search" id="fileSearch" />
+          </div>
         </template>
-    </div>
-    <div class='status-line high'></div>
-    <pre><table class="coverage">
+      </div>
+      <div class="status-line high"></div>
+      <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -213,110 +209,153 @@
 <a name='L148'></a><a href='#L148'>148</a>
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -324,54 +363,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// Utilitaires pour le leaderboard avancé
 import { PERIODS, METRICS, ALLOWED_EXERCISES } from '../constants/leaderboard';
-import { parseLocalDate } from './workoutUtils';
+import { parseLocalDate } from './workout/workoutUtils';
 &nbsp;
 // Obtenir la date de début selon la période
 export function getStartDate(period) {
   const now = new Date();
   const start = new Date(now);
-  
+&nbsp;
   switch (period) {
     case PERIODS.WEEK:
       start.setDate(now.getDate() - 7);
@@ -387,14 +387,14 @@ export function getStartDate(period) {
     default:
       start.setDate(now.getDate() - 7);
   }
-  
+&nbsp;
   return start;
 }
 &nbsp;
 // Filtrer les workouts par période
 export function filterWorkoutsByPeriod(workouts, period) {
   const startDate = getStartDate(period);
-  return workouts.filter(workout =&gt; {
+  return workouts.filter((workout) =&gt; {
     const workoutDate = parseLocalDate(workout.date);
     return workoutDate &gt;= startDate;
   });
@@ -403,34 +403,34 @@ export function filterWorkoutsByPeriod(workouts, period) {
 // Calculer les statistiques pour un utilisateur
 export function calculateUserStats(workouts, period = <span class="branch-0 cbranch-no" title="branch not covered" >PERIODS.ALL_TIME)</span> {
   const filteredWorkouts = filterWorkoutsByPeriod(workouts, period);
-  
+&nbsp;
   const stats = {
     workouts: filteredWorkouts.length,
     maxWeight: 0,
-    exerciseStats: {}
+    exerciseStats: {},
   };
 &nbsp;
   // Calculer les totaux
-  filteredWorkouts.forEach(workout =&gt; {
+  filteredWorkouts.forEach(<span class="fstat-no" title="function not covered" >(w</span>orkout) =&gt; {
     // Statistiques par exercice (seulement les exercices autorisés)
-    workout.exercises?.forEach(exercise =&gt; {
-      if (!ALLOWED_EXERCISES.includes(exercise.name)) return;
-      
-      if (!stats.exerciseStats[exercise.name]) {
-        stats.exerciseStats[exercise.name] = {
+<span class="cstat-no" title="statement not covered" >    workout.exercises?.forEach(<span class="fstat-no" title="function not covered" >(e</span>xercise) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (!ALLOWED_EXERCISES.includes(exercise.name)) <span class="cstat-no" title="statement not covered" >return;</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (!stats.exerciseStats[exercise.name]) {</span>
+<span class="cstat-no" title="statement not covered" >        stats.exerciseStats[exercise.name] = {</span>
           name: exercise.name,
           count: 0,
-          maxWeight: 0
+          maxWeight: 0,
         };
       }
 &nbsp;
-      const exerciseStat = stats.exerciseStats[exercise.name];
-      exerciseStat.count++;
+      const exerciseStat = <span class="cstat-no" title="statement not covered" >stats.exerciseStats[exercise.name];</span>
+<span class="cstat-no" title="statement not covered" >      exerciseStat.count++;</span>
 &nbsp;
-      exercise.sets.forEach(set =&gt; {
-        const weight = set.weight || 0;
-        exerciseStat.maxWeight = Math.max(exerciseStat.maxWeight, weight);
-        stats.maxWeight = Math.max(stats.maxWeight, weight);
+<span class="cstat-no" title="statement not covered" >      exercise.sets.forEach(<span class="fstat-no" title="function not covered" >(s</span>et) =&gt; {</span>
+        const weight = <span class="cstat-no" title="statement not covered" >set.weight || 0;</span>
+<span class="cstat-no" title="statement not covered" >        exerciseStat.maxWeight = Math.max(exerciseStat.maxWeight, weight);</span>
+<span class="cstat-no" title="statement not covered" >        stats.maxWeight = Math.max(stats.maxWeight, weight);</span>
       });
     });
   });
@@ -441,16 +441,16 @@ export function calculateUserStats(workouts, period = <span class="branch-0 cbra
 // Obtenir le classement pour une métrique donnée
 export function getLeaderboardRanking(usersStats, metric) {
   return usersStats
-    .map(user =&gt; {
+    .map((user) =&gt; {
       let value = 0;
-      
+&nbsp;
       // Mapper les métriques aux bonnes propriétés
       if (metric === METRICS.WORKOUTS) {
         value = user.stats?.workouts || 0;
-      } else <span class="missing-if-branch" title="if path not taken" >I</span>if (metric === METRICS.MAX_WEIGHT) {
-<span class="cstat-no" title="statement not covered" >        value = user.stats?.maxWeight || 0;</span>
+      } else if (metric === METRICS.MAX_WEIGHT) {
+        value = user.stats?.maxWeight || <span class="branch-1 cbranch-no" title="branch not covered" >0;</span>
       }
-      
+&nbsp;
       return {
         uid: user.uid,
         displayName: user.displayName,
@@ -459,14 +459,15 @@ export function getLeaderboardRanking(usersStats, metric) {
         photoURL: user.photoURL,
         selectedBadge: user.selectedBadge,
         badges: user.badges,
-        nickname: user.nickname || ''
+        nickname: user.nickname || '',
       };
     })
     .sort((a, b) =&gt; b.value - a.value)
     .map((user, index) =&gt; ({
       ...user,
       rank: index + 1,
-      medal: index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : null
+      medal:
+        index === 0 ? '🥇' : index === 1 ? '🥈' : <span class="branch-1 cbranch-no" title="branch not covered" >index === 2 ? '🥉' : null,</span>
     }));
 }
 &nbsp;
@@ -475,61 +476,68 @@ export function formatMetricValue(value, metric) {
   switch (metric) {
     case METRICS.WORKOUTS:
       return `${value} séances`;
-<span class="branch-1 cbranch-no" title="branch not covered" >    case METRICS.MAX_WEIGHT:</span>
-<span class="cstat-no" title="statement not covered" >      return `${value} kg`;</span>
-<span class="branch-2 cbranch-no" title="branch not covered" >    default:</span>
-<span class="cstat-no" title="statement not covered" >      return value;</span>
+    case METRICS.MAX_WEIGHT:
+      return `${value} kg`;
+    default:
+      return value;
   }
 }
 &nbsp;
 // Obtenir le label de la période
 export function getPeriodLabel(period) {
   switch (period) {
-<span class="branch-0 cbranch-no" title="branch not covered" >    case PERIODS.WEEK:</span>
-<span class="cstat-no" title="statement not covered" >      return 'Cette semaine';</span>
+    case PERIODS.WEEK:
+      return 'Cette semaine';
     case PERIODS.MONTH:
       return 'Ce mois';
-<span class="branch-2 cbranch-no" title="branch not covered" >    case PERIODS.YEAR:</span>
-<span class="cstat-no" title="statement not covered" >      return 'Cette année';</span>
-<span class="branch-3 cbranch-no" title="branch not covered" >    case PERIODS.ALL_TIME:</span>
-<span class="cstat-no" title="statement not covered" >      return 'Tout le temps';</span>
-<span class="branch-4 cbranch-no" title="branch not covered" >    default:</span>
-<span class="cstat-no" title="statement not covered" >      return 'Cette semaine';</span>
+    case PERIODS.YEAR:
+      return 'Cette année';
+    case PERIODS.ALL_TIME:
+      return 'Tout le temps';
+    default:
+      return 'Cette semaine';
   }
 }
 &nbsp;
 // Obtenir le label de la métrique
 export function getMetricLabel(metric) {
   switch (metric) {
-<span class="branch-0 cbranch-no" title="branch not covered" >    case METRICS.WORKOUTS:</span>
-<span class="cstat-no" title="statement not covered" >      return 'Séances';</span>
+    case METRICS.WORKOUTS:
+      return 'Séances';
     case METRICS.MAX_WEIGHT:
       return 'Poids max';
-<span class="branch-2 cbranch-no" title="branch not covered" >    default:</span>
-<span class="cstat-no" title="statement not covered" >      return 'Métrique';</span>
+    default:
+      return 'Métrique';
   }
 }
 &nbsp;
 // Obtenir la liste des exercices autorisés
 export function getAllowedExercises() {
   return ALLOWED_EXERCISES;
-} </pre></td></tr></table></pre>
+}
+&nbsp;</pre></td></tr></table></pre>
 
-                <div class='push'></div><!-- for sticky footer -->
-            </div><!-- /wrapper -->
-            <div class='footer quiet pad2 space-top1 center small'>
-                Code coverage generated by
-                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-29T00:54:49.671Z
-            </div>
-        <script src="../prettify.js"></script>
-        <script>
-            window.onload = function () {
-                prettyPrint();
-            };
-        </script>
-        <script src="../sorter.js"></script>
-        <script src="../block-navigation.js"></script>
-    </body>
+      <div class="push"></div>
+      <!-- for sticky footer -->
+    </div>
+    <!-- /wrapper -->
+    <div class="footer quiet pad2 space-top1 center small">
+      Code coverage generated by
+      <a
+        href="https://istanbul.js.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >istanbul</a
+      >
+      at 2025-08-01T21:59:56.923Z
+    </div>
+    <script src="../prettify.js"></script>
+    <script>
+      window.onload = function () {
+        prettyPrint();
+      };
+    </script>
+    <script src="../sorter.js"></script>
+    <script src="../block-navigation.js"></script>
+  </body>
 </html>
-    

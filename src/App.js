@@ -28,11 +28,9 @@ import WorkoutTemplates from './components/Workout/WorkoutTemplates';
 import MigrationPrompt from './components/MigrationPrompt';
 import PageTransition from './components/PageTransition';
 
-// ProfileSettings remplacé par ProfilePage
 import ProfilePage from './components/Profile/ProfilePage';
 import ChatbotBubble from './components/Chatbot/ChatbotBubble';
 import ThemeToggleBubble from './components/ThemeToggleBubble';
-
 
 // Hooks
 import {
@@ -47,12 +45,11 @@ import {
   useSwipeNavigation,
   useKeyboardNavigation,
   useNotifications,
-  useWorkoutTemplates
+  useWorkoutTemplates,
 } from './hooks';
 
-
 // Utils
-import { migrateLocalWorkoutsToCloud } from './utils/storage';
+import { migrateLocalWorkoutsToCloud } from './utils/firebase/storage';
 import { STORAGE_KEYS } from './constants';
 
 function App() {
@@ -60,7 +57,7 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
   const [showWeightNotif, setShowWeightNotif] = useState(false);
   const [isFading, setIsFading] = useState(false);
-  
+
   // Hook personnalisé pour l'état global
   const appState = useAppState();
   const {
@@ -88,7 +85,14 @@ function App() {
   } = appState;
 
   // Hooks personnalisés
-  const { workouts, addWorkout, updateWorkout, deleteWorkout, getWorkoutForDate, getStats } = useWorkouts(user);
+  const {
+    workouts,
+    addWorkout,
+    updateWorkout,
+    deleteWorkout,
+    getWorkoutForDate,
+    getStats,
+  } = useWorkouts(user);
   const {
     exercises,
     addExercise,
@@ -99,16 +103,33 @@ function App() {
     clearExercises,
     setExercisesFromWorkout,
   } = useExercises();
-  const { templates, addTemplate, updateTemplate, deleteTemplate, saveCurrentWorkoutAsTemplate, cleanProblematicTemplates, deleteAllTemplates, forceDeleteTemplate } = useWorkoutTemplates(user);
-  const { addWorkoutXP, addBadgeUnlockXP, addFriendXP, addChallengeSendXP, addChallengeWinXP, recalculateStreak } = useExperience(user);
-  const { challenges } = useChallenges(user, addChallengeSendXP, addChallengeWinXP);
+  const {
+    templates,
+    addTemplate,
+    updateTemplate,
+    deleteTemplate,
+    saveCurrentWorkoutAsTemplate,
+    cleanProblematicTemplates,
+    deleteAllTemplates,
+    forceDeleteTemplate,
+  } = useWorkoutTemplates(user);
+  const {
+    addWorkoutXP,
+    addBadgeUnlockXP,
+    addFriendXP,
+    addChallengeSendXP,
+    addChallengeWinXP,
+    recalculateStreak,
+  } = useExperience(user);
+  const { challenges } = useChallenges(
+    user,
+    addChallengeSendXP,
+    addChallengeWinXP
+  );
 
   const { friends } = useFriends(user, addFriendXP);
   const { notifications } = useNotifications(user);
   const { t } = useTranslation();
-
-
-
 
   // Hook personnalisé pour la logique des workouts
   const workoutLogic = useWorkoutLogic({
@@ -137,7 +158,7 @@ function App() {
     addWorkoutXP,
     workouts,
 
-    user
+    user,
   });
 
   const {
@@ -191,8 +212,8 @@ function App() {
         id: Date.now() + index * 100 + setIndex,
         reps: set.reps || 0,
         weight: set.weight || 0,
-        duration: set.duration || 0
-      }))
+        duration: set.duration || 0,
+      })),
     }));
 
     // Vider les exercices actuels et charger le template
@@ -214,7 +235,7 @@ function App() {
     { id: 'leaderboard', label: 'Classement' },
     { id: 'challenges', label: 'Défis' },
     { id: 'badges', label: 'Badges' },
-    { id: 'friends', label: 'Amis' }
+    { id: 'friends', label: 'Amis' },
   ];
 
   // Navigation par gestes et raccourcis clavier
@@ -233,7 +254,9 @@ function App() {
   useEffect(() => {
     if (user) {
       // Vérifier s'il y a des données locales à migrer
-      const localWorkouts = JSON.parse(localStorage.getItem(STORAGE_KEYS.WORKOUTS) || '[]');
+      const localWorkouts = JSON.parse(
+        localStorage.getItem(STORAGE_KEYS.WORKOUTS) || '[]'
+      );
       if (localWorkouts.length > 0) {
         setShowMigratePrompt(true);
       }
@@ -246,13 +269,18 @@ function App() {
       // Recalculer le streak une fois par jour au maximum
       const lastRecalculation = localStorage.getItem('lastStreakRecalculation');
       const today = new Date().toDateString();
-      
+
       if (lastRecalculation !== today) {
-        recalculateStreak(workouts).then(() => {
-          localStorage.setItem('lastStreakRecalculation', today);
-        }).catch(error => {
-          console.error('Erreur lors du recalcul automatique du streak:', error);
-        });
+        recalculateStreak(workouts)
+          .then(() => {
+            localStorage.setItem('lastStreakRecalculation', today);
+          })
+          .catch((error) => {
+            console.error(
+              'Erreur lors du recalcul automatique du streak:',
+              error
+            );
+          });
       }
     }
   }, [user, workouts, recalculateStreak]);
@@ -267,10 +295,10 @@ function App() {
       const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Si dimanche, on remonte de 6 jours
       const monday = new Date(now);
       monday.setDate(now.getDate() + daysToMonday);
-      monday.setHours(0,0,0,0);
-      const weekKey = monday.toISOString().slice(0,10);
+      monday.setHours(0, 0, 0, 0);
+      const weekKey = monday.toISOString().slice(0, 10);
       const weightHistory = user.weightHistory || [];
-      const hasEntry = weightHistory.some(w => w.weekKey === weekKey);
+      const hasEntry = weightHistory.some((w) => w.weekKey === weekKey);
       // Vérifie si la notif a déjà été affichée cette semaine
       const lastNotifWeek = localStorage.getItem('weightNotifLastWeekKey');
       if (!hasEntry && lastNotifWeek !== weekKey) {
@@ -292,10 +320,11 @@ function App() {
     const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Si dimanche, on remonte de 6 jours
     const monday = new Date(now);
     monday.setDate(now.getDate() + daysToMonday);
-    monday.setHours(0,0,0,0);
-    const weekKey = monday.toISOString().slice(0,10);
+    monday.setHours(0, 0, 0, 0);
+    const weekKey = monday.toISOString().slice(0, 10);
     const weightHistory = user.weightHistory || [];
-    const last = weightHistory.length > 0 ? weightHistory[weightHistory.length-1] : null;
+    const last =
+      weightHistory.length > 0 ? weightHistory[weightHistory.length - 1] : null;
     if (last && last.weekKey !== weekKey) {
       const userRef = doc(db, 'users', user.uid);
       const newHistory = [...weightHistory, { weekKey, value: last.value }];
@@ -318,9 +347,13 @@ function App() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="text-2xl font-bold text-indigo-600 mb-4">Chargement...</div>
+          <div className="text-2xl font-bold text-indigo-600 mb-4">
+            Chargement...
+          </div>
           <div className="text-sm text-gray-500">
-            {userLoading ? 'Chargement du profil...' : 'Vérification de l\'authentification...'}
+            {userLoading
+              ? 'Chargement du profil...'
+              : "Vérification de l'authentification..."}
           </div>
         </div>
       </div>
@@ -340,7 +373,10 @@ function App() {
   // Afficher la proposition de migration si besoin
   if (showMigratePrompt) {
     return (
-      <MigrationPrompt onMigrate={handleMigrate} onIgnore={() => setShowMigratePrompt(false)} />
+      <MigrationPrompt
+        onMigrate={handleMigrate}
+        onIgnore={() => setShowMigratePrompt(false)}
+      />
     );
   }
 
@@ -348,22 +384,42 @@ function App() {
     <>
       {/* Notification hebdo poids */}
       {showWeightNotif && (
-        <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-white border border-indigo-300 shadow-lg rounded-xl px-6 py-4 flex flex-col items-center gap-2 animate-fadein transition-opacity duration-400 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
-          <div className="font-bold text-indigo-700 text-lg mb-1">Mise à jour du poids</div>
-          <div className="text-gray-700 mb-2">C'est le début d'une nouvelle semaine !<br/>Veux-tu mettre à jour ton poids ?</div>
+        <div
+          className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-white border border-indigo-300 shadow-lg rounded-xl px-6 py-4 flex flex-col items-center gap-2 animate-fadein transition-opacity duration-400 ${isFading ? 'opacity-0' : 'opacity-100'}`}
+        >
+          <div className="font-bold text-indigo-700 text-lg mb-1">
+            Mise à jour du poids
+          </div>
+          <div className="text-gray-700 mb-2">
+            C'est le début d'une nouvelle semaine !<br />
+            Veux-tu mettre à jour ton poids ?
+          </div>
           <div className="flex gap-3">
-            <button onClick={handleUpdateWeight} className="px-4 py-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors font-medium">Mettre à jour</button>
-            <button onClick={handleSameWeight} className="px-4 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors font-medium">C'est le même</button>
+            <button
+              onClick={handleUpdateWeight}
+              className="px-4 py-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors font-medium"
+            >
+              Mettre à jour
+            </button>
+            <button
+              onClick={handleSameWeight}
+              className="px-4 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors font-medium"
+            >
+              C'est le même
+            </button>
           </div>
         </div>
       )}
 
       <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
-        <div id="main-content" className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact">
-          <Header 
-            workoutCount={workouts.length} 
-            user={user} 
-            workouts={workouts} 
+        <div
+          id="main-content"
+          className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact"
+        >
+          <Header
+            workoutCount={workouts.length}
+            user={user}
+            workouts={workouts}
             challenges={challenges}
             addBadgeUnlockXP={addBadgeUnlockXP}
             refreshUserProfile={refreshUserProfile}
@@ -373,8 +429,12 @@ function App() {
               // Les changements sont gérés automatiquement par le hook
             }}
           />
-          <Navigation activeTab={activeTab} setActiveTab={setActiveTab} notifications={notifications} />
-          
+          <Navigation
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            notifications={notifications}
+          />
+
           {/* Conteneur pour tous les onglets avec position relative */}
           <div className="relative">
             {/* Onglet Séance */}
@@ -419,7 +479,7 @@ function App() {
 
             {/* Onglet Statistiques */}
             <PageTransition isActive={activeTab === 'stats'}>
-            <StatsView stats={getStats()} workouts={workouts} user={user} />
+              <StatsView stats={getStats()} workouts={workouts} user={user} />
             </PageTransition>
 
             {/* Onglet Templates */}
@@ -440,8 +500,6 @@ function App() {
               />
             </PageTransition>
 
-
-
             {/* Onglet Amis */}
             <PageTransition isActive={activeTab === 'friends'}>
               <FriendsList user={user} />
@@ -457,32 +515,35 @@ function App() {
               <Challenges user={user} />
             </PageTransition>
 
-
-
             {/* Onglet Badges */}
             <PageTransition isActive={activeTab === 'badges'}>
-              <BadgesPage workouts={workouts} challenges={challenges} friends={friends} user={user} addBadgeUnlockXP={addBadgeUnlockXP} />
+              <BadgesPage
+                workouts={workouts}
+                challenges={challenges}
+                friends={friends}
+                user={user}
+                addBadgeUnlockXP={addBadgeUnlockXP}
+              />
             </PageTransition>
 
             {/* Onglet Profil */}
             <PageTransition isActive={activeTab === 'profile'}>
-              <ProfilePage 
-                user={user} 
-                workouts={workouts} 
-                challenges={challenges} 
+              <ProfilePage
+                user={user}
+                workouts={workouts}
+                challenges={challenges}
                 onUserUpdate={refreshUserProfile}
                 addBadgeUnlockXP={addBadgeUnlockXP}
                 refreshUserProfile={refreshUserProfile}
               />
             </PageTransition>
-
-            
           </div>
 
           {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
           <PWAInstallButton />
           {toast.show && (
-            <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg
+            <div
+              className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg
               ${toast.type === 'success' ? 'bg-white border border-green-200 text-green-700' : 'bg-white border border-red-200 text-red-700'}`}
             >
               <span>{toast.message}</span>
@@ -496,7 +557,7 @@ function App() {
             setActiveTab={setActiveTab}
           />
           <ThemeToggleBubble />
-          
+
           {/* Vercel Analytics et Speed Insights */}
           <Analytics />
           <SpeedInsights />

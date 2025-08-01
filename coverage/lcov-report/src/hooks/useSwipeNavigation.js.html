@@ -1,68 +1,64 @@
-
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Code coverage report for src/hooks/useSwipeNavigation.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
     <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style type='text/css'>
-        .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
-        }
+    <style type="text/css">
+      .coverage-summary .sorter {
+        background-image: url(../../sort-arrow-sprite.png);
+      }
     </style>
-</head>
-    
-<body>
-<div class='wrapper'>
-    <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/hooks</a> useSwipeNavigation.js</h1>
-        <div class='clearfix'>
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Lines</span>
-                <span class='fraction'>0/33</span>
-            </div>
-        
-            
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="pad1">
+        <h1>
+          <a href="../../index.html">All files</a> /
+          <a href="index.html">src/hooks</a> useSwipeNavigation.js
+        </h1>
+        <div class="clearfix">
+          <div class="fl pad1y space-right2">
+            <span class="strong">0% </span>
+            <span class="quiet">Statements</span>
+            <span class="fraction">0/36</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">0% </span>
+            <span class="quiet">Branches</span>
+            <span class="fraction">0/20</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">0% </span>
+            <span class="quiet">Functions</span>
+            <span class="fraction">0/7</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">0% </span>
+            <span class="quiet">Lines</span>
+            <span class="fraction">0/33</span>
+          </div>
         </div>
         <p class="quiet">
-            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+          Press <em>n</em> or <em>j</em> to go to the next uncovered block,
+          <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
         <template id="filterTemplate">
-            <div class="quiet">
-                Filter:
-                <input type="search" id="fileSearch">
-            </div>
+          <div class="quiet">
+            Filter:
+            <input type="search" id="fileSearch" />
+          </div>
         </template>
-    </div>
-    <div class='status-line low'></div>
-    <pre><table class="coverage">
+      </div>
+      <div class="status-line low"></div>
+      <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -122,7 +118,8 @@
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -181,6 +178,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useRef, useCallback } from 'react';
 &nbsp;
 export const useSwipeNavigation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctiveTab, setActiveTab, tabs) =&gt; {</span>
@@ -201,13 +199,13 @@ export const useSwipeNavigation = <span class="cstat-no" title="statement not co
 &nbsp;
   const onTouchEnd = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!touchStart.current || !touchEnd.current) <span class="cstat-no" title="statement not covered" >return;</span></span>
-    
+&nbsp;
     const distance = <span class="cstat-no" title="statement not covered" >touchStart.current - touchEnd.current;</span>
     const isLeftSwipe = <span class="cstat-no" title="statement not covered" >distance &gt; minSwipeDistance;</span>
     const isRightSwipe = <span class="cstat-no" title="statement not covered" >distance &lt; -minSwipeDistance;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (isLeftSwipe || isRightSwipe) {</span>
-      const currentIndex = <span class="cstat-no" title="statement not covered" >tabs.findIndex(<span class="fstat-no" title="function not covered" >ta</span>b =&gt; <span class="cstat-no" title="statement not covered" >tab.id === activeTab)</span>;</span>
+      const currentIndex = <span class="cstat-no" title="statement not covered" >tabs.findIndex(<span class="fstat-no" title="function not covered" >(t</span>ab) =&gt; <span class="cstat-no" title="statement not covered" >tab.id === activeTab)</span>;</span>
       let newIndex;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (isLeftSwipe &amp;&amp; currentIndex &lt; tabs.length - 1) {</span>
@@ -240,23 +238,30 @@ export const useSwipeNavigation = <span class="cstat-no" title="statement not co
   }, [onTouchEnd]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return null;</span>
-}; </pre></td></tr></table></pre>
+};
+&nbsp;</pre></td></tr></table></pre>
 
-                <div class='push'></div><!-- for sticky footer -->
-            </div><!-- /wrapper -->
-            <div class='footer quiet pad2 space-top1 center small'>
-                Code coverage generated by
-                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-19T23:54:04.842Z
-            </div>
-        <script src="../../prettify.js"></script>
-        <script>
-            window.onload = function () {
-                prettyPrint();
-            };
-        </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
-    </body>
+      <div class="push"></div>
+      <!-- for sticky footer -->
+    </div>
+    <!-- /wrapper -->
+    <div class="footer quiet pad2 space-top1 center small">
+      Code coverage generated by
+      <a
+        href="https://istanbul.js.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >istanbul</a
+      >
+      at 2025-08-01T22:21:52.886Z
+    </div>
+    <script src="../../prettify.js"></script>
+    <script>
+      window.onload = function () {
+        prettyPrint();
+      };
+    </script>
+    <script src="../../sorter.js"></script>
+    <script src="../../block-navigation.js"></script>
+  </body>
 </html>
-    
