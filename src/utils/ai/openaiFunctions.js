@@ -14,7 +14,28 @@ export const fitnessFunctions = [
             type: 'object',
             properties: {
               date: { type: 'string', description: 'Date de la séance' },
-              exercises: { type: 'array', description: 'Exercices effectués' },
+              exercises: { 
+                type: 'array', 
+                description: 'Exercices effectués',
+                items: {
+                  type: 'object',
+                  properties: {
+                    name: { type: 'string', description: 'Nom de l\'exercice' },
+                    sets: { 
+                      type: 'array', 
+                      description: 'Séries effectuées',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          weight: { type: 'number', description: 'Poids en kg' },
+                          reps: { type: 'number', description: 'Nombre de répétitions' },
+                          rest: { type: 'number', description: 'Temps de repos en secondes' }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               duration: { type: 'number', description: 'Durée en minutes' },
               feeling: {
                 type: 'string',

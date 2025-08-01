@@ -568,3 +568,32 @@ describe('openaiFunctions', () => {
     });
   });
 });
+
+describe('Schema Validation', () => {
+  test('should have valid JSON schema for analyze_workout_performance', () => {
+    const analyzeFunction = fitnessFunctions.find(
+      (f) => f.name === 'analyze_workout_performance'
+    );
+    
+    expect(analyzeFunction).toBeDefined();
+    
+    // Vérifier que le schéma est valide
+    const schema = analyzeFunction.parameters;
+    
+    // Vérifier que workout_data.items.exercises.items est défini
+    expect(schema.properties.workout_data.items.properties.exercises.items).toBeDefined();
+    expect(schema.properties.workout_data.items.properties.exercises.items.type).toBe('object');
+    
+    // Vérifier que les propriétés des exercices sont définies
+    const exerciseSchema = schema.properties.workout_data.items.properties.exercises.items;
+    expect(exerciseSchema.properties.name).toBeDefined();
+    expect(exerciseSchema.properties.sets).toBeDefined();
+    expect(exerciseSchema.properties.sets.items).toBeDefined();
+    
+    // Vérifier que les propriétés des séries sont définies
+    const setSchema = exerciseSchema.properties.sets.items;
+    expect(setSchema.properties.weight).toBeDefined();
+    expect(setSchema.properties.reps).toBeDefined();
+    expect(setSchema.properties.rest).toBeDefined();
+  });
+});
