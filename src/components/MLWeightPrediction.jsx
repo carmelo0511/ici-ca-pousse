@@ -9,7 +9,7 @@ import {
   BarChart3,
   Lightbulb
 } from 'lucide-react';
-import { predictNextWeight, getProgressionInsights } from '../utils/ml/weightPrediction';
+import { getProgressionInsights } from '../utils/ml/weightPrediction';
 
 const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSuggestion }) => {
   const [prediction, setPrediction] = useState(null);
