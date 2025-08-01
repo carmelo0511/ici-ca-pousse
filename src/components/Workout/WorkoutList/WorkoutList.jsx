@@ -26,6 +26,7 @@ import Modal from '../Modal';
 import GradientButton from '../../GradientButton';
 import Card from '../../Card';
 import IconButton from '../../IconButton';
+import LexIA from '../../IAInfoBox';
 import PropTypes from 'prop-types';
 import { getLastExerciseWeight } from '../../../utils/workout/workoutUtils';
 
@@ -1184,6 +1185,9 @@ function WorkoutList({
           </div>
         </div>
       )}
+
+      {/* Encart explicatif du Coach IA */}
+      <LexIA className="mt-8" />
     </div>
   );
 }
