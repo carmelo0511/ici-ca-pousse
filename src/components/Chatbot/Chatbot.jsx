@@ -217,18 +217,18 @@ const Chatbot = ({
   const sendMessage = chatGpt.sendMessage;
   const {
     isLoading,
-    clearCache,
-    cacheStats,
+    // clearCache, // TODO: Implement cache management UI
+    // cacheStats, // TODO: Implement cache stats display
     clearMemory,
-    clearAll,
+    // clearAll, // TODO: Implement clear all functionality
     exportConversation,
     getMemoryStats,
     getMonitoringStats,
     getFunctionStats,
     getPerformanceTrends,
     getPerformanceAlerts,
-    generatePerformanceReport,
-    resetMonitoring,
+    // generatePerformanceReport, // TODO: Implement performance report generation
+    // resetMonitoring, // TODO: Implement monitoring reset
     getSafetyStats,
     getKnowledgeBaseStats,
     addCustomKnowledge,
@@ -554,7 +554,7 @@ const Chatbot = ({
 
   // Génère une séance conseillée intelligemment selon l'historique
   const handleSuggestWorkout = () => {
-    const analysis = analyzeWorkoutHistory();
+    // const analysis = analyzeWorkoutHistory(); // TODO: Utiliser pour personnaliser les recommandations
     const recommendedExercises = getIntelligentExerciseRecommendations();
 
     // Si pas assez d'exercices recommandés, compléter avec des exercices de base
@@ -577,24 +577,22 @@ const Chatbot = ({
       sets: getSetsForIntensity(intensity, ex),
     }));
 
-    // Générer un message explicatif
-    let explanation = `Voici une séance ${sessionType} de niveau ${intensity} avec ${suggestedExercises.length} exercices :\n`;
-
-    if (analysis.daysSinceLastWorkout !== null) {
-      if (analysis.daysSinceLastWorkout === 0) {
-        explanation += '💪 Séance du jour ! ';
-      } else if (analysis.daysSinceLastWorkout === 1) {
-        explanation += '🔥 Reprise après 1 jour de repos. ';
-      } else {
-        explanation += `⏰ Reprise après ${analysis.daysSinceLastWorkout} jours. `;
-      }
-    }
-
-    // Ajouter des recommandations spécifiques
-    const muscleGroups = Object.keys(analysis.muscleGroups);
-    if (muscleGroups.length > 0) {
-      explanation += `\n🎯 Cette séance équilibre ton entraînement en ciblant des groupes moins travaillés récemment.`;
-    }
+    // TODO: Générer un message explicatif pour l'utilisateur
+    // let explanation = `Voici une séance ${sessionType} de niveau ${intensity} avec ${suggestedExercises.length} exercices :\n`;
+    // if (analysis.daysSinceLastWorkout !== null) {
+    //   if (analysis.daysSinceLastWorkout === 0) {
+    //     explanation += '💪 Séance du jour ! ';
+    //   } else if (analysis.daysSinceLastWorkout === 1) {
+    //     explanation += '🔥 Reprise après 1 jour de repos. ';
+    //   } else {
+    //     explanation += `⏰ Reprise après ${analysis.daysSinceLastWorkout} jours. `;
+    //   }
+    // }
+    // const muscleGroups = Object.keys(analysis.muscleGroups);
+    // if (muscleGroups.length > 0) {
+    //   explanation += `\n🎯 Cette séance équilibre ton entraînement en ciblant des groupes moins travaillés récemment.`;
+    // }
+    // setMessages(prev => [...prev, { role: 'assistant', content: explanation }]);
 
     // Fermer immédiatement le chatbot et afficher la séance
     setExercisesFromWorkout(suggestedExercises);

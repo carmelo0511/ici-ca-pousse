@@ -76,7 +76,7 @@ describe('openaiFunctions', () => {
     });
 
     test('should have track_progress function', () => {
-      const func = fitnessFunctions.find((f) => f.name === 'track_progress');
+      // const func = fitnessFunctions.find((f) => f.name === 'track_progress'); // TODO: Implémenter track_progress
       // track_progress n'existe pas dans le fichier, vérifions les fonctions qui existent
       const existingFunctions = fitnessFunctions.map((f) => f.name);
       expect(existingFunctions).toContain('analyze_workout_performance');
@@ -200,7 +200,7 @@ describe('openaiFunctions', () => {
     });
 
     test('should handle null message', () => {
-      const message = null;
+      // const message = null; // TODO: Gérer les messages null
       // getRelevantFunctions ne gère pas null, testons avec une chaîne vide
       const functions = getRelevantFunctions('', {});
 

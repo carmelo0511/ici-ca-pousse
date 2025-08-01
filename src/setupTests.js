@@ -3,6 +3,10 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+import { configure } from '@testing-library/react';
+
+// Setup for React 18 compatibility
+configure({ testIdAttribute: 'data-testid' });
 
 // Mock fetch globally
 global.fetch = jest.fn();
@@ -36,11 +40,6 @@ document.createElement = jest.fn(() => ({
 }));
 document.body.appendChild = jest.fn();
 document.body.removeChild = jest.fn();
-
-// Setup for React 18 compatibility
-import { configure } from '@testing-library/react';
-
-configure({ testIdAttribute: 'data-testid' });
 
 // Mock ResizeObserver
 global.ResizeObserver = jest.fn().mockImplementation(() => ({

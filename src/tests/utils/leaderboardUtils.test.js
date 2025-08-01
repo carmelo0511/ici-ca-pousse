@@ -11,7 +11,7 @@ import {
 import {
   PERIODS,
   METRICS,
-  ALLOWED_EXERCISES,
+  // ALLOWED_EXERCISES, // TODO: Utiliser pour les tests d'exercices spécifiques
 } from '../../constants/leaderboard';
 
 // Mock des constantes

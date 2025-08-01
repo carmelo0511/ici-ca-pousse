@@ -649,12 +649,12 @@ export default function useChatGPT(apiKey) {
   const analyzeWorkoutPerformance = async (args, workouts, user) => {
     // Analyse des performances basée sur les données réelles
     const workoutData = workouts || [];
-    const userProfile = {
-      goal: user?.goal || 'général',
-      level: determineUserLevel(workoutData),
-      height: user?.height,
-      weight: user?.weight,
-    };
+    // const userProfile = { // TODO: Utiliser pour des analyses plus poussées
+    //   goal: user?.goal || 'général',
+    //   level: determineUserLevel(workoutData),
+    //   height: user?.height,
+    //   weight: user?.weight,
+    // };
 
     return {
       summary: `Analyse de ${workoutData.length} séances`,
@@ -763,7 +763,7 @@ export default function useChatGPT(apiKey) {
   };
 
   const analyzeExerciseForm = async (args, user) => {
-    const { exercise_name, user_level } = args;
+    const { exercise_name } = args; // const { user_level } = args; // TODO: Utiliser pour adapter les conseils au niveau
 
     return {
       exercise_name,
@@ -794,7 +794,7 @@ export default function useChatGPT(apiKey) {
   };
 
   const getMotivationBoost = async (args, user) => {
-    const { current_motivation, user_personality } = args;
+    // const { current_motivation, user_personality } = args; // TODO: Utiliser pour personnaliser les messages
 
     return {
       motivational_message:
@@ -817,12 +817,12 @@ export default function useChatGPT(apiKey) {
   };
 
   // Fonctions utilitaires
-  const determineUserLevel = (workouts) => {
-    if (!workouts || workouts.length === 0) return 'débutant';
-    if (workouts.length < 10) return 'débutant';
-    if (workouts.length < 30) return 'intermédiaire';
-    return 'avancé';
-  };
+  // const determineUserLevel = (workouts) => { // TODO: Utiliser pour adapter les recommandations au niveau
+  //   if (!workouts || workouts.length === 0) return 'débutant';
+  //   if (workouts.length < 10) return 'débutant';
+  //   if (workouts.length < 30) return 'intermédiaire';
+  //   return 'avancé';
+  // };
 
   const getExercisesForType = (type, intensity, level) => {
     // Logique de sélection d'exercices selon le type et l'intensité

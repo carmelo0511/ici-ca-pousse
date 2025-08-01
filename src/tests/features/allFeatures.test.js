@@ -1,4 +1,4 @@
-const { renderHook, act } = require('@testing-library/react');
+// const { renderHook, act } = require('@testing-library/react'); // TODO: Utiliser pour les tests de hooks
 
 // Mock des dépendances
 jest.mock('../../utils/ai/aiMonitoring', () => ({
