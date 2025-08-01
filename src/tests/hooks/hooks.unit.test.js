@@ -95,31 +95,33 @@ describe('Hooks - Tests Unitaires', () => {
     });
 
     test('devrait charger le cache du chatbot depuis le stockage', () => {
+      const mockTimestamp = Date.now();
       const mockCache = {
         cache: [
-          ['test:key', { response: 'cached', expiresAt: Date.now() + 1000 }],
+          ['test:key', { response: 'cached', expiresAt: mockTimestamp + 1000 }],
         ],
-        timestamp: Date.now(),
+        timestamp: mockTimestamp,
       };
       load.mockReturnValue(mockCache);
 
       const result = load(STORAGE_KEYS.CHATBOT_CACHE, {
         cache: [],
-        timestamp: Date.now(),
+        timestamp: mockTimestamp,
       });
       expect(result).toEqual(mockCache);
       expect(load).toHaveBeenCalledWith(STORAGE_KEYS.CHATBOT_CACHE, {
         cache: [],
-        timestamp: Date.now(),
+        timestamp: mockTimestamp,
       });
     });
 
     test('devrait sauvegarder le cache du chatbot', async () => {
+      const mockTimestamp = Date.now();
       const cache = {
         cache: [
-          ['test:key', { response: 'cached', expiresAt: Date.now() + 1000 }],
+          ['test:key', { response: 'cached', expiresAt: mockTimestamp + 1000 }],
         ],
-        timestamp: Date.now(),
+        timestamp: mockTimestamp,
       };
 
       await save(STORAGE_KEYS.CHATBOT_CACHE, cache);
