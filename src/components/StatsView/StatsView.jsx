@@ -16,6 +16,7 @@ import {
   getPreferredWorkoutTime,
   getAverageDurationByTime,
 } from '../../utils/workout/workoutUtils';
+import { analyzeAllExercises } from '../../utils/ml/weightPrediction';
 import PropTypes from 'prop-types';
 
 function getMostWorkedMuscleGroup(workouts) {
@@ -98,6 +99,107 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </ResponsiveContainer>
         )}
       </div>
+
+      {/* Prédictions IA */}
+      {workouts.length > 0 && (
+        <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up mb-8">
+          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+            <span>🤖</span>
+            <span>Prédictions IA - Progression des Poids</span>
+          </h3>
+
+          {(() => {
+            const exerciseAnalysis = analyzeAllExercises(workouts);
+            const exercisesWithData = Object.entries(exerciseAnalysis).filter(
+              ([_, analysis]) => analysis.confidence > 0
+            );
+
+            if (exercisesWithData.length === 0) {
+              return (
+                <div className="text-center py-8">
+                  <div className="text-gray-400 text-6xl mb-4">🧠</div>
+                  <p className="text-gray-600 mb-2">Pas encore assez de données</p>
+                  <p className="text-sm text-gray-500">
+                    Continuez à vous entraîner pour obtenir des prédictions IA
+                  </p>
+                </div>
+              );
+            }
+
+            return (
+              <div className="space-y-4">
+                <p className="text-gray-600 mb-6">
+                  L'IA analyse vos données d'entraînement pour prédire vos prochains poids recommandés
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {exercisesWithData
+                    .sort((a, b) => b[1].confidence - a[1].confidence)
+                    .slice(0, 6)
+                    .map(([exerciseName, analysis]) => (
+                      <div
+                        key={exerciseName}
+                        className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 border border-purple-200"
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-semibold text-gray-800 text-sm truncate">
+                            {exerciseName}
+                          </h4>
+                          <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                            analysis.confidence >= 70 
+                              ? 'bg-green-100 text-green-700'
+                              : analysis.confidence >= 40
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-red-100 text-red-700'
+                          }`}>
+                            {analysis.confidence}%
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-600">Actuel</span>
+                            <span className="text-sm font-medium text-gray-800">
+                              {analysis.lastWeight}kg
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-600">Prédiction</span>
+                            <span className="text-sm font-bold text-purple-700">
+                              {analysis.predictedWeight}kg
+                            </span>
+                          </div>
+                          
+                          {analysis.predictedWeight > analysis.lastWeight && (
+                            <div className="flex items-center space-x-1 text-xs text-green-600">
+                              <TrendingUp className="h-3 w-3" />
+                              <span>+{(analysis.predictedWeight - analysis.lastWeight).toFixed(1)}kg</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="mt-3 pt-3 border-t border-purple-100">
+                          <p className="text-xs text-gray-600">
+                            {analysis.recommendation}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+                
+                {exercisesWithData.length > 6 && (
+                  <div className="text-center mt-4">
+                    <p className="text-sm text-gray-500">
+                      +{exercisesWithData.length - 6} autres exercices analysés
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+        </div>
+      )}
 
       {/* Statistiques principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

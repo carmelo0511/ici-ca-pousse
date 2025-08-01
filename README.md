@@ -3,8 +3,8 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=for-the-badge&logo=openai)](https://openai.com/)
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-12.0.0-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
-[![Tests](https://img.shields.io/badge/Tests-733%20lines-25D366?style=for-the-badge&logo=jest)](https://jestjs.io/)
-[![Coverage](https://img.shields.io/badge/Coverage-85%25-brightgreen?style=for-the-badge)](https://jestjs.io/)
+[![Tests](https://img.shields.io/badge/Tests-418%20tests-25D366?style=for-the-badge&logo=jest)](https://jestjs.io/)
+[![Coverage](https://img.shields.io/badge/Coverage-88%25-brightgreen?style=for-the-badge)](https://jestjs.io/)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
@@ -14,7 +14,7 @@
 
 **L'IA analyse les 5 dernières séances, détecte les groupes musculaires sous-traités, et génère des séances personnalisées avec validation de sécurité automatique.**
 
-**Technologies IA : OpenAI GPT-4o + Function Calling, RAG (Retrieval-Augmented Generation), Safety Validator, AI Monitoring Dashboard, et cache intelligent avec TTL adaptatif.**
+**Technologies IA : OpenAI GPT-4o + Function Calling, RAG (Retrieval-Augmented Generation), Safety Validator, AI Monitoring Dashboard, ML de prédiction de poids, et cache intelligent avec TTL adaptatif.**
 
 **[🌐 Application Live](https://ici-ca-pousse.vercel.app)**
 
@@ -91,6 +91,8 @@ const validation = validateFunctionResponse(
 - **RAG System** : Base de connaissances avec recherche sémantique
 - **Safety Validator** : Validation automatique des recommandations
 - **AI Monitoring** : Dashboard de performance temps réel
+- **ML Weight Prediction** : Système de prédiction de poids intelligent
+- **LEX IA** : Interface utilisateur pour le coach IA personnel
 
 ### **Backend & Infrastructure**
 
@@ -108,8 +110,9 @@ const validation = validateFunctionResponse(
 
 ### **Tests & Qualité**
 
-- **Jest** : 733 lignes de tests, 85% de couverture
+- **Jest** : 418 tests, 88% de couverture
 - **Testing Library** : Tests des hooks IA et fonctions
+- **ML Tests** : Tests complets du système de prédiction de poids
 - **ESLint + Prettier** : Qualité de code
 - **TypeScript** : Typage statique (en cours)
 
@@ -123,6 +126,8 @@ const validation = validateFunctionResponse(
 - ✅ **Prompt Engineering** : Optimisation des prompts pour des réponses spécialisées
 - ✅ **Context Management** : Gestion intelligente du contexte utilisateur
 - ✅ **RAG Implementation** : Système de base de connaissances avec recherche sémantique
+- ✅ **ML Weight Prediction** : Système de prédiction de poids basé sur l'historique
+- ✅ **LEX IA Interface** : Interface utilisateur intuitive pour le coach IA
 
 ### **Maîtrise de l'Orchestration Backend**
 
@@ -144,6 +149,8 @@ const validation = validateFunctionResponse(
 - ✅ **User Satisfaction Tracking** : Suivi de la satisfaction
 - ✅ **Safety Monitoring** : Score de sécurité en temps réel
 - ✅ **Performance Optimization** : Cache intelligent et optimisation
+- ✅ **ML Analytics** : Analyse des prédictions et tendances de progression
+- ✅ **Weight Prediction Insights** : Insights détaillés sur la progression des poids
 
 ---
 
@@ -250,14 +257,31 @@ describe('OpenAI Function Calling', () => {
     expect(validation.safetyScore).toBeLessThan(50);
   });
 });
+
+// Tests du système ML de prédiction de poids
+describe('Système ML de Prédiction de Poids', () => {
+  test('devrait prédire le prochain poids pour un exercice avec progression', () => {
+    const result = predictNextWeight('Pompes', mockWorkouts);
+    expect(result.predictedWeight).toBeGreaterThan(0);
+    expect(result.confidence).toBeGreaterThan(0);
+    expect(result.trend).toBeDefined();
+  });
+
+  test('devrait analyser tous les exercices', () => {
+    const result = analyzeAllExercises(mockWorkouts);
+    expect(Object.keys(result)).toContain('Pompes');
+    expect(Object.keys(result)).toContain('Squats');
+  });
+});
 ```
 
 ### **Métriques de Qualité**
 
-- **733 lignes de tests** : Couverture complète des fonctionnalités IA
-- **85% de couverture** : Garantie de qualité et fiabilité
+- **418 tests** : Couverture complète des fonctionnalités IA et ML
+- **88% de couverture** : Garantie de qualité et fiabilité
 - **Tests des hooks IA** : useChatGPT, useAppState, useExercises
 - **Tests des utilitaires IA** : Safety Validator, Knowledge Base, AI Monitoring
+- **Tests ML** : Système de prédiction de poids avec 21 tests spécialisés
 
 ---
 
@@ -317,9 +341,11 @@ npm run lint:fix       # Correction automatique
 - **Prompt Optimization** : Amélioration automatique des prompts
 - **A/B Testing** : Test de différentes stratégies IA
 
-### **Phase 3 : Prédictions & Analytics**
+### **Phase 3 : Prédictions & Analytics** ✅ **IMPLÉMENTÉ**
 
-- **ML Prédictif** : Prédiction des performances futures
+- **ML Prédictif** : Prédiction des performances futures ✅
+- **Weight Prediction System** : Prédiction intelligente des poids ✅
+- **Progression Analytics** : Analyse des tendances et insights ✅
 - **Risk Assessment** : Évaluation des risques de blessure
 - **Personalization Engine** : Adaptation dynamique des recommandations
 
@@ -340,6 +366,8 @@ npm run lint:fix       # Correction automatique
 - **Monitoring avancé** : Dashboard de performance IA personnalisé
 - **Sécurité IA** : Validation automatique des recommandations
 - **Performance optimization** : Cache intelligent et optimisation
+- **ML Weight Prediction** : Système de prédiction de poids intelligent
+- **LEX IA Interface** : Interface utilisateur pour le coach IA personnel
 
 ### **🔧 Compétences Développement**
 
@@ -359,11 +387,12 @@ npm run lint:fix       # Correction automatique
 
 ### **🚀 Innovation & Leadership**
 
-- **Intégration IA pionnière** : Function Calling + RAG + Safety
+- **Intégration IA pionnière** : Function Calling + RAG + Safety + ML
 - **Performance** : Optimisation des temps de réponse et de la qualité
 - **Sécurité** : Validation automatique pour éviter les risques
-- **Expérience utilisateur** : Interface conversationnelle naturelle
-- **Maintenabilité** : Code modulaire et bien testé
+- **Expérience utilisateur** : Interface conversationnelle naturelle avec LEX IA
+- **Maintenabilité** : Code modulaire et bien testé (418 tests, 88% coverage)
+- **ML Innovation** : Système de prédiction de poids basé sur l'historique utilisateur
 
 ---
 

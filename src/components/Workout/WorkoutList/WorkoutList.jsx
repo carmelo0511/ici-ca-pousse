@@ -27,6 +27,7 @@ import GradientButton from '../../GradientButton';
 import Card from '../../Card';
 import IconButton from '../../IconButton';
 import LexIA from '../../IAInfoBox';
+import MLWeightPrediction from '../../MLWeightPrediction';
 import PropTypes from 'prop-types';
 import { getLastExerciseWeight } from '../../../utils/workout/workoutUtils';
 
@@ -401,6 +402,29 @@ function WorkoutList({
                           Dernier poids : {getLastWeightFor(exercise.name)} kg
                         </p>
                       )}
+                    {exercise.type !== 'cardio' && (
+                      <MLWeightPrediction
+                        exerciseName={exercise.name}
+                        workouts={workouts}
+                        currentWeight={getLastWeightFor(exercise.name)}
+                        onWeightSuggestion={(suggestedWeight) => {
+                          // Appliquer le poids suggéré au premier set vide ou créer un nouveau set
+                          if (exercise.sets && exercise.sets.length > 0) {
+                            const emptySetIndex = exercise.sets.findIndex(set => !set.weight || set.weight === 0);
+                            if (emptySetIndex !== -1) {
+                              updateSet(exercise.id, emptySetIndex, 'weight', suggestedWeight);
+                            } else {
+                              // Ajouter un nouveau set avec le poids suggéré
+                              addSet(exercise.id);
+                              setTimeout(() => {
+                                const newSetIndex = exercise.sets.length;
+                                updateSet(exercise.id, newSetIndex, 'weight', suggestedWeight);
+                              }, 100);
+                            }
+                          }
+                        }}
+                      />
+                    )}
                     <span
                       className={`text-sm font-medium px-3 py-1 rounded-full ${
                         exercise.type === 'cardio'
