@@ -377,8 +377,8 @@ function WorkoutList({
               key={exercise.id}
               className="rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-200"
             >
-              <div className="flex justify-between items-center mb-6">
-                <div className="flex items-center space-x-3">
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex items-start space-x-3 flex-1">
                   <div
                     className={`p-2 rounded-lg ${
                       exercise.type === 'cardio'
@@ -392,39 +392,16 @@ function WorkoutList({
                       <Dumbbell className="h-5 w-5" />
                     )}
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">
                       {exercise.name}
                     </h3>
                     {exercise.type !== 'cardio' &&
                       getLastWeightFor(exercise.name) !== null && (
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 mb-3">
                           Dernier poids : {getLastWeightFor(exercise.name)} kg
                         </p>
                       )}
-                    {exercise.type !== 'cardio' && (
-                      <MLWeightPrediction
-                        exerciseName={exercise.name}
-                        workouts={workouts}
-                        currentWeight={getLastWeightFor(exercise.name)}
-                        onWeightSuggestion={(suggestedWeight) => {
-                          // Appliquer le poids suggéré au premier set vide ou créer un nouveau set
-                          if (exercise.sets && exercise.sets.length > 0) {
-                            const emptySetIndex = exercise.sets.findIndex(set => !set.weight || set.weight === 0);
-                            if (emptySetIndex !== -1) {
-                              updateSet(exercise.id, emptySetIndex, 'weight', suggestedWeight);
-                            } else {
-                              // Ajouter un nouveau set avec le poids suggéré
-                              addSet(exercise.id);
-                              setTimeout(() => {
-                                const newSetIndex = exercise.sets.length;
-                                updateSet(exercise.id, newSetIndex, 'weight', suggestedWeight);
-                              }, 100);
-                            }
-                          }
-                        }}
-                      />
-                    )}
                     <span
                       className={`text-sm font-medium px-3 py-1 rounded-full ${
                         exercise.type === 'cardio'
@@ -444,7 +421,7 @@ function WorkoutList({
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 ml-4">
                   <IconButton
                     icon={Plus}
                     onClick={() => addSet(exercise.id)}
@@ -459,6 +436,33 @@ function WorkoutList({
                   </button>
                 </div>
               </div>
+
+              {/* Prédiction IA en pleine largeur */}
+              {exercise.type !== 'cardio' && (
+                <div className="mb-6">
+                  <MLWeightPrediction
+                    exerciseName={exercise.name}
+                    workouts={workouts}
+                    currentWeight={getLastWeightFor(exercise.name)}
+                    onWeightSuggestion={(suggestedWeight) => {
+                      // Appliquer le poids suggéré au premier set vide ou créer un nouveau set
+                      if (exercise.sets && exercise.sets.length > 0) {
+                        const emptySetIndex = exercise.sets.findIndex(set => !set.weight || set.weight === 0);
+                        if (emptySetIndex !== -1) {
+                          updateSet(exercise.id, emptySetIndex, 'weight', suggestedWeight);
+                        } else {
+                          // Ajouter un nouveau set avec le poids suggéré
+                          addSet(exercise.id);
+                          setTimeout(() => {
+                            const newSetIndex = exercise.sets.length;
+                            updateSet(exercise.id, newSetIndex, 'weight', suggestedWeight);
+                          }, 100);
+                        }
+                      }
+                    }}
+                  />
+                </div>
+              )}
 
               <div className="space-y-3">
                 <div
