@@ -100,12 +100,12 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
         )}
       </div>
 
-      {/* Prédictions IA */}
+      {/* Madame IrmIA */}
       {workouts.length > 0 && (
         <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up mb-8">
           <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
-            <span>🤖</span>
-            <span>Prédictions IA - Progression des Poids</span>
+            <span>👩‍💼</span>
+            <span>Madame IrmIA - Progression des Poids</span>
           </h3>
 
           {(() => {
@@ -120,7 +120,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                   <div className="text-gray-400 text-6xl mb-4">🧠</div>
                   <p className="text-gray-600 mb-2">Pas encore assez de données</p>
                   <p className="text-sm text-gray-500">
-                    Continuez à vous entraîner pour obtenir des prédictions IA
+                    Continuez à vous entraîner pour obtenir des prédictions de Madame IrmIA
                   </p>
                 </div>
               );
@@ -129,7 +129,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
             return (
               <div className="space-y-4">
                 <p className="text-gray-600 mb-6">
-                  L'IA analyse vos données d'entraînement pour prédire vos prochains poids recommandés
+                  Madame IrmIA analyse vos données d'entraînement pour prédire vos prochains poids recommandés
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
