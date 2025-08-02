@@ -9,6 +9,115 @@ import aiMonitoring from '../utils/ai/aiMonitoring';
 import safetyValidator from '../utils/ai/safetyValidator';
 import knowledgeBase from '../utils/ai/knowledgeBase';
 
+// Système de limitation des appels API
+class APIRateLimiter {
+  constructor() {
+    this.dailyLimit = 50; // Limite quotidienne d'appels API
+    this.hourlyLimit = 10; // Limite horaire d'appels API
+    this.minuteLimit = 3; // Limite par minute
+    this.resetDaily();
+  }
+
+  resetDaily() {
+    const today = new Date().toDateString();
+    if (this.lastResetDay !== today) {
+      this.dailyCount = 0;
+      this.hourlyCount = 0;
+      this.minuteCount = 0;
+      this.lastResetDay = today;
+      this.lastResetHour = new Date().getHours();
+      this.lastResetMinute = new Date().getMinutes();
+      this.saveToStorage();
+    }
+  }
+
+  resetHourly() {
+    const currentHour = new Date().getHours();
+    if (this.lastResetHour !== currentHour) {
+      this.hourlyCount = 0;
+      this.lastResetHour = currentHour;
+      this.saveToStorage();
+    }
+  }
+
+  resetMinute() {
+    const currentMinute = new Date().getMinutes();
+    if (this.lastResetMinute !== currentMinute) {
+      this.minuteCount = 0;
+      this.lastResetMinute = currentMinute;
+      this.saveToStorage();
+    }
+  }
+
+  canMakeRequest() {
+    this.resetDaily();
+    this.resetHourly();
+    this.resetMinute();
+
+    return {
+      canProceed: this.dailyCount < this.dailyLimit && 
+                  this.hourlyCount < this.hourlyLimit && 
+                  this.minuteCount < this.minuteLimit,
+      dailyRemaining: this.dailyLimit - this.dailyCount,
+      hourlyRemaining: this.hourlyLimit - this.hourlyCount,
+      minuteRemaining: this.minuteLimit - this.minuteCount,
+      limits: {
+        daily: this.dailyLimit,
+        hourly: this.hourlyLimit,
+        minute: this.minuteLimit
+      }
+    };
+  }
+
+  recordRequest() {
+    this.dailyCount++;
+    this.hourlyCount++;
+    this.minuteCount++;
+    this.saveToStorage();
+  }
+
+  getStats() {
+    return {
+      daily: { used: this.dailyCount, limit: this.dailyLimit, remaining: this.dailyLimit - this.dailyCount },
+      hourly: { used: this.hourlyCount, limit: this.hourlyLimit, remaining: this.hourlyLimit - this.hourlyCount },
+      minute: { used: this.minuteCount, limit: this.minuteLimit, remaining: this.minuteLimit - this.minuteCount }
+    };
+  }
+
+  saveToStorage() {
+    try {
+      const data = {
+        dailyCount: this.dailyCount,
+        hourlyCount: this.hourlyCount,
+        minuteCount: this.minuteCount,
+        lastResetDay: this.lastResetDay,
+        lastResetHour: this.lastResetHour,
+        lastResetMinute: this.lastResetMinute
+      };
+      localStorage.setItem('api_rate_limiter', JSON.stringify(data));
+    } catch (error) {
+      console.warn('Erreur lors de la sauvegarde des limites API:', error);
+    }
+  }
+
+  loadFromStorage() {
+    try {
+      const data = localStorage.getItem('api_rate_limiter');
+      if (data) {
+        const parsed = JSON.parse(data);
+        this.dailyCount = parsed.dailyCount || 0;
+        this.hourlyCount = parsed.hourlyCount || 0;
+        this.minuteCount = parsed.minuteCount || 0;
+        this.lastResetDay = parsed.lastResetDay;
+        this.lastResetHour = parsed.lastResetHour;
+        this.lastResetMinute = parsed.lastResetMinute;
+      }
+    } catch (error) {
+      console.warn('Erreur lors du chargement des limites API:', error);
+    }
+  }
+}
+
 // Cache intelligent avec expiration et persistance
 class IntelligentCache {
   constructor() {
@@ -164,8 +273,9 @@ const detectLanguage = (text) => {
   return 'french';
 };
 
-// Instance globale du cache
+// Instance globale du cache et du rate limiter
 const intelligentCache = new IntelligentCache();
+const apiRateLimiter = new APIRateLimiter();
 
 export default function useChatGPT(apiKey) {
   const [messages, setMessages] = useState([]);
@@ -176,6 +286,9 @@ export default function useChatGPT(apiKey) {
   useEffect(() => {
     // Charger le cache depuis le stockage
     intelligentCache.loadFromStorage();
+    
+    // Charger les limites API
+    apiRateLimiter.loadFromStorage();
 
     // Charger les messages précédents
     const savedMessages = load(STORAGE_KEYS.CHATBOT_MEMORY, []) || [];
@@ -228,6 +341,22 @@ export default function useChatGPT(apiKey) {
 
     setIsLoading(true);
     const startTime = Date.now();
+
+    // Vérifier les limites d'API avant de faire l'appel
+    const rateLimitCheck = apiRateLimiter.canMakeRequest();
+    if (!rateLimitCheck.canProceed) {
+      const limitMessage = detectedLanguage === 'english' 
+        ? `⚠️ API Rate Limit Reached! You've used ${rateLimitCheck.limits.daily} calls today. Please wait before making another request.`
+        : `⚠️ Limite d'API atteinte ! Vous avez utilisé ${rateLimitCheck.limits.daily} appels aujourd'hui. Veuillez attendre avant de faire une autre demande.`;
+      
+      setMessages((prev) => [
+        ...prev,
+        { role: 'user', content, timestamp: Date.now() },
+        { role: 'assistant', content: limitMessage, timestamp: Date.now() },
+      ]);
+      setIsLoading(false);
+      return;
+    }
 
     // Mettre à jour les statistiques de requêtes
     aiMonitoring.metrics.totalRequests++;
@@ -403,6 +532,9 @@ export default function useChatGPT(apiKey) {
         // Calculer le temps de réponse total
         const totalResponseTime = Date.now() - startTime;
 
+        // Enregistrer l'appel API
+        apiRateLimiter.recordRequest();
+
         // Enregistrer les métriques
         aiMonitoring.recordResponseTime(totalResponseTime);
         aiMonitoring.recordUserSatisfaction(
@@ -564,6 +696,10 @@ export default function useChatGPT(apiKey) {
   // Fonctions de gestion de la base de connaissances RAG
   const getKnowledgeBaseStats = () => {
     return knowledgeBase.getStats();
+  };
+
+  const getAPILimits = () => {
+    return apiRateLimiter.getStats();
   };
 
   const addCustomKnowledge = (title, content, category, tags = []) => {
@@ -1132,5 +1268,7 @@ export default function useChatGPT(apiKey) {
     addCustomKnowledge,
     searchKnowledgeBase,
     getKnowledgeByCategory,
+    // Fonctions de limitation API
+    getAPILimits,
   };
 }
