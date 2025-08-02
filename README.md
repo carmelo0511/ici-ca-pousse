@@ -88,6 +88,8 @@ graph TB
 - **ML Weight Prediction** : Système de prédiction de poids intelligent | Intelligent weight prediction system
 - **LEX IA** : Interface utilisateur pour le coach IA personnel | User interface for personal AI coach
 - **Performance Optimization** : Cache intelligent, timeout, limitation des fonctions | Intelligent cache, timeout, function limiting
+- **Language Detection** : Détection automatique français/anglais | Automatic French/English detection
+- **API Rate Limiting** : Contrôle des coûts et protection contre les abus | Cost control and abuse protection
 
 ### **Backend & Infrastructure**
 
@@ -96,6 +98,7 @@ graph TB
 - **Intelligent Cache** : TTL adaptatif selon le type de contenu | Adaptive TTL based on content type
 - **Error Handling** : Gestion robuste des erreurs IA | Robust AI error handling
 - **Performance Monitoring** : Timeout 30s, limitation historique, optimisation RAG | 30s timeout, history limiting, RAG optimization
+- **API Cost Control** : Limites quotidiennes (50), horaires (10), par minute (3) | Daily (50), hourly (10), per-minute (3) limits
 
 ### **Frontend & UX**
 
@@ -148,6 +151,8 @@ graph TB
 - ✅ **Safety Monitoring** : Score de sécurité en temps réel | Real-time safety score
 - ✅ **Performance Optimization** : Cache intelligent et optimisation | Intelligent cache and optimization
 - ✅ **Response Time Optimization** : Timeout 30s, limitation des fonctions, optimisation RAG | 30s timeout, function limiting, RAG optimization
+- ✅ **Language Detection Analytics** : Suivi de l'utilisation des langues | Language usage tracking
+- ✅ **API Cost Monitoring** : Suivi des appels API et contrôle des coûts | API call tracking and cost control
 - ✅ **ML Analytics** : Analyse des prédictions et tendances de progression | Prediction analysis and progression trends
 - ✅ **Weight Prediction Insights** : Insights détaillés sur la progression des poids | Detailed weight progression insights
 
@@ -224,6 +229,14 @@ const performanceOptimization = {
   maxHistory: 10, // Limite de l'historique | History limit
   cacheSize: 50, // Taille du cache | Cache size
   adaptiveTTL: true, // TTL adaptatif | Adaptive TTL
+};
+
+// Contrôle des coûts API | API cost control
+const apiRateLimiting = {
+  dailyLimit: 50, // Limite quotidienne | Daily limit
+  hourlyLimit: 10, // Limite horaire | Hourly limit
+  minuteLimit: 3, // Limite par minute | Per-minute limit
+  languageDetection: true, // Détection automatique de langue | Automatic language detection
 };
 ```
 
@@ -339,6 +352,8 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **Progression Analytics** : Analyse des tendances et insights ✅ | Trend analysis and insights ✅
 - **Performance Optimization** : Optimisation des temps de réponse ✅ | Response time optimization ✅
 - **Safety Validation** : Validation automatique des recommandations ✅ | Automatic recommendation validation ✅
+- **Language Detection** : Détection automatique français/anglais ✅ | Automatic French/English detection ✅
+- **API Cost Control** : Contrôle des coûts et protection contre les abus ✅ | Cost control and abuse protection ✅
 - **Risk Assessment** : Évaluation des risques de blessure | Injury risk assessment
 - **Personalization Engine** : Adaptation dynamique des recommandations | Dynamic recommendation adaptation
 
@@ -359,6 +374,8 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **Monitoring avancé** : Dashboard de performance IA personnalisé | Advanced monitoring
 - **Sécurité IA** : Validation automatique des recommandations | AI security
 - **Performance optimization** : Cache intelligent, timeout, limitation des fonctions | Intelligent cache, timeout, function limiting
+- **Language Detection** : Détection automatique français/anglais | Automatic French/English detection
+- **API Cost Control** : Système de limitation des appels API | API rate limiting system
 - **ML Weight Prediction** : Système de prédiction de poids intelligent | Intelligent weight prediction system
 - **LEX IA Interface** : Interface utilisateur pour le coach IA personnel | User interface for personal AI coach
 - **Error Handling** : Gestion robuste des erreurs et valeurs undefined | Robust error handling and undefined values
@@ -388,6 +405,8 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **Maintenabilité** : Code modulaire et bien testé (418 tests, 88% coverage) | Modular and well-tested code
 - **ML Innovation** : Système de prédiction de poids basé sur l'historique utilisateur | ML innovation
 - **Robustesse** : Gestion des erreurs et optimisation des performances | Error handling and performance optimization
+- **Multilingue** : Détection automatique français/anglais pour une expérience internationale | Automatic French/English detection for international experience
+- **Contrôle des coûts** : Système de limitation API pour une gestion professionnelle | API rate limiting for professional cost management
 
 ---
 
