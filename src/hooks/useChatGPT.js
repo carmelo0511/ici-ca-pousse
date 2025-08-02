@@ -13,8 +13,8 @@ import knowledgeBase from '../utils/ai/knowledgeBase';
 class IntelligentCache {
   constructor() {
     this.cache = new Map();
-    this.maxSize = 100; // Limite de taille du cache
-    this.defaultTTL = 30 * 60 * 1000; // 30 minutes par défaut
+    this.maxSize = 50; // Réduire la taille du cache pour améliorer les performances
+    this.defaultTTL = 15 * 60 * 1000; // Réduire le TTL à 15 minutes par défaut
   }
 
   // Génère une clé de cache basée sur le contexte
@@ -201,17 +201,22 @@ export default function useChatGPT(apiKey) {
     // Mettre à jour les statistiques de requêtes
     aiMonitoring.metrics.totalRequests++;
 
-    // Générer le contexte enrichi avec RAG
-    const enrichedContext = knowledgeBase.generateEnrichedContext(
-      content,
-      user
-    );
-
-    // Construire le message enrichi
+    // Générer le contexte enrichi avec RAG (optimisé pour les performances)
     let enrichedContent = content;
-    if (enrichedContext) {
-      enrichedContent = `Contexte spécialisé:\n${enrichedContext}\n\nQuestion utilisateur: ${content}`;
-      console.log('📚 Contexte RAG ajouté pour enrichir la réponse');
+    let enrichedContext = null;
+    
+    // Ne générer le contexte RAG que si nécessaire (éviter pour les questions simples)
+    if (content.length > 10 && !content.toLowerCase().includes('bonjour') && !content.toLowerCase().includes('salut')) {
+      try {
+        enrichedContext = knowledgeBase.generateEnrichedContext(content, user);
+        if (enrichedContext) {
+          enrichedContent = `Contexte spécialisé:\n${enrichedContext}\n\nQuestion utilisateur: ${content}`;
+          console.log('📚 Contexte RAG ajouté pour enrichir la réponse');
+        }
+      } catch (error) {
+        console.warn('Erreur lors de la génération du contexte RAG:', error);
+        // Continuer sans le contexte RAG en cas d'erreur
+      }
     }
 
     // Générer la clé de cache avec le contenu enrichi
@@ -252,19 +257,26 @@ export default function useChatGPT(apiKey) {
         `L'utilisateur mesure${height ? ` ${height} cm` : ''}${height && weight ? ' et' : ''}${weight ? ` pèse ${weight} kg` : ''}${(height || weight) && goal ? ' et a pour objectif' : ''}${goal ? ` ${goal}` : ''}. Prends cela en compte dans tes conseils.`;
     }
 
-    // Déterminer les fonctions pertinentes selon le message (utiliser le contenu enrichi)
-    const relevantFunctions =
-      getRelevantFunctions(enrichedContent, context) || [];
+    // Déterminer les fonctions pertinentes selon le message (optimisé)
+    const relevantFunctions = getRelevantFunctions(enrichedContent, context) || [];
+    
+    // Limiter le nombre de fonctions pour améliorer les performances
+    const limitedFunctions = relevantFunctions.slice(0, 3);
+    
     console.log(
       '🔧 Fonctions détectées:',
-      relevantFunctions.map((f) => f.name)
+      limitedFunctions.map((f) => f.name)
     );
 
     const userMessage = { role: 'user', content, timestamp: Date.now() };
-    // Historique pour l'API : inclut le message système si besoin
+    // Historique pour l'API : inclut le message système si besoin (optimisé)
+    // Limiter l'historique pour améliorer les performances
+    const maxHistoryLength = 10;
+    const limitedMessages = messages.slice(-maxHistoryLength);
+    
     const apiHistory = systemContext
-      ? [{ role: 'system', content: systemContext }, ...messages, userMessage]
-      : [...messages, userMessage];
+      ? [{ role: 'system', content: systemContext }, ...limitedMessages, userMessage]
+      : [...limitedMessages, userMessage];
     // Historique pour l'affichage : n'inclut jamais le message système
     const uiHistory = [...messages, userMessage];
     setMessages(uiHistory);
@@ -286,8 +298,8 @@ export default function useChatGPT(apiKey) {
       };
 
       // Ajouter les fonctions si elles sont pertinentes
-      if (relevantFunctions.length > 0) {
-        requestBody.functions = relevantFunctions;
+      if (limitedFunctions.length > 0) {
+        requestBody.functions = limitedFunctions;
         requestBody.function_call = 'auto'; // Laisse l'IA décider quand utiliser les fonctions
       }
 
@@ -298,6 +310,8 @@ export default function useChatGPT(apiKey) {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify(requestBody),
+        // Ajouter un timeout pour éviter les requêtes trop longues
+        signal: AbortSignal.timeout(30000), // 30 secondes max
       });
       const data = await res.json();
       if (data.choices && data.choices.length > 0) {
