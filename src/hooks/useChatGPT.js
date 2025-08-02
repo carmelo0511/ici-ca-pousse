@@ -139,6 +139,31 @@ class IntelligentCache {
   }
 }
 
+// Fonction pour détecter la langue d'un texte
+const detectLanguage = (text) => {
+  const englishWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'can', 'may', 'might', 'give', 'workout', 'chest', 'back', 'legs', 'arms', 'shoulders', 'abs', 'exercise', 'training', 'fitness', 'gym'];
+  const frenchWords = ['le', 'la', 'les', 'un', 'une', 'des', 'et', 'ou', 'mais', 'dans', 'sur', 'à', 'pour', 'de', 'avec', 'par', 'est', 'sont', 'était', 'étaient', 'être', 'été', 'avoir', 'a', 'eu', 'faire', 'fait', 'donner', 'séance', 'entraînement', 'exercice', 'musculation', 'fitness', 'salle'];
+  
+  const words = text.toLowerCase().split(/\s+/);
+  let englishCount = 0;
+  let frenchCount = 0;
+  
+  words.forEach(word => {
+    if (englishWords.includes(word)) englishCount++;
+    if (frenchWords.includes(word)) frenchCount++;
+  });
+  
+  // Détection basée sur les mots-clés et la structure
+  if (englishCount > frenchCount) return 'english';
+  if (frenchCount > englishCount) return 'french';
+  
+  // Détection basée sur les caractères spéciaux
+  if (text.includes('é') || text.includes('è') || text.includes('à') || text.includes('ç')) return 'french';
+  
+  // Par défaut, français
+  return 'french';
+};
+
 // Instance globale du cache
 const intelligentCache = new IntelligentCache();
 
@@ -189,8 +214,14 @@ export default function useChatGPT(apiKey) {
     user = null
   ) => {
     if (welcome) {
+      // Détecter la langue pour le message d'accueil
+      const welcomeLanguage = detectLanguage(content || 'bonjour');
+      const welcomeMessage = welcomeLanguage === 'english' 
+        ? 'Hello, I am Coach Lex IA'
+        : 'Bonjour, je suis Coach Lex IA';
+      
       setMessages([
-        { role: 'assistant', content: 'Bonjour, je suis Coach Lex IA' },
+        { role: 'assistant', content: welcomeMessage },
       ]);
       return;
     }
@@ -249,12 +280,27 @@ export default function useChatGPT(apiKey) {
       return;
     }
 
-    // Ajout d'un contexte système personnalisé si height/weight/goal sont fournis
+    // Détecter la langue de la question
+    const detectedLanguage = detectLanguage(content);
+    console.log('🌍 Langue détectée:', detectedLanguage);
+
+    // Ajout d'un contexte système personnalisé adapté à la langue
     let systemContext = context || '';
+    
+    // Instructions de langue pour l'IA
+    const languageInstruction = detectedLanguage === 'english' 
+      ? 'IMPORTANT: Respond in the same language as the user\'s question. If the user asks in English, respond in English. If the user asks in French, respond in French.'
+      : 'IMPORTANT: Réponds dans la même langue que la question de l\'utilisateur. Si l\'utilisateur pose sa question en anglais, réponds en anglais. Si l\'utilisateur pose sa question en français, réponds en français.';
+    
+    systemContext = languageInstruction + (systemContext ? '\n' + systemContext : '');
+    
+    // Ajouter les informations utilisateur dans la langue appropriée
     if (height || weight || goal) {
-      systemContext =
-        (systemContext ? systemContext + '\n' : '') +
-        `L'utilisateur mesure${height ? ` ${height} cm` : ''}${height && weight ? ' et' : ''}${weight ? ` pèse ${weight} kg` : ''}${(height || weight) && goal ? ' et a pour objectif' : ''}${goal ? ` ${goal}` : ''}. Prends cela en compte dans tes conseils.`;
+      if (detectedLanguage === 'english') {
+        systemContext += `\nUser profile: ${height ? `Height: ${height} cm` : ''}${height && weight ? ' and' : ''}${weight ? ` Weight: ${weight} kg` : ''}${(height || weight) && goal ? ' with goal:' : ''}${goal ? ` ${goal}` : ''}. Take this into account in your advice.`;
+      } else {
+        systemContext += `\nProfil utilisateur: ${height ? `Taille: ${height} cm` : ''}${height && weight ? ' et' : ''}${weight ? ` Poids: ${weight} kg` : ''}${(height || weight) && goal ? ' avec objectif:' : ''}${goal ? ` ${goal}` : ''}. Prends cela en compte dans tes conseils.`;
+      }
     }
 
     // Déterminer les fonctions pertinentes selon le message (optimisé)
