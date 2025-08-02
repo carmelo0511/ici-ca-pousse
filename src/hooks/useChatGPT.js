@@ -342,6 +342,10 @@ export default function useChatGPT(apiKey) {
     setIsLoading(true);
     const startTime = Date.now();
 
+    // Détecter la langue de la question (déplacé plus tôt pour éviter l'erreur)
+    const detectedLanguage = detectLanguage(content);
+    console.log('🌍 Langue détectée:', detectedLanguage);
+
     // Vérifier les limites d'API avant de faire l'appel
     const rateLimitCheck = apiRateLimiter.canMakeRequest();
     if (!rateLimitCheck.canProceed) {
@@ -409,9 +413,7 @@ export default function useChatGPT(apiKey) {
       return;
     }
 
-    // Détecter la langue de la question
-    const detectedLanguage = detectLanguage(content);
-    console.log('🌍 Langue détectée:', detectedLanguage);
+
 
     // Ajout d'un contexte système personnalisé adapté à la langue
     let systemContext = context || '';
