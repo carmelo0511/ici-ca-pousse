@@ -84,7 +84,7 @@ const Navigation = ({
     {
       id: 'leaderboard',
       icon: Trophy,
-      label: 'Classement',
+      label: 'Classement & Amis',
       color: 'from-indigo-500 to-indigo-600',
       shortcut: 'L',
     },
@@ -102,13 +102,7 @@ const Navigation = ({
       color: 'from-indigo-500 to-indigo-600',
       shortcut: 'B',
     },
-    {
-      id: 'friends',
-      icon: User,
-      label: 'Amis',
-      color: 'from-indigo-500 to-indigo-600',
-      shortcut: 'F',
-    },
+
   ];
 
   // Vérifier si on peut faire défiler

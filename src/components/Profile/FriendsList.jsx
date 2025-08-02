@@ -6,7 +6,7 @@ import FriendProfile from './FriendProfile';
 import BadgeList from '../Badges/Badges';
 import ProfilePicture from './ProfilePicture';
 
-function FriendsList({ user }) {
+function FriendsList({ user, showToastMsg, onShowFriendProfile }) {
   const { notifications, markAsRead } = useNotifications(user);
   const {
     friends,
@@ -52,6 +52,7 @@ function FriendsList({ user }) {
       <FriendProfile
         friend={selectedFriend}
         onBack={() => setSelectedFriend(null)}
+        showToastMsg={showToastMsg}
       />
     );
   }

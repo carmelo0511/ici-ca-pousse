@@ -36,6 +36,34 @@
 
 ---
 
+## 🆕 **Nouvelles Fonctionnalités | New Features**
+
+### 🇫🇷 **Fonctionnalités Sociales & Collaboration**
+
+- **🏆 Classement & Amis Unifiés** : Interface intégrée pour le classement et la gestion des amis
+- **👥 Profils Amis Détaillés** : Voir les statistiques et la dernière séance de vos amis
+- **📋 Copie de Séance Intelligente** : Copier la dernière séance d'un ami directement dans votre onglet "Séance"
+- **🔄 Navigation Fluide** : Redirection automatique vers l'onglet séance avec exercices pré-chargés
+- **💪 Inspiration Sociale** : S'inspirer des entraînements de vos amis pour varier vos séances
+
+### 🇬🇧 **Social Features & Collaboration**
+
+- **🏆 Unified Leaderboard & Friends** : Integrated interface for leaderboard and friends management
+- **👥 Detailed Friend Profiles** : View statistics and last workout of your friends
+- **📋 Smart Workout Copying** : Copy a friend's last workout directly into your "Workout" tab
+- **🔄 Smooth Navigation** : Automatic redirection to workout tab with pre-loaded exercises
+- **💪 Social Inspiration** : Get inspired by your friends' workouts to vary your sessions
+
+### **🎯 Fonctionnalités Techniques | Technical Features**
+
+- **Interface Unifiée** : Onglets "Classement" et "Mes Amis" dans une seule section
+- **Copie Intelligente** : Double méthode (props React + localStorage fallback)
+- **Formatage Automatique** : Adaptation des exercices au format attendu
+- **Navigation Contextuelle** : Boutons de retour et navigation fluide
+- **Feedback Utilisateur** : Toast notifications et états visuels
+
+---
+
 ## 🧠 **Intégration IA - Architecture & Flux | AI Integration - Architecture & Flow**
 
 ### 🇫🇷 **Rôle de l'IA dans l'Application**
@@ -127,6 +155,8 @@ graph TB
 - ✅ **RAG Implementation** : Système de base de connaissances avec recherche sémantique
 - ✅ **ML Weight Prediction** : Système de prédiction de poids basé sur l'historique
 - ✅ **LEX IA Interface** : Interface utilisateur intuitive pour le coach IA
+- ✅ **Social Features** : Système d'amis et collaboration avec copie de séances
+- ✅ **Unified UI/UX** : Interface unifiée pour classement et gestion des amis
 
 ### 🇬🇧 **Complete AI Integration Capability**
 
@@ -136,6 +166,8 @@ graph TB
 - ✅ **RAG Implementation** : Knowledge base system with semantic search
 - ✅ **ML Weight Prediction** : Weight prediction system based on history
 - ✅ **LEX IA Interface** : Intuitive user interface for AI coach
+- ✅ **Social Features** : Friends system and collaboration with workout copying
+- ✅ **Unified UI/UX** : Unified interface for leaderboard and friends management
 
 ### **Maîtrise de l'Orchestration Backend | Backend Orchestration Mastery**
 
@@ -357,7 +389,15 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **UI/UX Optimization** : Interface prédiction IA moderne et responsive ✅ | Modern and responsive AI prediction interface ✅
 - **Real-time Integration** : Intégration temps réel dans les séances d'entraînement ✅ | Real-time integration in workout sessions ✅
 
-### **Phase 4 : Automatisation n8n | Phase 4: n8n Automation**
+### **Phase 4 : Fonctionnalités Sociales** ✅ **IMPLÉMENTÉ & INTÉGRÉ | IMPLEMENTED & INTEGRATED**
+
+- **Unified Leaderboard & Friends** : Interface unifiée pour classement et amis ✅ | Unified interface for leaderboard and friends ✅
+- **Friend Profiles** : Profils détaillés avec statistiques et dernière séance ✅ | Detailed profiles with statistics and last workout ✅
+- **Smart Workout Copying** : Copie intelligente des séances d'amis ✅ | Smart copying of friends' workouts ✅
+- **Social Collaboration** : Inspiration et partage entre utilisateurs ✅ | Inspiration and sharing between users ✅
+- **Navigation Optimization** : Redirection fluide vers l'onglet séance ✅ | Smooth redirection to workout tab ✅
+
+### **Phase 5 : Automatisation n8n | Phase 5: n8n Automation**
 
 - **Workflow Automation** : Automatisation des tâches répétitives | Repetitive task automation
 - **Data Pipeline** : Pipeline de données pour l'IA | Data pipeline for AI
@@ -380,6 +420,8 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **LEX IA Interface** : Interface utilisateur pour le coach IA personnel | User interface for personal AI coach
 - **Error Handling** : Gestion robuste des erreurs et valeurs undefined | Robust error handling and undefined values
 - **UI/UX Design** : Interface prédiction IA responsive et moderne | Responsive and modern AI prediction interface
+- **Social Features** : Système d'amis et collaboration avec copie de séances | Friends system and collaboration with workout copying
+- **Unified Interface** : Interface unifiée pour classement et gestion des amis | Unified interface for leaderboard and friends management
 
 ### **🔧 Compétences Développement | Development Skills**
 
@@ -409,6 +451,8 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **Multilingue** : Détection automatique français/anglais pour une expérience internationale | Automatic French/English detection for international experience
 - **Contrôle des coûts** : Système de limitation API pour une gestion professionnelle | API rate limiting for professional cost management
 - **Design System** : Interface prédiction IA cohérente et responsive | Consistent and responsive AI prediction interface
+- **Social Innovation** : Système de collaboration et inspiration entre utilisateurs | Social collaboration and inspiration system
+- **UX Optimization** : Navigation fluide et interface unifiée | Smooth navigation and unified interface
 
 ---
 

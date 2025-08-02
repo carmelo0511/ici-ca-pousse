@@ -500,14 +500,14 @@ function App() {
               />
             </PageTransition>
 
-            {/* Onglet Amis */}
-            <PageTransition isActive={activeTab === 'friends'}>
-              <FriendsList user={user} />
-            </PageTransition>
-
             {/* Onglet Classement */}
             <PageTransition isActive={activeTab === 'leaderboard'}>
-              <LeaderboardView user={user} />
+              <LeaderboardView 
+                user={user} 
+                showToastMsg={showToastMsg}
+                setActiveTab={setActiveTab}
+                setExercisesFromWorkout={setExercisesFromWorkout}
+              />
             </PageTransition>
 
             {/* Onglet Défis */}

@@ -6,6 +6,25 @@ import { STORAGE_KEYS } from '../constants';
 export const useExercises = () => {
   const [exercises, setExercises] = useState(() => {
     const saved = load(STORAGE_KEYS.CURRENT_WORKOUT, {});
+    
+    // Vérifier s'il y a des exercices copiés à charger
+    const loadCopiedWorkout = localStorage.getItem('load_copied_workout');
+    const copiedWorkoutData = localStorage.getItem('copied_workout_data');
+    
+    if (loadCopiedWorkout === 'true' && copiedWorkoutData) {
+      try {
+        const copiedExercises = JSON.parse(copiedWorkoutData);
+        
+        // Nettoyer les flags
+        localStorage.removeItem('load_copied_workout');
+        localStorage.removeItem('copied_workout_data');
+        
+        return copiedExercises;
+      } catch (error) {
+        console.error('Erreur lors du chargement des exercices copiés:', error);
+      }
+    }
+    
     return saved.exercises || [];
   });
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);

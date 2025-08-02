@@ -20,6 +20,7 @@ function Leaderboard({
   onShowTeam,
   sendInvite,
   friends = [],
+  onShowFriendProfile,
 }) {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -262,11 +263,16 @@ function Leaderboard({
                   exerciseRanking.map((user, idx) => (
                     <div
                       key={user.uid}
-                      className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 ${
+                      className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 cursor-pointer hover:bg-gray-50 transition-colors ${
                         user.uid === currentUser?.uid
                           ? 'bg-indigo-100 border-2 border-indigo-300'
                           : 'bg-white'
                       }`}
+                      onClick={() => {
+                        if (user.uid !== currentUser?.uid && onShowFriendProfile) {
+                          onShowFriendProfile(user);
+                        }
+                      }}
                     >
                       <div className="flex items-center space-x-3 md:space-x-4">
                         <div className="text-xl md:text-2xl">
@@ -336,11 +342,16 @@ function Leaderboard({
                   return (
                     <div
                       key={user.uid}
-                      className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 ${
+                      className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 md:p-4 rounded-lg space-y-2 sm:space-y-0 cursor-pointer hover:bg-gray-50 transition-colors ${
                         user.uid === currentUser?.uid
                           ? 'bg-indigo-100 border-2 border-indigo-300'
                           : 'bg-white'
                       }`}
+                      onClick={() => {
+                        if (user.uid !== currentUser?.uid && onShowFriendProfile) {
+                          onShowFriendProfile(user);
+                        }
+                      }}
                     >
                       <div className="flex items-center space-x-3 md:space-x-4">
                         <div className="text-xl md:text-2xl">
