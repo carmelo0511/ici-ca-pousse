@@ -19,7 +19,7 @@ import WorkoutList from './components/Workout/WorkoutList/WorkoutList';
 import CalendarView from './components/CalendarView/CalendarView';
 import StatsView from './components/StatsView/StatsView';
 import PWAInstallButton from './components/PWAInstallButton';
-import FriendsList from './components/Profile/FriendsList';
+
 import LeaderboardView from './components/Leaderboard/LeaderboardView';
 import BadgesPage from './components/Badges/BadgesPage';
 import Challenges from './components/Challenges';

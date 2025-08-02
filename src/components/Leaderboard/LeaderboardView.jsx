@@ -3,7 +3,7 @@ import Leaderboard from './Leaderboard';
 import StatsComparison from '../Workout/StatsComparison';
 import FriendsList from '../Profile/FriendsList';
 import FriendProfile from '../Profile/FriendProfile';
-import { ArrowLeft, Trophy, Users, BarChart3 } from 'lucide-react';
+import { ArrowLeft, Trophy, Users } from 'lucide-react';
 import { useFriends } from '../../hooks/useFriends';
 
 function LeaderboardView({ user, showToastMsg, setActiveTab: setMainActiveTab, setExercisesFromWorkout }) {
