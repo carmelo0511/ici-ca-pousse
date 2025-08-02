@@ -189,8 +189,14 @@ export const fitnessFunctions = [
                   }
                 }
               },
-              weights: { type: 'array' },
-              reps: { type: 'array' },
+              weights: { 
+                type: 'array',
+                items: { type: 'number' }
+              },
+              reps: { 
+                type: 'array',
+                items: { type: 'number' }
+              },
               feeling: { type: 'string' },
             },
           },
