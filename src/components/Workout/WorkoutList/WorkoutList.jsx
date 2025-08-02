@@ -20,6 +20,7 @@ import {
   Meh,
   Frown,
   Bookmark,
+  Mic,
 } from 'lucide-react';
 import { exerciseDatabase } from '../../../utils/workout/exerciseDatabase';
 import Modal from '../Modal';
@@ -28,6 +29,7 @@ import Card from '../../Card';
 import IconButton from '../../IconButton';
 import LexIA from '../../IAInfoBox';
 import MLWeightPrediction from '../../MLWeightPrediction';
+
 import PropTypes from 'prop-types';
 import { getLastExerciseWeight } from '../../../utils/workout/workoutUtils';
 
@@ -54,6 +56,9 @@ function getMuscleIcon(muscle) {
   }
 }
 
+// Fonction utilitaire pour attendre un délai
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 function WorkoutList({
   selectedDate,
   setSelectedDate,
@@ -72,6 +77,7 @@ function WorkoutList({
   selectedMuscleGroup,
   setSelectedMuscleGroup,
   addExerciseToWorkout,
+  addCompleteExerciseToWorkout,
   removeExerciseFromWorkout,
   onSaveTemplate,
   user,
@@ -90,6 +96,7 @@ function WorkoutList({
   const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false);
   const [templateName, setTemplateName] = useState('');
   const [templateDescription, setTemplateDescription] = useState('');
+
 
   // Options de ressentis prédéfinis
   const feelingOptions = [
@@ -224,7 +231,11 @@ function WorkoutList({
     } else if (selectedFeeling && selectedFeeling !== 'none') {
       feeling = selectedFeeling;
     }
+    
+    // Sauvegarder la séance
     saveWorkout(feeling);
+    
+    // Fermer la modal de ressenti
     setShowFeelingModal(false);
     setSelectedFeeling('');
     setCustomFeeling('');
@@ -361,14 +372,18 @@ function WorkoutList({
           <p className="text-gray-600 mb-6 max-w-[90%] mx-auto break-words overflow-wrap break-word truncate max-w-full">
             {t('start_workout')}
           </p>
-          <GradientButton
-            icon={Plus}
-            onClick={() => setShowAddExercise(true)}
-            from="blue-500"
-            to="blue-600"
-          >
-            {t('add_exercise')}
-          </GradientButton>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <GradientButton
+              icon={Plus}
+              onClick={() => setShowAddExercise(true)}
+              from="blue-500"
+              to="blue-600"
+            >
+              {t('add_exercise')}
+            </GradientButton>
+            
+
+          </div>
         </Card>
       ) : (
         <div className="space-y-6">
@@ -588,7 +603,7 @@ function WorkoutList({
           ))}
 
           <div className="space-y-3 mt-4">
-            {/* Première ligne : Ajouter exercice + Vider séance */}
+            {/* Première ligne : Ajouter exercice + Ajouter vocal + Vider séance */}
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setShowAddExercise(true)}
@@ -597,6 +612,9 @@ function WorkoutList({
                 <Plus className="h-5 w-5" />
                 {t('add_exercise')}
               </button>
+              
+
+              
               {exercises.length > 0 && (
                 <button
                   onClick={() => {
@@ -1220,6 +1238,8 @@ function WorkoutList({
       <div className="flex justify-center">
         <LexIA className="mt-8" />
       </div>
+
+
     </div>
   );
 }
@@ -1242,6 +1262,7 @@ WorkoutList.propTypes = {
   selectedMuscleGroup: PropTypes.string,
   setSelectedMuscleGroup: PropTypes.func,
   addExerciseToWorkout: PropTypes.func,
+  addCompleteExerciseToWorkout: PropTypes.func,
   removeExerciseFromWorkout: PropTypes.func,
   onSaveTemplate: PropTypes.func,
   user: PropTypes.object, // Added user prop type
@@ -1249,3 +1270,4 @@ WorkoutList.propTypes = {
 };
 
 export default memo(WorkoutList);
+

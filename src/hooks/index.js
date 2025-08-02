@@ -14,3 +14,4 @@ export { default as useWorkoutLogic } from './useWorkoutLogic';
 export { useWorkouts } from './useWorkouts';
 export { useWorkoutTemplates } from './useWorkoutTemplates';
 export { default as useChatGPT } from './useChatGPT';
+
