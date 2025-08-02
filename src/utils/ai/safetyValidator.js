@@ -116,7 +116,7 @@ class SafetyValidator {
     const limits = this.safetyRules.exercise.intensityLimits[userLevel];
 
     // Vérifier les exercices interdits
-    if (this.isForbiddenExercise(exercise.name)) {
+    if (exercise.name && this.isForbiddenExercise(exercise.name)) {
       validation.isValid = false;
       validation.errors.push(`Exercice dangereux détecté: ${exercise.name}`);
       validation.safetyScore -= 50;
@@ -372,9 +372,15 @@ class SafetyValidator {
   }
 
   isForbiddenExercise(exerciseName) {
-    return this.safetyRules.exercise.forbiddenExercises.some((forbidden) =>
-      exerciseName.toLowerCase().includes(forbidden.toLowerCase())
-    );
+    if (!exerciseName || typeof exerciseName !== 'string') {
+      return false;
+    }
+    return this.safetyRules.exercise.forbiddenExercises.some((forbidden) => {
+      if (!forbidden || typeof forbidden !== 'string') {
+        return false;
+      }
+      return exerciseName.toLowerCase().includes(forbidden.toLowerCase());
+    });
   }
 
   calculateProgression(currentExercise, previousWorkout) {
