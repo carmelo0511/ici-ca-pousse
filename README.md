@@ -87,6 +87,7 @@ graph TB
 - **AI Monitoring** : Dashboard de performance temps réel | Real-time performance dashboard
 - **ML Weight Prediction** : Système de prédiction de poids intelligent | Intelligent weight prediction system
 - **LEX IA** : Interface utilisateur pour le coach IA personnel | User interface for personal AI coach
+- **Performance Optimization** : Cache intelligent, timeout, limitation des fonctions | Intelligent cache, timeout, function limiting
 
 ### **Backend & Infrastructure**
 
@@ -94,6 +95,7 @@ graph TB
 - **Vercel** : Déploiement serverless avec CI/CD | Serverless deployment with CI/CD
 - **Intelligent Cache** : TTL adaptatif selon le type de contenu | Adaptive TTL based on content type
 - **Error Handling** : Gestion robuste des erreurs IA | Robust AI error handling
+- **Performance Monitoring** : Timeout 30s, limitation historique, optimisation RAG | 30s timeout, history limiting, RAG optimization
 
 ### **Frontend & UX**
 
@@ -145,6 +147,7 @@ graph TB
 - ✅ **User Satisfaction Tracking** : Suivi de la satisfaction | Satisfaction tracking
 - ✅ **Safety Monitoring** : Score de sécurité en temps réel | Real-time safety score
 - ✅ **Performance Optimization** : Cache intelligent et optimisation | Intelligent cache and optimization
+- ✅ **Response Time Optimization** : Timeout 30s, limitation des fonctions, optimisation RAG | 30s timeout, function limiting, RAG optimization
 - ✅ **ML Analytics** : Analyse des prédictions et tendances de progression | Prediction analysis and progression trends
 - ✅ **Weight Prediction Insights** : Insights détaillés sur la progression des poids | Detailed weight progression insights
 
@@ -184,6 +187,7 @@ const safetyValidator = {
     // Validation des limites d'intensité | Intensity limit validation
     // Analyse des risques de blessure | Injury risk analysis
     // Score de sécurité (0-100) | Safety score (0-100)
+    // Gestion des valeurs undefined | Undefined value handling
   },
 
   validateNutritionRecommendation: (nutrition, userProfile) => {
@@ -211,6 +215,15 @@ const aiMonitoring = {
     // Alertes automatiques | Automatic alerts
     // Recommandations d'optimisation | Optimization recommendations
   },
+};
+
+// Optimisation des performances | Performance optimization
+const performanceOptimization = {
+  timeout: 30000, // 30 secondes max | 30 seconds max
+  maxFunctions: 3, // Limite des fonctions | Function limit
+  maxHistory: 10, // Limite de l'historique | History limit
+  cacheSize: 50, // Taille du cache | Cache size
+  adaptiveTTL: true, // TTL adaptatif | Adaptive TTL
 };
 ```
 
@@ -324,6 +337,8 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **ML Prédictif** : Prédiction des performances futures ✅ | Predictive ML: Future performance prediction ✅
 - **Weight Prediction System** : Prédiction intelligente des poids ✅ | Intelligent weight prediction ✅
 - **Progression Analytics** : Analyse des tendances et insights ✅ | Trend analysis and insights ✅
+- **Performance Optimization** : Optimisation des temps de réponse ✅ | Response time optimization ✅
+- **Safety Validation** : Validation automatique des recommandations ✅ | Automatic recommendation validation ✅
 - **Risk Assessment** : Évaluation des risques de blessure | Injury risk assessment
 - **Personalization Engine** : Adaptation dynamique des recommandations | Dynamic recommendation adaptation
 
@@ -343,9 +358,10 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **Architecture modulaire** : Séparation claire des responsabilités | Modular architecture
 - **Monitoring avancé** : Dashboard de performance IA personnalisé | Advanced monitoring
 - **Sécurité IA** : Validation automatique des recommandations | AI security
-- **Performance optimization** : Cache intelligent et optimisation | Performance optimization
+- **Performance optimization** : Cache intelligent, timeout, limitation des fonctions | Intelligent cache, timeout, function limiting
 - **ML Weight Prediction** : Système de prédiction de poids intelligent | Intelligent weight prediction system
 - **LEX IA Interface** : Interface utilisateur pour le coach IA personnel | User interface for personal AI coach
+- **Error Handling** : Gestion robuste des erreurs et valeurs undefined | Robust error handling and undefined values
 
 ### **🔧 Compétences Développement | Development Skills**
 
@@ -366,11 +382,12 @@ npm run lint:fix       # Correction automatique | Automatic fix
 ### **🚀 Innovation & Leadership**
 
 - **Intégration IA pionnière** : Function Calling + RAG + Safety + ML | Pioneering AI integration
-- **Performance** : Optimisation des temps de réponse et de la qualité | Response time and quality optimization
+- **Performance** : Optimisation des temps de réponse (30s timeout, cache intelligent) | Response time optimization (30s timeout, intelligent cache)
 - **Sécurité** : Validation automatique pour éviter les risques | Automatic validation to avoid risks
 - **Expérience utilisateur** : Interface conversationnelle naturelle avec LEX IA | Natural conversational interface
 - **Maintenabilité** : Code modulaire et bien testé (418 tests, 88% coverage) | Modular and well-tested code
 - **ML Innovation** : Système de prédiction de poids basé sur l'historique utilisateur | ML innovation
+- **Robustesse** : Gestion des erreurs et optimisation des performances | Error handling and performance optimization
 
 ---
 
