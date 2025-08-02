@@ -31,8 +31,8 @@ const ChatbotBubble = (props) => {
 
   return (
     <>
-      {/* Bouton texte flottant en bas à gauche */}
-      <div style={{ position: 'fixed', left: 16, bottom: 24, zIndex: 1000 }}>
+      {/* Bouton texte flottant en bas à droite */}
+      <div style={{ position: 'fixed', right: 16, bottom: 24, zIndex: 1000 }}>
         {!open && (
           <button
             onClick={() => setOpen(true)}
@@ -46,7 +46,7 @@ const ChatbotBubble = (props) => {
           </button>
         )}
         {open && (
-          <div className="fixed bottom-20 left-4 w-[350px] max-w-[95vw] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50 animate-fade-in">
+          <div className="fixed bottom-20 right-4 w-[350px] max-w-[95vw] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50 animate-fade-in">
             <div className="flex justify-between items-center p-3 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl">
               <span className="font-bold text-blue-700 text-lg">
                 Coach Lex IA
