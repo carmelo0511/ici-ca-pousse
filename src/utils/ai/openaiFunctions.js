@@ -169,7 +169,26 @@ export const fitnessFunctions = [
             type: 'object',
             properties: {
               date: { type: 'string' },
-              exercises: { type: 'array' },
+              exercises: { 
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    name: { type: 'string' },
+                    sets: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          weight: { type: 'number' },
+                          reps: { type: 'number' },
+                          rest: { type: 'number' }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               weights: { type: 'array' },
               reps: { type: 'array' },
               feeling: { type: 'string' },
@@ -198,6 +217,34 @@ export const fitnessFunctions = [
         recent_workouts: {
           type: 'array',
           description: 'Séances récentes',
+          items: {
+            type: 'object',
+            properties: {
+              date: { type: 'string' },
+              exercises: { 
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    name: { type: 'string' },
+                    sets: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          weight: { type: 'number' },
+                          reps: { type: 'number' },
+                          rest: { type: 'number' }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              duration: { type: 'number' },
+              feeling: { type: 'string' }
+            }
+          }
         },
         current_fatigue: {
           type: 'string',
@@ -217,6 +264,7 @@ export const fitnessFunctions = [
         upcoming_goals: {
           type: 'array',
           description: 'Objectifs à venir',
+          items: { type: 'string' },
         },
       },
       required: ['recent_workouts', 'current_fatigue'],
