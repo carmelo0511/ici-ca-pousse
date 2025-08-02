@@ -1,21 +1,77 @@
 import React, { useState } from 'react';
 import { auth, googleProvider } from '../utils/firebase/index.js';
-import { signInWithPopup, signOut } from 'firebase/auth';
+import { 
+  signInWithPopup, 
+  signOut, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword 
+} from 'firebase/auth';
 import GradientButton from './GradientButton';
 import PropTypes from 'prop-types';
 
 function Auth({ className = '' }) {
   const [user, setUser] = useState(null);
+  const [userPseudo, setUserPseudo] = useState('');
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [pseudo, setPseudo] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
 
-  // Vérifie l'état de connexion
+  // Vérifie l'état de connexion et récupère le pseudo
   React.useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((u) => {
+    const unsubscribe = auth.onAuthStateChanged(async (u) => {
       setUser(u);
+      if (u) {
+        // Essayer de récupérer le pseudo depuis Firestore
+        try {
+          const { doc, getDoc } = await import('firebase/firestore');
+          const { db } = await import('../utils/firebase/index.js');
+          const userDoc = await getDoc(doc(db, 'users', u.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            console.log('Données utilisateur dans Firestore:', userData);
+            const pseudo = userData.pseudo || userData.nickname || userData.displayName || u.displayName;
+            setUserPseudo(pseudo);
+            console.log('Pseudo récupéré:', pseudo);
+          } else {
+            setUserPseudo(u.displayName);
+            console.log('Pseudo depuis displayName:', u.displayName);
+          }
+        } catch (error) {
+          console.log('Erreur lors de la récupération du pseudo:', error);
+          setUserPseudo(u.displayName);
+        }
+      } else {
+        setUserPseudo('');
+      }
     });
     return unsubscribe;
   }, []);
+
+  // Force la récupération du pseudo quand l'utilisateur change
+  React.useEffect(() => {
+    if (user && !userPseudo) {
+      const fetchPseudo = async () => {
+        try {
+          const { doc, getDoc } = await import('firebase/firestore');
+          const { db } = await import('../utils/firebase/index.js');
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const pseudo = userData.pseudo || userData.displayName || user.displayName;
+            console.log('Pseudo forcé récupéré:', pseudo);
+            setUserPseudo(pseudo);
+          }
+        } catch (error) {
+          console.log('Erreur lors de la récupération forcée du pseudo:', error);
+        }
+      };
+      fetchPseudo();
+    }
+  }, [user, userPseudo]);
 
   const handleGoogleSignIn = async () => {
     setError('');
@@ -33,6 +89,65 @@ function Auth({ className = '' }) {
     await signOut(auth);
   };
 
+  const handleEmailAuth = async (e) => {
+    e.preventDefault();
+    setError('');
+    setEmailLoading(true);
+    
+    try {
+      if (isSignUp) {
+        // Vérifier que le pseudo est fourni
+        if (!pseudo.trim()) {
+          throw new Error('Le pseudo est requis');
+        }
+        
+        console.log('Tentative d\'inscription avec:', { email, pseudo });
+        
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        
+        console.log('Compte créé avec succès, UID:', userCredential.user.uid);
+        
+        // Sauvegarder d'abord dans Firestore
+        const { doc, setDoc } = await import('firebase/firestore');
+        const { db } = await import('../utils/firebase/index.js');
+        
+        const userData = {
+          pseudo: pseudo,
+          email: email,
+          createdAt: new Date(),
+          displayName: pseudo,
+          nickname: pseudo
+        };
+        
+        console.log('Sauvegarde des données utilisateur:', userData);
+        
+        await setDoc(doc(db, 'users', userCredential.user.uid), userData);
+        
+        console.log('Données sauvegardées dans Firestore');
+        
+        // Mettre à jour le profil utilisateur avec le pseudo
+        await userCredential.user.updateProfile({
+          displayName: pseudo
+        });
+        
+        console.log('Profil utilisateur mis à jour');
+        
+        // Mettre à jour l'état local du pseudo
+        setUserPseudo(pseudo);
+        
+        console.log('Pseudo mis à jour dans l\'état local:', pseudo);
+        
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+      }
+    } catch (err) {
+      console.error('Erreur lors de l\'authentification:', err);
+      setError(err.message);
+    } finally {
+      setEmailLoading(false);
+    }
+  };
+
   if (user) {
     return (
       <div
@@ -44,7 +159,7 @@ function Auth({ className = '' }) {
         <p className="mb-4 text-gray-700">
           Connecté en tant que{' '}
           <span className="font-semibold">
-            {user.email || user.displayName}
+            {userPseudo || user.displayName || user.email}
           </span>
         </p>
         <GradientButton
@@ -61,21 +176,99 @@ function Auth({ className = '' }) {
 
   return (
     <div
-      className={`max-w-md mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg ${className}`}
+      className={`max-w-lg mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg ${className}`}
     >
-      <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent text-center">
-        Connexion
+      <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent text-center">
+        {isSignUp ? 'Inscription' : 'Connexion'}
       </h2>
+      
       {error && (
-        <div className="text-red-500 text-sm text-center mb-4" role="alert">
+        <div className="text-red-500 text-sm text-center mb-4 p-3 bg-red-50 rounded-lg" role="alert">
           {error}
         </div>
       )}
+
+      {/* Formulaire Email/Mot de passe */}
+      <form onSubmit={handleEmailAuth} className="mb-6">
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="votre@email.com"
+            required
+          />
+        </div>
+        
+        {isSignUp && (
+          <div className="mb-4">
+            <label htmlFor="pseudo" className="block text-sm font-medium text-gray-700 mb-2">
+              Pseudo
+            </label>
+            <input
+              type="text"
+              id="pseudo"
+              value={pseudo}
+              onChange={(e) => setPseudo(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Votre pseudo"
+              required={isSignUp}
+              minLength={2}
+              maxLength={20}
+            />
+          </div>
+        )}
+        
+        <div className="mb-6">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            Mot de passe
+          </label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Votre mot de passe"
+            required
+            minLength={6}
+          />
+        </div>
+
+        <GradientButton
+          type="submit"
+          from="blue-500"
+          to="blue-600"
+          className="w-full mb-4"
+          disabled={emailLoading}
+          ariaLabel={isSignUp ? "S'inscrire" : "Se connecter"}
+        >
+          {emailLoading ? (
+            'Chargement...'
+          ) : (
+            isSignUp ? "S'inscrire" : "Se connecter"
+          )}
+        </GradientButton>
+      </form>
+
+      {/* Séparateur */}
+      <div className="flex items-center mb-6">
+        <div className="flex-1 border-t border-gray-300"></div>
+        <span className="px-4 text-sm text-gray-500">ou</span>
+        <div className="flex-1 border-t border-gray-300"></div>
+      </div>
+
+      {/* Bouton Google */}
       <GradientButton
         type="button"
         from="blue-500"
         to="blue-600"
-        className="w-full flex items-center justify-center gap-2"
+        className="w-full flex items-center justify-center gap-2 mb-4"
         onClick={handleGoogleSignIn}
         disabled={googleLoading}
         ariaLabel="Connexion Google"
@@ -108,6 +301,25 @@ function Auth({ className = '' }) {
           </>
         )}
       </GradientButton>
+
+      {/* Lien pour basculer entre connexion et inscription */}
+      <div className="text-center">
+        <button
+          type="button"
+          onClick={() => {
+            setIsSignUp(!isSignUp);
+            setError('');
+            setEmail('');
+            setPassword('');
+          }}
+          className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+        >
+          {isSignUp 
+            ? "Déjà un compte ? Se connecter" 
+            : "Pas de compte ? S'inscrire"
+          }
+        </button>
+      </div>
     </div>
   );
 }

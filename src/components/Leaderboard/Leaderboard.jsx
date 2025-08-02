@@ -74,7 +74,7 @@ function Leaderboard({
             // User data for leaderboard
             statsArr.push({
               uid: u.uid,
-              displayName: u.displayName || u.email,
+              displayName: u.pseudo || u.displayName || u.email,
               badges: u.badges || [],
               selectedBadge: u.selectedBadge || null,
               photoURL: u.photoURL,
