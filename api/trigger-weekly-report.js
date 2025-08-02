@@ -1,10 +1,10 @@
-import { db } from '../../src/utils/firebase/index.js';
-import {
+const { db } = require('../../src/utils/firebase/index.js');
+const {
   collection,
   query,
   getDocs,
   where,
-} from 'firebase/firestore';
+} = require('firebase/firestore');
 
 export default async function handler(req, res) {
   // Vérifier la méthode HTTP

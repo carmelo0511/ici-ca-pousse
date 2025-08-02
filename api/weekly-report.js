@@ -1,17 +1,17 @@
-import { db } from '../../src/utils/firebase/index.js';
-import {
+const { db } = require('../../src/utils/firebase/index.js');
+const {
   collection,
   query,
   where,
   getDocs,
   orderBy,
-} from 'firebase/firestore';
-import { 
+} = require('firebase/firestore');
+const { 
   calculateWorkoutStats,
   analyzeWorkoutHabits,
   getMuscleGroupDistribution,
   getAverageWeights
-} from '../../src/utils/workout/workoutUtils.js';
+} = require('../../src/utils/workout/workoutUtils.js');
 
 // Configuration OpenAI
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
