@@ -18,6 +18,6 @@ export {
 export {
   load,
   save,
-  migrateLocalFavoritesToCloud,
+
   migrateLocalWorkoutsToCloud,
 } from './storage.js';

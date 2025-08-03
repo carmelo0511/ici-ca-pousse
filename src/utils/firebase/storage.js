@@ -29,11 +29,4 @@ export const migrateLocalWorkoutsToCloud = async (user, addWorkoutCloud) => {
   }
 };
 
-export const migrateLocalFavoritesToCloud = async (user, setFavoriteCloud) => {
-  const localFavorites = load(STORAGE_KEYS.FAVORITE_EXERCISES, []);
-  if (user && localFavorites.length > 0) {
-    await setFavoriteCloud(localFavorites);
-    // Optionnel : vider le localStorage après migration
-    save(STORAGE_KEYS.FAVORITE_EXERCISES, []);
-  }
-};
+

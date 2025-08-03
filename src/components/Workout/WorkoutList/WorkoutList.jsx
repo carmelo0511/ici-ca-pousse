@@ -1,8 +1,6 @@
-import React, { memo, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { memo, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { STORAGE_KEYS } from '../../../constants';
-import { db } from '../../../utils/firebase/index.js';
-import { doc, setDoc, onSnapshot } from 'firebase/firestore';
+
 import {
   Calendar,
   Plus,
@@ -11,7 +9,6 @@ import {
   Target,
   Clock,
   X,
-  Star,
   Activity,
   Shield,
   Zap,
@@ -20,6 +17,7 @@ import {
   Meh,
   Frown,
   Bookmark,
+  Star,
 } from 'lucide-react';
 import { exerciseDatabase } from '../../../utils/workout/exerciseDatabase';
 import Modal from '../Modal';
@@ -84,10 +82,7 @@ function WorkoutList({
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [customExerciseName, setCustomExerciseName] = useState('');
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem('exerciseFavorites');
-    return saved ? JSON.parse(saved) : [];
-  });
+
   const [showFeelingModal, setShowFeelingModal] = useState(false);
   const [selectedFeeling, setSelectedFeeling] = useState('');
   const [customFeeling, setCustomFeeling] = useState('');
@@ -245,67 +240,7 @@ function WorkoutList({
     [workouts, selectedDate]
   );
 
-  // Synchro favoris Firestore <-> localStorage
-  useEffect(() => {
-    if (user) {
-      const favRef = doc(db, 'favorites', user.uid);
-      // Ecoute temps réel
-      const unsubscribe = onSnapshot(favRef, (docSnap) => {
-        if (docSnap.exists()) {
-          setFavorites(docSnap.data().exercises || []);
-        } else {
-          setFavorites([]);
-        }
-      });
-      return unsubscribe;
-    } else {
-      // Fallback localStorage
-      try {
-        setFavorites(
-          JSON.parse(
-            localStorage.getItem(STORAGE_KEYS.FAVORITE_EXERCISES) || '[]'
-          )
-        );
-      } catch {
-        setFavorites([]);
-      }
-    }
-  }, [user]);
 
-  // Sauvegarde favoris Firestore ou localStorage
-  useEffect(() => {
-    if (user) {
-      const favRef = doc(db, 'favorites', user.uid);
-      setDoc(favRef, { exercises: favorites }, { merge: true });
-    } else {
-      localStorage.setItem(
-        STORAGE_KEYS.FAVORITE_EXERCISES,
-        JSON.stringify(favorites)
-      );
-    }
-  }, [favorites, user]);
-
-  // Migration favoris locaux -> cloud
-  useEffect(() => {
-    if (user) {
-      const localFavs = JSON.parse(
-        localStorage.getItem(STORAGE_KEYS.FAVORITE_EXERCISES) || '[]'
-      );
-      if (localFavs.length > 0) {
-        const favRef = doc(db, 'favorites', user.uid);
-        setDoc(favRef, { exercises: localFavs }, { merge: true });
-        localStorage.setItem(STORAGE_KEYS.FAVORITE_EXERCISES, '[]');
-      }
-    }
-  }, [user]);
-
-  const toggleFavorite = useCallback((exercise) => {
-    setFavorites((prev) =>
-      prev.includes(exercise)
-        ? prev.filter((e) => e !== exercise)
-        : [...prev, exercise]
-    );
-  }, []);
 
   // Filtrage dynamique des exercices selon la recherche
   const filteredExercises = useMemo(
@@ -320,21 +255,7 @@ function WorkoutList({
     [selectedMuscleGroup, searchTerm]
   );
 
-  // Exercices favoris du groupe sélectionné (filtrés)
-  const favoriteInGroup = useMemo(
-    () =>
-      selectedMuscleGroup
-        ? filteredExercises.filter((ex) => favorites.includes(ex))
-        : [],
-    [selectedMuscleGroup, filteredExercises, favorites]
-  );
-  const nonFavoriteInGroup = useMemo(
-    () =>
-      selectedMuscleGroup
-        ? filteredExercises.filter((ex) => !favorites.includes(ex))
-        : [],
-    [selectedMuscleGroup, filteredExercises, favorites]
-  );
+
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
@@ -926,53 +847,7 @@ function WorkoutList({
                   </div>
                 ) : (
                   <>
-                    {/* Affichage des favoris en haut */}
-                    {favoriteInGroup.length > 0 && (
-                      <>
-                        {favoriteInGroup.map((exercise) => (
-                          <div key={exercise} className="relative">
-                            <button
-                              onClick={() =>
-                                addExerciseToWorkout(
-                                  exercise,
-                                  selectedMuscleGroup
-                                )
-                              }
-                              className="w-full text-left p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 hover:from-yellow-100 hover:to-yellow-200 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-yellow-200 hover:border-yellow-400 hover:shadow-md transform hover:scale-[1.02]"
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div
-                                  className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}
-                                >
-                                  {selectedMuscleGroup === 'cardio' ? (
-                                    <Heart className="h-4 w-4" />
-                                  ) : (
-                                    <Dumbbell className="h-4 w-4" />
-                                  )}
-                                </div>
-                                <span className="flex-1 text-center text-base font-medium break-words leading-tight max-h-[2.5em] overflow-hidden">
-                                  {t(exercise)}
-                                </span>
-                                <span className="text-gray-400">→</span>
-                              </div>
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleFavorite(exercise);
-                              }}
-                              className="absolute top-2 right-2 text-yellow-500 hover:text-yellow-600"
-                              title="Retirer des favoris"
-                            >
-                              <Star fill="currentColor" className="h-5 w-5" />
-                            </button>
-                          </div>
-                        ))}
-                        <div className="col-span-2 sm:col-span-3 border-b border-yellow-200 my-2"></div>
-                      </>
-                    )}
-                    {/* Exercices non favoris */}
-                    {nonFavoriteInGroup.map((exercise) => (
+                    {filteredExercises.map((exercise) => (
                       <div key={exercise} className="relative">
                         <button
                           onClick={() =>
@@ -995,16 +870,6 @@ function WorkoutList({
                             </span>
                             <span className="text-gray-400">→</span>
                           </div>
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleFavorite(exercise);
-                          }}
-                          className="absolute top-2 right-2 text-gray-300 hover:text-yellow-500"
-                          title="Ajouter aux favoris"
-                        >
-                          <Star className="h-5 w-5" />
                         </button>
                       </div>
                     ))}

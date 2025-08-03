@@ -12,11 +12,7 @@ describe('Storage Keys', () => {
     expect(STORAGE_KEYS.WORKOUTS.length).toBeGreaterThan(0);
   });
 
-  test('should have favorite exercises storage key', () => {
-    expect(STORAGE_KEYS.FAVORITE_EXERCISES).toBeDefined();
-    expect(typeof STORAGE_KEYS.FAVORITE_EXERCISES).toBe('string');
-    expect(STORAGE_KEYS.FAVORITE_EXERCISES.length).toBeGreaterThan(0);
-  });
+
 
   test('should have theme storage key', () => {
     expect(STORAGE_KEYS.THEME).toBeDefined();
@@ -51,7 +47,6 @@ describe('Storage Keys', () => {
   test('should have all required storage keys', () => {
     const requiredKeys = [
       'WORKOUTS',
-      'FAVORITE_EXERCISES',
       'THEME',
       'CURRENT_WORKOUT',
       'WORKOUT_TEMPLATES',
@@ -100,7 +95,6 @@ describe('Storage Keys', () => {
 
   test('should have meaningful key names', () => {
     expect(STORAGE_KEYS.WORKOUTS).toContain('workouts');
-    expect(STORAGE_KEYS.FAVORITE_EXERCISES).toContain('Exercises');
     expect(STORAGE_KEYS.THEME).toContain('theme');
     expect(STORAGE_KEYS.CURRENT_WORKOUT).toContain('Workout');
     expect(STORAGE_KEYS.WORKOUT_TEMPLATES).toContain('workoutTemplates');

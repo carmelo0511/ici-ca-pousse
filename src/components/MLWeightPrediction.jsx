@@ -33,18 +33,18 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
   const getTrendIcon = (trend) => {
     switch (trend) {
       case 'increasing':
-        return <TrendingUp className="h-4 w-4 text-green-400" />;
+        return <TrendingUp className="h-4 w-4 text-green-600" />;
       case 'decreasing':
-        return <TrendingDown className="h-4 w-4 text-red-400" />;
+        return <TrendingDown className="h-4 w-4 text-red-600" />;
       default:
-        return <Minus className="h-4 w-4 text-gray-400" />;
+        return <Minus className="h-4 w-4 text-gray-600" />;
     }
   };
 
   const getConfidenceColor = (confidence) => {
-    if (confidence >= 70) return 'text-green-400';
-    if (confidence >= 40) return 'text-yellow-400';
-    return 'text-red-400';
+    if (confidence >= 70) return 'text-green-600';
+    if (confidence >= 40) return 'text-yellow-600';
+    return 'text-red-600';
   };
 
   const handleApplyPrediction = () => {
@@ -55,12 +55,12 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
 
   if (isLoading) {
     return (
-      <div className="w-full card p-4 mb-4">
+      <div className="w-full bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200 mb-4">
         <div className="flex items-center space-x-3">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-400"></div>
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-white">🤖 IA en train d'analyser...</p>
-            <p className="text-xs text-gray-300">Calcul de la prédiction de poids</p>
+            <p className="text-sm font-medium text-blue-800">🤖 IA en train d'analyser...</p>
+            <p className="text-xs text-blue-600">Calcul de la prédiction de poids</p>
           </div>
         </div>
       </div>
@@ -69,12 +69,12 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
 
   if (!prediction || prediction.confidence === 0) {
     return (
-      <div className="w-full card p-4 mb-4">
+      <div className="w-full bg-gray-50 rounded-xl p-4 border border-gray-200 mb-4">
         <div className="flex items-center space-x-3">
-          <Brain className="h-5 w-5 text-gray-400 flex-shrink-0" />
+          <Brain className="h-5 w-5 text-gray-500 flex-shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-white">Pas assez de données</p>
-            <p className="text-xs text-gray-300">Continuez à vous entraîner pour obtenir des prédictions</p>
+            <p className="text-sm font-medium text-gray-700">Pas assez de données</p>
+            <p className="text-xs text-gray-500">Continuez à vous entraîner pour obtenir des prédictions</p>
           </div>
         </div>
       </div>
@@ -82,16 +82,16 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
   }
 
   return (
-    <div className="w-full card p-4 mb-4">
+    <div className="w-full bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 border border-purple-200 mb-4">
       {/* Header avec titre et confiance */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
-          <Brain className="h-5 w-5 text-blue-400 flex-shrink-0" />
-          <h4 className="font-semibold text-white text-sm">🤖 Prédiction IA</h4>
+          <Brain className="h-5 w-5 text-purple-600 flex-shrink-0" />
+          <h4 className="font-semibold text-gray-800 text-sm">🤖 Prédiction IA</h4>
         </div>
         <div className="flex items-center space-x-2">
           {getTrendIcon(prediction.trend)}
-          <span className={`text-xs font-medium px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm ${getConfidenceColor(prediction.confidence)}`}>
+          <span className={`text-xs font-medium px-2 py-1 rounded-full bg-white/50 ${getConfidenceColor(prediction.confidence)}`}>
             {prediction.confidence}% confiance
           </span>
         </div>
@@ -102,11 +102,11 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
         {/* Section prédiction et recommandation côte à côte */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Prédiction principale */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+          <div className="bg-white rounded-lg p-4 border border-purple-100 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-xs text-gray-300 mb-1">Poids suggéré</p>
-                <p className="text-xl font-bold text-white">
+                <p className="text-xs text-gray-500 mb-1">Poids suggéré</p>
+                <p className="text-xl font-bold text-purple-700">
                   {prediction.predictedWeight}kg
                 </p>
                 {currentWeight && (
@@ -117,7 +117,7 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
               </div>
               <button
                 onClick={handleApplyPrediction}
-                className="btn-primary px-4 py-2 text-sm font-medium flex items-center space-x-2"
+                className="bg-gradient-to-r from-purple-500 to-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-purple-600 hover:to-blue-700 transition-all duration-200 flex items-center space-x-2 shadow-sm hover:shadow-md"
               >
                 <Target className="h-4 w-4" />
                 <span>Appliquer</span>
@@ -126,11 +126,11 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
           </div>
 
           {/* Recommandation */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
             <div className="flex items-start space-x-3">
-              <Lightbulb className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
+              <Lightbulb className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-sm text-white leading-relaxed">{prediction.recommendation}</p>
+                <p className="text-sm text-blue-800 leading-relaxed">{prediction.recommendation}</p>
               </div>
             </div>
           </div>
@@ -140,15 +140,15 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Insights */}
           {prediction.insights && prediction.insights.length > 0 && (
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <div className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
               <div className="flex items-center space-x-2 mb-3">
-                <BarChart3 className="h-4 w-4 text-blue-400" />
-                <p className="text-sm font-medium text-white">Analyse IA</p>
+                <BarChart3 className="h-4 w-4 text-gray-600" />
+                <p className="text-sm font-medium text-gray-700">Analyse IA</p>
               </div>
               <div className="space-y-2">
                 {prediction.insights.slice(0, 3).map((insight, index) => (
-                  <div key={index} className="flex items-start space-x-2 text-sm text-gray-300">
-                    <Zap className="h-3 w-3 text-yellow-400 mt-0.5 flex-shrink-0" />
+                  <div key={index} className="flex items-start space-x-2 text-sm text-gray-700">
+                    <Zap className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
                     <span className="leading-relaxed">{insight}</span>
                   </div>
                 ))}
@@ -158,15 +158,15 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
 
           {/* Facteurs d'ajustement */}
           {prediction.factors && prediction.factors.length > 0 && (
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-              <p className="text-sm font-medium text-white mb-3 flex items-center space-x-2">
-                <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
+            <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-100">
+              <p className="text-sm font-medium text-yellow-800 mb-3 flex items-center space-x-2">
+                <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
                 <span>Facteurs d'ajustement</span>
               </p>
               <div className="space-y-2">
                 {prediction.factors.map((factor, index) => (
-                  <div key={index} className="text-sm text-gray-300 flex items-start space-x-2">
-                    <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full mt-1.5 flex-shrink-0"></span>
+                  <div key={index} className="text-sm text-yellow-700 flex items-start space-x-2">
+                    <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5 flex-shrink-0"></span>
                     <span className="leading-relaxed">{factor}</span>
                   </div>
                 ))}

@@ -43,10 +43,7 @@ const WorkoutTemplates = ({
   const [newTemplateExercises, setNewTemplateExercises] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [customExerciseName, setCustomExerciseName] = useState('');
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem('exerciseFavorites');
-    return saved ? JSON.parse(saved) : [];
-  });
+
 
   const handleSaveTemplate = async () => {
     if (!templateName.trim()) {
@@ -304,13 +301,7 @@ const WorkoutTemplates = ({
     }
   };
 
-  const toggleFavorite = (exercise) => {
-    const newFavorites = favorites.includes(exercise)
-      ? favorites.filter((fav) => fav !== exercise)
-      : [...favorites, exercise];
-    setFavorites(newFavorites);
-    localStorage.setItem('exerciseFavorites', JSON.stringify(newFavorites));
-  };
+
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -319,7 +310,7 @@ const WorkoutTemplates = ({
         <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
           Mes Templates
         </h2>
-        <p className="text-gray-600 mt-1">Gérez vos séances favorites</p>
+        <p className="text-gray-600 mt-1">Gérez vos séances</p>
       </div>
 
       {/* Boutons d'action principaux */}
@@ -917,13 +908,7 @@ const WorkoutTemplates = ({
                     if (filteredForMuscle.length === 0 && searchTerm)
                       return null;
 
-                    // Séparer favoris et non-favoris pour ce groupe
-                    const favoritesInMuscle = filteredForMuscle.filter(
-                      (exercise) => favorites.includes(exercise)
-                    );
-                    const nonFavoritesInMuscle = filteredForMuscle.filter(
-                      (exercise) => !favorites.includes(exercise)
-                    );
+
 
                     return (
                       <div key={muscle} className="bg-gray-50 rounded-2xl p-4">
@@ -947,46 +932,7 @@ const WorkoutTemplates = ({
 
                         {/* Liste des exercices */}
                         <div className="grid grid-cols-1 gap-3">
-                          {/* Favoris en premier */}
-                          {favoritesInMuscle.map((exercise) => (
-                            <div key={exercise} className="relative">
-                              <button
-                                onClick={() =>
-                                  addExerciseToNewTemplate(exercise, muscle)
-                                }
-                                className="w-full text-left p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 hover:from-yellow-100 hover:to-yellow-200 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-yellow-200 hover:border-yellow-400 hover:shadow-md transform hover:scale-[1.02]"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <div
-                                    className={`p-2 rounded-lg ${muscle === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}
-                                  >
-                                    {muscle === 'cardio' ? (
-                                      <Heart className="h-4 w-4" />
-                                    ) : (
-                                      <Dumbbell className="h-4 w-4" />
-                                    )}
-                                  </div>
-                                  <span className="flex-1 text-base font-medium">
-                                    {exercise}
-                                  </span>
-                                  <span className="text-gray-400">→</span>
-                                </div>
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleFavorite(exercise);
-                                }}
-                                className="absolute top-2 right-2 text-yellow-500 hover:text-yellow-600"
-                                title="Retirer des favoris"
-                              >
-                                <Star fill="currentColor" className="h-5 w-5" />
-                              </button>
-                            </div>
-                          ))}
-
-                          {/* Exercices non favoris */}
-                          {nonFavoritesInMuscle.map((exercise) => (
+                          {filteredForMuscle.map((exercise) => (
                             <div key={exercise} className="relative">
                               <button
                                 onClick={() =>
@@ -1009,16 +955,6 @@ const WorkoutTemplates = ({
                                   </span>
                                   <span className="text-gray-400">→</span>
                                 </div>
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleFavorite(exercise);
-                                }}
-                                className="absolute top-2 right-2 text-gray-300 hover:text-yellow-500"
-                                title="Ajouter aux favoris"
-                              >
-                                <Star className="h-5 w-5" />
                               </button>
                             </div>
                           ))}

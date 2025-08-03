@@ -28,7 +28,7 @@ export {
 export {
   load,
   save,
-  migrateLocalFavoritesToCloud,
+
   migrateLocalWorkoutsToCloud,
 } from './firebase/storage.js';
 

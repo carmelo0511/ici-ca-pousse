@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { load, save } from '../utils/firebase/storage';
 import { STORAGE_KEYS } from '../constants';
 import { db } from '../utils/firebase/index.js';
@@ -14,39 +14,85 @@ import {
 } from 'firebase/firestore';
 import { cleanWorkoutForFirestore } from '../utils/workout/workoutUtils';
 
+// Cache pour éviter les re-renders inutiles
+const workoutCache = new Map();
+const lastUpdateTime = new Map();
+
 export const useWorkouts = (user) => {
   const [workouts, setWorkouts] = useState([]);
+  const unsubscribeRef = useRef(null);
+  const lastUserId = useRef(null);
 
-  // Synchro Firestore temps réel si user connecté
+  // Optimisation : éviter de recréer la subscription si l'utilisateur n'a pas changé
   useEffect(() => {
-    if (user) {
+    if (user && user.uid !== lastUserId.current) {
+      // Nettoyer l'ancienne subscription
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+      }
+
+      // Vérifier le cache
+      const cacheKey = `workouts_${user.uid}`;
+      const cachedData = workoutCache.get(cacheKey);
+      const lastUpdate = lastUpdateTime.get(cacheKey);
+      const now = Date.now();
+
+      // Utiliser le cache si il n'est pas trop vieux (5 minutes)
+      if (cachedData && lastUpdate && (now - lastUpdate) < 300000) {
+        setWorkouts(cachedData);
+      }
+
       const q = query(
         collection(db, 'workouts'),
         where('userId', '==', user.uid)
       );
+      
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        setWorkouts(
-          querySnapshot.docs.map((docSnap) => ({
-            id: docSnap.id,
-            ...docSnap.data(),
-          }))
-        );
+        const newWorkouts = querySnapshot.docs.map((docSnap) => ({
+          id: docSnap.id,
+          ...docSnap.data(),
+        }));
+        
+        // Mettre en cache
+        workoutCache.set(cacheKey, newWorkouts);
+        lastUpdateTime.set(cacheKey, now);
+        
+        setWorkouts(newWorkouts);
       });
-      return unsubscribe;
-    } else {
+
+      unsubscribeRef.current = unsubscribe;
+      lastUserId.current = user.uid;
+    } else if (!user) {
+      // Nettoyer la subscription
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+        unsubscribeRef.current = null;
+      }
+      lastUserId.current = null;
+      
       // Fallback localStorage
       const savedWorkouts = load(STORAGE_KEYS.WORKOUTS, []);
       setWorkouts(savedWorkouts);
     }
+
+    // Cleanup
+    return () => {
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+      }
+    };
   }, [user]);
 
-  // Sauvegarde locale si pas connecté
+  // Optimisation : éviter les sauvegardes inutiles
+  const lastSavedWorkouts = useRef([]);
   useEffect(() => {
-    if (!user) {
+    if (!user && JSON.stringify(workouts) !== JSON.stringify(lastSavedWorkouts.current)) {
       save(STORAGE_KEYS.WORKOUTS, workouts);
+      lastSavedWorkouts.current = [...workouts];
     }
   }, [workouts, user]);
 
+  // Optimisation des fonctions avec useCallback
   const addWorkout = useCallback(
     async (workout) => {
       if (user) {
@@ -70,20 +116,13 @@ export const useWorkouts = (user) => {
     async (workoutId, updatedWorkout) => {
       if (user) {
         const cleanedWorkout = cleanWorkoutForFirestore(updatedWorkout);
-        try {
-          // setDoc permet de créer ou mettre à jour le document avec le même ID
-          await setDoc(
-            doc(db, 'workouts', workoutId),
-            { ...cleanedWorkout, userId: user.uid },
-            { merge: true }
-          );
-        } catch (error) {
-          console.error('Erreur update Firestore:', error);
-          throw error;
-        }
+        await setDoc(doc(db, 'workouts', workoutId), {
+          ...cleanedWorkout,
+          userId: user.uid,
+        });
       } else {
         setWorkouts((prev) =>
-          prev.map((w) => (w.id === workoutId ? updatedWorkout : w))
+          prev.map((w) => (w.id === workoutId ? { ...w, ...updatedWorkout } : w))
         );
       }
     },
@@ -93,12 +132,7 @@ export const useWorkouts = (user) => {
   const deleteWorkout = useCallback(
     async (workoutId) => {
       if (user) {
-        try {
-          await deleteDoc(doc(db, 'workouts', workoutId));
-        } catch (error) {
-          console.error('Erreur suppression Firestore:', error);
-          throw error;
-        }
+        await deleteDoc(doc(db, 'workouts', workoutId));
       } else {
         setWorkouts((prev) => prev.filter((w) => w.id !== workoutId));
       }
@@ -106,29 +140,74 @@ export const useWorkouts = (user) => {
     [user]
   );
 
+  // Optimisation des calculs avec useMemo
   const getWorkoutForDate = useCallback(
     (date) => {
-      return workouts.find((w) => w.date === date);
+      // Gérer le cas où date est une chaîne (YYYY-MM-DD) ou un objet Date
+      let dateStr;
+      if (typeof date === 'string') {
+        dateStr = date;
+      } else if (date instanceof Date) {
+        dateStr = date.toISOString().split('T')[0];
+      } else {
+        return null;
+      }
+      return workouts.find((w) => w.date === dateStr);
     },
     [workouts]
   );
 
   const getStats = useCallback(() => {
-    const totalWorkouts = workouts.length;
-    const totalSets = workouts.reduce((acc, w) => acc + (w.totalSets || 0), 0);
-    const totalReps = workouts.reduce((acc, w) => acc + (w.totalReps || 0), 0);
-    const totalWeight = workouts.reduce(
-      (acc, w) => acc + (w.totalWeight || 0),
-      0
+    if (workouts.length === 0) {
+      return {
+        totalWorkouts: 0,
+        totalSets: 0,
+        totalReps: 0,
+        totalWeight: 0,
+        avgDuration: 0,
+      };
+    }
+
+    return workouts.reduce(
+      (stats, workout) => {
+        const workoutSets = workout.exercises?.reduce(
+          (acc, ex) => acc + (ex.sets?.length || 0),
+          0
+        ) || 0;
+        const workoutReps = workout.exercises?.reduce(
+          (acc, ex) =>
+            acc +
+            (ex.sets?.reduce((setAcc, set) => setAcc + (set.reps || 0), 0) || 0),
+          0
+        ) || 0;
+        const workoutWeight = workout.exercises?.reduce(
+          (acc, ex) =>
+            acc +
+            (ex.sets?.reduce(
+              (setAcc, set) => setAcc + (set.weight || 0) * (set.reps || 0),
+              0
+            ) || 0),
+          0
+        ) || 0;
+
+        return {
+          totalWorkouts: stats.totalWorkouts + 1,
+          totalSets: stats.totalSets + workoutSets,
+          totalReps: stats.totalReps + workoutReps,
+          totalWeight: stats.totalWeight + workoutWeight,
+          avgDuration:
+            (stats.avgDuration * stats.totalWorkouts + (workout.duration || 0)) /
+            (stats.totalWorkouts + 1),
+        };
+      },
+      {
+        totalWorkouts: 0,
+        totalSets: 0,
+        totalReps: 0,
+        totalWeight: 0,
+        avgDuration: 0,
+      }
     );
-    const avgDuration =
-      workouts.length > 0
-        ? Math.round(
-            workouts.reduce((acc, w) => acc + (w.duration || 0), 0) /
-              workouts.length
-          )
-        : 0;
-    return { totalWorkouts, totalSets, totalReps, totalWeight, avgDuration };
   }, [workouts]);
 
   return {
