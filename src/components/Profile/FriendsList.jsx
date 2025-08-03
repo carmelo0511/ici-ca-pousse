@@ -190,7 +190,7 @@ function FriendsList({ user, showToastMsg, onShowFriendProfile }) {
                     selectedBadge={friend.selectedBadge}
                   />
                   <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-indigo-700 group-hover:underline truncate">
+                    <div className="font-semibold text-blue-400 group-hover:underline truncate">
                       {friend.displayName || friend.email}
                     </div>
                     {friend.badges && friend.badges.length > 0 && (
@@ -204,7 +204,7 @@ function FriendsList({ user, showToastMsg, onShowFriendProfile }) {
                 </button>
                 <button
                   onClick={() => removeFriend(friend.uid)}
-                  className="bg-red-100 text-red-700 px-3 py-1 rounded-lg font-semibold hover:bg-red-200 transition-colors"
+                  className="bg-red-900/30 text-red-400 px-3 py-1 rounded-lg font-semibold hover:bg-red-800/40 transition-colors"
                 >
                   Supprimer
                 </button>
@@ -213,7 +213,7 @@ function FriendsList({ user, showToastMsg, onShowFriendProfile }) {
           </ul>
         )}
       </div>
-      {loading && <div className="text-gray-400 text-sm">Chargement...</div>}
+      {loading && <div className="text-gray-300 text-sm">Chargement...</div>}
     </div>
   );
 }
