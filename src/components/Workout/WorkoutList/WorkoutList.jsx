@@ -20,7 +20,6 @@ import {
   Meh,
   Frown,
   Bookmark,
-  Mic,
 } from 'lucide-react';
 import { exerciseDatabase } from '../../../utils/workout/exerciseDatabase';
 import Modal from '../Modal';
@@ -56,8 +55,7 @@ function getMuscleIcon(muscle) {
   }
 }
 
-// Fonction utilitaire pour attendre un délai
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
 function WorkoutList({
   selectedDate,
