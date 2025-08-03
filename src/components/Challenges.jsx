@@ -306,13 +306,13 @@ const Challenges = ({ user }) => {
       </div>
 
       {/* Onglets */}
-      <div className="flex space-x-1 mb-6 bg-gray-100 p-1 rounded-lg">
+      <div className="flex space-x-1 mb-6 card">
         <button
           onClick={() => setActiveTab('all')}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
             activeTab === 'all'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
+              ? 'nav-tab active'
+              : 'nav-tab'
           }`}
         >
           Actifs ({getActiveChallenges().length})
@@ -321,8 +321,8 @@ const Challenges = ({ user }) => {
           onClick={() => setActiveTab('sent')}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
             activeTab === 'sent'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
+              ? 'nav-tab active'
+              : 'nav-tab'
           }`}
         >
           Envoyés ({sentChallenges.length})
@@ -331,8 +331,8 @@ const Challenges = ({ user }) => {
           onClick={() => setActiveTab('received')}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
             activeTab === 'received'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
+              ? 'nav-tab active'
+              : 'nav-tab'
           }`}
         >
           Reçus ({receivedChallenges.length})
@@ -341,8 +341,8 @@ const Challenges = ({ user }) => {
           onClick={() => setActiveTab('completed')}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
             activeTab === 'completed'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
+              ? 'nav-tab active'
+              : 'nav-tab'
           }`}
         >
           Terminés ({getCompletedChallenges().length})
@@ -882,7 +882,7 @@ const Challenges = ({ user }) => {
               </div>
             ) : (
               <select
-                className="w-full p-3 border border-gray-300 rounded-lg"
+                className="input w-full"
                 value={selectedFriend?.uid || ''}
                 onChange={(e) => {
                   const friend = friends.find((f) => f.uid === e.target.value);

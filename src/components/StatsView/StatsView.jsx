@@ -54,20 +54,20 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
   return (
     <div className={`p-6 space-y-8 ${className}`}>
       <div>
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+        <h2 className="section-title text-3xl">
           Statistiques
         </h2>
-        <p className="text-gray-600 mt-1">{t('stats_subtitle')}</p>
+        <p className="text-secondary mt-1">{t('stats_subtitle')}</p>
       </div>
 
       {/* Courbe d'évolution du poids */}
-      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up mb-8">
-        <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
-          <TrendingUp className="h-6 w-6" />
+      <div className="card mb-8">
+        <h3 className="section-title text-xl mb-4 flex items-center space-x-2">
+          <TrendingUp className="h-6 w-6 nav-icon" />
           <span>Évolution du poids</span>
         </h3>
         {weightData.length === 0 ? (
-          <div className="text-gray-500 text-center py-8">
+          <div className="text-center py-8 text-secondary">
             Aucune donnée de poids enregistrée.
             <br />
             Ajoutez votre poids dans le profil pour voir la courbe !
@@ -102,8 +102,8 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
       {/* Madame IrmIA */}
       {workouts.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 fade-in-up mb-8">
-          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+        <div className="card mb-8">
+          <h3 className="section-title text-xl mb-4 flex items-center space-x-2">
             <span>👩‍💼</span>
             <span>Madame IrmIA - Progression des Poids</span>
           </h3>
@@ -117,9 +117,9 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
             if (exercisesWithData.length === 0) {
               return (
                 <div className="text-center py-8">
-                  <div className="text-gray-400 text-6xl mb-4">🧠</div>
-                  <p className="text-gray-600 mb-2">Pas encore assez de données</p>
-                  <p className="text-sm text-gray-500">
+                  <div className="text-6xl mb-4">🧠</div>
+                  <p className="mb-2 text-secondary">Pas encore assez de données</p>
+                  <p className="text-sm text-tertiary">
                     Continuez à vous entraîner pour obtenir des prédictions de Madame IrmIA
                   </p>
                 </div>
@@ -128,7 +128,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
             return (
               <div className="space-y-4">
-                <p className="text-gray-600 mb-6">
+                <p className="mb-6 text-secondary">
                   Madame IrmIA analyse vos données d'entraînement pour prédire vos prochains poids recommandés
                 </p>
                 
@@ -139,18 +139,18 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                     .map(([exerciseName, analysis]) => (
                       <div
                         key={exerciseName}
-                        className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 border border-purple-200"
+                        className="card"
                       >
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-semibold text-gray-800 text-sm truncate">
+                          <h4 className="font-semibold text-primary text-sm truncate">
                             {exerciseName}
                           </h4>
-                          <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                          <span className={`status-badge text-xs font-medium px-2 py-1 rounded-full ${
                             analysis.confidence >= 70 
-                              ? 'bg-green-100 text-green-700'
+                              ? 'badge-success'
                               : analysis.confidence >= 40
-                                ? 'bg-yellow-100 text-yellow-700'
-                                : 'bg-red-100 text-red-700'
+                                ? 'badge-warning'
+                                : 'badge-danger'
                           }`}>
                             {analysis.confidence}%
                           </span>
@@ -158,15 +158,15 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                         
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600">Actuel</span>
-                            <span className="text-sm font-medium text-gray-800">
+                            <span className="text-xs text-tertiary">Actuel</span>
+                            <span className="text-sm font-medium text-primary">
                               {analysis.lastWeight}kg
                             </span>
                           </div>
                           
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600">Prédiction</span>
-                            <span className="text-sm font-bold text-purple-700">
+                            <span className="text-xs text-tertiary">Prédiction</span>
+                            <span className="text-sm font-bold badge">
                               {analysis.predictedWeight}kg
                             </span>
                           </div>
@@ -203,86 +203,98 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
       {/* Statistiques principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
+        <div className="card hover-lift">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">
+              <p className="text-secondary text-sm font-medium">
                 {t('total_workouts')}
               </p>
-              <p className="text-4xl font-bold">{stats.totalWorkouts}</p>
+              <p className="text-4xl font-bold text-primary">{stats.totalWorkouts}</p>
             </div>
-            <Target className="h-12 w-12 text-blue-200" />
+            <div className="icon-primary p-3 rounded-lg">
+              <Target className="h-12 w-12 text-white" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
+        <div className="card hover-lift">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">
+              <p className="text-secondary text-sm font-medium">
                 {t('total_sets')}
               </p>
-              <p className="text-4xl font-bold">{stats.totalSets}</p>
+              <p className="text-4xl font-bold text-primary">{stats.totalSets}</p>
             </div>
-            <Dumbbell className="h-12 w-12 text-blue-200" />
+            <div className="icon-secondary p-3 rounded-lg">
+              <Dumbbell className="h-12 w-12 text-white" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
+        <div className="card hover-lift">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">
+              <p className="text-secondary text-sm font-medium">
                 {t('total_reps')}
               </p>
-              <p className="text-4xl font-bold">{stats.totalReps}</p>
+              <p className="text-4xl font-bold text-primary">{stats.totalReps}</p>
             </div>
-            <TrendingUp className="h-12 w-12 text-blue-200" />
+            <div className="icon-success p-3 rounded-lg">
+              <TrendingUp className="h-12 w-12 text-white" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
+        <div className="card hover-lift">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">
+              <p className="text-secondary text-sm font-medium">
                 {t('avg_duration')}
               </p>
-              <p className="text-4xl font-bold">{stats.avgDuration} min</p>
+              <p className="text-4xl font-bold text-primary">{stats.avgDuration} min</p>
             </div>
-            <Clock className="h-12 w-12 text-blue-200" />
+            <div className="icon-warning p-3 rounded-lg">
+              <Clock className="h-12 w-12 text-white" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
+        <div className="card hover-lift">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">
+              <p className="text-secondary text-sm font-medium">
                 {t('regularity')}
               </p>
-              <p className="text-4xl font-bold">
+              <p className="text-4xl font-bold text-primary">
                 {workouts.length > 0 ? '💪' : '🔥'}
               </p>
             </div>
-            <Zap className="h-12 w-12 text-blue-200" />
+            <div className="icon-primary p-3 rounded-lg">
+              <Zap className="h-12 w-12 text-white" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl w-full max-w-full overflow-x-auto border border-white/20">
+        <div className="card hover-lift">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">
+              <p className="text-secondary text-sm font-medium">
                 Groupe préféré
               </p>
-              <p className="text-2xl font-bold">
+              <p className="text-2xl font-bold text-primary">
                 {getMostWorkedMuscleGroup(workouts)}
               </p>
             </div>
-            <Dumbbell className="h-12 w-12 text-blue-200" />
+            <div className="icon-success p-3 rounded-lg">
+              <Dumbbell className="h-12 w-12 text-white" />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Habitudes d'entraînement */}
       {workoutHabits.totalWithTime > 0 && (
-        <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        <div className="card">
           <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
             <Clock className="h-6 w-6" />
             <span>Habitudes d'entraînement</span>
@@ -290,7 +302,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Moment préféré */}
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
+            <div className="card">
               <h4 className="text-lg font-semibold text-gray-800 mb-3">
                 Moment préféré
               </h4>
@@ -363,28 +375,28 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               Durée moyenne par moment
             </h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-blue-100 rounded-xl p-4 text-center border border-white/20">
+              <div className="card text-center">
                 <div className="text-2xl mb-1">🌅</div>
                 <div className="font-bold text-blue-800">
                   {avgDurationByTime.morning} min
                 </div>
                 <div className="text-sm text-blue-600">Matin</div>
               </div>
-              <div className="bg-blue-100 rounded-xl p-4 text-center border border-white/20">
+              <div className="card text-center">
                 <div className="text-2xl mb-1">☀️</div>
                 <div className="font-bold text-blue-800">
                   {avgDurationByTime.afternoon} min
                 </div>
                 <div className="text-sm text-blue-600">Après-midi</div>
               </div>
-              <div className="bg-blue-100 rounded-xl p-4 text-center border border-white/20">
+              <div className="card text-center">
                 <div className="text-2xl mb-1">🌆</div>
                 <div className="font-bold text-blue-800">
                   {avgDurationByTime.evening} min
                 </div>
                 <div className="text-sm text-blue-600">Soir</div>
               </div>
-              <div className="bg-blue-100 rounded-xl p-4 text-center border border-white/20">
+              <div className="card text-center">
                 <div className="text-2xl mb-1">🌙</div>
                 <div className="font-bold text-blue-800">
                   {avgDurationByTime.night} min
@@ -397,7 +409,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
       )}
 
       {/* Section Recommandations */}
-      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+      <div className="card">
         <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
           <Target className="h-6 w-6" />
           <span>Recommandations personnalisées</span>
@@ -405,7 +417,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Recommandation basée sur la fréquence */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
+          <div className="card">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>📊</span>
               <span>Fréquence d'entraînement</span>
@@ -457,7 +469,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur le groupe musculaire */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
+          <div className="card">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>💪</span>
               <span>Équilibre musculaire</span>
@@ -513,7 +525,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur la durée */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
+          <div className="card">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>⏱️</span>
               <span>Durée des séances</span>
@@ -567,7 +579,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur le moment */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-white/20">
+          <div className="card">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>🌅</span>
               <span>Moment d'entraînement</span>
@@ -651,7 +663,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
         </div>
 
         {/* Recommandation générale */}
-        <div className="mt-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6">
+        <div className="mt-6 card">
           <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
             <span>🎯</span>
             <span>Objectif du mois</span>

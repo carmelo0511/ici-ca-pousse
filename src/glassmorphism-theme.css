@@ -1,0 +1,795 @@
+/* ========================================
+   GLASSMORPHISME SOMBRE PREMIUM - CODE COMPLET
+   ======================================== */
+
+/* Variables CSS pour faciliter la maintenance */
+:root {
+    --glass-bg-primary: rgba(15, 15, 35, 0.8);
+    --glass-bg-secondary: rgba(15, 15, 35, 0.6);
+    --glass-bg-light: rgba(15, 15, 35, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-border-light: rgba(255, 255, 255, 0.05);
+    --glass-border-active: rgba(59, 130, 246, 0.3);
+    
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-tertiary: rgba(255, 255, 255, 0.6);
+    
+    --blue-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --purple-gradient: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    --orange-gradient: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+    --green-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --red-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-glass-hover: 0 30px 60px rgba(0, 0, 0, 0.6);
+    --shadow-blue: 0 8px 25px rgba(59, 130, 246, 0.4);
+    --shadow-blue-hover: 0 20px 40px rgba(59, 130, 246, 0.5);
+    --shadow-purple: 0 8px 25px rgba(139, 92, 246, 0.4);
+    --shadow-orange: 0 8px 25px rgba(245, 158, 11, 0.4);
+    --shadow-green: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* Background principal */
+body {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Background animé avec particules */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(79, 172, 254, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+    animation: backgroundFloat 20s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes backgroundFloat {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -30px); }
+    66% { transform: translate(-20px, 20px); }
+}
+
+/* Container principal avec glassmorphisme */
+.container, .phone-container, .main-container {
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 
+        var(--shadow-glass),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Header/Navigation */
+.header, .navbar, .top-bar {
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border-light);
+    box-shadow: var(--shadow-glass);
+}
+
+/* Cards/Cartes avec animations premium */
+.card, .item, .section, .block {
+    background: var(--glass-bg-secondary);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    box-shadow: var(--shadow-glass);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: cardEntry 1s ease-out;
+}
+
+.card::before, .item::before, .section::before, .block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%, rgba(168, 85, 247, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover::before, .item:hover::before, .section:hover::before, .block:hover::before {
+    opacity: 1;
+}
+
+.card:hover, .item:hover, .section:hover, .block:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-glass-hover);
+    border-color: var(--glass-border-active);
+}
+
+@keyframes cardEntry {
+    from { 
+        opacity: 0; 
+        transform: translateY(50px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0);
+    }
+}
+
+/* Boutons primaires avec effets premium */
+.btn-primary, .button-primary, .primary-button {
+    background: var(--blue-gradient);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 30px;
+    padding: 18px 35px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-blue);
+    position: relative;
+    overflow: hidden;
+    animation: buttonPop 1s ease-out;
+}
+
+.btn-primary::before, .button-primary::before, .primary-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+}
+
+.btn-primary:hover::before, .button-primary:hover::before, .primary-button:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover, .button-primary:hover, .primary-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-blue-hover);
+}
+
+.btn-primary:active, .button-primary:active, .primary-button:active {
+    transform: scale(0.95);
+}
+
+@keyframes buttonPop {
+    from { 
+        opacity: 0; 
+        transform: scale(0.8);
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+}
+
+/* Boutons secondaires */
+.btn-secondary, .button-secondary, .secondary-button {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover, .button-secondary:hover, .secondary-button:hover {
+    background: var(--glass-bg-secondary);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Navigation/Onglets avec animations premium */
+.nav-tab, .tab, .menu-item {
+    background: var(--glass-bg-light);
+    color: var(--text-tertiary);
+    border: none;
+    border-radius: 15px;
+    padding: 15px 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-tab.active, .tab.active, .menu-item.active {
+    background: var(--blue-gradient);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-blue);
+    transform: translateY(-3px);
+    animation: tabActivate 0.3s ease-out;
+}
+
+.nav-tab:hover:not(.active), .tab:hover:not(.active), .menu-item:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.nav-icon {
+    font-size: 18px;
+    margin-bottom: 5px;
+    display: block;
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes tabActivate {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.05); }
+    100% { transform: translateY(-3px) scale(1); }
+}
+
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+}
+
+/* Inputs/Formulaires */
+.input, .form-control, input, textarea, select {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.input::placeholder, .form-control::placeholder, input::placeholder, textarea::placeholder {
+    color: var(--text-tertiary);
+}
+
+.input:focus, .form-control:focus, input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: var(--glass-bg-secondary);
+}
+
+/* Icônes avec glow */
+.icon-primary {
+    background: var(--blue-gradient);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--shadow-blue);
+    color: var(--text-primary);
+}
+
+.icon-secondary {
+    background: var(--purple-gradient);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--shadow-purple);
+    color: var(--text-primary);
+}
+
+.icon-success {
+    background: var(--green-gradient);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--shadow-green);
+    color: var(--text-primary);
+}
+
+.icon-warning {
+    background: var(--orange-gradient);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--shadow-orange);
+    color: var(--text-primary);
+}
+
+/* Progress bar */
+.progress-bar, .progress {
+    background: var(--glass-bg-light);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+}
+
+.progress-fill, .progress-value {
+    background: var(--blue-gradient);
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+    position: relative;
+}
+
+.progress-fill::after, .progress-value::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Badges/Labels */
+.badge, .label, .tag {
+    background: var(--purple-gradient);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: var(--shadow-purple);
+}
+
+.badge-success, .label-success {
+    background: var(--green-gradient);
+    box-shadow: var(--shadow-green);
+}
+
+.badge-warning, .label-warning {
+    background: var(--orange-gradient);
+    box-shadow: var(--shadow-orange);
+}
+
+.badge-danger, .label-danger {
+    background: var(--red-gradient);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+/* Modals/Popups avec animations premium */
+.modal, .popup, .dialog {
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    box-shadow: 
+        0 35px 60px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: modalEntry 1s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal::before, .popup::before, .dialog::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+    animation: modalBackground 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes modalEntry {
+    from { 
+        opacity: 0; 
+        transform: translateY(50px) scale(0.9);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes modalBackground {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+.modal-backdrop, .popup-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+}
+
+/* Sidebar/Menu latéral */
+.sidebar, .side-menu {
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-glass);
+}
+
+/* Footer */
+.footer, .bottom-bar {
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--glass-border-light);
+    box-shadow: var(--shadow-glass);
+}
+
+/* Texte */
+.text-primary, h1, h2, h3 {
+    color: var(--text-primary);
+}
+
+.text-secondary, p, span {
+    color: var(--text-secondary);
+}
+
+.text-muted, .text-tertiary {
+    color: var(--text-tertiary);
+}
+
+/* Animations globales */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Classes d'animation */
+.animate-fade-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-left {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.animate-slide-right {
+    animation: slideInRight 0.6s ease-out;
+}
+
+.animate-scale {
+    animation: scaleIn 0.6s ease-out;
+}
+
+/* Hover effects globaux */
+.hover-lift {
+    transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+.hover-glow {
+    transition: box-shadow 0.3s ease;
+}
+
+.hover-glow:hover {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--glass-bg-light);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--blue-gradient);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+/* Particules pour l'arrière-plan */
+.glass-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.glass-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(59, 130, 246, 0.4);
+    border-radius: 50%;
+    animation: glassFloat 8s linear infinite;
+    box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+}
+
+@keyframes glassFloat {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container, .phone-container, .main-container {
+        margin: 10px;
+        border-radius: 20px;
+    }
+    
+    .card, .item, .section, .block {
+        padding: 20px 15px;
+    }
+    
+    .btn-primary, .button-primary, .primary-button,
+    .btn-secondary, .button-secondary, .secondary-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+/* Transitions fluides pour le changement de thème */
+* {
+    transition: background-color 0.3s ease, 
+                border-color 0.3s ease, 
+                color 0.3s ease, 
+                box-shadow 0.3s ease;
+}
+
+/* Effets spéciaux et interactions */
+.ripple-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple-effect::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.ripple-effect:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Section workout principale */
+.workout-main {
+    background: var(--glass-bg-secondary);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    padding: 35px 25px;
+    text-align: center;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+    animation: cardEntry 1s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.workout-main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%, rgba(168, 85, 247, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.workout-main:hover::before {
+    opacity: 1;
+}
+
+.workout-main:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-glass-hover);
+    border-color: var(--glass-border-active);
+}
+
+.workout-icon {
+    width: 100px;
+    height: 100px;
+    background: var(--purple-gradient);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    font-size: 45px;
+    color: white;
+    animation: iconPulse 3s ease-in-out infinite;
+    box-shadow: var(--shadow-purple);
+    position: relative;
+    overflow: hidden;
+}
+
+.workout-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: iconShine 4s linear infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+}
+
+@keyframes iconShine {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Titres avec effets lumineux */
+.section-title, .workout-title {
+    font-size: 28px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); }
+    50% { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6)); }
+}
+
+/* Boutons flottants */
+.floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: var(--blue-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-blue);
+    transition: all 0.3s ease;
+    animation: floatingPulse 2s ease-in-out infinite;
+    z-index: 1000;
+}
+
+.floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-blue-hover);
+}
+
+@keyframes floatingPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Status et badges animés */
+.status-badge, .date-badge {
+    background: var(--purple-gradient);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    animation: badgePulse 2s ease-in-out infinite;
+    box-shadow: var(--shadow-purple);
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); }
+}
+
+/* Notifications toast */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px 30px;
+    color: var(--text-primary);
+    font-weight: 600;
+    box-shadow: var(--shadow-glass);
+    animation: toastSlide 0.5s ease-out;
+    z-index: 10000;
+}
+
+@keyframes toastSlide {
+    from { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(-30px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ========================================
+   FIN DU CODE GLASSMORPHISME SOMBRE PREMIUM
+   ======================================== */

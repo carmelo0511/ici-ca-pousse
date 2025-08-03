@@ -1,0 +1,579 @@
+/* ========================================
+   CORRECTION COULEURS CARTES - CLASSES TAILWIND
+   ======================================== */
+
+/* Correction des cartes de groupes musculaires (classes Tailwind) */
+.bg-gradient-to-br.from-gray-50.to-gray-100,
+button[class*="bg-gradient-to-br from-gray-50 to-gray-100"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.bg-gradient-to-br.from-gray-50.to-gray-100:hover,
+button[class*="bg-gradient-to-br from-gray-50 to-gray-100"]:hover {
+    background: rgba(15, 15, 35, 0.9) !important;
+    border-color: rgba(139, 92, 246, 0.3) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 15px 45px rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Texte dans les cartes de groupes musculaires */
+.bg-gradient-to-br.from-gray-50.to-gray-100 *,
+button[class*="bg-gradient-to-br from-gray-50 to-gray-100"] * {
+    color: #ffffff !important;
+}
+
+.bg-gradient-to-br.from-gray-50.to-gray-100 h4,
+button[class*="bg-gradient-to-br from-gray-50 to-gray-100"] h4 {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.bg-gradient-to-br.from-gray-50.to-gray-100 p,
+button[class*="bg-gradient-to-br from-gray-50 to-gray-100"] p {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Correction des cartes d'exercices (classes Tailwind) */
+.bg-gradient-to-r.from-gray-50.to-gray-100,
+.bg-gradient-to-r.from-yellow-50.to-yellow-100,
+button[class*="bg-gradient-to-r from-gray-50 to-gray-100"],
+button[class*="bg-gradient-to-r from-yellow-50 to-yellow-100"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.bg-gradient-to-r.from-gray-50.to-gray-100:hover,
+.bg-gradient-to-r.from-yellow-50.to-yellow-100:hover,
+button[class*="bg-gradient-to-r from-gray-50 to-gray-100"]:hover,
+button[class*="bg-gradient-to-r from-yellow-50 to-yellow-100"]:hover {
+    background: rgba(15, 15, 35, 0.9) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Texte dans les cartes d'exercices */
+.bg-gradient-to-r.from-gray-50.to-gray-100 *,
+.bg-gradient-to-r.from-yellow-50.to-yellow-100 *,
+button[class*="bg-gradient-to-r from-gray-50 to-gray-100"] *,
+button[class*="bg-gradient-to-r from-yellow-50 to-yellow-100"] * {
+    color: #ffffff !important;
+}
+
+.bg-gradient-to-r.from-gray-50.to-gray-100 span,
+.bg-gradient-to-r.from-yellow-50.to-yellow-100 span,
+button[class*="bg-gradient-to-r from-gray-50 to-gray-100"] span,
+button[class*="bg-gradient-to-r from-yellow-50 to-yellow-100"] span {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+}
+
+/* Icônes dans les cartes */
+.bg-gradient-to-br.from-gray-50.to-gray-100 svg,
+.bg-gradient-to-r.from-gray-50.to-gray-100 svg,
+.bg-gradient-to-r.from-yellow-50.to-yellow-100 svg,
+button[class*="bg-gradient-to-br from-gray-50 to-gray-100"] svg,
+button[class*="bg-gradient-to-r from-gray-50 to-gray-100"] svg,
+button[class*="bg-gradient-to-r from-yellow-50 to-yellow-100"] svg {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+/* ========================================
+   CORRECTION PROFIL ET CLASSEMENT
+   ======================================== */
+
+/* Correction des sections profil (classes Tailwind) */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    color: #ffffff !important;
+}
+
+/* Texte dans les sections profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 *,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] * {
+    color: #ffffff !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 h2,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 h3,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 h4,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] h2,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] h3,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] h4 {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 p,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 span,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] p,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] span {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Correction des inputs dans le profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 input,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] input {
+    background: rgba(15, 15, 35, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 input:focus,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] input:focus {
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 input::placeholder,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Correction des labels dans le profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 label,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] label {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Correction des boutons dans le profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 button,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] button {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 button:hover,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Correction du classement (classes Tailwind) */
+.bg-white.rounded-2xl.shadow-lg,
+div[class*="bg-white rounded-2xl shadow-lg"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    color: #ffffff !important;
+}
+
+/* Texte dans le classement */
+.bg-white.rounded-2xl.shadow-lg *,
+div[class*="bg-white rounded-2xl shadow-lg"] * {
+    color: #ffffff !important;
+}
+
+.bg-white.rounded-2xl.shadow-lg h2,
+.bg-white.rounded-2xl.shadow-lg h3,
+div[class*="bg-white rounded-2xl shadow-lg"] h2,
+div[class*="bg-white rounded-2xl shadow-lg"] h3 {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.bg-white.rounded-2xl.shadow-lg p,
+.bg-white.rounded-2xl.shadow-lg span,
+div[class*="bg-white rounded-2xl shadow-lg"] p,
+div[class*="bg-white rounded-2xl shadow-lg"] span {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Correction des éléments de classement */
+.bg-gray-50.rounded-xl,
+div[class*="bg-gray-50 rounded-xl"] {
+    background: rgba(15, 15, 35, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.bg-white,
+div[class*="bg-white"]:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]) {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.bg-indigo-100,
+div[class*="bg-indigo-100"] {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    color: #ffffff !important;
+}
+
+/* Correction des selects dans le classement */
+.bg-white.rounded-2xl.shadow-lg select,
+div[class*="bg-white rounded-2xl shadow-lg"] select {
+    background: rgba(15, 15, 35, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.bg-white.rounded-2xl.shadow-lg select:focus,
+div[class*="bg-white rounded-2xl shadow-lg"] select:focus {
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Correction des boutons dans le classement */
+.bg-white.rounded-2xl.shadow-lg button,
+div[class*="bg-white rounded-2xl shadow-lg"] button {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
+}
+
+.bg-white.rounded-2xl.shadow-lg button:hover,
+div[class*="bg-white rounded-2xl shadow-lg"] button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* ========================================
+   CORRECTION CHATBOT - LIGNES TRANSPARENTES
+   ======================================== */
+
+/* Correction des messages du chatbot */
+.bg-white\/60, .bg-white\/80, .bg-white\/90,
+div[class*="bg-white/60"], div[class*="bg-white/80"], div[class*="bg-white/90"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Messages du chatbot avec fond blanc */
+.bg-white,
+div[class*="bg-white"]:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]):not([class*="bg-white/"]):not([class*="bg-white shadow"]):not([class*="bg-white border"]) {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Bulles de messages du chatbot */
+.chat-message, .message-bubble, .chat-bubble,
+div[class*="chat"], div[class*="message"], div[class*="bubble"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Input du chatbot */
+.chat-input, .message-input,
+input[class*="chat"], input[class*="message"] {
+    background: rgba(15, 15, 35, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+.chat-input:focus, .message-input:focus,
+input[class*="chat"]:focus, input[class*="message"]:focus {
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.chat-input::placeholder, .message-input::placeholder,
+input[class*="chat"]::placeholder, input[class*="message"]::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Boutons du chatbot */
+.chat-button, .send-button,
+button[class*="chat"], button[class*="send"] {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
+}
+
+.chat-button:hover, .send-button:hover,
+button[class*="chat"]:hover, button[class*="send"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Modal du chatbot */
+.chat-modal, .chatbot-modal,
+div[class*="chat-modal"], div[class*="chatbot-modal"] {
+    background: rgba(15, 15, 35, 0.9) !important;
+    backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* En-tête du modal chatbot */
+.chat-header, .chatbot-header,
+div[class*="chat-header"], div[class*="chatbot-header"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Corps du modal chatbot */
+.chat-body, .chatbot-body,
+div[class*="chat-body"], div[class*="chatbot-body"] {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Correction spécifique pour les messages blancs */
+.bg-white.rounded-lg, .bg-white.rounded-xl, .bg-white.rounded-2xl,
+div[class*="bg-white rounded-lg"], div[class*="bg-white rounded-xl"], div[class*="bg-white rounded-2xl"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+
+
+/* Transitions fluides */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200,
+.bg-white.rounded-2xl.shadow-lg,
+.bg-gray-50.rounded-xl,
+.bg-white,
+.bg-indigo-100,
+.bg-white\/60, .bg-white\/80, .bg-white\/90,
+.chat-message, .message-bubble, .chat-bubble,
+.chat-input, .message-input,
+.chat-button, .send-button,
+.chat-modal, .chatbot-modal,
+.chat-header, .chatbot-header,
+.chat-body, .chatbot-body,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"],
+div[class*="bg-white rounded-2xl shadow-lg"],
+div[class*="bg-gray-50 rounded-xl"],
+div[class*="bg-white"]:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100"],
+div[class*="bg-white/60"], div[class*="bg-white/80"], div[class*="bg-white/90"],
+div[class*="chat"], div[class*="message"], div[class*="bubble"],
+input[class*="chat"], input[class*="message"],
+button[class*="chat"], button[class*="send"],
+div[class*="chat-modal"], div[class*="chatbot-modal"],
+div[class*="chat-header"], div[class*="chatbot-header"],
+div[class*="chat-body"], div[class*="chatbot-body"],
+div[class*="bg-white rounded-lg"], div[class*="bg-white rounded-xl"], div[class*="bg-white rounded-2xl"] {
+    transition: all 0.3s ease !important;
+} 
+
+/* Fix pour la transparence de la barre de navigation "Classement & Amis" */
+.nav-tab.active {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
+    transform: translateY(-3px) !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+}
+
+/* Fix pour la carte "Mes amis" - rendre le fond opaque */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 {
+    background: #1a1a2e !important;
+    backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Fix pour les éléments internes de la carte "Mes amis" */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 h2,
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 h3,
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 p,
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 span,
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 div {
+    color: #ffffff !important;
+}
+
+/* Fix pour les inputs dans la carte "Mes amis" */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 input {
+    background: rgba(15, 15, 35, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 input::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Fix pour les boutons dans la carte "Mes amis" */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 button {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+/* Fix pour les éléments de la liste d'amis */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 li {
+    background: rgba(15, 15, 35, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Fix pour les notifications d'amis */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .bg-blue-50 {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-left: 4px solid #3b82f6 !important;
+}
+
+/* Fix pour les textes de couleur grise */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .text-gray-400,
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .text-gray-600,
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .text-gray-900 {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Fix pour les textes indigo */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .text-indigo-700 {
+    color: #3b82f6 !important;
+}
+
+/* Fix pour les éléments bg-indigo-50 */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .bg-indigo-50 {
+    background: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Fix pour les éléments bg-gray-50 */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .bg-gray-50 {
+    background: rgba(15, 15, 35, 0.6) !important;
+}
+
+/* Fix pour les éléments bg-gray-100 */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .bg-gray-100 {
+    background: rgba(15, 15, 35, 0.8) !important;
+}
+
+/* Fix pour les éléments bg-red-100 */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .bg-red-100 {
+    background: rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Fix pour les textes rouges */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .text-red-700 {
+    color: #ef4444 !important;
+}
+
+/* Fix pour les textes verts */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .text-green-600 {
+    color: #10b981 !important;
+}
+
+/* Fix pour les textes bleus */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .text-blue-600 {
+    color: #3b82f6 !important;
+}
+
+/* Fix pour les textes bleus hover */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .hover\:text-blue-800:hover {
+    color: #1d4ed8 !important;
+}
+
+/* Fix pour les boutons verts */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .bg-green-500 {
+    background: #10b981 !important;
+}
+
+/* Fix pour les boutons rouges */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .bg-red-500 {
+    background: #ef4444 !important;
+}
+
+/* Fix pour les boutons hover */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .hover\:bg-green-600:hover {
+    background: #059669 !important;
+}
+
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .hover\:bg-red-600:hover {
+    background: #dc2626 !important;
+}
+
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .hover\:bg-red-200:hover {
+    background: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Fix pour les éléments de la liste d'amis hover */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .hover\:bg-gray-100:hover {
+    background: rgba(15, 15, 35, 0.8) !important;
+}
+
+/* Fix pour les textes d'erreur et de succès */
+.max-w-lg.mx-auto.p-6.bg-white.rounded-2xl.shadow-lg.space-y-8 .text-red-500 {
+    color: #ef4444 !important;
+}
+
+/* Fix pour les onglets dans LeaderboardView */
+.flex.space-x-1.mb-6.bg-gray-100.p-1.rounded-xl {
+    background: rgba(15, 15, 35, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Fix pour les boutons d'onglets inactifs */
+.flex.space-x-1.mb-6.bg-gray-100.p-1.rounded-xl button:not(.bg-white) {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Fix pour les boutons d'onglets actifs */
+.flex.space-x-1.mb-6.bg-gray-100.p-1.rounded-xl .bg-white {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+/* Fix pour les textes dans les onglets */
+.flex.space-x-1.mb-6.bg-gray-100.p-1.rounded-xl .text-gray-600 {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.flex.space-x-1.mb-6.bg-gray-100.p-1.rounded-xl .text-gray-800 {
+    color: #ffffff !important;
+}
+
+.flex.space-x-1.mb-6.bg-gray-100.p-1.rounded-xl .text-indigo-600 {
+    color: #ffffff !important;
+}
+
+.flex.space-x-1.mb-6.bg-gray-100.p-1.rounded-xl .hover\:text-gray-800:hover {
+    color: #ffffff !important;
+}
+
+.flex.space-x-1.mb-6.bg-gray-100.p-1.rounded-xl .hover\:text-indigo-700:hover {
+    color: #ffffff !important;
+}
+
+/* Fix pour le titre "Mes Amis" dans LeaderboardView */
+.text-2xl.font-bold.text-gray-800 {
+    color: #ffffff !important;
+}
+
+/* Fix pour le bouton "Retour au classement" */
+.text-sm.text-indigo-600.hover\:text-indigo-700 {
+    color: #3b82f6 !important;
+}
+
+.text-sm.text-indigo-600.hover\:text-indigo-700:hover {
+    color: #1d4ed8 !important;
+} 

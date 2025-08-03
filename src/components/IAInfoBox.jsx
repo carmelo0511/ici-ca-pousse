@@ -4,7 +4,7 @@ import { Bot, MessageCircle, ArrowRight } from 'lucide-react';
 const LexIA = ({ className = '' }) => {
   return (
     <div 
-      className={`bg-gray-100 rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm max-w-2xl mx-auto ${className}`}
+      className={`bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm max-w-2xl mx-auto ${className}`}
       data-testid="ia-info-box"
     >
       <div className="flex items-center space-x-3 mb-4">
@@ -41,7 +41,7 @@ const LexIA = ({ className = '' }) => {
             <MessageCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
             <span className="text-sm font-medium text-gray-800">💬 Exemple :</span>
           </div>
-          <p className="text-sm text-gray-700 italic">
+          <p className="text-sm text-gray-900 italic">
             "Je reprends après une pause de 2 semaines, tu me proposes quoi ?"
           </p>
         </div>

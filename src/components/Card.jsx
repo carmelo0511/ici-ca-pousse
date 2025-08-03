@@ -4,14 +4,16 @@ import PropTypes from 'prop-types';
 const Card = ({
   children,
   className = '',
-  padding = 'p-6',
-  radius = 'rounded-3xl',
-  shadow = 'shadow-xl',
-  border = 'border border-gray-100',
+  padding = '',
+  radius = '',
+  shadow = '',
+  border = '',
+  clickable = false,
   ...props
 }) => (
   <div
-    className={`bg-white ${radius} ${shadow} ${border} ${padding} ${className}`}
+    className={`card ${clickable ? 'ripple-effect' : ''} ${className}`}
+    data-clickable={clickable ? 'true' : undefined}
     {...props}
   >
     {children}
@@ -25,6 +27,7 @@ Card.propTypes = {
   radius: PropTypes.string,
   shadow: PropTypes.string,
   border: PropTypes.string,
+  clickable: PropTypes.bool,
 };
 
 export default Card;

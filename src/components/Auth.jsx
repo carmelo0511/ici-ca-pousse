@@ -151,7 +151,7 @@ function Auth({ className = '' }) {
   if (user) {
     return (
       <div
-        className={`max-w-md mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center ${className}`}
+        className={`max-w-md mx-auto mt-10 card flex flex-col items-center ${className}`}
       >
         <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
           Bienvenue !
@@ -176,7 +176,7 @@ function Auth({ className = '' }) {
 
   return (
     <div
-      className={`max-w-lg mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg ${className}`}
+      className={`max-w-lg mx-auto mt-10 card ${className}`}
     >
       <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent text-center">
         {isSignUp ? 'Inscription' : 'Connexion'}
@@ -199,7 +199,7 @@ function Auth({ className = '' }) {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="input w-full"
             placeholder="votre@email.com"
             required
           />
@@ -215,7 +215,7 @@ function Auth({ className = '' }) {
               id="pseudo"
               value={pseudo}
               onChange={(e) => setPseudo(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input w-full"
               placeholder="Votre pseudo"
               required={isSignUp}
               minLength={2}
@@ -233,7 +233,7 @@ function Auth({ className = '' }) {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="input w-full"
             placeholder="Votre mot de passe"
             required
             minLength={6}

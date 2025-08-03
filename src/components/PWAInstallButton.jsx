@@ -23,8 +23,8 @@ const PWAInstallButton = () => {
   if (isIOS() && !isInStandaloneMode() && !isInstalled) {
     return (
       <div
-        className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 text-sm md:text-base pulse-soft border border-white/30"
-        style={{ maxWidth: 320 }}
+        className="toast-notification text-sm md:text-base pulse-soft"
+        style={{ maxWidth: 320, position: 'fixed', bottom: '1rem', right: '1rem', top: 'auto', left: 'auto', transform: 'none' }}
       >
         <Download className="h-4 w-4 md:h-5 md:w-5" />
         <span>
@@ -42,9 +42,9 @@ const PWAInstallButton = () => {
   return (
     <button
       onClick={installApp}
-      className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 text-sm md:text-base hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 pulse-soft border border-white/30"
+      className="floating-btn ripple-effect flex items-center space-x-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-indigo-400 px-4 py-2"
       aria-label={t('install_app')}
-      style={{ maxWidth: 320 }}
+      style={{ maxWidth: 320, position: 'fixed', bottom: '1rem', right: '1rem', width: 'auto', height: 'auto', borderRadius: '2rem' }}
     >
       <Download className="h-4 w-4 md:h-5 md:w-5" />
       <span>

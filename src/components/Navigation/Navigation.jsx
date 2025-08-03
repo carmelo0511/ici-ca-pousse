@@ -26,24 +26,6 @@ const Navigation = ({
   const [canScrollRight, setCanScrollRight] = useState(false);
   const scrollContainerRef = React.useRef(null);
 
-  // Mapping des couleurs pour les gradients
-  const getGradientClasses = (colorKey) => {
-    const gradients = {
-      'from-blue-500 to-blue-600': 'bg-gradient-to-r from-blue-500 to-blue-600',
-      'from-green-500 to-green-600':
-        'bg-gradient-to-r from-green-500 to-green-600',
-      'from-purple-500 to-purple-600':
-        'bg-gradient-to-r from-purple-500 to-purple-600',
-      'from-rose-500 to-pink-600': 'bg-gradient-to-r from-rose-500 to-pink-600',
-      'from-indigo-500 to-indigo-600':
-        'bg-gradient-to-r from-indigo-500 to-indigo-600',
-      'from-pink-500 to-pink-600': 'bg-gradient-to-r from-pink-500 to-pink-600',
-      'from-yellow-500 to-yellow-600':
-        'bg-gradient-to-r from-yellow-500 to-yellow-600',
-      'from-gray-800 to-black': 'bg-gradient-to-r from-gray-800 to-black',
-    };
-    return gradients[colorKey] || gradients['from-indigo-500 to-indigo-600'];
-  };
 
   const navItems = [
     {
@@ -71,35 +53,35 @@ const Navigation = ({
       id: 'templates',
       icon: Bookmark,
       label: 'Templates',
-      color: 'from-indigo-500 to-indigo-600',
+      color: 'from-blue-500 to-blue-600',
       shortcut: 'T',
     },
     {
       id: 'profile',
       icon: User,
       label: 'Profil',
-      color: 'from-indigo-500 to-indigo-600',
+      color: 'from-blue-500 to-blue-600',
       shortcut: 'P',
     },
     {
       id: 'leaderboard',
       icon: Trophy,
       label: 'Classement & Amis',
-      color: 'from-indigo-500 to-indigo-600',
+      color: 'from-blue-500 to-blue-600',
       shortcut: 'L',
     },
     {
       id: 'challenges',
       icon: Zap,
       label: 'Défis',
-      color: 'from-indigo-500 to-indigo-600',
+      color: 'from-blue-500 to-blue-600',
       shortcut: 'D',
     },
     {
       id: 'badges',
       icon: Award,
       label: 'Badges',
-      color: 'from-indigo-500 to-indigo-600',
+      color: 'from-blue-500 to-blue-600',
       shortcut: 'B',
     },
 
@@ -154,7 +136,7 @@ const Navigation = ({
 
   return (
     <nav
-      className={`bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-40 ${className}`}
+      className={`navbar sticky top-0 z-40 mb-6 ${className}`}
       role="navigation"
       aria-label="Navigation principale"
     >
@@ -165,33 +147,33 @@ const Navigation = ({
             <button
               onClick={() => scroll('left')}
               disabled={!canScrollLeft}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 btn-secondary ripple-effect rounded-full flex items-center justify-center ${
                 canScrollLeft
-                  ? 'hover:bg-gray-50 text-gray-600'
-                  : 'text-gray-300 cursor-not-allowed'
+                  ? ''
+                  : 'cursor-not-allowed'
               }`}
               aria-label="Défiler vers la gauche"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 nav-icon" />
             </button>
             <button
               onClick={() => scroll('right')}
               disabled={!canScrollRight}
-              className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
+              className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 btn-secondary ripple-effect rounded-full flex items-center justify-center ${
                 canScrollRight
-                  ? 'hover:bg-gray-50 text-gray-600'
-                  : 'text-gray-300 cursor-not-allowed'
+                  ? ''
+                  : 'cursor-not-allowed'
               }`}
               aria-label="Défiler vers la droite"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 nav-icon" />
             </button>
           </>
         )}
 
         <div
           ref={scrollContainerRef}
-          className="menu-horizontal-scroll flex flex-row overflow-x-auto flex-nowrap min-w-0 w-full space-x-1 md:space-x-2 py-1 px-1 max-w-4xl mx-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent"
+          className="flex flex-row overflow-x-auto flex-nowrap min-w-0 w-full space-x-1 md:space-x-2 py-3 px-1 max-w-4xl mx-auto"
           onScroll={checkScroll}
         >
           {navItems.map(({ id, icon: Icon, label, color, shortcut }) => (
@@ -199,17 +181,15 @@ const Navigation = ({
               key={id}
               data-tab={id}
               onClick={() => setActiveTab(id)}
-              className={`group relative flex-shrink-0 py-1.5 px-2.5 md:py-2 md:px-4 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 max-w-[90px] md:max-w-[120px] truncate text-ellipsis text-center active:scale-95 ${
-                activeTab === id
-                  ? `${getGradientClasses(color)} text-white shadow-lg transform scale-105 border-2 border-white/20`
-                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:shadow-md transform hover:scale-105 bg-white'
+              className={`nav-tab ripple-effect group relative flex-shrink-0 py-1.5 px-2.5 md:py-2 md:px-4 font-semibold text-xs md:text-sm focus:outline-none max-w-[90px] md:max-w-[120px] truncate text-ellipsis text-center ${
+                activeTab === id ? 'active' : ''
               }`}
               aria-current={activeTab === id ? 'page' : undefined}
               aria-label={label}
             >
               <div className="flex flex-col items-center justify-center gap-1 w-full">
                 <Icon
-                  className={`h-4 w-4 md:h-5 md:w-5 transition-transform duration-200 ${activeTab === id ? 'animate-pulse' : 'group-hover:scale-110'}`}
+                  className={`nav-icon h-4 w-4 md:h-5 md:w-5 transition-transform duration-200 ${activeTab === id ? 'animate-pulse' : 'group-hover:scale-110'}`}
                 />
                 <span className="truncate w-full">{label}</span>
               </div>

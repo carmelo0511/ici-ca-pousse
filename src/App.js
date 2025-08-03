@@ -10,6 +10,11 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Styles
 import './App.css';
+import './glassmorphism-theme.css';
+import './styles/fix-cards-colors.css';
+
+// Vérification des couleurs Tailwind
+import './utils/checkTailwindColors';
 
 // Components
 import Auth from './components/Auth';
@@ -30,7 +35,6 @@ import PageTransition from './components/PageTransition';
 
 import ProfilePage from './components/Profile/ProfilePage';
 import ChatbotBubble from './components/Chatbot/ChatbotBubble';
-import ThemeToggleBubble from './components/ThemeToggleBubble';
 
 // Hooks
 import {
@@ -51,6 +55,7 @@ import {
 // Utils
 import { migrateLocalWorkoutsToCloud } from './utils/firebase/storage';
 import { STORAGE_KEYS } from './constants';
+import { initAllGlassEffects } from './utils/glassParticles';
 
 function App() {
   const { user, loading: userLoading, refreshUserProfile } = useUserProfile();
@@ -285,6 +290,12 @@ function App() {
     }
   }, [user, workouts, recalculateStreak]);
 
+  // Initialize glass effects
+  useEffect(() => {
+    // Initialize all glass effects with reduced count for performance
+    initAllGlassEffects(15);
+  }, []);
+
   // Notification hebdo poids
   useEffect(() => {
     if (!user || !user.uid) return;
@@ -385,25 +396,25 @@ function App() {
       {/* Notification hebdo poids */}
       {showWeightNotif && (
         <div
-          className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-white border border-indigo-300 shadow-lg rounded-xl px-6 py-4 flex flex-col items-center gap-2 animate-fadein transition-opacity duration-400 ${isFading ? 'opacity-0' : 'opacity-100'}`}
+          className={`toast-notification flex flex-col items-center gap-2 transition-opacity duration-400 ${isFading ? 'opacity-0' : 'opacity-100'}`}
         >
-          <div className="font-bold text-indigo-700 text-lg mb-1">
+          <div className="section-title text-lg mb-1">
             Mise à jour du poids
           </div>
-          <div className="text-gray-700 mb-2">
+          <div className="text-secondary mb-2">
             C'est le début d'une nouvelle semaine !<br />
             Veux-tu mettre à jour ton poids ?
           </div>
           <div className="flex gap-3">
             <button
               onClick={handleUpdateWeight}
-              className="px-4 py-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors font-medium"
+              className="btn-primary ripple-effect px-4 py-1 font-medium"
             >
               Mettre à jour
             </button>
             <button
               onClick={handleSameWeight}
-              className="px-4 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors font-medium"
+              className="btn-secondary ripple-effect px-4 py-1 font-medium"
             >
               C'est le même
             </button>
@@ -411,10 +422,10 @@ function App() {
         </div>
       )}
 
-      <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen w-full">
         <div
           id="main-content"
-          className="mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact"
+          className="main-container mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact"
         >
           <Header
             workoutCount={workouts.length}
@@ -543,8 +554,7 @@ function App() {
           <PWAInstallButton />
           {toast.show && (
             <div
-              className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-3 px-6 py-4 rounded-2xl shadow-xl font-semibold text-lg
-              ${toast.type === 'success' ? 'bg-white border border-green-200 text-green-700' : 'bg-white border border-red-200 text-red-700'}`}
+              className={`toast-notification ${toast.type === 'success' ? 'badge-success' : 'badge-danger'}`}
             >
               <span>{toast.message}</span>
             </div>
@@ -556,7 +566,6 @@ function App() {
             setShowAddExercise={setShowAddExercise}
             setActiveTab={setActiveTab}
           />
-          <ThemeToggleBubble />
 
           {/* Vercel Analytics et Speed Insights */}
           <Analytics />

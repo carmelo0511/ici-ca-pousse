@@ -358,16 +358,16 @@ function WorkoutList({
 
       {exercises.length === 0 ? (
         <Card
-          className="text-center py-6 sm:py-10 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100 w-full max-w-[340px] sm:max-w-[400px] mx-auto overflow-visible shadow-md rounded-3xl"
+          className="workout-main text-center py-6 sm:py-10 w-full max-w-[340px] sm:max-w-[400px] mx-auto overflow-visible"
           style={{ boxSizing: 'border-box' }}
         >
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 rounded-2xl inline-block mb-4 shadow-lg">
+          <div className="workout-icon mb-4">
             <Dumbbell className="h-12 w-12 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-2 break-words overflow-wrap break-word truncate max-w-full">
+          <h3 className="section-title text-2xl mb-2 break-words overflow-wrap break-word truncate max-w-full">
             {t('ready_to_train')}
           </h3>
-          <p className="text-gray-600 mb-6 max-w-[90%] mx-auto break-words overflow-wrap break-word truncate max-w-full">
+          <p className="text-secondary mb-6 max-w-[90%] mx-auto break-words overflow-wrap break-word truncate max-w-full">
             {t('start_workout')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
@@ -388,15 +388,16 @@ function WorkoutList({
           {exercises.map((exercise) => (
             <Card
               key={exercise.id}
-              className="rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-200"
+              className="card p-6 hover-lift"
+              clickable={true}
             >
               <div className="flex justify-between items-start mb-6">
                 <div className="flex items-start space-x-3 flex-1">
                   <div
                     className={`p-2 rounded-lg ${
                       exercise.type === 'cardio'
-                        ? 'bg-red-100 text-red-600'
-                        : 'bg-blue-100 text-blue-600'
+                        ? 'icon-warning'
+                        : 'icon-primary'
                     }`}
                   >
                     {exercise.type === 'cardio' ? (
@@ -406,22 +407,22 @@ function WorkoutList({
                     )}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    <h3 className="text-xl font-bold text-primary mb-2">
                       {exercise.name}
                     </h3>
                     {exercise.type !== 'cardio' &&
                       getLastWeightFor(exercise.name) !== null && (
-                        <p className="text-xs text-gray-500 mb-3">
+                        <p className="text-xs text-tertiary mb-3">
                           Dernier poids : {getLastWeightFor(exercise.name)} kg
                         </p>
                       )}
                     <span
-                      className={`text-sm font-medium px-3 py-1 rounded-full ${
+                      className={`status-badge text-sm font-medium px-3 py-1 rounded-full ${
                         exercise.type === 'cardio'
-                          ? 'bg-red-100 text-red-700'
+                          ? 'badge-warning'
                           : exercise.type === 'custom'
-                            ? 'bg-purple-100 text-purple-700'
-                            : 'bg-blue-100 text-blue-700'
+                            ? 'badge'
+                            : 'badge-success'
                       }`}
                     >
                       {exercise.type === 'cardio'
@@ -438,11 +439,11 @@ function WorkoutList({
                   <IconButton
                     icon={Plus}
                     onClick={() => addSet(exercise.id)}
-                    className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg border border-white/20"
+                    className="btn-primary ripple-effect shadow-md hover:shadow-lg"
                   />
                   <button
                     onClick={() => removeExerciseFromWorkout(exercise.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
+                    className="btn-secondary ripple-effect hover:badge-danger text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
                     title="Supprimer l'exercice"
                   >
                     <X className="h-3 w-3" />
@@ -605,7 +606,7 @@ function WorkoutList({
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setShowAddExercise(true)}
-                className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs border border-white/20"
+                className="btn-primary ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
               >
                 <Plus className="h-5 w-5" />
                 {t('add_exercise')}
@@ -626,7 +627,7 @@ function WorkoutList({
                       );
                     }
                   }}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs"
+                  className="badge-danger ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
                 >
                   <X className="h-5 w-5" />
                   <span className="font-medium">Vider la séance</span>
@@ -639,14 +640,14 @@ function WorkoutList({
               <div className="flex gap-3 justify-center">
                 <button
                   onClick={() => setShowSaveTemplateModal(true)}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs border border-white/20"
+                  className="btn-primary ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
                 >
                   <Bookmark className="h-5 w-5" />
                   Sauvegarder en template
                 </button>
                 <button
                   onClick={handleSaveWorkout}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex-1 max-w-xs border border-white/20"
+                  className="btn-primary ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
                 >
                   <Target className="h-5 w-5" />
                   {t('finish_workout')}
@@ -659,7 +660,7 @@ function WorkoutList({
               <div className="flex justify-center">
                 <button
                   onClick={handleSaveWorkout}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 max-w-xs border border-white/20"
+                  className="btn-primary ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold max-w-xs"
                 >
                   <Target className="h-5 w-5" />
                   {t('finish_workout')}
@@ -668,12 +669,12 @@ function WorkoutList({
             )}
           </div>
 
-          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border-blue-100">
+          <Card className="card">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="bg-blue-500 p-2 rounded-lg">
+              <div className="icon-primary p-2 rounded-lg">
                 <Clock className="h-5 w-5 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-gray-800">
+              <h3 className="section-title text-lg">
                 Heure de la séance
               </h3>
             </div>
@@ -687,10 +688,10 @@ function WorkoutList({
                     setStartTime('06:00');
                     setEndTime('07:00');
                   }}
-                  className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  className={`btn-secondary ripple-effect p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                     startTime === '06:00' && endTime === '07:00'
-                      ? 'bg-blue-500 text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-blue-100 border border-blue-200'
+                      ? 'btn-primary'
+                      : ''
                   }`}
                 >
                   🌅 Matin
@@ -702,10 +703,10 @@ function WorkoutList({
                     setStartTime('12:00');
                     setEndTime('13:00');
                   }}
-                  className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  className={`btn-secondary ripple-effect p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                     startTime === '12:00' && endTime === '13:00'
-                      ? 'bg-blue-500 text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-blue-100 border border-blue-200'
+                      ? 'btn-primary'
+                      : ''
                   }`}
                 >
                   ☀️ Midi
@@ -717,10 +718,10 @@ function WorkoutList({
                     setStartTime('18:00');
                     setEndTime('19:00');
                   }}
-                  className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  className={`btn-secondary ripple-effect p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                     startTime === '18:00' && endTime === '19:00'
-                      ? 'bg-blue-500 text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-blue-100 border border-blue-200'
+                      ? 'btn-primary'
+                      : ''
                   }`}
                 >
                   🌆 Soir
@@ -732,10 +733,10 @@ function WorkoutList({
                     setStartTime('20:00');
                     setEndTime('21:00');
                   }}
-                  className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  className={`btn-secondary ripple-effect p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                     startTime === '20:00' && endTime === '21:00'
-                      ? 'bg-blue-500 text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-blue-100 border border-blue-200'
+                      ? 'btn-primary'
+                      : ''
                   }`}
                 >
                   🌙 Soirée
@@ -747,14 +748,14 @@ function WorkoutList({
               {/* Sélecteur personnalisé */}
               <div className="flex items-center space-x-4">
                 <div className="flex flex-col flex-1">
-                  <label className="text-sm font-medium text-gray-700 mb-2">
+                  <label className="text-sm font-medium text-secondary mb-2">
                     Début
                   </label>
                   <input
                     type="time"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="border-2 border-blue-200 rounded-xl px-4 py-3 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200 bg-white"
+                    className="input px-4 py-3 text-center font-semibold"
                     step="60"
                   />
                 </div>
@@ -762,14 +763,14 @@ function WorkoutList({
                 <div className="text-gray-700 font-medium text-2xl mt-6">→</div>
 
                 <div className="flex flex-col flex-1">
-                  <label className="text-sm font-medium text-gray-700 mb-2">
+                  <label className="text-sm font-medium text-secondary mb-2">
                     Fin
                   </label>
                   <input
                     type="time"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="border-2 border-blue-200 rounded-xl px-4 py-3 text-center font-semibold focus:border-blue-500 focus:outline-none transition-colors duration-200 bg-white"
+                    className="input px-4 py-3 text-center font-semibold"
                     step="60"
                   />
                 </div>
@@ -777,7 +778,7 @@ function WorkoutList({
 
               {/* Durées prédéfinies */}
               <div className="flex flex-wrap gap-2">
-                <span className="text-sm font-medium text-gray-700 mr-2">
+                <span className="text-sm font-medium text-secondary mr-2">
                   Durées rapides:
                 </span>
                 {[30, 45, 60, 90].map((minutes) => (
@@ -792,7 +793,7 @@ function WorkoutList({
                         setEndTime(end.toTimeString().slice(0, 5));
                       }
                     }}
-                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition-colors duration-200"
+                    className="btn-secondary ripple-effect px-3 py-1 rounded-lg text-sm"
                   >
                     {minutes} min
                   </button>

@@ -49,7 +49,7 @@ function LeaderboardView({ user, showToastMsg, setActiveTab: setMainActiveTab, s
         <div className="space-y-4">
           <button
             onClick={() => setShowComparison(false)}
-            className="flex items-center space-x-2 px-4 py-2 text-indigo-600 hover:text-indigo-700 transition-colors"
+            className="flex items-center space-x-2 px-4 py-2 text-blue-400 hover:text-blue-300 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Retour au classement</span>
@@ -63,13 +63,13 @@ function LeaderboardView({ user, showToastMsg, setActiveTab: setMainActiveTab, s
   return (
     <div className="max-w-4xl mx-auto">
       {/* Onglets principaux */}
-      <div className="flex space-x-1 mb-6 bg-gray-100 p-1 rounded-xl">
+      <div className="flex space-x-1 mb-6 card p-1 rounded-xl">
         <button
           onClick={() => setActiveTab('leaderboard')}
           className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
             activeTab === 'leaderboard'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
+              ? 'bg-blue-600 text-white shadow-sm'
+              : 'text-white hover:text-blue-300'
           }`}
         >
           <Trophy className="h-4 w-4" />
@@ -79,8 +79,8 @@ function LeaderboardView({ user, showToastMsg, setActiveTab: setMainActiveTab, s
           onClick={() => setActiveTab('friends')}
           className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
             activeTab === 'friends'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
+              ? 'bg-blue-600 text-white shadow-sm'
+              : 'text-white hover:text-blue-300'
           }`}
         >
           <Users className="h-4 w-4" />
@@ -102,10 +102,10 @@ function LeaderboardView({ user, showToastMsg, setActiveTab: setMainActiveTab, s
       {activeTab === 'friends' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-800">Mes Amis</h2>
+            <h2 className="text-2xl font-bold text-white">Mes Amis</h2>
             <button
               onClick={handleBackToMain}
-              className="flex items-center space-x-2 px-3 py-1 text-sm text-indigo-600 hover:text-indigo-700 transition-colors"
+              className="flex items-center space-x-2 px-3 py-1 text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
               <ArrowLeft className="h-3 w-3" />
               <span>Retour au classement</span>
