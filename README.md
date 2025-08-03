@@ -106,6 +106,12 @@ graph TB
 
 ## 🚀 **Stack Technique - IA First | Technical Stack - AI First**
 
+### **🛠️ Outils de Développement | Development Tools**
+
+- **Cursor AI** : Développé avec Cursor, l'éditeur de code alimenté par l'IA | Developed with Cursor, the AI-powered code editor
+- **Vercel Monitoring** : Monitoring en temps réel des performances et des erreurs | Real-time performance and error monitoring
+- **Vercel Observability** : Observabilité complète avec métriques détaillées et alertes | Complete observability with detailed metrics and alerts
+
 ### **Technologies IA | AI Technologies**
 
 - **OpenAI GPT-4o** : Modèle principal avec Function Calling | Main model with Function Calling
