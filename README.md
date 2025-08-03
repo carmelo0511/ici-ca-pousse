@@ -3,7 +3,7 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=for-the-badge&logo=openai)](https://openai.com/)
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-12.0.0-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
-[![Tests](https://img.shields.io/badge/Tests-418%20tests-25D366?style=for-the-badge&logo=jest)](https://jestjs.io/)
+[![Tests](https://img.shields.io/badge/Tests-421%20tests-25D366?style=for-the-badge&logo=jest)](https://jestjs.io/)
 [![Coverage](https://img.shields.io/badge/Coverage-88%25-brightgreen?style=for-the-badge)](https://jestjs.io/)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
@@ -113,7 +113,7 @@ graph TB
 - **RAG System** : Base de connaissances avec recherche sémantique | Knowledge base with semantic search
 - **Safety Validator** : Validation automatique des recommandations | Automatic recommendation validation
 - **AI Monitoring** : Dashboard de performance temps réel | Real-time performance dashboard
-- **ML Weight Prediction** : Système de prédiction de poids intelligent | Intelligent weight prediction system
+- **ML Weight Prediction** : Système "Madame IrmIA" avec prédiction de poids et interface moderne | "Madame IrmIA" system with weight prediction and modern interface
 - **LEX IA** : Interface utilisateur pour le coach IA personnel | User interface for personal AI coach
 - **Performance Optimization** : Cache intelligent, timeout, limitation des fonctions | Intelligent cache, timeout, function limiting
 - **Language Detection** : Détection automatique français/anglais | Automatic French/English detection
@@ -313,11 +313,11 @@ describe('Système ML de Prédiction de Poids | ML Weight Prediction System', ()
 
 ### **Métriques de Qualité | Quality Metrics**
 
-- **418 tests** : Couverture complète des fonctionnalités IA et ML | Complete AI and ML feature coverage
+- **421 tests** : Couverture complète des fonctionnalités IA et ML | Complete AI and ML feature coverage
 - **88% de couverture** : Garantie de qualité et fiabilité | Quality and reliability guarantee
 - **Tests des hooks IA** : useChatGPT, useAppState, useExercises | AI hooks testing
 - **Tests des utilitaires IA** : Safety Validator, Knowledge Base, AI Monitoring | AI utilities testing
-- **Tests ML** : Système de prédiction de poids avec 21 tests spécialisés | ML system with 21 specialized tests
+- **Tests ML** : Système de prédiction de poids avec interface "Madame IrmIA" | ML system with "Madame IrmIA" interface
 
 ---
 
@@ -361,47 +361,6 @@ npm run lint           # Qualité de code | Code quality
 npm run lint:fix       # Correction automatique | Automatic fix
 ```
 
----
-
-## 🔮 **Roadmap IA - Extensions Futures | AI Roadmap - Future Extensions**
-
-### **Phase 1 : Modèles Spécialisés | Phase 1: Specialized Models**
-
-- **GPT-4o-mini** pour les séances (plus rapide) | for workouts (faster)
-- **Embeddings réels** avec OpenAI text-embedding-3-small | Real embeddings
-- **Vector Database** (Pinecone/Supabase) pour RAG avancé | for advanced RAG
-
-### **Phase 2 : Apprentissage Continu | Phase 2: Continuous Learning**
-
-- **Feedback Loop** : Collecte et analyse du feedback utilisateur | User feedback collection and analysis
-- **Prompt Optimization** : Amélioration automatique des prompts | Automatic prompt improvement
-- **A/B Testing** : Test de différentes stratégies IA | AI strategy testing
-
-### **Phase 3 : Prédictions & Analytics** ✅ **IMPLÉMENTÉ & INTÉGRÉ | IMPLEMENTED & INTEGRATED**
-
-- **ML Prédictif** : Prédiction des performances futures ✅ | Predictive ML: Future performance prediction ✅
-- **Weight Prediction System** : Prédiction intelligente des poids avec interface moderne ✅ | Intelligent weight prediction with modern interface ✅
-- **Progression Analytics** : Analyse des tendances et insights ✅ | Trend analysis and insights ✅
-- **Performance Optimization** : Optimisation des temps de réponse ✅ | Response time optimization ✅
-- **Safety Validation** : Validation automatique des recommandations ✅ | Automatic recommendation validation ✅
-- **Language Detection** : Détection automatique français/anglais ✅ | Automatic French/English detection ✅
-- **API Cost Control** : Contrôle des coûts et protection contre les abus ✅ | Cost control and abuse protection ✅
-- **UI/UX Optimization** : Interface prédiction IA moderne et responsive ✅ | Modern and responsive AI prediction interface ✅
-- **Real-time Integration** : Intégration temps réel dans les séances d'entraînement ✅ | Real-time integration in workout sessions ✅
-
-### **Phase 4 : Fonctionnalités Sociales** ✅ **IMPLÉMENTÉ & INTÉGRÉ | IMPLEMENTED & INTEGRATED**
-
-- **Unified Leaderboard & Friends** : Interface unifiée pour classement et amis ✅ | Unified interface for leaderboard and friends ✅
-- **Friend Profiles** : Profils détaillés avec statistiques et dernière séance ✅ | Detailed profiles with statistics and last workout ✅
-- **Smart Workout Copying** : Copie intelligente des séances d'amis ✅ | Smart copying of friends' workouts ✅
-- **Social Collaboration** : Inspiration et partage entre utilisateurs ✅ | Inspiration and sharing between users ✅
-- **Navigation Optimization** : Redirection fluide vers l'onglet séance ✅ | Smooth redirection to workout tab ✅
-
-### **Phase 5 : Automatisation n8n | Phase 5: n8n Automation**
-
-- **Workflow Automation** : Automatisation des tâches répétitives | Repetitive task automation
-- **Data Pipeline** : Pipeline de données pour l'IA | Data pipeline for AI
-- **Integration Hub** : Centralisation des intégrations | Integration centralization
 
 ---
 
@@ -416,7 +375,7 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **Performance optimization** : Cache intelligent, timeout, limitation des fonctions | Intelligent cache, timeout, function limiting
 - **Language Detection** : Détection automatique français/anglais | Automatic French/English detection
 - **API Cost Control** : Système de limitation des appels API | API rate limiting system
-- **ML Weight Prediction** : Système de prédiction de poids intelligent avec interface moderne | Intelligent weight prediction system with modern interface
+- **ML Weight Prediction** : Système "Madame IrmIA" avec prédiction de poids et interface moderne | "Madame IrmIA" system with weight prediction and modern interface
 - **LEX IA Interface** : Interface utilisateur pour le coach IA personnel | User interface for personal AI coach
 - **Error Handling** : Gestion robuste des erreurs et valeurs undefined | Robust error handling and undefined values
 - **UI/UX Design** : Interface prédiction IA responsive et moderne | Responsive and modern AI prediction interface
@@ -445,8 +404,8 @@ npm run lint:fix       # Correction automatique | Automatic fix
 - **Performance** : Optimisation des temps de réponse (30s timeout, cache intelligent) | Response time optimization (30s timeout, intelligent cache)
 - **Sécurité** : Validation automatique pour éviter les risques | Automatic validation to avoid risks
 - **Expérience utilisateur** : Interface conversationnelle naturelle avec LEX IA | Natural conversational interface
-- **Maintenabilité** : Code modulaire et bien testé (418 tests, 88% coverage) | Modular and well-tested code
-- **ML Innovation** : Système de prédiction de poids basé sur l'historique utilisateur avec interface moderne | ML innovation with modern interface
+- **Maintenabilité** : Code modulaire et bien testé (421 tests, 88% coverage) | Modular and well-tested code
+- **ML Innovation** : Système "Madame IrmIA" avec prédiction de poids et interface moderne | "Madame IrmIA" system with weight prediction and modern interface
 - **Robustesse** : Gestion des erreurs et optimisation des performances | Error handling and performance optimization
 - **Multilingue** : Détection automatique français/anglais pour une expérience internationale | Automatic French/English detection for international experience
 - **Contrôle des coûts** : Système de limitation API pour une gestion professionnelle | API rate limiting for professional cost management
