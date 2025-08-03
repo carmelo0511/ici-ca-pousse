@@ -230,6 +230,13 @@ function App() {
     showToastMsg(`Template "${template.name}" chargé !`);
   };
 
+  const handleDateSelect = (selectedDate) => {
+    console.log('Date sélectionnée:', selectedDate);
+    setSelectedDate(selectedDate);
+    setActiveTab('workout');
+    showToastMsg(`Séance créée pour le ${selectedDate} !`);
+  };
+
   // Configuration des onglets pour la navigation
   const tabs = [
     { id: 'workout', label: 'Séance' },
@@ -485,6 +492,7 @@ function App() {
                 deleteWorkout={handleDeleteWorkout}
                 setShowWorkoutDetail={setShowWorkoutDetail}
                 onEditWorkout={handleEditWorkout}
+                onDateSelect={handleDateSelect}
               />
             </PageTransition>
 

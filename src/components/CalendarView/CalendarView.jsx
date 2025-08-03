@@ -54,6 +54,7 @@ const CalendarView = ({
   deleteWorkout,
   setShowWorkoutDetail,
   onEditWorkout,
+  onDateSelect,
   className = '',
 }) => {
   const { t, i18n } = useTranslation();
@@ -149,18 +150,26 @@ const CalendarView = ({
               <div
                 key={dateString}
                 className={`
-                  h-10 sm:h-12 flex items-center justify-center text-xs sm:text-sm rounded-xl cursor-pointer font-medium transition-all duration-200 relative select-none
+                  h-10 sm:h-12 flex items-center justify-center text-xs sm:text-sm rounded-xl cursor-pointer font-medium transition-all duration-200 relative select-none hover:scale-105
                   ${isToday ? 'btn-primary' : 'card'}
-                  ${hasWorkout ? 'badge-success' : ''}
+                  ${hasWorkout ? 'badge-success' : 'hover:bg-blue-500/20'}
                 `}
                 style={{ minWidth: '32px', maxWidth: '100%', margin: '0 auto' }}
-                onClick={() => hasWorkout && openWorkoutDetail(hasWorkout)}
-              >
-                {day}
-                {hasWorkout && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 status-badge rounded-full border-2 border-white"></div>
-                )}
-              </div>
+                onClick={() => {
+                  if (hasWorkout) {
+                    openWorkoutDetail(hasWorkout);
+                  } else if (onDateSelect) {
+                    onDateSelect(dateString);
+                  }
+                }}
+                              >
+                  {day}
+                  {hasWorkout ? (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 status-badge rounded-full border-2 border-white"></div>
+                  ) : (
+                    <div className="absolute -bottom-1 -right-1 w-2 h-2 text-blue-400 opacity-50 text-xs">+</div>
+                  )}
+                </div>
             );
           })}
         </div>
@@ -667,6 +676,7 @@ CalendarView.propTypes = {
   deleteWorkout: PropTypes.func,
   setShowWorkoutDetail: PropTypes.func,
   onEditWorkout: PropTypes.func,
+  onDateSelect: PropTypes.func,
   className: PropTypes.string,
 };
 
