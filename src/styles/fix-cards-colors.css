@@ -355,6 +355,26 @@ div[class*="bg-white rounded-lg"], div[class*="bg-white rounded-xl"], div[class*
 
 
 
+/* Correction pour les onglets de navigation */
+.navbar button,
+.navbar .nav-tab,
+button[class*="nav-tab"],
+div[class*="card"] button,
+div[class*="max-w-4xl"] button {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* S'assurer que les onglets de navigation sont cliquables */
+.flex.space-x-1.mb-6.card button {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 20 !important;
+}
+
 /* Transitions fluides */
 .bg-white.rounded-xl.shadow-sm.border.border-gray-200,
 .bg-white.rounded-2xl.shadow-lg,

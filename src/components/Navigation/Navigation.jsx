@@ -7,8 +7,6 @@ import {
   Trophy,
   Zap,
   Award,
-  ChevronLeft,
-  ChevronRight,
   Bookmark,
 } from 'lucide-react';
 // import { useTranslation } from 'react-i18next'; // Temporarily disabled for CI
@@ -21,9 +19,6 @@ const Navigation = ({
   className = '',
 }) => {
   // const { t } = useTranslation(); // Temporarily disabled for CI
-  const [showScrollButtons, setShowScrollButtons] = useState(false);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
   const scrollContainerRef = React.useRef(null);
 
 
@@ -87,36 +82,9 @@ const Navigation = ({
 
   ];
 
-  // Vérifier si on peut faire défiler
-  const checkScroll = () => {
-    if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } =
-        scrollContainerRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-      setShowScrollButtons(scrollWidth > clientWidth);
-    }
-  };
 
-  // Faire défiler
-  const scroll = (direction) => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 200;
-      const newScrollLeft =
-        scrollContainerRef.current.scrollLeft +
-        (direction === 'left' ? -scrollAmount : scrollAmount);
-      scrollContainerRef.current.scrollTo({
-        left: newScrollLeft,
-        behavior: 'smooth',
-      });
-    }
-  };
 
-  useEffect(() => {
-    checkScroll();
-    window.addEventListener('resize', checkScroll);
-    return () => window.removeEventListener('resize', checkScroll);
-  }, []);
+
 
   useEffect(() => {
     // Faire défiler vers l'onglet actif
@@ -141,40 +109,11 @@ const Navigation = ({
       aria-label="Navigation principale"
     >
       <div className="relative px-4 md:px-6">
-        {/* Boutons de défilement */}
-        {showScrollButtons && (
-          <>
-            <button
-              onClick={() => scroll('left')}
-              disabled={!canScrollLeft}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 btn-secondary ripple-effect rounded-full flex items-center justify-center ${
-                canScrollLeft
-                  ? ''
-                  : 'cursor-not-allowed'
-              }`}
-              aria-label="Défiler vers la gauche"
-            >
-              <ChevronLeft className="h-4 w-4 nav-icon" />
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              disabled={!canScrollRight}
-              className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 btn-secondary ripple-effect rounded-full flex items-center justify-center ${
-                canScrollRight
-                  ? ''
-                  : 'cursor-not-allowed'
-              }`}
-              aria-label="Défiler vers la droite"
-            >
-              <ChevronRight className="h-4 w-4 nav-icon" />
-            </button>
-          </>
-        )}
+
 
         <div
           ref={scrollContainerRef}
           className="flex flex-row overflow-x-auto flex-nowrap min-w-0 w-full space-x-1 md:space-x-2 py-3 px-1 max-w-4xl mx-auto"
-          onScroll={checkScroll}
         >
           {navItems.map(({ id, icon: Icon, label, color, shortcut }) => (
             <button

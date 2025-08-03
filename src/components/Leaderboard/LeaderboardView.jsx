@@ -77,11 +77,12 @@ function LeaderboardView({ user, showToastMsg, setActiveTab: setMainActiveTab, s
         </button>
         <button
           onClick={() => setActiveTab('friends')}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+          className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer relative z-10 ${
             activeTab === 'friends'
               ? 'bg-blue-600 text-white shadow-sm'
               : 'text-white hover:text-blue-300'
           }`}
+          style={{ pointerEvents: 'auto' }}
         >
           <Users className="h-4 w-4" />
           <span>Mes Amis</span>

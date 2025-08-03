@@ -32,7 +32,6 @@ const BadgesPage = ({
     canUnlock,
     unlockBadge,
     getTimeUntilNextUnlock,
-    resetWeeklyUnlock,
   } = useWeeklyBadgeUnlock(user);
 
   // Tous les badges disponibles
@@ -130,21 +129,7 @@ const BadgesPage = ({
     }
   };
 
-  const handleResetWeeklyUnlock = async () => {
-    try {
-      await resetWeeklyUnlock();
-      setToast({
-        message:
-          '🔄 Déblocage hebdomadaire réinitialisé ! Vous pouvez maintenant débloquer un nouveau badge.',
-        type: 'success',
-      });
-    } catch (error) {
-      setToast({
-        message: 'Erreur lors de la réinitialisation',
-        type: 'error',
-      });
-    }
-  };
+
 
   const renderBadge = (badge, isUnlocked = true) => {
     const isSelected = selectedBadge === badge.id;
@@ -253,13 +238,6 @@ const BadgesPage = ({
           <div className="text-right">
             {canUnlock ? (
               <div className="flex space-x-2">
-                <button
-                  onClick={handleResetWeeklyUnlock}
-                  className="px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-medium text-sm border border-white/20"
-                  title="Réinitialiser pour tester"
-                >
-                  🔄 Test
-                </button>
                 <button
                   onClick={() => setShowUnlockModal(true)}
                   className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-medium border border-white/20"

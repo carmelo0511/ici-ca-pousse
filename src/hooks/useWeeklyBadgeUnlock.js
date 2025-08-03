@@ -134,29 +134,7 @@ export function useWeeklyBadgeUnlock(user) {
     return { days, hours };
   };
 
-  // Fonction de test pour réinitialiser le déblocage hebdomadaire
-  const resetWeeklyUnlock = async () => {
-    if (!user?.uid) return;
 
-    try {
-      const unlockRef = doc(db, 'users', user.uid, 'weeklyUnlocks', 'data');
-      const resetData = {
-        lastUnlockDate: null,
-        unlockedBadges: weeklyUnlockData?.unlockedBadges || [],
-        canUnlock: true,
-      };
-
-      await setDoc(unlockRef, resetData);
-      setWeeklyUnlockData(resetData);
-      setLastUnlockDate(null);
-      setCanUnlock(true);
-
-      return true;
-    } catch (error) {
-      console.error('Erreur lors de la réinitialisation:', error);
-      throw error;
-    }
-  };
 
   return {
     loading,
@@ -165,6 +143,5 @@ export function useWeeklyBadgeUnlock(user) {
     weeklyUnlockData,
     unlockBadge,
     getTimeUntilNextUnlock,
-    resetWeeklyUnlock,
   };
 }
