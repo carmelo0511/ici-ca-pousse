@@ -172,7 +172,7 @@ class RateLimitService {
   cleanupKey(key) {
     const attempts = this.storage.get(key) || [];
     const now = Date.now();
-    const [identifier, action, type] = key.split(':');
+    const [, action, type] = key.split(':');
     const windowMs = this.getWindowMs(action, type);
     
     const validAttempts = attempts.filter(timestamp => 
@@ -192,7 +192,7 @@ class RateLimitService {
     const keysToDelete = [];
     
     for (const [key, attempts] of this.storage.entries()) {
-      const [identifier, action, type] = key.split(':');
+      const [, action, type] = key.split(':');
       const windowMs = this.getWindowMs(action, type);
       
       const validAttempts = attempts.filter(timestamp => 

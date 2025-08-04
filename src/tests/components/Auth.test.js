@@ -174,6 +174,7 @@ describe('Composant Auth', () => {
   test('devrait avoir les bonnes classes CSS', () => {
     render(<Auth />);
     
+    // eslint-disable-next-line testing-library/no-node-access
     const container = screen.getByText('Connexion').parentElement;
     expect(container).toHaveClass('max-w-lg', 'mx-auto', 'mt-10', 'card');
   });

@@ -62,7 +62,7 @@ if (typeof Element !== 'undefined') {
 // Suppress console logs in tests
 const originalError = console.error;
 const originalWarn = console.warn;
-const originalLog = console.log;
+// const originalLog = console.log;
 
 beforeAll(() => {
   console.error = (...args) => {

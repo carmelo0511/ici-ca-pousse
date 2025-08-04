@@ -73,7 +73,7 @@ class APIOptimizationService {
         this.updateStats(true, responseTime);
         return result;
       } catch (error) {
-        lastError = error;
+        // lastError = error;
         
         if (attempt === retries) {
           this.updateStats(false);
@@ -98,7 +98,7 @@ class APIOptimizationService {
       useCache = true,
       cacheTTL = 5 * 60 * 1000, // 5 minutes
       preload = false,
-      priority = 'normal'
+      // priority = 'normal'
     } = options;
 
     // Vérifier le cache si activé
