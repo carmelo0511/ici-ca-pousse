@@ -113,14 +113,14 @@ const Navigation = ({
 
         <div
           ref={scrollContainerRef}
-          className="flex flex-row overflow-x-auto flex-nowrap min-w-0 w-full space-x-1 md:space-x-2 py-3 px-1 max-w-4xl mx-auto"
+          className="flex flex-row overflow-x-auto flex-nowrap min-w-0 w-full space-x-1 md:space-x-4 lg:space-x-6 py-3 px-1 max-w-6xl mx-auto"
         >
           {navItems.map(({ id, icon: Icon, label, color, shortcut }) => (
             <button
               key={id}
               data-tab={id}
               onClick={() => setActiveTab(id)}
-              className={`nav-tab ripple-effect group relative flex-shrink-0 py-1.5 px-2.5 md:py-2 md:px-4 font-semibold text-xs md:text-sm focus:outline-none max-w-[90px] md:max-w-[120px] truncate text-ellipsis text-center ${
+              className={`nav-tab ripple-effect group relative flex-shrink-0 py-1.5 px-2.5 md:py-2 md:px-4 lg:px-6 font-semibold text-xs md:text-sm focus:outline-none max-w-[90px] md:max-w-[140px] lg:max-w-[160px] truncate text-ellipsis text-center ${
                 activeTab === id ? 'active' : ''
               }`}
               aria-current={activeTab === id ? 'page' : undefined}
