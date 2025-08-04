@@ -2,13 +2,9 @@
 
 // Configuration pour le code splitting
 export const lazyLoadComponent = (importFunc, fallback = null) => {
-  const LazyComponent = React.lazy(importFunc);
-  
-  return (props) => (
-    <React.Suspense fallback={fallback || <div>Loading...</div>}>
-      <LazyComponent {...props} />
-    </React.Suspense>
-  );
+  // Note: This function should be used in .jsx files where React is imported
+  // For now, we'll export a function that returns the import function
+  return importFunc;
 };
 
 // Optimisation des imports

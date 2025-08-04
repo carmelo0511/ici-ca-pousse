@@ -187,8 +187,9 @@ export const openIndexedDB = (dbName, version = 1) => {
     request.onsuccess = () => resolve(request.result);
     
     request.onupgradeneeded = (event) => {
-      const db = event.target.result;
+      const database = event.target.result;
       // Créer les object stores ici si nécessaire
+      console.log('Database upgrade needed:', database.version);
     };
   });
 };
