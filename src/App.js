@@ -5,8 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from './utils/firebase';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
+import { inject as injectAnalytics } from '@vercel/analytics';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 
 // Styles
 import './App.css';
@@ -324,6 +324,16 @@ function App() {
     checkWeightNotif();
   }, [user]);
 
+  // Initialize Vercel Analytics and Speed Insights
+  useEffect(() => {
+    try {
+      injectAnalytics();
+      injectSpeedInsights();
+    } catch (error) {
+      console.warn('Failed to initialize Vercel analytics:', error);
+    }
+  }, []);
+
   // Action 'C'est le même'
   const handleSameWeight = async () => {
     if (!user || !user.uid) return;
@@ -572,9 +582,7 @@ function App() {
             setActiveTab={setActiveTab}
           />
 
-          {/* Vercel Analytics et Speed Insights */}
-          <Analytics />
-          <SpeedInsights />
+          {/* Vercel Analytics et Speed Insights - Initialized via useEffect */}
         </div>
       </div>
     </>

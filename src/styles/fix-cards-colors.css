@@ -596,4 +596,606 @@ div[class*="bg-white rounded-lg"], div[class*="bg-white rounded-xl"], div[class*
 
 .text-sm.text-indigo-600.hover\:text-indigo-700:hover {
     color: #1d4ed8 !important;
-} 
+}
+
+/* ========================================
+   CORRECTION MODAL D'EXERCICE ET TEMPLATE
+   ======================================== */
+
+/* Correction du modal d'ajout d'exercice */
+.modal.relative.w-full,
+div[class*="modal relative w-full"] {
+    background: rgba(15, 15, 35, 0.95) !important;
+    backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.6) !important;
+    color: #ffffff !important;
+}
+
+/* Modal d'exercice - contenu interne */
+.modal .bg-white,
+div[class*="modal"] .bg-white {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Modal d'exercice - boutons de groupes musculaires */
+.modal .bg-gradient-to-br.from-gray-50.to-gray-100,
+div[class*="modal"] .bg-gradient-to-br.from-gray-50.to-gray-100 {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.modal .bg-gradient-to-br.from-gray-50.to-gray-100:hover,
+div[class*="modal"] .bg-gradient-to-br.from-gray-50.to-gray-100:hover {
+    background: rgba(59, 130, 246, 0.3) !important;
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Modal d'exercice - liste d'exercices */
+.modal .bg-gradient-to-r.from-gray-50.to-gray-100,
+.modal .bg-gradient-to-r.from-yellow-50.to-yellow-100,
+div[class*="modal"] .bg-gradient-to-r.from-gray-50.to-gray-100,
+div[class*="modal"] .bg-gradient-to-r.from-yellow-50.to-yellow-100 {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.modal .bg-gradient-to-r.from-gray-50.to-gray-100:hover,
+.modal .bg-gradient-to-r.from-yellow-50.to-yellow-100:hover,
+div[class*="modal"] .bg-gradient-to-r.from-gray-50.to-gray-100:hover,
+div[class*="modal"] .bg-gradient-to-r.from-yellow-50.to-yellow-100:hover {
+    background: rgba(59, 130, 246, 0.3) !important;
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Modal d'exercice - textes */
+.modal h1, .modal h2, .modal h3, .modal h4,
+div[class*="modal"] h1, div[class*="modal"] h2, div[class*="modal"] h3, div[class*="modal"] h4 {
+    color: #ffffff !important;
+}
+
+.modal p, .modal span, .modal div:not([class*="bg-"]),
+div[class*="modal"] p, div[class*="modal"] span, div[class*="modal"] div:not([class*="bg-"]) {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Modal d'exercice - inputs */
+.modal input[type="text"], .modal input[type="search"], .modal textarea,
+div[class*="modal"] input[type="text"], div[class*="modal"] input[type="search"], div[class*="modal"] textarea {
+    background: rgba(15, 15, 35, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.modal input::placeholder, .modal textarea::placeholder,
+div[class*="modal"] input::placeholder, div[class*="modal"] textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Modal d'exercice - boutons actifs */
+.modal .bg-gradient-to-br.from-indigo-500.to-purple-600,
+.modal .bg-indigo-600,
+div[class*="modal"] .bg-gradient-to-br.from-indigo-500.to-purple-600,
+div[class*="modal"] .bg-indigo-600 {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+}
+
+/* ========================================
+   CORRECTION CASES SÉRIE ET TOTAL KILOS
+   ======================================== */
+
+/* Correction des cases de série dans les cartes d'exercice */
+.bg-gray-100,
+.bg-gray-50,
+div[class*="bg-gray-100"],
+div[class*="bg-gray-50"] {
+    background: rgba(15, 15, 35, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.text-gray-500, .text-gray-600, .text-gray-700, .text-gray-800,
+span[class*="text-gray-500"], span[class*="text-gray-600"], 
+span[class*="text-gray-700"], span[class*="text-gray-800"] {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Cases de série dans les exercices */
+.exercise-card .bg-gray-100,
+.workout-item .bg-gray-100,
+div[class*="exercise"] .bg-gray-100,
+div[class*="workout"] .bg-gray-100 {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+
+/* Inputs dans les cases de série */
+input[class*="bg-gray"],
+input[class*="border-gray"] {
+    background: rgba(15, 15, 35, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+input[class*="bg-gray"]:focus,
+input[class*="border-gray"]:focus {
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* ========================================
+   CORRECTION SURNOM DANS CLASSEMENT
+   ======================================== */
+
+/* Correction du surnom dans le classement - rendre visible */
+.text-white {
+    color: #ffffff !important;
+}
+
+/* Correction spécifique pour les surnoms dans le leaderboard */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .text-gray-600,
+.bg-white.rounded-2xl.shadow-lg .text-gray-600,
+.bg-white.rounded-2xl.shadow-lg .text-gray-800,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .text-gray-600,
+div[class*="bg-white rounded-2xl shadow-lg"] .text-gray-600,
+div[class*="bg-white rounded-2xl shadow-lg"] .text-gray-800 {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500 !important;
+}
+
+/* Nickname/surnom spécifiquement visible */
+.nickname, 
+[class*="nickname"],
+div:contains("nickname") {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* ========================================
+   CORRECTION MODAL TEMPLATE RESPONSIVE
+   ======================================== */
+
+/* Modal de template - responsive amélioré */
+.modal-backdrop {
+    padding: 8px !important;
+    overflow-y: auto !important;
+}
+
+/* Correction globale pour tous les modals */
+.fixed.inset-0.z-50.flex.items-stretch {
+    padding: 4px !important;
+    box-sizing: border-box !important;
+    overflow-y: auto !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+}
+
+.modal.relative.w-full {
+    max-width: min(90vw, 600px) !important;
+    max-height: 90vh !important;
+    margin: auto !important;
+    margin-top: 8vh !important;
+    margin-bottom: 2vh !important;
+    width: 100% !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Contenu scrollable forcé */
+.modal .overflow-y-auto,
+.modal .h-full,
+.modal .flex-1 {
+    max-height: calc(90vh - 120px) !important;
+    overflow-y: auto !important;
+    flex-shrink: 1 !important;
+}
+
+/* Contenu interne du modal */
+.modal .w-full.max-w-md {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+@media (max-width: 768px) {
+    .modal.relative.w-full {
+        max-width: calc(100vw - 8px) !important;
+        max-height: calc(100vh - 8px) !important;
+        margin: 4px !important;
+        margin-top: 10vh !important;
+        padding: 12px !important;
+        border-radius: 12px !important;
+    }
+    
+    .fixed.inset-0.z-50.flex.items-stretch {
+        padding: 2px !important;
+        align-items: flex-start !important;
+    }
+    
+    /* Forcer le scroll du contenu */
+    .modal .overflow-y-auto {
+        max-height: calc(100vh - 60px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Boutons et inputs plus petits */
+    .modal button {
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+        min-height: 40px !important;
+    }
+    
+    .modal input, .modal textarea {
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal.relative.w-full {
+        max-width: calc(100vw - 4px) !important;
+        max-height: calc(100vh - 4px) !important;
+        margin: 2px !important;
+        margin-top: 12vh !important;
+        padding: 8px !important;
+        border-radius: 8px !important;
+    }
+    
+    .fixed.inset-0.z-50.flex.items-stretch {
+        padding: 1px !important;
+    }
+    
+    .modal h2, .modal h3 {
+        font-size: 1.1rem !important;
+    }
+    
+    .modal button {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+        min-height: 36px !important;
+    }
+    
+    .modal input, .modal textarea {
+        padding: 6px 10px !important;
+        font-size: 13px !important;
+    }
+    
+    /* Espacement réduit */
+    .modal .space-y-4 > * + * {
+        margin-top: 12px !important;
+    }
+    
+    .modal .space-y-6 > * + * {
+        margin-top: 16px !important;
+    }
+}
+
+/* Correction spécifique pour le modal de template qui utilise fixed positioning */
+div[class*="fixed inset-0 z-50"][class*="modal-backdrop"] {
+    padding: 4px !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+}
+
+/* Assurer que le modal ne dépasse jamais l'écran */
+.modal {
+    box-sizing: border-box !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+}
+
+/* ========================================
+   CORRECTION SPÉCIFIQUE MODAL TEMPLATE
+   ======================================== */
+
+/* Modal de création de template avec classes spécifiques */
+.bg-white.rounded-2xl.w-full.max-w-4xl {
+    background: rgba(15, 15, 35, 0.95) !important;
+    backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    margin-top: 15vh !important;
+    margin-bottom: 5vh !important;
+    max-height: 80vh !important;
+    position: relative !important;
+}
+
+/* Titre du modal template */
+.bg-white.rounded-2xl.w-full.max-w-4xl h3.text-2xl.font-bold.text-gray-800 {
+    color: #ffffff !important;
+}
+
+/* Labels dans le modal template */
+.bg-white.rounded-2xl.w-full.max-w-4xl .text-gray-700 {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Inputs dans le modal template */
+.bg-white.rounded-2xl.w-full.max-w-4xl input {
+    background: rgba(15, 15, 35, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.bg-white.rounded-2xl.w-full.max-w-4xl input:focus {
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.bg-white.rounded-2xl.w-full.max-w-4xl input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Section exercices */
+.bg-white.rounded-2xl.w-full.max-w-4xl h4.text-lg.font-semibold.text-gray-800 {
+    color: #ffffff !important;
+}
+
+/* Zone vide des exercices */
+.bg-white.rounded-2xl.w-full.max-w-4xl .bg-gray-50 {
+    background: rgba(15, 15, 35, 0.4) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.bg-white.rounded-2xl.w-full.max-w-4xl .text-gray-500,
+.bg-white.rounded-2xl.w-full.max-w-4xl .text-gray-400 {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.bg-white.rounded-2xl.w-full.max-w-4xl .text-gray-300 {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Bouton fermer */
+.bg-white.rounded-2xl.w-full.max-w-4xl .text-gray-500.hover\:text-gray-700 {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.bg-white.rounded-2xl.w-full.max-w-4xl .text-gray-500.hover\:text-gray-700:hover {
+    color: #ffffff !important;
+}
+
+/* Positionnement responsive pour le modal template */
+@media (max-width: 1024px) {
+    .bg-white.rounded-2xl.w-full.max-w-4xl {
+        margin-top: 12vh !important;
+        max-height: 85vh !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .bg-white.rounded-2xl.w-full.max-w-4xl {
+        margin-top: 8vh !important;
+        margin-left: 4px !important;
+        margin-right: 4px !important;
+        max-height: 90vh !important;
+        border-radius: 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .bg-white.rounded-2xl.w-full.max-w-4xl {
+        margin-top: 5vh !important;
+        margin-left: 2px !important;
+        margin-right: 2px !important;
+        max-height: 95vh !important;
+        border-radius: 8px !important;
+        padding: 16px !important;
+    }
+}
+
+/* ========================================
+   CORRECTIONS SUPPLÉMENTAIRES
+   ======================================== */
+
+/* Correction des éléments de date/heure */
+.bg-white.rounded-xl.p-3.shadow-md.border.border-gray-100,
+div[class*="bg-white rounded-xl p-3 shadow-md border border-gray-100"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Correction des sélecteurs de date/heure */
+.text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900 {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Hover states pour les éléments interactifs */
+.hover\:bg-gray-50:hover, .hover\:bg-gray-100:hover, .hover\:bg-gray-200:hover {
+    background: rgba(15, 15, 35, 0.9) !important;
+}
+
+.hover\:text-gray-700:hover, .hover\:text-gray-800:hover, .hover\:text-gray-900:hover {
+    color: #ffffff !important;
+}
+
+/* ========================================
+   CORRECTION CARTE PRÉDICTION IA
+   ======================================== */
+
+/* Carte principale de prédiction IA */
+.bg-gradient-to-r.from-purple-50.to-blue-50,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+    color: #ffffff !important;
+}
+
+/* Bordure purple de la carte IA */
+.border-purple-200 {
+    border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Titre et textes de la carte IA */
+.bg-gradient-to-r.from-purple-50.to-blue-50 h4,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] h4 {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.bg-gradient-to-r.from-purple-50.to-blue-50 .text-gray-800,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] .text-gray-800 {
+    color: #ffffff !important;
+}
+
+/* Icône cerveau */
+.text-purple-600 {
+    color: #a855f7 !important;
+}
+
+/* Badge de confiance */
+.bg-white\/50 {
+    background: rgba(15, 15, 35, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Sous-carte blanche dans la prédiction */
+.bg-gradient-to-r.from-purple-50.to-blue-50 .bg-white,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] .bg-white {
+    background: rgba(15, 15, 35, 0.6) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(139, 92, 246, 0.2) !important;
+    color: #ffffff !important;
+}
+
+/* Bordure purple-100 */
+.border-purple-100 {
+    border-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Textes dans la sous-carte */
+.bg-gradient-to-r.from-purple-50.to-blue-50 .text-gray-500,
+.bg-gradient-to-r.from-purple-50.to-blue-50 .text-gray-400,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] .text-gray-500,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] .text-gray-400 {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.bg-gradient-to-r.from-purple-50.to-blue-50 .text-purple-700,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] .text-purple-700 {
+    color: #a855f7 !important;
+    font-weight: 700 !important;
+}
+
+/* Zone bleue d'information */
+.bg-blue-50 {
+    background: rgba(59, 130, 246, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.border-blue-100 {
+    border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.text-blue-600, .text-blue-800 {
+    color: #60a5fa !important;
+}
+
+/* Section d'analyse IA */
+.bg-gradient-to-r.from-purple-50.to-blue-50 .text-gray-700,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] .text-gray-700 {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.bg-gradient-to-r.from-purple-50.to-blue-50 .text-gray-600,
+div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] .text-gray-600 {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Icônes dans l'analyse */
+.text-yellow-500 {
+    color: #eab308 !important;
+}
+
+/* Corrections générales pour border-gray-100 */
+.border-gray-100 {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Bouton gradient purple-blue dans la carte IA */
+.bg-gradient-to-r.from-purple-500.to-blue-600 {
+    background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4) !important;
+}
+
+.bg-gradient-to-r.from-purple-500.to-blue-600:hover,
+.hover\:from-purple-600.hover\:to-blue-700:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5) !important;
+}
+
+/* ========================================
+   CORRECTION SPAN "0 KG" ET BADGES SIMILAIRES
+   ======================================== */
+
+/* Badge/span avec bg-blue-50 et text-blue-600 */
+.text-blue-600.bg-blue-50,
+span[class*="text-blue-600 bg-blue-50"],
+.bg-blue-50.text-blue-600,
+span[class*="bg-blue-50 text-blue-600"] {
+    background: rgba(59, 130, 246, 0.2) !important;
+    color: #60a5fa !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    font-weight: 600 !important;
+}
+
+/* Correction spécifique pour les badges de poids/kg */
+span.text-sm.font-semibold.text-blue-600.bg-blue-50,
+.text-sm.font-semibold.text-blue-600.bg-blue-50 {
+    background: rgba(59, 130, 246, 0.25) !important;
+    color: #3b82f6 !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Autres variations de badges bleus */
+.bg-blue-100 {
+    background: rgba(59, 130, 246, 0.15) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+.text-blue-700, .text-blue-800, .text-blue-900 {
+    color: #60a5fa !important;
+}
+
+/* Badge avec bordure arrondie et padding */
+.rounded-lg.px-3.py-2.bg-blue-50 {
+    background: rgba(59, 130, 246, 0.25) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+}
