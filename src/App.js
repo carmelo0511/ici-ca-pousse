@@ -44,7 +44,6 @@ import {
   useWorkoutLogic,
   useAppState,
   useExperience,
-  useSwipeNavigation,
   useKeyboardNavigation,
   useNotifications,
   useWorkoutTemplates,
@@ -249,7 +248,7 @@ function App() {
   ];
 
   // Navigation par gestes et raccourcis clavier
-  useSwipeNavigation(activeTab, setActiveTab, tabs);
+  // useSwipeNavigation(activeTab, setActiveTab, tabs); // Désactivé pour éviter le changement d'onglet par swipe
   useKeyboardNavigation(activeTab, setActiveTab, tabs);
 
   useEffect(() => {
