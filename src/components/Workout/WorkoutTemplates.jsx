@@ -620,9 +620,9 @@ const WorkoutTemplates = ({
 
       {/* Modal créer template depuis zéro */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
           <div
-            className="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto p-4 sm:p-6"
+            className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto p-3 sm:p-4"
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-gray-800">
@@ -689,17 +689,17 @@ const WorkoutTemplates = ({
                 </div>
 
                 {newTemplateExercises.length === 0 ? (
-                  <div className="text-center py-8 bg-gray-50 rounded-lg">
-                    <Dumbbell className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-gray-500">Aucun exercice ajouté</p>
-                    <p className="text-sm text-gray-400">
+                  <div className="text-center py-6 sm:py-8 bg-gray-50 rounded-lg">
+                    <Dumbbell className="h-10 w-10 sm:h-12 sm:w-12 text-gray-300 mx-auto mb-2 sm:mb-3" />
+                    <p className="text-gray-500 text-sm sm:text-base">Aucun exercice ajouté</p>
+                    <p className="text-xs sm:text-sm text-gray-400">
                       Cliquez sur "Ajouter un exercice" pour commencer
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {newTemplateExercises.map((exercise, exerciseIndex) => (
-                      <Card key={exercise.id} className="p-4">
+                      <Card key={exercise.id} className="p-3 sm:p-4">
                         <div className="flex justify-between items-start mb-3">
                           <div className="flex-1">
                             <input
@@ -742,7 +742,7 @@ const WorkoutTemplates = ({
                             </span>
                             <button
                               onClick={() => addSetToExercise(exercise.id)}
-                              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                              className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium"
                             >
                               + Ajouter série
                             </button>
@@ -750,12 +750,12 @@ const WorkoutTemplates = ({
                           {exercise.sets.map((set, setIndex) => (
                             <div
                               key={setIndex}
-                              className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg"
+                              className="flex items-center gap-2 sm:gap-3 bg-gray-50 p-2 sm:p-3 rounded-lg"
                             >
                               <span className="text-sm font-medium text-gray-600 w-8">
                                 #{setIndex + 1}
                               </span>
-                              <div className="flex gap-2 flex-1">
+                              <div className="flex gap-1 sm:gap-2 flex-1">
                                 <div className="flex-1">
                                   <label className="text-xs text-gray-500">
                                     Reps
@@ -771,7 +771,7 @@ const WorkoutTemplates = ({
                                         e.target.value
                                       )
                                     }
-                                    className="w-full border border-gray-200 rounded px-2 py-1 text-sm"
+                                    className="w-full border border-gray-200 rounded px-1 sm:px-2 py-1 text-xs sm:text-sm"
                                     min="0"
                                   />
                                 </div>
@@ -790,7 +790,7 @@ const WorkoutTemplates = ({
                                         e.target.value
                                       )
                                     }
-                                    className="w-full border border-gray-200 rounded px-2 py-1 text-sm"
+                                    className="w-full border border-gray-200 rounded px-1 sm:px-2 py-1 text-xs sm:text-sm"
                                     min="0"
                                     step="0.5"
                                   />
@@ -810,7 +810,7 @@ const WorkoutTemplates = ({
                                         e.target.value
                                       )
                                     }
-                                    className="w-full border border-gray-200 rounded px-2 py-1 text-sm"
+                                    className="w-full border border-gray-200 rounded px-1 sm:px-2 py-1 text-xs sm:text-sm"
                                     min="0"
                                   />
                                 </div>
@@ -861,10 +861,10 @@ const WorkoutTemplates = ({
 
       {/* Modal sélection exercice pour template */}
       {showAddExerciseModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden p-4 sm:p-6">
-            <div className="flex justify-between items-center mb-4 flex-shrink-0">
-              <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden flex flex-col p-3 sm:p-4">
+            <div className="flex justify-between items-center mb-3 flex-shrink-0">
+              <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 💪 Ajouter un exercice
               </h3>
               <button
@@ -873,30 +873,27 @@ const WorkoutTemplates = ({
                   setSearchTerm('');
                   setCustomExerciseName('');
                 }}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 p-1"
               >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
             </div>
 
-            <div
-              className="overflow-y-auto flex-1 pr-2"
-              style={{ maxHeight: 'calc(85vh - 200px)' }}
-            >
+            <div className="overflow-y-auto flex-1 pr-1 sm:pr-2" style={{ maxHeight: 'calc(85vh - 100px)' }}>
               {/* Champ de recherche global */}
-              <div className="flex flex-col items-center mb-4 w-full">
+              <div className="flex flex-col items-center mb-3 sm:mb-4 w-full">
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Rechercher un exercice..."
-                  className="border-2 border-gray-200 rounded-xl px-4 py-2 w-full max-w-md text-center font-medium focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
+                  className="border-2 border-gray-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 w-full max-w-md text-center font-medium focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm text-sm sm:text-base"
                   autoFocus
                 />
               </div>
 
               {/* Affichage par groupes musculaires */}
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {Object.entries(exerciseDatabase).map(
                   ([muscle, exerciseList]) => {
                     // Filtrer les exercices selon la recherche
@@ -907,22 +904,20 @@ const WorkoutTemplates = ({
                     if (filteredForMuscle.length === 0 && searchTerm)
                       return null;
 
-
-
                     return (
-                      <div key={muscle} className="bg-gray-50 rounded-2xl p-4">
+                      <div key={muscle} className="bg-gray-50 rounded-xl sm:rounded-2xl p-3 sm:p-4">
                         {/* En-tête du groupe musculaire */}
-                        <div className="flex items-center space-x-3 mb-3">
+                        <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
                           <div
-                            className={`p-3 rounded-xl ${muscle === 'cardio' ? 'bg-red-500' : 'bg-indigo-500'} shadow-lg`}
+                            className={`p-2 sm:p-3 rounded-lg sm:rounded-xl ${muscle === 'cardio' ? 'bg-red-500' : 'bg-indigo-500'} shadow-lg`}
                           >
                             {getMuscleIconLarge(muscle)}
                           </div>
                           <div>
-                            <h4 className="font-bold text-gray-800 capitalize text-xl">
+                            <h4 className="font-bold text-gray-800 capitalize text-lg sm:text-xl">
                               {muscle}
                             </h4>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-xs sm:text-sm text-gray-600">
                               {filteredForMuscle.length} exercice
                               {filteredForMuscle.length > 1 ? 's' : ''}
                             </p>
@@ -930,29 +925,29 @@ const WorkoutTemplates = ({
                         </div>
 
                         {/* Liste des exercices */}
-                        <div className="grid grid-cols-1 gap-2">
+                        <div className="grid grid-cols-1 gap-1 sm:gap-2">
                           {filteredForMuscle.map((exercise) => (
                             <div key={exercise} className="relative">
                               <button
                                 onClick={() =>
                                   addExerciseToNewTemplate(exercise, muscle)
                                 }
-                                className="w-full text-left p-4 bg-white hover:bg-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
+                                className="w-full text-left p-3 sm:p-4 bg-white hover:bg-gray-50 rounded-lg sm:rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.01] sm:hover:scale-[1.02]"
                               >
-                                <div className="flex items-center space-x-3">
+                                <div className="flex items-center space-x-2 sm:space-x-3">
                                   <div
-                                    className={`p-2 rounded-lg ${muscle === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}
+                                    className={`p-1.5 sm:p-2 rounded-md sm:rounded-lg ${muscle === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}
                                   >
                                     {muscle === 'cardio' ? (
-                                      <Heart className="h-4 w-4" />
+                                      <Heart className="h-3 w-3 sm:h-4 sm:w-4" />
                                     ) : (
-                                      <Dumbbell className="h-4 w-4" />
+                                      <Dumbbell className="h-3 w-3 sm:h-4 sm:w-4" />
                                     )}
                                   </div>
-                                  <span className="flex-1 text-base font-medium">
+                                  <span className="flex-1 text-sm sm:text-base font-medium">
                                     {exercise}
                                   </span>
-                                  <span className="text-gray-400">→</span>
+                                  <span className="text-gray-400 text-sm sm:text-base">→</span>
                                 </div>
                               </button>
                             </div>
@@ -966,8 +961,8 @@ const WorkoutTemplates = ({
 
               {/* Champ pour exercice personnalisé */}
               <div className="flex flex-col items-center justify-center gap-3 mt-4 w-full">
-                <div className="w-full max-w-md bg-white rounded-2xl p-4 border-2 border-dashed border-indigo-300">
-                  <h5 className="text-center font-semibold text-gray-700 mb-3">
+                <div className="w-full max-w-md bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 border-2 border-dashed border-indigo-300">
+                  <h5 className="text-center font-semibold text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">
                     Exercice personnalisé
                   </h5>
                   <input
@@ -975,7 +970,7 @@ const WorkoutTemplates = ({
                     value={customExerciseName}
                     onChange={(e) => setCustomExerciseName(e.target.value)}
                     placeholder="Nom d'exercice personnalisé..."
-                    className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm mb-3"
+                    className="border-2 border-indigo-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 w-full text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm mb-2 sm:mb-3 text-sm sm:text-base"
                   />
                   <button
                     onClick={() => {
@@ -986,7 +981,7 @@ const WorkoutTemplates = ({
                         );
                       }
                     }}
-                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 w-full"
+                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 w-full text-sm sm:text-base"
                   >
                     Ajouter l'exercice
                   </button>
