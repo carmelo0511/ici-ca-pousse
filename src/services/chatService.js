@@ -192,15 +192,108 @@ class ChatService {
   }
 
   async callOpenAI(content, context, apiKey) {
-    // Simulation de l'appel OpenAI (à remplacer par l'implémentation réelle)
-    // const functions = getRelevantFunctions();
-    
-    // Ici, vous intégreriez l'appel réel à l'API OpenAI
-    // Pour l'instant, retournons une réponse simulée
-    return {
-      content: `Réponse simulée pour: ${content}`,
-      functionCall: null
-    };
+    if (!apiKey) {
+      throw new Error('Clé API OpenAI manquante');
+    }
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [
+            {
+              role: 'system',
+              content: context || 'Tu es un assistant personnel sportif et bien-être. Sois motivant, bienveillant et adapte tes réponses au niveau de l\'utilisateur.'
+            },
+            {
+              role: 'user',
+              content: content
+            }
+          ],
+          max_tokens: 1000,
+          temperature: 0.7,
+          functions: [
+            {
+              name: 'analyze_workout_performance',
+              description: 'Analyse les performances d\'entraînement de l\'utilisateur',
+              parameters: {
+                type: 'object',
+                properties: {
+                  analysis: {
+                    type: 'string',
+                    description: 'Analyse détaillée des performances'
+                  },
+                  recommendations: {
+                    type: 'string',
+                    description: 'Recommandations d\'amélioration'
+                  }
+                },
+                required: ['analysis', 'recommendations']
+              }
+            },
+            {
+              name: 'generate_personalized_workout',
+              description: 'Génère un entraînement personnalisé',
+              parameters: {
+                type: 'object',
+                properties: {
+                  workout_plan: {
+                    type: 'string',
+                    description: 'Plan d\'entraînement détaillé'
+                  },
+                  exercises: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        name: { type: 'string' },
+                        sets: { type: 'number' },
+                        reps: { type: 'number' },
+                        weight: { type: 'string' }
+                      }
+                    }
+                  }
+                },
+                required: ['workout_plan', 'exercises']
+              }
+            }
+          ],
+          function_call: 'auto'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur API OpenAI: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.choices && data.choices[0]) {
+        const choice = data.choices[0];
+        
+        if (choice.message.function_call) {
+          return {
+            content: choice.message.content || '',
+            functionCall: choice.message.function_call
+          };
+        } else {
+          return {
+            content: choice.message.content,
+            functionCall: null
+          };
+        }
+      } else {
+        throw new Error('Réponse invalide de l\'API OpenAI');
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'appel à l\'API OpenAI:', error);
+      throw error;
+    }
   }
 
   async handleFunctionCall(functionCall, workouts, user) {
@@ -214,8 +307,49 @@ class ChatService {
   }
 
   async sendFollowUpMessage(functionCall, functionResponse, apiKey) {
-    // Simulation du message de suivi
-    return `Fonction ${functionCall.name} exécutée avec succès. Résultat: ${JSON.stringify(functionResponse)}`;
+    if (!apiKey) {
+      throw new Error('Clé API OpenAI manquante');
+    }
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [
+            {
+              role: 'system',
+              content: 'Tu es un assistant personnel sportif et bien-être. Présente les résultats de manière claire et motivante.'
+            },
+            {
+              role: 'user',
+              content: `La fonction ${functionCall.name} a été exécutée avec le résultat: ${JSON.stringify(functionResponse)}. Présente ce résultat de manière claire et motivante.`
+            }
+          ],
+          max_tokens: 800,
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur API OpenAI: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.choices && data.choices[0]) {
+        return data.choices[0].message.content;
+      } else {
+        throw new Error('Réponse invalide de l\'API OpenAI');
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'appel de suivi à l\'API OpenAI:', error);
+      return `Fonction ${functionCall.name} exécutée avec succès. Résultat: ${JSON.stringify(functionResponse)}`;
+    }
   }
 
   async validateResponse(content, user, workouts) {
@@ -256,6 +390,14 @@ class ChatService {
 
   getFallbackResponse(content) {
     const detectedLanguage = detectLanguage(content);
+    const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+    
+    if (!apiKey || apiKey === 'your_openai_api_key_here') {
+      return detectedLanguage === 'english' 
+        ? '⚠️ **Configuration Required**: Please configure your OpenAI API key in the .env file. Set REACT_APP_OPENAI_API_KEY=your_actual_api_key'
+        : '⚠️ **Configuration Requise** : Veuillez configurer votre clé API OpenAI dans le fichier .env. Définissez REACT_APP_OPENAI_API_KEY=votre_vraie_cle_api';
+    }
+    
     return detectedLanguage === 'english' 
       ? 'I apologize, but I\'m having trouble processing your request right now. Please try again later.'
       : 'Je m\'excuse, mais j\'ai des difficultés à traiter votre demande pour le moment. Veuillez réessayer plus tard.';
