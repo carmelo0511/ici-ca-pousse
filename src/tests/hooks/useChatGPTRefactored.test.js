@@ -1,5 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 
+import useChatGPTRefactored from '../../hooks/useChatGPTRefactored';
+
 // Mock des services (doivent être placés AVANT l'import du hook !)
 jest.mock('../../services/chatService', () => ({
   __esModule: true,
@@ -49,8 +51,6 @@ jest.mock('../../utils/firebase/storage', () => ({
   load: jest.fn(() => []),
   save: jest.fn()
 }));
-
-import useChatGPTRefactored from '../../hooks/useChatGPTRefactored';
 
 describe('Hook useChatGPTRefactored', () => {
   let chatService;

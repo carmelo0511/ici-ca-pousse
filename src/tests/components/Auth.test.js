@@ -2,6 +2,10 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
+import Auth from '../../components/Auth';
+import { auth } from '../../utils/firebase/index.js';
+import { signInWithPopup, signOut } from 'firebase/auth';
+
 // Mock de Firebase Auth
 const mockSignInWithPopup = jest.fn();
 const mockSignOut = jest.fn();
@@ -28,10 +32,6 @@ jest.mock('firebase/firestore', () => ({
   doc: jest.fn(),
   getDoc: jest.fn(),
 }));
-
-import Auth from '../../components/Auth';
-import { auth } from '../../utils/firebase/index.js';
-import { signInWithPopup, signOut } from 'firebase/auth';
 
 describe('Composant Auth', () => {
   beforeEach(() => {

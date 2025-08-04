@@ -193,7 +193,7 @@ class ChatService {
 
   async callOpenAI(content, context, apiKey) {
     // Simulation de l'appel OpenAI (à remplacer par l'implémentation réelle)
-    const functions = getRelevantFunctions();
+    // const functions = getRelevantFunctions();
     
     // Ici, vous intégreriez l'appel réel à l'API OpenAI
     // Pour l'instant, retournons une réponse simulée
