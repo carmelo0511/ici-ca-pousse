@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import useChatGPT from '../../hooks/useChatGPT';
+import useChatGPT from '../../hooks/useChatGPTRefactored';
 import MonitoringDashboard from './MonitoringDashboard';
 import KnowledgeBaseManager from './KnowledgeBaseManager';
 import ChatbotDashboard from './ChatbotDashboard';

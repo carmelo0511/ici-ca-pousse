@@ -4,26 +4,36 @@
 
 Cette analyse identifie les fichiers potentiellement inutiles ou redondants dans le projet **Ici Ça Pousse**.
 
-## 🗑️ Fichiers à Supprimer
+## ✅ Fichiers Supprimés
 
 ### ❌ Composants Non Utilisés
 
-#### 1. **`src/components/ChallengeStats.jsx`**
+#### 1. **`src/components/ChallengeStats.jsx`** ✅ **SUPPRIMÉ**
 - **Statut** : Commenté dans `Challenges.jsx` (ligne 432)
 - **Raison** : Temporairement désactivé, remplacé par une logique intégrée
-- **Action** : ✅ **SUPPRIMER**
+- **Action** : ✅ **SUPPRIMÉ**
 
-#### 2. **`src/components/Profile/ProfileSettings.jsx`**
+#### 2. **`src/components/Profile/ProfileSettings.jsx`** ✅ **SUPPRIMÉ**
 - **Statut** : Remplacé par `ProfilePage.jsx`
 - **Raison** : Commenté dans `App.js` (ligne 30)
-- **Action** : ✅ **SUPPRIMER**
+- **Action** : ✅ **SUPPRIMÉ**
+
+#### 3. **`src/components/GlassTestComponent.jsx`** ✅ **SUPPRIMÉ**
+- **Statut** : Composant de test non utilisé
+- **Raison** : Exporté mais jamais utilisé dans l'application
+- **Action** : ✅ **SUPPRIMÉ**
+
+#### 4. **`src/hooks/useChatGPT.js`** ✅ **SUPPRIMÉ**
+- **Statut** : Remplacé par `useChatGPTRefactored.js`
+- **Raison** : Hook refactorisé et modulaire
+- **Action** : ✅ **SUPPRIMÉ**
 
 ### ❌ Fichiers de Configuration Redondants
 
-#### 3. **`__mocks__/fileMock.js`**
+#### 5. **`__mocks__/fileMock.js`** ✅ **GARDÉ**
 - **Statut** : Mock simple pour les tests
-- **Raison** : Peut être remplacé par une configuration Jest plus simple
-- **Action** : ⚠️ **ÉVALUER** (garder si les tests l'utilisent)
+- **Raison** : Utilisé dans la configuration Jest
+- **Action** : ✅ **GARDÉ** (nécessaire pour les tests)
 
 ## 🔍 Fichiers à Vérifier
 
@@ -61,7 +71,7 @@ Cette analyse identifie les fichiers potentiellement inutiles ou redondants dans
 - **`Toast.jsx`** : Utilisé pour les notifications
 
 ### 🎣 Hooks Actifs
-- **`useChatGPT.js`** : Hook principal pour l'IA
+- **`useChatGPTRefactored.js`** : Hook principal pour l'IA (refactorisé)
 - **`useWorkouts.js`** : Gestion des séances
 - **`useFriends.js`** : Gestion des amis
 - **`useBadges.js`** : Gestion des badges
@@ -74,22 +84,24 @@ Cette analyse identifie les fichiers potentiellement inutiles ou redondants dans
 
 ## 📊 Statistiques
 
-- **Composants** : 36 fichiers (3 à supprimer)
-- **Hooks** : 18 fichiers (tous utiles)
+- **Composants** : 33 fichiers (3 supprimés)
+- **Hooks** : 17 fichiers (1 supprimé)
 - **Utilitaires** : 19 fichiers (tous utiles)
 - **Tests** : 12 fichiers (tous utiles)
 
 ## 🚀 Plan d'Action
 
-### Phase 1 : Nettoyage Immédiat
+### Phase 1 : Nettoyage Immédiat ✅ **TERMINÉ**
 1. ✅ Supprimer `ChallengeStats.jsx`
 2. ✅ Supprimer `ProfileSettings.jsx`
-3. ✅ Vérifier `fileMock.js`
+3. ✅ Supprimer `GlassTestComponent.jsx`
+4. ✅ Supprimer `useChatGPT.js` (ancien)
+5. ✅ Vérifier `fileMock.js` (gardé)
 
-### Phase 2 : Optimisation
-1. 🔄 Consolider les composants peu utilisés
-2. 🔄 Optimiser les imports
-3. 🔄 Améliorer la documentation
+### Phase 2 : Optimisation ✅ **TERMINÉ**
+1. ✅ Consolider les composants peu utilisés
+2. ✅ Optimiser les imports
+3. ✅ Améliorer la documentation
 
 ## 📝 Notes
 
@@ -97,7 +109,8 @@ Cette analyse identifie les fichiers potentiellement inutiles ou redondants dans
 - **Structure cohérente** et bien organisée
 - **Tests complets** et fonctionnels
 - **Documentation** à jour dans `docs/`
+- **Refactoring** du hook useChatGPT terminé
 
 ## ✅ Conclusion
 
-Le projet est **bien organisé** avec seulement **2 fichiers à supprimer**. La structure est cohérente et tous les composants/hooks/utilitaires restants sont utiles et utilisés. 
+Le projet est **bien organisé** avec **4 fichiers supprimés** et une structure cohérente. Tous les composants/hooks/utilitaires restants sont utiles et utilisés. Le refactoring du hook useChatGPT a été effectué avec succès. 

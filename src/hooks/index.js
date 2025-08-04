@@ -1,17 +1,31 @@
-// Hooks exports
+// Core State Hooks
 export { default as useAppState } from './useAppState';
-export { useBadges } from './useBadges';
-export { useChallenges } from './useChallenges';
-export { useExercises } from './useExercises';
-export { useExperience } from './useExperience';
-export { useFriends } from './useFriends';
-export { useKeyboardNavigation } from './useKeyboardNavigation';
-export { useNotifications } from './useNotifications';
-export { usePWA } from './usePWA';
-export { useSwipeNavigation } from './useSwipeNavigation';
 export { useUserProfile } from './useUserProfile';
-export { default as useWorkoutLogic } from './useWorkoutLogic';
+
+// Business Logic Hooks
 export { useWorkouts } from './useWorkouts';
+export { useExercises } from './useExercises';
+export { default as useWorkoutLogic } from './useWorkoutLogic';
 export { useWorkoutTemplates } from './useWorkoutTemplates';
-export { default as useChatGPT } from './useChatGPT';
+export { useExperience } from './useExperience';
+
+// Social Features Hooks
+export { useFriends } from './useFriends';
+export { useChallenges } from './useChallenges';
+export { useNotifications } from './useNotifications';
+
+// UI/UX Hooks
+export { useBadges } from './useBadges';
+export { useKeyboardNavigation } from './useKeyboardNavigation';
+export { useSwipeNavigation } from './useSwipeNavigation';
+export { usePWA } from './usePWA';
+
+// AI & Chat Hooks
+export { default as useChatGPT } from './useChatGPTRefactored';
+
+// Specialized Hooks
+export { useAppInitialization } from './useAppInitialization';
+export { useWeightNotification } from './useWeightNotification';
+export { useTemplateActions } from './useTemplateActions';
+export { useStreakRecalculation } from './useStreakRecalculation';
 

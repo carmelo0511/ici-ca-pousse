@@ -35,10 +35,16 @@ const detectTrend = (weights, sessions = 5) => {
 
 // Fonction pour calculer la fréquence d'entraînement
 const calculateTrainingFrequency = (workouts, days = 30) => {
+  // Validation des paramètres d'entrée
+  if (!workouts || !Array.isArray(workouts)) {
+    return 0;
+  }
+
   const now = new Date();
   const cutoffDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
   
   const recentWorkouts = workouts.filter(workout => {
+    if (!workout || !workout.date) return false;
     const workoutDate = new Date(workout.date);
     return workoutDate >= cutoffDate;
   });
@@ -49,21 +55,34 @@ const calculateTrainingFrequency = (workouts, days = 30) => {
 // Fonction principale de prédiction
 export const predictNextWeight = (exerciseName, workouts, currentWeight = null) => {
   try {
+    // Validation des paramètres d'entrée
+    if (!workouts || !Array.isArray(workouts)) {
+      return {
+        predictedWeight: currentWeight || 0,
+        confidence: 0,
+        trend: 'no_data',
+        recommendation: 'Pas de données d\'entraînement disponibles',
+        factors: []
+      };
+    }
+
     // Extraire les poids pour cet exercice
     const exerciseWeights = [];
     const exerciseDates = [];
     
     workouts.forEach(workout => {
-      workout.exercises?.forEach(exercise => {
-        if (exercise.name === exerciseName && exercise.sets) {
-          exercise.sets.forEach(set => {
-            if (set.weight && set.weight > 0) {
-              exerciseWeights.push(parseFloat(set.weight));
-              exerciseDates.push(new Date(workout.date));
-            }
-          });
-        }
-      });
+      if (workout && workout.exercises && Array.isArray(workout.exercises)) {
+        workout.exercises.forEach(exercise => {
+          if (exercise && exercise.name === exerciseName && exercise.sets && Array.isArray(exercise.sets)) {
+            exercise.sets.forEach(set => {
+              if (set && set.weight && set.weight > 0) {
+                exerciseWeights.push(parseFloat(set.weight));
+                exerciseDates.push(new Date(workout.date));
+              }
+            });
+          }
+        });
+      }
     });
     
     if (exerciseWeights.length === 0) {
@@ -184,16 +203,23 @@ export const getProgressionInsights = (exerciseName, workouts) => {
 
 // Fonction pour analyser tous les exercices d'un utilisateur
 export const analyzeAllExercises = (workouts) => {
+  // Validation des paramètres d'entrée
+  if (!workouts || !Array.isArray(workouts)) {
+    return {};
+  }
+
   const exerciseAnalysis = {};
   
   // Extraire tous les exercices uniques
   const uniqueExercises = new Set();
   workouts.forEach(workout => {
-    workout.exercises?.forEach(exercise => {
-      if (exercise.name) {
-        uniqueExercises.add(exercise.name);
-      }
-    });
+    if (workout && workout.exercises && Array.isArray(workout.exercises)) {
+      workout.exercises.forEach(exercise => {
+        if (exercise && exercise.name) {
+          uniqueExercises.add(exercise.name);
+        }
+      });
+    }
   });
   
   // Analyser chaque exercice

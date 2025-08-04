@@ -163,8 +163,8 @@ describe('Système ML de Prédiction de Poids', () => {
       const result = predictNextWeight('Pompes', null);
       
       expect(result.predictedWeight).toBe(0);
-      expect(result.trend).toBe('error');
-      expect(result.recommendation).toBe('Erreur de prédiction');
+      expect(result.trend).toBe('no_data');
+      expect(result.recommendation).toBe('Pas de données d\'entraînement disponibles');
     });
   });
 

@@ -3,36 +3,29 @@ import React, { useState, useEffect } from 'react';
 
 // Third-party imports
 import { useTranslation, I18nextProvider } from 'react-i18next';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from './utils/firebase';
-import { inject as injectAnalytics } from '@vercel/analytics';
-import { injectSpeedInsights } from '@vercel/speed-insights';
-import i18n from './i18n';
 
 // Styles
 import './App.css';
 import './glassmorphism-theme.css';
 import './styles/fix-cards-colors.css';
-
-// Vérification des couleurs Tailwind
 import './utils/checkTailwindColors';
 
+// Core imports
+import i18n from './i18n';
+
 // Components
-import Auth from './components/Auth';
-import Header from './components/Header/Header';
-import Navigation from './components/Navigation/Navigation';
-import WorkoutList from './components/Workout/WorkoutList/WorkoutList';
-import CalendarView from './components/CalendarView/CalendarView';
-import StatsView from './components/StatsView/StatsView';
-import PWAInstallButton from './components/PWAInstallButton';
-import LeaderboardView from './components/Leaderboard/LeaderboardView';
-import BadgesPage from './components/Badges/BadgesPage';
-import Challenges from './components/Challenges';
-import WorkoutTemplates from './components/Workout/WorkoutTemplates';
-import MigrationPrompt from './components/MigrationPrompt';
-import PageTransition from './components/PageTransition';
-import ProfilePage from './components/Profile/ProfilePage';
-import ChatbotBubble from './components/Chatbot/ChatbotBubble';
+import {
+  Auth,
+  Header,
+  Navigation,
+  PWAInstallButton,
+  MigrationPrompt,
+  ChatbotBubble,
+} from './components';
+
+// UI Components
+import { LoadingScreen, WeightNotification, AppToast } from './components/UI';
+import TabContent from './components/Layout/TabContent';
 
 // Hooks
 import {
@@ -49,16 +42,19 @@ import {
   useWorkoutTemplates,
 } from './hooks';
 
+// Specialized Hooks
+import { useAppInitialization } from './hooks/useAppInitialization';
+import { useWeightNotification } from './hooks/useWeightNotification';
+import { useTemplateActions } from './hooks/useTemplateActions';
+import { useStreakRecalculation } from './hooks/useStreakRecalculation';
+
 // Utils
 import { migrateLocalWorkoutsToCloud } from './utils/firebase/storage';
 import { STORAGE_KEYS } from './constants';
-import { initAllGlassEffects } from './utils/glassParticles';
 
 function App() {
   const { user, loading: userLoading, refreshUserProfile } = useUserProfile();
   const [authChecked, setAuthChecked] = useState(false);
-  const [showWeightNotif, setShowWeightNotif] = useState(false);
-  const [isFading, setIsFading] = useState(false);
 
   // Hook personnalisé pour l'état global
   const appState = useAppState();
@@ -172,60 +168,6 @@ function App() {
     handleDeleteWorkout,
   } = workoutLogic;
 
-  // Fonctions pour gérer les templates
-  const handleSaveTemplate = async (exercises, name, description = '') => {
-    try {
-      await saveCurrentWorkoutAsTemplate(exercises, name, description);
-      setActiveTab('templates'); // Basculer vers l'onglet Templates
-      showToastMsg('Template sauvegardé avec succès !');
-    } catch (error) {
-      console.error('Erreur sauvegarde template:', error);
-      showToastMsg('Erreur lors de la sauvegarde du template', 'error');
-    }
-  };
-
-  const handleDeleteTemplate = async (templateId) => {
-    try {
-      await deleteTemplate(templateId);
-      showToastMsg('Template supprimé avec succès !');
-    } catch (error) {
-      console.error('Erreur suppression template:', error);
-      showToastMsg('Erreur lors de la suppression du template', 'error');
-    }
-  };
-
-  const handleEditTemplate = async (templateId, updatedTemplate) => {
-    try {
-      await updateTemplate(templateId, updatedTemplate);
-      showToastMsg('Template modifié avec succès !');
-    } catch (error) {
-      console.error('Erreur modification template:', error);
-      showToastMsg('Erreur lors de la modification du template', 'error');
-    }
-  };
-
-  const handleLoadTemplate = (template) => {
-    // Convertir le template en exercices pour la séance actuelle
-    const templateExercises = template.exercises.map((exercise, index) => ({
-      id: Date.now() + index,
-      name: exercise.name,
-      type: exercise.type,
-      sets: exercise.sets.map((set, setIndex) => ({
-        id: Date.now() + index * 100 + setIndex,
-        reps: set.reps || 0,
-        weight: set.weight || 0,
-        duration: set.duration || 0,
-      })),
-    }));
-
-    // Vider les exercices actuels et charger le template
-    clearExercises();
-    setExercisesFromWorkout(templateExercises);
-
-    // Basculer vers l'onglet séance
-    setActiveTab('workout');
-    showToastMsg(`Template "${template.name}" chargé !`);
-  };
 
   const handleDateSelect = (selectedDate) => {
     console.log('Date sélectionnée:', selectedDate);
@@ -272,117 +214,39 @@ function App() {
     }
   }, [user, setShowMigratePrompt]);
 
-  // Recalculer le streak au chargement si nécessaire
-  useEffect(() => {
-    if (user && workouts.length > 0) {
-      // Recalculer le streak une fois par jour au maximum
-      const lastRecalculation = localStorage.getItem('lastStreakRecalculation');
-      const today = new Date().toDateString();
+  // Hook pour le recalcul automatique du streak
+  useStreakRecalculation(user, workouts, recalculateStreak);
 
-      if (lastRecalculation !== today) {
-        recalculateStreak(workouts)
-          .then(() => {
-            localStorage.setItem('lastStreakRecalculation', today);
-          })
-          .catch((error) => {
-            console.error(
-              'Erreur lors du recalcul automatique du streak:',
-              error
-            );
-          });
-      }
-    }
-  }, [user, workouts, recalculateStreak]);
 
-  // Initialize glass effects
-  useEffect(() => {
-    // Initialize all glass effects with reduced count for performance
-    initAllGlassEffects(15);
-  }, []);
+  // Hook pour la notification de poids hebdomadaire
+  const { 
+    showWeightNotif, 
+    isFading, 
+    handleUpdateWeight, 
+    handleSameWeight 
+  } = useWeightNotification(user, setActiveTab, refreshUserProfile);
 
-  // Notification hebdo poids
-  useEffect(() => {
-    if (!user || !user.uid) return;
-    const checkWeightNotif = async () => {
-      // Date de la semaine courante (lundi)
-      const now = new Date();
-      const dayOfWeek = now.getDay(); // 0 = dimanche, 1 = lundi, ..., 6 = samedi
-      const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Si dimanche, on remonte de 6 jours
-      const monday = new Date(now);
-      monday.setDate(now.getDate() + daysToMonday);
-      monday.setHours(0, 0, 0, 0);
-      const weekKey = monday.toISOString().slice(0, 10);
-      const weightHistory = user.weightHistory || [];
-      const hasEntry = weightHistory.some((w) => w.weekKey === weekKey);
-      // Vérifie si la notif a déjà été affichée cette semaine
-      const lastNotifWeek = localStorage.getItem('weightNotifLastWeekKey');
-      if (!hasEntry && lastNotifWeek !== weekKey) {
-        setShowWeightNotif(true);
-        localStorage.setItem('weightNotifLastWeekKey', weekKey);
-      }
-    };
-    checkWeightNotif();
-  }, [user]);
+  // Hook pour l'initialisation de l'app
+  useAppInitialization();
 
-  // Initialize Vercel Analytics and Speed Insights
-  useEffect(() => {
-    try {
-      injectAnalytics();
-      injectSpeedInsights();
-    } catch (error) {
-      console.warn('Failed to initialize Vercel analytics:', error);
-    }
-  }, []);
-
-  // Action 'C'est le même'
-  const handleSameWeight = async () => {
-    if (!user || !user.uid) return;
-    setIsFading(true);
-    setTimeout(() => setShowWeightNotif(false), 400);
-    // Date de la semaine courante (lundi)
-    const now = new Date();
-    const dayOfWeek = now.getDay(); // 0 = dimanche, 1 = lundi, ..., 6 = samedi
-    const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Si dimanche, on remonte de 6 jours
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + daysToMonday);
-    monday.setHours(0, 0, 0, 0);
-    const weekKey = monday.toISOString().slice(0, 10);
-    const weightHistory = user.weightHistory || [];
-    const last =
-      weightHistory.length > 0 ? weightHistory[weightHistory.length - 1] : null;
-    if (last && last.weekKey !== weekKey) {
-      const userRef = doc(db, 'users', user.uid);
-      const newHistory = [...weightHistory, { weekKey, value: last.value }];
-      await updateDoc(userRef, { weightHistory: newHistory });
-      if (refreshUserProfile) await refreshUserProfile();
-    } else {
-      // Force refresh même si rien n'est ajouté
-      if (refreshUserProfile) await refreshUserProfile();
-    }
-  };
-
-  // Action 'Mettre à jour' (ouvre le profil)
-  const handleUpdateWeight = () => {
-    setIsFading(true);
-    setTimeout(() => setShowWeightNotif(false), 400);
-    setActiveTab('profile');
-  };
+  // Hook pour les actions des templates
+  const {
+    handleSaveTemplate,
+    handleDeleteTemplate,
+    handleEditTemplate,
+    handleLoadTemplate
+  } = useTemplateActions({
+    saveCurrentWorkoutAsTemplate,
+    deleteTemplate,
+    updateTemplate,
+    clearExercises,
+    setExercisesFromWorkout,
+    setActiveTab,
+    showToastMsg
+  });
 
   if (!authChecked || userLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="text-2xl font-bold text-indigo-600 mb-4">
-            Chargement...
-          </div>
-          <div className="text-sm text-gray-500">
-            {userLoading
-              ? 'Chargement du profil...'
-              : "Vérification de l'authentification..."}
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen userLoading={userLoading} />;
   }
 
   if (!user) {
@@ -408,33 +272,12 @@ function App() {
   return (
     <I18nextProvider i18n={i18n}>
       {/* Notification hebdo poids */}
-      {showWeightNotif && (
-        <div
-          className={`toast-notification flex flex-col items-center gap-2 transition-opacity duration-400 ${isFading ? 'opacity-0' : 'opacity-100'}`}
-        >
-          <div className="section-title text-lg mb-1">
-            Mise à jour du poids
-          </div>
-          <div className="text-secondary mb-2">
-            C'est le début d'une nouvelle semaine !<br />
-            Veux-tu mettre à jour ton poids ?
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={handleUpdateWeight}
-              className="btn-primary ripple-effect px-4 py-1 font-medium"
-            >
-              Mettre à jour
-            </button>
-            <button
-              onClick={handleSameWeight}
-              className="btn-secondary ripple-effect px-4 py-1 font-medium"
-            >
-              C'est le même
-            </button>
-          </div>
-        </div>
-      )}
+      <WeightNotification
+        show={showWeightNotif}
+        isFading={isFading}
+        onUpdateWeight={handleUpdateWeight}
+        onSameWeight={handleSameWeight}
+      />
 
       <div className="min-h-screen w-full">
         <div
@@ -460,120 +303,90 @@ function App() {
             notifications={notifications}
           />
 
-          {/* Conteneur pour tous les onglets avec position relative */}
-          <div className="relative">
-            {/* Onglet Séance */}
-            <PageTransition isActive={activeTab === 'workout'}>
-              <WorkoutList
-                user={user}
-                exercises={exercises}
-                workouts={workouts}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                startTime={startTime}
-                setStartTime={setStartTime}
-                endTime={endTime}
-                setEndTime={setEndTime}
-                addSet={addSet}
-                updateSet={updateSet}
-                removeSet={removeSet}
-                saveWorkout={saveWorkout}
-                showAddExercise={showAddExercise}
-                setShowAddExercise={setShowAddExercise}
-                selectedMuscleGroup={selectedMuscleGroup}
-                setSelectedMuscleGroup={setSelectedMuscleGroup}
-                addExerciseToWorkout={addExerciseToWorkout}
-                removeExerciseFromWorkout={removeExerciseFromWorkout}
-                onSaveTemplate={handleSaveTemplate}
-              />
-            </PageTransition>
-
-            {/* Onglet Calendrier */}
-            <PageTransition isActive={activeTab === 'calendar'}>
-              <CalendarView
-                workouts={workouts}
-                getWorkoutForDate={getWorkoutForDate}
-                openWorkoutDetail={openWorkoutDetail}
-                showWorkoutDetail={showWorkoutDetail}
-                selectedWorkout={selectedWorkout}
-                deleteWorkout={handleDeleteWorkout}
-                setShowWorkoutDetail={setShowWorkoutDetail}
-                onEditWorkout={handleEditWorkout}
-                onDateSelect={handleDateSelect}
-              />
-            </PageTransition>
-
-            {/* Onglet Statistiques */}
-            <PageTransition isActive={activeTab === 'stats'}>
-              <StatsView stats={getStats()} workouts={workouts} user={user} />
-            </PageTransition>
-
-            {/* Onglet Templates */}
-            <PageTransition isActive={activeTab === 'templates'}>
-              <WorkoutTemplates
-                templates={templates}
-                addTemplate={addTemplate}
-                onSaveTemplate={handleSaveTemplate}
-                onDeleteTemplate={handleDeleteTemplate}
-                onLoadTemplate={handleLoadTemplate}
-                onEditTemplate={handleEditTemplate}
-                saveCurrentWorkoutAsTemplate={saveCurrentWorkoutAsTemplate}
-                cleanProblematicTemplates={cleanProblematicTemplates}
-                deleteAllTemplates={deleteAllTemplates}
-                forceDeleteTemplate={forceDeleteTemplate}
-                exercises={exercises}
-                showToastMsg={showToastMsg}
-              />
-            </PageTransition>
-
-            {/* Onglet Classement */}
-            <PageTransition isActive={activeTab === 'leaderboard'}>
-              <LeaderboardView 
-                user={user} 
-                showToastMsg={showToastMsg}
-                setActiveTab={setActiveTab}
-                setExercisesFromWorkout={setExercisesFromWorkout}
-              />
-            </PageTransition>
-
-            {/* Onglet Défis */}
-            <PageTransition isActive={activeTab === 'challenges'}>
-              <Challenges user={user} />
-            </PageTransition>
-
-            {/* Onglet Badges */}
-            <PageTransition isActive={activeTab === 'badges'}>
-              <BadgesPage
-                workouts={workouts}
-                challenges={challenges}
-                friends={friends}
-                user={user}
-                addBadgeUnlockXP={addBadgeUnlockXP}
-              />
-            </PageTransition>
-
-            {/* Onglet Profil */}
-            <PageTransition isActive={activeTab === 'profile'}>
-              <ProfilePage
-                user={user}
-                workouts={workouts}
-                challenges={challenges}
-                onUserUpdate={refreshUserProfile}
-                addBadgeUnlockXP={addBadgeUnlockXP}
-                refreshUserProfile={refreshUserProfile}
-              />
-            </PageTransition>
-          </div>
+          {/* Contenu principal avec tabs */}
+          <TabContent
+            activeTab={activeTab}
+            workoutProps={{
+              user,
+              exercises,
+              workouts,
+              selectedDate,
+              setSelectedDate,
+              startTime,
+              setStartTime,
+              endTime,
+              setEndTime,
+              addSet,
+              updateSet,
+              removeSet,
+              saveWorkout,
+              showAddExercise,
+              setShowAddExercise,
+              selectedMuscleGroup,
+              setSelectedMuscleGroup,
+              addExerciseToWorkout,
+              removeExerciseFromWorkout,
+              onSaveTemplate: handleSaveTemplate
+            }}
+            calendarProps={{
+              workouts,
+              getWorkoutForDate,
+              openWorkoutDetail,
+              showWorkoutDetail,
+              selectedWorkout,
+              deleteWorkout: handleDeleteWorkout,
+              setShowWorkoutDetail,
+              onEditWorkout: handleEditWorkout,
+              onDateSelect: handleDateSelect
+            }}
+            statsProps={{
+              stats: getStats(),
+              workouts,
+              user
+            }}
+            templateProps={{
+              templates,
+              addTemplate,
+              onSaveTemplate: handleSaveTemplate,
+              onDeleteTemplate: handleDeleteTemplate,
+              onLoadTemplate: handleLoadTemplate,
+              onEditTemplate: handleEditTemplate,
+              saveCurrentWorkoutAsTemplate,
+              cleanProblematicTemplates,
+              deleteAllTemplates,
+              forceDeleteTemplate,
+              exercises,
+              showToastMsg
+            }}
+            leaderboardProps={{
+              user,
+              showToastMsg,
+              setActiveTab,
+              setExercisesFromWorkout
+            }}
+            challengeProps={{
+              user
+            }}
+            badgeProps={{
+              workouts,
+              challenges,
+              friends,
+              user,
+              addBadgeUnlockXP
+            }}
+            profileProps={{
+              user,
+              workouts,
+              challenges,
+              onUserUpdate: refreshUserProfile,
+              addBadgeUnlockXP,
+              refreshUserProfile
+            }}
+          />
 
           {/* Bouton PWA discret, visible tant que l'app n'est pas installée */}
           <PWAInstallButton />
-          {toast.show && (
-            <div
-              className={`toast-notification ${toast.type === 'success' ? 'badge-success' : 'badge-danger'}`}
-            >
-              <span>{toast.message}</span>
-            </div>
-          )}
+          <AppToast toast={toast} />
           <ChatbotBubble
             user={user}
             workouts={workouts}
