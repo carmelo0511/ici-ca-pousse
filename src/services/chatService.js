@@ -364,7 +364,7 @@ class ChatService {
   addSafetyWarnings(result, validation) {
     let enhancedResult = result;
 
-    // Ajouter les erreurs critiques
+    // Ajouter les erreurs critiques (toujours affichées pour la sécurité)
     if (validation.errors.length > 0) {
       enhancedResult += '\n\n🚨 **AVERTISSEMENTS CRITIQUES :**\n';
       validation.errors.forEach((error) => {
@@ -373,7 +373,7 @@ class ChatService {
       enhancedResult += '\n⚠️ **Cette recommandation présente des risques. Consultez un professionnel.**';
     }
 
-    // Ajouter les avertissements
+    // Ajouter les avertissements importants (toujours affichés pour la sécurité)
     if (validation.warnings.length > 0) {
       enhancedResult += '\n\n⚠️ **PRÉCAUTIONS :**\n';
       validation.warnings.forEach((warning) => {
@@ -381,10 +381,9 @@ class ChatService {
       });
     }
 
-    // Ajouter le score de sécurité
-    const safetyEmoji = validation.safetyScore >= 90 ? '✅' : validation.safetyScore >= 70 ? '⚠️' : '🚨';
-    enhancedResult += `\n\n${safetyEmoji} **Score de sécurité : ${validation.safetyScore}/100**`;
-
+    // Le score de sécurité n'est plus affiché dans le chat
+    // Il est disponible dans le dashboard via getSafetyStats()
+    
     return enhancedResult;
   }
 
