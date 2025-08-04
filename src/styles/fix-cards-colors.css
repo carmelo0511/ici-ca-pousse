@@ -1455,3 +1455,243 @@ div[class*="text-gray-800"],
 div[class*="text-gray-900"] {
     color: rgba(255, 255, 255, 0.9) !important;
 }
+
+/* ========================================
+   Variables CSS pour le style glassmorphism
+   ======================================== */
+:root {
+    --glass-bg-primary: rgba(15, 15, 35, 0.8);
+    --glass-bg-secondary: rgba(15, 15, 35, 0.6);
+    --glass-bg-light: rgba(15, 15, 35, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-border-light: rgba(255, 255, 255, 0.05);
+    --glass-border-active: rgba(59, 130, 246, 0.3);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-tertiary: rgba(255, 255, 255, 0.6);
+    --blue-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --purple-gradient: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    --orange-gradient: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+    --green-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --red-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-glass-hover: 0 30px 60px rgba(0, 0, 0, 0.6);
+    --shadow-blue: 0 8px 25px rgba(59, 130, 246, 0.4);
+    --shadow-blue-hover: 0 20px 40px rgba(59, 130, 246, 0.5);
+    --shadow-purple: 0 8px 25px rgba(139, 92, 246, 0.4);
+    --shadow-orange: 0 8px 25px rgba(245, 158, 11, 0.4);
+    --shadow-green: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* ========================================
+   Style glassmorphism pour les cartes de profil
+   ======================================== */
+
+/* Cartes de profil principales */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] {
+    background: var(--glass-bg-primary) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 15px !important;
+    box-shadow: var(--shadow-glass) !important;
+    color: var(--text-primary) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Effet hover pour les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200:hover,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"]:hover {
+    background: rgba(15, 15, 35, 0.95) !important;
+    box-shadow: var(--shadow-glass-hover) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Textes dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 *,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] * {
+    color: var(--text-primary) !important;
+}
+
+/* Titres dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .font-semibold,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 h3,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 h2,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .font-semibold,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] h3,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] h2 {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Valeurs et textes importants dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .font-bold,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .font-semibold,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .font-bold,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .font-semibold {
+    color: var(--text-primary) !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Textes secondaires dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .text-gray-600,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .text-gray-700,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .text-gray-800,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .text-gray-600,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .text-gray-700,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .text-gray-800 {
+    color: var(--text-secondary) !important;
+}
+
+/* Textes tertiaires dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .text-gray-500,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .text-gray-500 {
+    color: var(--text-tertiary) !important;
+}
+
+/* Valeurs colorées dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .text-indigo-600,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .text-indigo-600 {
+    color: #60a5fa !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(96, 165, 250, 0.3) !important;
+}
+
+/* Boutons dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 button,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] button {
+    background: var(--blue-gradient) !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: var(--shadow-blue) !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 button:hover,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] button:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-blue-hover) !important;
+}
+
+/* Boutons d'objectifs dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .border-gray-200,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .border-gray-200 {
+    background: var(--glass-bg-secondary) !important;
+    border: 1px solid var(--glass-border) !important;
+    backdrop-filter: blur(10px) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .border-gray-200:hover,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .border-gray-200:hover {
+    background: var(--glass-bg-primary) !important;
+    border-color: var(--glass-border-active) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-glass) !important;
+}
+
+/* Boutons d'objectifs sélectionnés */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .border-gray-600,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .border-gray-600 {
+    background: var(--glass-bg-primary) !important;
+    border-color: var(--glass-border-active) !important;
+    box-shadow: var(--shadow-blue) !important;
+}
+
+/* Inputs dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 input,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] input {
+    background: var(--glass-bg-secondary) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-primary) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 input:focus,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] input:focus {
+    background: var(--glass-bg-primary) !important;
+    border-color: var(--glass-border-active) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 input::placeholder,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] input::placeholder {
+    color: var(--text-tertiary) !important;
+}
+
+/* Labels dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 label,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] label {
+    color: var(--text-secondary) !important;
+    font-weight: 500 !important;
+}
+
+/* Badges dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .bg-gray-100,
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .bg-gray-50,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .bg-gray-100,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .bg-gray-50 {
+    background: var(--glass-bg-secondary) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Messages d'erreur et de succès dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .bg-red-50,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .bg-red-50 {
+    background: rgba(239, 68, 68, 0.1) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    color: #fca5a5 !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .bg-green-50,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .bg-green-50 {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    color: #6ee7b7 !important;
+}
+
+/* Icônes dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 svg,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) !important;
+}
+
+/* Grille de badges dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .grid,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .grid {
+    gap: 1rem !important;
+}
+
+/* Boutons de badges dans les cartes de profil */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .border-gray-200.bg-white,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .border-gray-200.bg-white {
+    background: var(--glass-bg-secondary) !important;
+    border: 1px solid var(--glass-border) !important;
+    backdrop-filter: blur(10px) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .border-gray-200.bg-white:hover,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .border-gray-200.bg-white:hover {
+    background: var(--glass-bg-primary) !important;
+    border-color: var(--glass-border-active) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-glass) !important;
+}
+
+/* Badges sélectionnés */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200 .border-gray-600.bg-gray-50,
+div[class*="bg-white rounded-xl shadow-sm border border-gray-200"] .border-gray-600.bg-gray-50 {
+    background: var(--glass-bg-primary) !important;
+    border-color: var(--glass-border-active) !important;
+    box-shadow: var(--shadow-blue) !important;
+}
+
+/* ========================================
+   Style glassmorphism pour les cartes du classement (conservé)
+   ======================================== */
