@@ -250,7 +250,7 @@ const Chatbot = ({
       setMessages([
         {
           role: 'assistant',
-          content: `${prenom ? 'Bonjour ' + prenom + ', ' : 'Bonjour,'}je suis Coach Lex IA. Je peux t'aider avec tes séances de sport, la nutrition et le bien-être. Prêt pour une nouvelle séance ?`,
+          content: `${prenom ? 'Bonjour ' + prenom + ', ' : 'Bonjour,'}je suis Coach Lex IA. Je peux t'aider avec tes séances de sport, la nutrition, le bien-être et bien d'autres sujets ! Comment puis-je t'aider aujourd'hui ?`,
         },
       ]);
     }
@@ -1092,7 +1092,7 @@ const Chatbot = ({
       {/* Header avec titre et boutons de contrôle */}
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className="flex items-center">
-          <h2 className="text-lg sm:text-3xl font-bold text-gray-800">Coach Lex IA</h2>
+          <h2 className="text-lg sm:text-3xl font-bold text-gray-800">Coach Lex IA 🤖</h2>
         </div>
 
         {/* Dashboard unifié */}
