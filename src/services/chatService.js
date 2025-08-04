@@ -4,7 +4,7 @@ import aiMonitoring from '../utils/ai/aiMonitoring';
 import safetyValidator from '../utils/ai/safetyValidator';
 import knowledgeBase from '../utils/ai/knowledgeBase';
 import {
-  getRelevantFunctions,
+  // getRelevantFunctions,
   processFunctionResponse,
 } from '../utils/ai/openaiFunctions';
 

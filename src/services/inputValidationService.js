@@ -181,6 +181,11 @@ class InputValidationService {
       case 'message':
         this.validateMessage(stringValue, result);
         break;
+      default:
+        // Type non reconnu
+        result.isValid = false;
+        result.errors.push(`Type de validation non reconnu: ${type}`);
+        break;
     }
 
     // Sanitisation si demandée

@@ -6,10 +6,10 @@ import Auth from '../../components/Auth';
 import { auth } from '../../utils/firebase/index.js';
 import { signInWithPopup, signOut } from 'firebase/auth';
 
-// Mock de Firebase Auth
-const mockSignInWithPopup = jest.fn();
-const mockSignOut = jest.fn();
-const mockOnAuthStateChanged = jest.fn();
+// Mock de Firebase Auth - Variables commentées car non utilisées
+// const mockSignInWithPopup = jest.fn();
+// const mockSignOut = jest.fn();
+// const mockOnAuthStateChanged = jest.fn();
 
 // Mock de Firebase
 jest.mock('../../utils/firebase/index.js', () => ({
@@ -174,7 +174,7 @@ describe('Composant Auth', () => {
   test('devrait avoir les bonnes classes CSS', () => {
     render(<Auth />);
     
-    const container = screen.getByText('Connexion').closest('div');
+    const container = screen.getByText('Connexion').parentElement;
     expect(container).toHaveClass('max-w-lg', 'mx-auto', 'mt-10', 'card');
   });
 

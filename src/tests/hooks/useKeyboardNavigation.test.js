@@ -1,4 +1,4 @@
-import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation';
+// import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation';
 
 // Mock the hook directly since it's hard to test with renderHook in this environment
 describe('useKeyboardNavigation', () => {

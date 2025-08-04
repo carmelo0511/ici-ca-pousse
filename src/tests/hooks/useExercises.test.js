@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { useExercises } from '../../hooks/useExercises';
-import { exerciseDatabase } from '../../utils/workout/exerciseDatabase';
+// import { exerciseDatabase } from '../../utils/workout/exerciseDatabase';
 import { load, save } from '../../utils/firebase/storage';
 import { STORAGE_KEYS } from '../../constants';
 
