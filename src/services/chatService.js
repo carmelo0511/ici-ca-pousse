@@ -208,15 +208,15 @@ class ChatService {
           messages: [
             {
               role: 'system',
-              content: context || 'Tu es un assistant personnel sportif et bien-être. Sois motivant, bienveillant et adapte tes réponses au niveau de l\'utilisateur.'
+              content: context || 'Tu es Coach Lex IA, un assistant personnel sportif et bien-être. Sois motivant, bienveillant et concis. Adapte tes réponses au niveau de l\'utilisateur. Pour les séances d\'entraînement, propose des exercices spécifiques avec séries/répétitions. Limite tes réponses à 2-3 phrases maximum sauf pour les plans d\'entraînement détaillés.'
             },
             {
               role: 'user',
               content: content
             }
           ],
-          max_tokens: 1000,
-          temperature: 0.7,
+          max_tokens: 600,
+          temperature: 0.5,
           functions: [
             {
               name: 'analyze_workout_performance',
@@ -323,15 +323,15 @@ class ChatService {
           messages: [
             {
               role: 'system',
-              content: 'Tu es un assistant personnel sportif et bien-être. Présente les résultats de manière claire et motivante.'
+              content: 'Tu es Coach Lex IA, un assistant personnel sportif et bien-être. Présente les résultats de manière claire, motivante et concise. Limite tes réponses à 2-3 phrases maximum.'
             },
             {
               role: 'user',
               content: `La fonction ${functionCall.name} a été exécutée avec le résultat: ${JSON.stringify(functionResponse)}. Présente ce résultat de manière claire et motivante.`
             }
           ],
-          max_tokens: 800,
-          temperature: 0.7
+          max_tokens: 400,
+          temperature: 0.5
         })
       });
 
