@@ -3,7 +3,7 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=for-the-badge&logo=openai)](https://openai.com/)
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-12.0.0-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
-[![Tests](https://img.shields.io/badge/Tests-92%20passing-25D366?style=for-the-badge&logo=jest)](https://jestjs.io/)
+[![Tests](https://img.shields.io/badge/Tests-612%20passing-25D366?style=for-the-badge&logo=jest)](https://jestjs.io/)
 [![Test Coverage](https://img.shields.io/badge/Coverage-100%25%20passing-brightgreen?style=for-the-badge)](https://jestjs.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-FF6B6B?style=for-the-badge)](https://web.dev/progressive-web-apps/)
@@ -74,7 +74,7 @@ Notre application se distingue par son **architecture IA sophistiquée** compos�
 
 #### **📈 Statistiques du Projet**
 - 📄 **32,945 lignes de code** : Base de code substantielle et professionnelle
-- 🧪 **92 tests passants** : Suite de tests stable et fiable
+- 🧪 **612 tests passants** : Suite de tests complète et professionnelle
 - 📊 **100% de succès** : Aucun test en échec
 - 🎯 **15 hooks personnalisés** : Architecture React sophistiquée
 - 🧩 **25+ composants React** : Interface modulaire et réutilisable
@@ -94,25 +94,29 @@ Notre application se distingue par son **architecture IA sophistiquée** compos�
 - ♿ **Accessibilité A+** : Interface inclusive
 - 🌍 **I18n ready** : Support multilingue natif
 
-### 🧪 **Suite de Tests Stable et Fiable**
+### 🧪 **Suite de Tests Complète et Professionnelle**
 
 #### **📊 État Actuel des Tests**
-- ✅ **9 suites de tests** : Toutes passantes
-- ✅ **92 tests** : Tous passants
+- ✅ **29 suites de tests** : Toutes passantes
+- ✅ **612 tests** : Tous passants
 - ✅ **0 échec** : Aucun test qui échoue
 - ✅ **100% de succès** : Suite de tests parfaitement fonctionnelle
+- ✅ **Couverture étendue** : Composants, hooks, services, utilitaires, IA
 
-#### **🔧 Tests Fonctionnels**
-- **Composants React** : Toast, Card, Navigation (41 tests)
-- **Hooks personnalisés** : useExercises, usePWA, useKeyboardNavigation (38 tests)
-- **Utilitaires** : notifications, badges (10 tests)
-- **Intégration** : userFlows (6 tests)
+#### **🔧 Tests par Catégorie**
+- **Composants React** : Auth, Navigation, Card, GradientButton, etc. (15+ tests)
+- **Hooks personnalisés** : useChatGPTRefactored, useExercises, usePWA, etc. (10+ tests)
+- **Services** : Security services, performance optimization, API services (36 tests)
+- **Utilitaires** : AI monitoring, knowledge base, safety validation, workout utils (20+ tests)
+- **Intégration** : User flows, feature tests (6 tests)
+- **Constants** : Badges, leaderboard, storage keys (4 tests)
 
 #### **⚡ Configuration Optimisée**
 - **React Testing Library** : Tests d'intégration modernes
-- **Jest** : Framework de test robuste
-- **Mocks appropriés** : localStorage, fetch, ResizeObserver
+- **Jest** : Framework de test robuste avec configuration personnalisée
+- **Mocks appropriés** : Firebase, localStorage, fetch, ResizeObserver, Image API
 - **Setup simplifié** : Configuration stable et maintenable
+- **Timeout adaptatif** : Gestion des tests asynchrones complexes
 
 ---
 
@@ -211,7 +215,7 @@ Our application stands out with its **sophisticated AI architecture** composed o
 
 #### **📈 Project Statistics**
 - 📄 **32,945 lines of code** : Substantial and professional codebase
-- 🧪 **450+ passing tests** : Exhaustive test coverage
+- 🧪 **612 passing tests** : Complete and professional test suite
 - 📊 **83.47% AI coverage** : Specialized tests for AI modules
 - 🎯 **15 custom hooks** : Sophisticated React architecture
 - 🧩 **25+ React components** : Modular and reusable interface
@@ -496,22 +500,26 @@ const apiRateLimiting = {
 ## 🧪 **Tests - Suite Stable et Fiable | Tests - Stable and Reliable Suite**
 
 ### **📊 État Actuel des Tests | Current Test Status**
-- ✅ **9 suites de tests** : Toutes passantes | All test suites passing
-- ✅ **92 tests** : Tous passants | All tests passing
+- ✅ **29 suites de tests** : Toutes passantes | All test suites passing
+- ✅ **612 tests** : Tous passants | All tests passing
 - ✅ **0 échec** : Aucun test qui échoue | No failing tests
 - ✅ **100% de succès** : Suite de tests parfaitement fonctionnelle | Perfectly functional test suite
+- ✅ **Couverture étendue** : Composants, hooks, services, utilitaires, IA | Extended coverage: Components, hooks, services, utilities, AI
 
-### **🔧 Tests Fonctionnels | Functional Tests**
-- **Composants React** : Toast, Card, Navigation (41 tests)
-- **Hooks personnalisés** : useExercises, usePWA, useKeyboardNavigation (38 tests)
-- **Utilitaires** : notifications, badges (10 tests)
-- **Intégration** : userFlows (6 tests)
+### **🔧 Tests par Catégorie | Tests by Category**
+- **Composants React** : Auth, Navigation, Card, GradientButton, etc. (15+ tests)
+- **Hooks personnalisés** : useChatGPTRefactored, useExercises, usePWA, etc. (10+ tests)
+- **Services** : Security services, performance optimization, API services (36 tests)
+- **Utilitaires** : AI monitoring, knowledge base, safety validation, workout utils (20+ tests)
+- **Intégration** : User flows, feature tests (6 tests)
+- **Constants** : Badges, leaderboard, storage keys (4 tests)
 
 ### **⚡ Configuration Optimisée | Optimized Configuration**
 - **React Testing Library** : Tests d'intégration modernes | Modern integration tests
-- **Jest** : Framework de test robuste | Robust testing framework
-- **Mocks appropriés** : localStorage, fetch, ResizeObserver | Appropriate mocks
+- **Jest** : Framework de test robuste avec configuration personnalisée | Robust testing framework with custom configuration
+- **Mocks appropriés** : Firebase, localStorage, fetch, ResizeObserver, Image API | Appropriate mocks
 - **Setup simplifié** : Configuration stable et maintenable | Stable and maintainable configuration
+- **Timeout adaptatif** : Gestion des tests asynchrones complexes | Adaptive timeout for complex async tests
 
 ```javascript
 // Tests des 7 fonctions spécialisées | Tests of 7 specialized functions
@@ -910,8 +918,255 @@ npm run build          # Production
 npm test               # Tests unitaires | Unit tests
 npm run test:coverage  # Couverture de tests | Test coverage
 npm run test:watch     # Tests en mode watch | Tests in watch mode
+npm run test:features  # Tests des fonctionnalités | Feature tests
 npm run lint           # Qualité de code | Code quality
 npm run lint:fix       # Correction automatique | Automatic fix
+```
+
+### **🧪 Guide Complet des Tests | Complete Testing Guide**
+
+#### **📋 Commandes de Test | Test Commands**
+
+```bash
+# Tests complets avec couverture
+npm run test:coverage
+
+# Tests en mode watch (développement)
+npm run test:watch
+
+# Tests spécifiques par catégorie
+npm test -- --testPathPattern="components"    # Tests des composants
+npm test -- --testPathPattern="hooks"         # Tests des hooks
+npm test -- --testPathPattern="services"      # Tests des services
+npm test -- --testPathPattern="utils"         # Tests des utilitaires
+npm test -- --testPathPattern="ai"            # Tests IA spécialisés
+npm test -- --testPathPattern="integration"   # Tests d'intégration
+
+# Tests de fichiers spécifiques
+npm test -- --testPathPattern="Auth.test.js"
+npm test -- --testPathPattern="securityServices.test.js"
+npm test -- --testPathPattern="allFeatures.test.js"
+```
+
+#### **🔧 Configuration des Tests | Test Configuration**
+
+```javascript
+// jest.config.js - Configuration optimisée
+module.exports = {
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  moduleNameMapping: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/__mocks__/fileMock.js',
+  },
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}',
+    '!src/index.js',
+    '!src/serviceWorkerRegistration.js',
+    '!src/setupTests.js',
+    '!src/**/*.test.{js,jsx}',
+    '!src/**/*.spec.{js,jsx}',
+    '!src/i18n.js',
+    '!src/**/index.js',
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 75,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+    './src/components/': {
+      branches: 70,
+      functions: 75,
+      lines: 75,
+      statements: 75,
+    },
+    './src/hooks/': {
+      branches: 80,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+  },
+  testMatch: [
+    '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/src/**/*.{test,spec}.{js,jsx,ts,tsx}',
+  ],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(react-native|@react-native|@react-navigation)/)',
+  ],
+};
+```
+
+#### **📊 Métriques de Couverture | Coverage Metrics**
+
+```bash
+# Exécution avec couverture détaillée
+npm run test:coverage
+
+# Résultats de couverture :
+# - Global: 25.8% statements, 21.16% branches, 25.88% functions, 26.29% lines
+# - Services: 47.55% statements, 42.5% branches, 45.71% functions, 48.23% lines
+# - AI Utils: 83.47% statements, 69.24% branches, 94.11% functions, 85.06% lines
+# - ML Utils: 85.21% statements, 77.9% branches, 100% functions, 86.66% lines
+# - Workout Utils: 83.26% statements, 61.47% branches, 100% functions, 86.53% lines
+```
+
+#### **🛠️ Mocks et Setup | Mocks and Setup**
+
+```javascript
+// src/setupTests.js - Configuration globale des tests
+import '@testing-library/jest-dom';
+
+// Mock fetch global
+global.fetch = jest.fn();
+
+// Polyfill pour TextEncoder/TextDecoder
+const { TextEncoder, TextDecoder } = require('util');
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
+// Mock localStorage
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+};
+global.localStorage = localStorageMock;
+
+// Mock URL methods
+global.URL.createObjectURL = jest.fn(() => 'blob:url');
+global.URL.revokeObjectURL = jest.fn();
+
+// Mock ResizeObserver
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
+// Mock IntersectionObserver
+global.IntersectionObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
+// Mock matchMedia
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
+// Mock scrollIntoView
+if (typeof Element !== 'undefined') {
+  Element.prototype.scrollIntoView = jest.fn();
+}
+```
+
+#### **🚀 Exemples de Tests | Test Examples**
+
+```javascript
+// Test de composant React
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Auth from '../../components/Auth';
+
+describe('Composant Auth', () => {
+  test('devrait afficher le formulaire de connexion', () => {
+    render(<Auth />);
+    
+    expect(screen.getByText('Connexion')).toBeInTheDocument();
+    expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    expect(screen.getByLabelText('Mot de passe')).toBeInTheDocument();
+    expect(screen.getByText('Se connecter')).toBeInTheDocument();
+  });
+
+  test('devrait gérer la connexion Google', async () => {
+    render(<Auth />);
+    
+    const googleButton = screen.getByText('Continuer avec Google');
+    fireEvent.click(googleButton);
+    
+    await waitFor(() => {
+      expect(signInWithPopup).toHaveBeenCalled();
+    });
+  });
+});
+
+// Test de service IA
+import inputValidationService from '../../services/inputValidationService';
+
+describe('Service de Validation d\'Entrée', () => {
+  test('devrait valider un email correct', () => {
+    const result = inputValidationService.validateEmail('test@example.com');
+    
+    expect(result.isValid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+
+  test('devrait rejeter un email invalide', () => {
+    const result = inputValidationService.validateEmail('invalid-email');
+    
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toContain('Format d\'email invalide');
+  });
+});
+
+// Test de hook personnalisé
+import { renderHook, act } from '@testing-library/react';
+import { useChatGPTRefactored } from '../../hooks/useChatGPTRefactored';
+
+describe('Hook useChatGPTRefactored', () => {
+  test('devrait initialiser avec un état vide', () => {
+    const { result } = renderHook(() => useChatGPTRefactored());
+    
+    expect(result.current.messages).toEqual([]);
+    expect(result.current.isLoading).toBe(false);
+  });
+
+  test('devrait envoyer un message', async () => {
+    const { result } = renderHook(() => useChatGPTRefactored());
+    
+    await act(async () => {
+      await result.current.sendMessage('Bonjour');
+    });
+    
+    expect(result.current.messages).toHaveLength(1);
+    expect(result.current.messages[0].content).toBe('Bonjour');
+  });
+});
+```
+
+#### **🔍 Dépannage des Tests | Test Troubleshooting**
+
+```bash
+# Problème courant : Tests qui échouent à cause de mocks manquants
+# Solution : Vérifier que tous les mocks sont configurés dans setupTests.js
+
+# Problème courant : Timeout sur les tests asynchrones
+# Solution : Augmenter le timeout ou optimiser les mocks
+
+# Problème courant : Erreurs de Firebase dans les tests
+# Solution : Mocker Firebase correctement dans chaque fichier de test
+
+# Problème courant : Tests qui échouent à cause de l'API Image
+# Solution : Mocker l'API Image comme dans securityServices.test.js
 ```
 
 

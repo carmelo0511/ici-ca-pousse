@@ -143,8 +143,8 @@ global.fetch = jest.fn();
 global.URL.createObjectURL = jest.fn(() => 'mock-url');
 global.URL.revokeObjectURL = jest.fn();
 
-// Mock useChatGPT pour éviter les problèmes de React hooks
-jest.mock('../../hooks/useChatGPT', () => {
+// Mock useChatGPTRefactored pour éviter les problèmes de React hooks
+jest.mock('../../hooks/useChatGPTRefactored', () => {
   return jest.fn(() => ({
     messages: [],
     isLoading: false,
