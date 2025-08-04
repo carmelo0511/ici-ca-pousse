@@ -1088,11 +1088,11 @@ const Chatbot = ({
   };
 
   return (
-    <div className="p-6 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg">
+    <div className="p-3 sm:p-6 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg">
       {/* Header avec titre et boutons de contrôle */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className="flex items-center">
-          <h2 className="text-3xl font-bold text-gray-800">Coach Lex IA</h2>
+          <h2 className="text-lg sm:text-3xl font-bold text-gray-800">Coach Lex IA</h2>
         </div>
 
         {/* Dashboard unifié */}
@@ -1106,7 +1106,17 @@ const Chatbot = ({
       </div>
 
       {/* Boutons d'action principaux */}
-      <div className="mb-4 flex items-center gap-3">
+      <div className="mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
+        {/* Bouton création séance IA */}
+        <button
+          onClick={() => setShowMenu((v) => !v)}
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all text-xs sm:text-sm border border-white/20 flex items-center gap-1 sm:gap-2"
+          title="Créer une séance personnalisée avec l'IA"
+        >
+          <span>🤖</span>
+          <span>Séance IA</span>
+        </button>
+        
         {/* Menu de recommandations IA */}
         <RecommendationsMenu
           onRecapWorkouts={handleRecapLastWorkouts}
@@ -1115,16 +1125,6 @@ const Chatbot = ({
           }
           onGoalsAndProgress={() => handleGoalsAndProgress()}
         />
-
-        {/* Bouton de création de séance personnalisée */}
-        <button
-          onClick={() => setShowMenu((v) => !v)}
-          className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded shadow font-semibold hover:from-green-600 hover:to-green-700 transition text-sm whitespace-nowrap border border-white/20 flex items-center gap-2"
-          title="Créer une séance personnalisée"
-        >
-          <span>💪</span>
-          <span>Créer une séance</span>
-        </button>
       </div>
 
       {/* Menu de création de séance */}
@@ -1185,7 +1185,7 @@ const Chatbot = ({
       )}
 
       {/* Zone de messages */}
-      <div className="border rounded-xl p-4 h-64 overflow-y-auto bg-white space-y-2 shadow-inner mb-4">
+      <div className="border rounded-xl p-2 sm:p-4 h-48 sm:h-64 overflow-y-auto bg-white space-y-2 shadow-inner mb-3 sm:mb-4">
         {messages.map((m, i) => (
           <div
             key={i}
@@ -1194,8 +1194,8 @@ const Chatbot = ({
             <span
               className={
                 m.role === 'user'
-                  ? 'bg-indigo-100 text-indigo-800 px-3 py-2 rounded inline-block text-lg'
-                  : 'bg-gray-100 px-3 py-2 rounded inline-block text-lg'
+                  ? 'bg-indigo-100 text-indigo-800 px-2 sm:px-3 py-1 sm:py-2 rounded inline-block text-xs sm:text-lg'
+                  : 'bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded inline-block text-xs sm:text-lg'
               }
             >
               {m.content}
@@ -1214,15 +1214,15 @@ const Chatbot = ({
               handleSend();
             }
           }}
-          className="flex-1 border rounded px-3 py-2 text-lg input-modern"
-          placeholder="Posez n'importe quelle question..."
+          className="flex-1 border rounded px-2 sm:px-3 py-1 sm:py-2 text-sm sm:text-lg input-modern"
+          placeholder="Posez une question..."
         />
         <button
           onClick={handleSend}
           disabled={isLoading}
-          className={`btn-gradient text-white px-5 py-2 rounded text-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`btn-gradient text-white px-3 sm:px-5 py-1 sm:py-2 rounded text-sm sm:text-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          {isLoading ? '⏳...' : 'Envoyer'}
+          {isLoading ? '⏳' : 'Envoyer'}
         </button>
       </div>
 

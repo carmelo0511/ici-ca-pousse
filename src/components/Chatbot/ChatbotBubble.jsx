@@ -47,19 +47,19 @@ const ChatbotBubble = (props) => {
           </button>
         )}
         {open && (
-          <div className="fixed bottom-20 left-8 w-[350px] max-w-[95vw] modal flex flex-col z-50 animate-fade-in">
-            <div className="flex justify-between items-center p-3 border-b border-glass-border section bg-glass-bg-secondary rounded-t-2xl">
-              <span className="section-title text-lg">
+          <div className="fixed bottom-16 left-2 right-2 sm:bottom-20 sm:left-8 sm:right-auto sm:w-[350px] sm:max-w-[95vw] w-full max-w-[calc(100vw-1rem)] modal flex flex-col z-50 animate-fade-in">
+            <div className="flex justify-between items-center p-2 sm:p-3 border-b border-glass-border section bg-glass-bg-secondary rounded-t-2xl">
+              <span className="section-title text-sm sm:text-lg font-medium">
                 Coach Lex IA
               </span>
               <button
                 onClick={handleClose}
-                className="btn-secondary ripple-effect p-1 rounded-full"
+                className="btn-secondary ripple-effect p-1 rounded-full text-xs"
               >
-                <X className="w-5 h-5" />
+                <X className="w-3 h-3 sm:w-5 sm:h-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto max-h-[60vh]">
+            <div className="flex-1 overflow-y-auto max-h-[45vh] sm:max-h-[60vh]">
               <Chatbot {...props} minimalMode onClose={handleClose} />
             </div>
           </div>

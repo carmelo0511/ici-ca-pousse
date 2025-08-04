@@ -306,7 +306,7 @@ const BadgesPage = ({
         {selectedBadge && (
           <button
             onClick={() => handleBadgeSelect(null)}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium border border-gray-500"
           >
             Retirer le badge de profil
           </button>

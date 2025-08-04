@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 
 // Third-party imports
-import { useTranslation } from 'react-i18next';
+import { useTranslation, I18nextProvider } from 'react-i18next';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from './utils/firebase';
 import { inject as injectAnalytics } from '@vercel/analytics';
 import { injectSpeedInsights } from '@vercel/speed-insights';
+import i18n from './i18n';
 
 // Styles
 import './App.css';
@@ -406,7 +407,7 @@ function App() {
   }
 
   return (
-    <>
+    <I18nextProvider i18n={i18n}>
       {/* Notification hebdo poids */}
       {showWeightNotif && (
         <div
@@ -585,7 +586,7 @@ function App() {
           {/* Vercel Analytics et Speed Insights - Initialized via useEffect */}
         </div>
       </div>
-    </>
+    </I18nextProvider>
   );
 }
 

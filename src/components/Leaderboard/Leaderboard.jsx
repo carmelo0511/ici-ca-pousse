@@ -290,7 +290,7 @@ function Leaderboard({
                           <div className="font-semibold text-sm md:text-base truncate">
                             {user.displayName}
                             {user.nickname && (
-                              <span className="ml-2 text-xs font-bold text-indigo-600 bg-indigo-50 rounded px-2 py-0.5 align-middle">
+                              <span className="ml-2 text-xs font-bold text-gray-700 bg-gray-100 rounded px-2 py-0.5 align-middle">
                                 {user.nickname}
                               </span>
                             )}
@@ -369,7 +369,7 @@ function Leaderboard({
                           <div className="font-semibold text-sm md:text-base truncate">
                             {user.displayName}
                             {user.nickname && (
-                              <span className="ml-2 text-xs font-bold text-indigo-600 bg-indigo-50 rounded px-2 py-0.5 align-middle">
+                              <span className="ml-2 text-xs font-bold text-gray-700 bg-gray-100 rounded px-2 py-0.5 align-middle">
                                 {user.nickname}
                               </span>
                             )}

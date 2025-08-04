@@ -183,7 +183,7 @@ const ProfilePage = ({
             {user.displayName || user.email}
           </div>
           {user.nickname && (
-            <div className="text-indigo-600 text-sm font-bold mt-1">
+            <div className="text-gray-700 text-sm font-bold mt-1">
               {user.nickname}
             </div>
           )}
@@ -201,7 +201,7 @@ const ProfilePage = ({
               </div>
             )}
             {user.goal && (
-              <div className="text-indigo-600 flex items-center mt-1">
+              <div className="text-gray-700 flex items-center mt-1">
                 <Target className="h-4 w-4 mr-1" />
                 <span className="font-semibold">{user.goal}</span>
               </div>
@@ -225,7 +225,7 @@ const ProfilePage = ({
                 max="300"
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
-                className="border rounded-lg px-3 py-2 w-24 text-center focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="border border-gray-300 rounded-lg px-3 py-2 w-24 text-center focus:ring-2 focus:ring-gray-400 focus:border-gray-500"
                 placeholder="ex: 175"
                 disabled={loading}
               />
@@ -241,7 +241,7 @@ const ProfilePage = ({
                 step="0.1"
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
-                className="border rounded-lg px-3 py-2 w-24 text-center focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="border border-gray-300 rounded-lg px-3 py-2 w-24 text-center focus:ring-2 focus:ring-gray-400 focus:border-gray-500"
                 placeholder="ex: 70.5"
                 disabled={loading}
               />
@@ -255,7 +255,7 @@ const ProfilePage = ({
                 maxLength={10}
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-                className="border rounded-lg px-3 py-2 w-28 text-center focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="border border-gray-300 rounded-lg px-3 py-2 w-28 text-center focus:ring-2 focus:ring-gray-400 focus:border-gray-500"
                 placeholder="Surnom"
                 disabled={loading}
               />
@@ -263,7 +263,7 @@ const ProfilePage = ({
           </div>
           <button
             type="submit"
-            className="px-6 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors font-medium disabled:opacity-50"
+            className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium disabled:opacity-50"
             disabled={loading}
           >
             {loading ? 'Enregistrement...' : 'Enregistrer'}
@@ -292,8 +292,8 @@ const ProfilePage = ({
             onClick={() => handleSaveGoal('Perte de poids')}
             className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
               user.goal === 'Perte de poids'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 bg-white hover:border-indigo-400'
+                ? 'border-gray-600 bg-gray-50'
+                : 'border-gray-200 bg-white hover:border-gray-400'
             }`}
             disabled={loading}
           >
@@ -308,12 +308,12 @@ const ProfilePage = ({
             onClick={() => handleSaveGoal('Prise de masse')}
             className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
               user.goal === 'Prise de masse'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 bg-white hover:border-indigo-400'
+                ? 'border-gray-600 bg-gray-50'
+                : 'border-gray-200 bg-white hover:border-gray-400'
             }`}
             disabled={loading}
           >
-            <Dumbbell className="h-6 w-6 text-blue-500" />
+            <Dumbbell className="h-6 w-6 text-gray-700" />
             <div className="text-left">
               <div className="font-semibold text-gray-800">Prise de masse</div>
               <div className="text-sm text-gray-600">Développer la force</div>
@@ -324,8 +324,8 @@ const ProfilePage = ({
             onClick={() => handleSaveGoal('Endurance')}
             className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
               user.goal === 'Endurance'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 bg-white hover:border-indigo-400'
+                ? 'border-gray-600 bg-gray-50'
+                : 'border-gray-200 bg-white hover:border-gray-400'
             }`}
             disabled={loading}
           >
@@ -340,8 +340,8 @@ const ProfilePage = ({
             onClick={() => handleSaveGoal('Performance')}
             className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all ${
               user.goal === 'Performance'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 bg-white hover:border-indigo-400'
+                ? 'border-gray-600 bg-gray-50'
+                : 'border-gray-200 bg-white hover:border-gray-400'
             }`}
             disabled={loading}
           >
@@ -387,8 +387,8 @@ const ProfilePage = ({
                 onClick={() => handleBadgeSelect(badge)}
                 className={`flex flex-col items-center p-3 rounded-lg border-2 transition-all ${
                   localSelectedBadge === badge
-                    ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                    : 'border-gray-200 bg-white hover:border-indigo-400 hover:shadow-sm'
+                    ? 'border-gray-600 bg-gray-50 shadow-md'
+                    : 'border-gray-200 bg-white hover:border-gray-400 hover:shadow-sm'
                 }`}
                 disabled={loading}
               >
@@ -402,7 +402,7 @@ const ProfilePage = ({
                   {BADGE_CONFIG[badge].name}
                 </span>
                 {localSelectedBadge === badge && (
-                  <span className="text-indigo-500 text-xs mt-1 font-medium">
+                  <span className="text-gray-700 text-xs mt-1 font-medium">
                     ✓ Sélectionné
                   </span>
                 )}
