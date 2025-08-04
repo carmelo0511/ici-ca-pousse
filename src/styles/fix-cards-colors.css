@@ -1199,3 +1199,259 @@ span.text-sm.font-semibold.text-blue-600.bg-blue-50,
     border: 1px solid rgba(59, 130, 246, 0.4) !important;
     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
 }
+
+/* ========================================
+   CORRECTION CLASSEMENT ET COMPARAISON DE STATS
+   ======================================== */
+
+/* Correction spécifique pour les cartes de comparaison de stats */
+.bg-gradient-to-br.from-blue-50.to-blue-100,
+.bg-gradient-to-br.from-green-50.to-green-100,
+.bg-gradient-to-br.from-purple-50.to-purple-100,
+div[class*="bg-gradient-to-br from-blue-50 to-blue-100"],
+div[class*="bg-gradient-to-br from-green-50 to-green-100"],
+div[class*="bg-gradient-to-br from-purple-50 to-purple-100"] {
+    background: rgba(15, 15, 35, 0.9) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    color: #ffffff !important;
+}
+
+/* Textes dans les cartes de comparaison */
+.bg-gradient-to-br.from-blue-50.to-blue-100 *,
+.bg-gradient-to-br.from-green-50.to-green-100 *,
+.bg-gradient-to-br.from-purple-50.to-purple-100 *,
+div[class*="bg-gradient-to-br from-blue-50 to-blue-100"] *,
+div[class*="bg-gradient-to-br from-green-50 to-green-100"] *,
+div[class*="bg-gradient-to-br from-purple-50 to-purple-100"] * {
+    color: #ffffff !important;
+}
+
+/* Titres dans les cartes de comparaison */
+.bg-gradient-to-br.from-blue-50.to-blue-100 .font-semibold,
+.bg-gradient-to-br.from-green-50.to-green-100 .font-semibold,
+.bg-gradient-to-br.from-purple-50.to-purple-100 .font-semibold,
+div[class*="bg-gradient-to-br from-blue-50 to-blue-100"] .font-semibold,
+div[class*="bg-gradient-to-br from-green-50 to-green-100"] .font-semibold,
+div[class*="bg-gradient-to-br from-purple-50 to-purple-100"] .font-semibold {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Valeurs dans les cartes de comparaison */
+.bg-gradient-to-br.from-blue-50.to-blue-100 .text-2xl,
+.bg-gradient-to-br.from-green-50.to-green-100 .text-2xl,
+.bg-gradient-to-br.from-purple-50.to-purple-100 .text-2xl,
+div[class*="bg-gradient-to-br from-blue-50 to-blue-100"] .text-2xl,
+div[class*="bg-gradient-to-br from-green-50 to-green-100"] .text-2xl,
+div[class*="bg-gradient-to-br from-purple-50 to-purple-100"] .text-2xl {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Icônes dans les cartes de comparaison */
+.bg-gradient-to-br.from-blue-50.to-blue-100 svg,
+.bg-gradient-to-br.from-green-50.to-green-100 svg,
+.bg-gradient-to-br.from-purple-50.to-purple-100 svg,
+div[class*="bg-gradient-to-br from-blue-50 to-blue-100"] svg,
+div[class*="bg-gradient-to-br from-green-50 to-green-100"] svg,
+div[class*="bg-gradient-to-br from-purple-50 to-purple-100"] svg {
+    color: #ffffff !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) !important;
+}
+
+/* Couleurs spécifiques pour chaque type de carte */
+.bg-gradient-to-br.from-blue-50.to-blue-100,
+div[class*="bg-gradient-to-br from-blue-50 to-blue-100"] {
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2) !important;
+}
+
+.bg-gradient-to-br.from-green-50.to-green-100,
+div[class*="bg-gradient-to-br from-green-50 to-green-100"] {
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2) !important;
+}
+
+.bg-gradient-to-br.from-purple-50.to-purple-100,
+div[class*="bg-gradient-to-br from-purple-50 to-purple-100"] {
+    border-color: rgba(139, 92, 246, 0.4) !important;
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Correction pour les cartes du classement */
+.bg-white.rounded-lg,
+.bg-indigo-100.border-2.border-indigo-300,
+div[class*="bg-white rounded-lg"]:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"] {
+    background: rgba(15, 15, 35, 0.9) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    color: #ffffff !important;
+}
+
+/* Cartes du classement avec bordure indigo pour l'utilisateur actuel */
+.bg-indigo-100.border-2.border-indigo-300,
+div[class*="bg-indigo-100 border-2 border-indigo-300"] {
+    background: rgba(59, 130, 246, 0.2) !important;
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Textes dans les cartes du classement */
+.bg-white.rounded-lg *,
+.bg-indigo-100.border-2.border-indigo-300 *,
+div[class*="bg-white rounded-lg"] *:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"] * {
+    color: #ffffff !important;
+}
+
+/* Titres dans les cartes du classement */
+.bg-white.rounded-lg .font-semibold,
+.bg-indigo-100.border-2.border-indigo-300 .font-semibold,
+div[class*="bg-white rounded-lg"] .font-semibold:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"] .font-semibold {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Valeurs dans les cartes du classement */
+.bg-white.rounded-lg .font-bold,
+.bg-indigo-100.border-2.border-indigo-300 .font-bold,
+div[class*="bg-white rounded-lg"] .font-bold:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"] .font-bold {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Correction pour les textes gris dans le classement */
+.bg-white.rounded-lg .text-gray-600,
+.bg-indigo-100.border-2.border-indigo-300 .text-gray-600,
+div[class*="bg-white rounded-lg"] .text-gray-600:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"] .text-gray-600 {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Correction pour les surnoms dans le classement */
+.bg-white.rounded-lg .text-gray-700,
+.bg-indigo-100.border-2.border-indigo-300 .text-gray-700,
+div[class*="bg-white rounded-lg"] .text-gray-700:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"] .text-gray-700 {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500 !important;
+}
+
+/* Correction pour les valeurs indigo dans le classement */
+.bg-white.rounded-lg .text-indigo-600,
+.bg-indigo-100.border-2.border-indigo-300 .text-indigo-600,
+div[class*="bg-white rounded-lg"] .text-indigo-600:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"] .text-indigo-600 {
+    color: #60a5fa !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(96, 165, 250, 0.3) !important;
+}
+
+/* Correction pour les boutons d'ajout d'ami dans le classement */
+.bg-green-100.hover\:bg-green-200,
+div[class*="bg-green-100 hover:bg-green-200"] {
+    background: rgba(16, 185, 129, 0.2) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    color: #10b981 !important;
+}
+
+.bg-green-100.hover\:bg-green-200:hover,
+div[class*="bg-green-100 hover:bg-green-200"]:hover {
+    background: rgba(16, 185, 129, 0.3) !important;
+    border-color: rgba(16, 185, 129, 0.5) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Correction pour les badges dans le classement */
+.bg-gray-100.rounded,
+div[class*="bg-gray-100 rounded"] {
+    background: rgba(15, 15, 35, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Correction pour les éléments de rang dans le classement */
+.bg-white.rounded-lg .text-xl,
+.bg-white.rounded-lg .text-2xl,
+.bg-indigo-100.border-2.border-indigo-300 .text-xl,
+.bg-indigo-100.border-2.border-indigo-300 .text-2xl,
+div[class*="bg-white rounded-lg"] .text-xl:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-white rounded-lg"] .text-2xl:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"] .text-xl,
+div[class*="bg-indigo-100 border-2 border-indigo-300"] .text-2xl {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Correction pour les éléments hover dans le classement */
+.bg-white.rounded-lg:hover,
+.bg-indigo-100.border-2.border-indigo-300:hover,
+div[class*="bg-white rounded-lg"]:hover:not([class*="bg-white rounded-xl"]):not([class*="bg-white rounded-2xl"]),
+div[class*="bg-indigo-100 border-2 border-indigo-300"]:hover {
+    background: rgba(15, 15, 35, 0.95) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Correction pour les éléments hover gray-50 dans le classement */
+.hover\:bg-gray-50:hover {
+    background: rgba(15, 15, 35, 0.8) !important;
+}
+
+/* Correction pour la zone de graphique mensuel dans la comparaison */
+.bg-white.border.border-gray-200.rounded-xl,
+div[class*="bg-white border border-gray-200 rounded-xl"] {
+    background: rgba(15, 15, 35, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+
+/* Textes dans la zone de graphique */
+.bg-white.border.border-gray-200.rounded-xl *,
+div[class*="bg-white border border-gray-200 rounded-xl"] * {
+    color: #ffffff !important;
+}
+
+/* Titre du graphique */
+.bg-white.border.border-gray-200.rounded-xl .text-lg.font-semibold,
+div[class*="bg-white border border-gray-200 rounded-xl"] .text-lg.font-semibold {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Légende du graphique */
+.bg-white.border.border-gray-200.rounded-xl .text-sm,
+div[class*="bg-white border border-gray-200 rounded-xl"] .text-sm {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Correction pour les textes gris dans la comparaison */
+.text-gray-600,
+.text-gray-500,
+div[class*="text-gray-600"],
+div[class*="text-gray-500"] {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Correction pour les textes gris plus foncés */
+.text-gray-700,
+.text-gray-800,
+.text-gray-900,
+div[class*="text-gray-700"],
+div[class*="text-gray-800"],
+div[class*="text-gray-900"] {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
