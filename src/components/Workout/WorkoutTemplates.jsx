@@ -622,11 +622,10 @@ const WorkoutTemplates = ({
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div
-            className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6"
-            style={{ height: '90vh' }}
+            className="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto p-4 sm:p-6"
           >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-800">
                 Créer un nouveau template
               </h3>
               <button
@@ -642,9 +641,9 @@ const WorkoutTemplates = ({
               </button>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Informations du template */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Nom du template *
@@ -698,7 +697,7 @@ const WorkoutTemplates = ({
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {newTemplateExercises.map((exercise, exerciseIndex) => (
                       <Card key={exercise.id} className="p-4">
                         <div className="flex justify-between items-start mb-3">
@@ -863,9 +862,9 @@ const WorkoutTemplates = ({
       {/* Modal sélection exercice pour template */}
       {showAddExerciseModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden p-6">
-            <div className="flex justify-between items-center mb-6 flex-shrink-0">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden p-4 sm:p-6">
+            <div className="flex justify-between items-center mb-4 flex-shrink-0">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 💪 Ajouter un exercice
               </h3>
               <button
@@ -882,10 +881,10 @@ const WorkoutTemplates = ({
 
             <div
               className="overflow-y-auto flex-1 pr-2"
-              style={{ maxHeight: 'calc(90vh - 200px)' }}
+              style={{ maxHeight: 'calc(85vh - 200px)' }}
             >
               {/* Champ de recherche global */}
-              <div className="flex flex-col items-center mb-6 w-full">
+              <div className="flex flex-col items-center mb-4 w-full">
                 <input
                   type="text"
                   value={searchTerm}
@@ -897,7 +896,7 @@ const WorkoutTemplates = ({
               </div>
 
               {/* Affichage par groupes musculaires */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {Object.entries(exerciseDatabase).map(
                   ([muscle, exerciseList]) => {
                     // Filtrer les exercices selon la recherche
@@ -913,7 +912,7 @@ const WorkoutTemplates = ({
                     return (
                       <div key={muscle} className="bg-gray-50 rounded-2xl p-4">
                         {/* En-tête du groupe musculaire */}
-                        <div className="flex items-center space-x-3 mb-4">
+                        <div className="flex items-center space-x-3 mb-3">
                           <div
                             className={`p-3 rounded-xl ${muscle === 'cardio' ? 'bg-red-500' : 'bg-indigo-500'} shadow-lg`}
                           >
@@ -931,7 +930,7 @@ const WorkoutTemplates = ({
                         </div>
 
                         {/* Liste des exercices */}
-                        <div className="grid grid-cols-1 gap-3">
+                        <div className="grid grid-cols-1 gap-2">
                           {filteredForMuscle.map((exercise) => (
                             <div key={exercise} className="relative">
                               <button
@@ -966,7 +965,7 @@ const WorkoutTemplates = ({
               </div>
 
               {/* Champ pour exercice personnalisé */}
-              <div className="flex flex-col items-center justify-center gap-3 mt-6 w-full">
+              <div className="flex flex-col items-center justify-center gap-3 mt-4 w-full">
                 <div className="w-full max-w-md bg-white rounded-2xl p-4 border-2 border-dashed border-indigo-300">
                   <h5 className="text-center font-semibold text-gray-700 mb-3">
                     Exercice personnalisé
