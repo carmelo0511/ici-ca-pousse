@@ -67,11 +67,11 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           <span>Évolution du poids</span>
         </h3>
         {weightData.length === 0 ? (
-          <div className="text-center py-8 text-secondary">
-            Aucune donnée de poids enregistrée.
-            <br />
-            Ajoutez votre poids dans le profil pour voir la courbe !
-          </div>
+                  <div className="text-center py-8 text-white">
+          Aucune donnée de poids enregistrée.
+          <br />
+          Ajoutez votre poids dans le profil pour voir la courbe !
+        </div>
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <LineChart
@@ -79,11 +79,12 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="weekFormatted" fontSize={12} />
-              <YAxis domain={['auto', 'auto']} tickCount={6} />
+              <XAxis dataKey="weekFormatted" fontSize={12} fill="white" />
+              <YAxis domain={['auto', 'auto']} tickCount={6} fill="white" />
               <Tooltip
                 formatter={(value, name) => [value + ' kg', 'Poids']}
                 labelFormatter={(label) => `Semaine du ${label}`}
+                contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', border: 'none', borderRadius: '8px', color: 'white' }}
               />
               <Line
                 type="monotone"
@@ -93,7 +94,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                 dot={{ r: 4, fill: '#6366f1' }}
                 activeDot={{ r: 6 }}
               >
-                <LabelList position="top" offset={12} fontSize={12} />
+                <LabelList position="top" offset={12} fontSize={12} fill="white" />
               </Line>
             </LineChart>
           </ResponsiveContainer>
@@ -209,7 +210,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <p className="text-secondary text-sm font-medium">
                 {t('total_workouts')}
               </p>
-              <p className="text-4xl font-bold text-primary">{stats.totalWorkouts}</p>
+              <p className="text-4xl font-bold text-white">{stats.totalWorkouts}</p>
             </div>
             <div className="icon-primary p-3 rounded-lg">
               <Target className="h-12 w-12 text-white" />
@@ -223,7 +224,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <p className="text-secondary text-sm font-medium">
                 {t('total_sets')}
               </p>
-              <p className="text-4xl font-bold text-primary">{stats.totalSets}</p>
+              <p className="text-4xl font-bold text-white">{stats.totalSets}</p>
             </div>
             <div className="icon-secondary p-3 rounded-lg">
               <Dumbbell className="h-12 w-12 text-white" />
@@ -237,7 +238,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <p className="text-secondary text-sm font-medium">
                 {t('total_reps')}
               </p>
-              <p className="text-4xl font-bold text-primary">{stats.totalReps}</p>
+              <p className="text-4xl font-bold text-white">{stats.totalReps}</p>
             </div>
             <div className="icon-success p-3 rounded-lg">
               <TrendingUp className="h-12 w-12 text-white" />
@@ -251,7 +252,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <p className="text-secondary text-sm font-medium">
                 {t('avg_duration')}
               </p>
-              <p className="text-4xl font-bold text-primary">{stats.avgDuration} min</p>
+              <p className="text-4xl font-bold text-white">{stats.avgDuration} min</p>
             </div>
             <div className="icon-warning p-3 rounded-lg">
               <Clock className="h-12 w-12 text-white" />
@@ -265,7 +266,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <p className="text-secondary text-sm font-medium">
                 {t('regularity')}
               </p>
-              <p className="text-4xl font-bold text-primary">
+              <p className="text-4xl font-bold text-white">
                 {workouts.length > 0 ? '💪' : '🔥'}
               </p>
             </div>
@@ -281,7 +282,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <p className="text-secondary text-sm font-medium">
                 Groupe préféré
               </p>
-              <p className="text-2xl font-bold text-primary">
+              <p className="text-2xl font-bold text-white">
                 {getMostWorkedMuscleGroup(workouts)}
               </p>
             </div>
@@ -309,10 +310,10 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               <div className="flex items-center space-x-3">
                 <span className="text-3xl">{preferredTime.icon}</span>
                 <div>
-                  <p className="text-xl font-bold text-gray-800">
+                  <p className="text-xl font-bold text-white">
                     {preferredTime.name}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-white">
                     {preferredTime.count} séances ({preferredTime.percentage}%)
                   </p>
                 </div>
@@ -330,7 +331,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                     <span>🌅</span>
                     <span>Matin (5h-12h)</span>
                   </span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-white">
                     {workoutHabits.morning.count} (
                     {workoutHabits.morning.percentage}%)
                   </span>
@@ -340,7 +341,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                     <span>☀️</span>
                     <span>Après-midi (12h-18h)</span>
                   </span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-white">
                     {workoutHabits.afternoon.count} (
                     {workoutHabits.afternoon.percentage}%)
                   </span>
@@ -350,7 +351,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                     <span>🌆</span>
                     <span>Soir (18h-22h)</span>
                   </span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-white">
                     {workoutHabits.evening.count} (
                     {workoutHabits.evening.percentage}%)
                   </span>
@@ -360,7 +361,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                     <span>🌙</span>
                     <span>Nuit (22h-5h)</span>
                   </span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-white">
                     {workoutHabits.night.count} (
                     {workoutHabits.night.percentage}%)
                   </span>
@@ -377,31 +378,31 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="card text-center">
                 <div className="text-2xl mb-1">🌅</div>
-                <div className="font-bold text-blue-800">
+                <div className="font-bold text-white">
                   {avgDurationByTime.morning} min
                 </div>
-                <div className="text-sm text-blue-600">Matin</div>
+                <div className="text-sm text-white">Matin</div>
               </div>
               <div className="card text-center">
                 <div className="text-2xl mb-1">☀️</div>
-                <div className="font-bold text-blue-800">
+                <div className="font-bold text-white">
                   {avgDurationByTime.afternoon} min
                 </div>
-                <div className="text-sm text-blue-600">Après-midi</div>
+                <div className="text-sm text-white">Après-midi</div>
               </div>
               <div className="card text-center">
                 <div className="text-2xl mb-1">🌆</div>
-                <div className="font-bold text-blue-800">
+                <div className="font-bold text-white">
                   {avgDurationByTime.evening} min
                 </div>
-                <div className="text-sm text-blue-600">Soir</div>
+                <div className="text-sm text-white">Soir</div>
               </div>
               <div className="card text-center">
                 <div className="text-2xl mb-1">🌙</div>
-                <div className="font-bold text-blue-800">
+                <div className="font-bold text-white">
                   {avgDurationByTime.night} min
                 </div>
-                <div className="text-sm text-blue-600">Nuit</div>
+                <div className="text-sm text-white">Nuit</div>
               </div>
             </div>
           </div>
