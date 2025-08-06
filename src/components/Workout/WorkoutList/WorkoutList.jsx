@@ -13,9 +13,6 @@ import {
   Shield,
   Zap,
   Apple,
-  Smile,
-  Meh,
-  Frown,
   Bookmark,
   Star,
 } from 'lucide-react';
@@ -23,7 +20,7 @@ import { exerciseDatabase } from '../../../utils/workout/exerciseDatabase';
 import Modal from '../Modal';
 import GradientButton from '../../GradientButton';
 import Card from '../../Card';
-import IconButton from '../../IconButton';
+
 import LexIA from '../../IAInfoBox';
 import MLWeightPrediction from '../../MLWeightPrediction';
 
@@ -96,85 +93,85 @@ function WorkoutList({
     {
       value: 'easy',
       label: t('feeling_easy'),
-      icon: <Smile className="h-5 w-5" />,
+      icon: <span className="text-3xl">😊</span>,
       color: 'green',
     },
     {
       value: 'medium',
       label: t('feeling_medium'),
-      icon: <Meh className="h-5 w-5" />,
+      icon: <span className="text-3xl">😐</span>,
       color: 'yellow',
     },
     {
       value: 'hard',
       label: t('feeling_hard'),
-      icon: <Frown className="h-5 w-5" />,
+      icon: <span className="text-3xl">😔</span>,
       color: 'red',
     },
     {
       value: 'weak',
       label: t('feeling_weak'),
-      icon: <Frown className="h-5 w-5" />,
+      icon: <span className="text-3xl">😞</span>,
       color: 'orange',
     },
     {
       value: 'strong',
       label: t('feeling_strong'),
-      icon: <Smile className="h-5 w-5" />,
+      icon: <span className="text-3xl">💪</span>,
       color: 'green',
     },
     {
       value: 'tired',
       label: t('feeling_tired'),
-      icon: <Meh className="h-5 w-5" />,
+      icon: <span className="text-3xl">😴</span>,
       color: 'gray',
     },
     {
       value: 'energized',
       label: t('feeling_energized'),
-      icon: <Smile className="h-5 w-5" />,
+      icon: <span className="text-3xl">⚡</span>,
       color: 'blue',
     },
     {
       value: 'motivated',
       label: t('feeling_motivated'),
-      icon: <Smile className="h-5 w-5" />,
+      icon: <span className="text-3xl">🔥</span>,
       color: 'purple',
     },
     {
       value: 'demotivated',
       label: t('feeling_demotivated'),
-      icon: <Frown className="h-5 w-5" />,
+      icon: <span className="text-3xl">😕</span>,
       color: 'gray',
     },
     {
       value: 'great',
       label: t('feeling_great'),
-      icon: <Smile className="h-5 w-5" />,
+      icon: <span className="text-3xl">🎉</span>,
       color: 'green',
     },
     {
       value: 'good',
       label: t('feeling_good'),
-      icon: <Smile className="h-5 w-5" />,
+      icon: <span className="text-3xl">👍</span>,
       color: 'blue',
     },
     {
       value: 'ok',
       label: t('feeling_ok'),
-      icon: <Meh className="h-5 w-5" />,
+      icon: <span className="text-3xl">🤷</span>,
       color: 'yellow',
     },
     {
       value: 'bad',
       label: t('feeling_bad'),
-      icon: <Frown className="h-5 w-5" />,
+      icon: <span className="text-3xl">😟</span>,
       color: 'orange',
     },
     {
       value: 'terrible',
       label: t('feeling_terrible'),
-      icon: <Frown className="h-5 w-5" />,
+      icon: <span className="text-3xl">😭</span>,
       color: 'red',
     },
   ];
@@ -357,14 +354,9 @@ function WorkoutList({
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 ml-4">
-                  <IconButton
-                    icon={Plus}
-                    onClick={() => addSet(exercise.id)}
-                    className="btn-primary ripple-effect shadow-md hover:shadow-lg"
-                  />
                   <button
                     onClick={() => removeExerciseFromWorkout(exercise.id)}
-                    className="btn-secondary ripple-effect hover:badge-danger text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
+                    className="bg-red-500 hover:bg-red-600 text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
                     title="Supprimer l'exercice"
                   >
                     <X className="h-3 w-3" />
@@ -507,13 +499,22 @@ function WorkoutList({
                         <span className="text-sm font-semibold text-blue-600 bg-blue-50 rounded-lg px-3 py-2 text-center">
                           {set.reps * set.weight} kg
                         </span>
-                        <button
-                          onClick={() => removeSet(exercise.id, setIndex)}
-                          className="bg-red-500 hover:bg-red-600 text-white p-0.5 rounded transition-all duration-200 shadow-sm hover:shadow-md w-6 h-6 flex items-center justify-center"
-                          title="Supprimer la série"
-                        >
-                          <X className="h-2.5 w-2.5" />
-                        </button>
+                        <div className="flex items-center space-x-1">
+                          <button
+                            onClick={() => addSet(exercise.id)}
+                            className="bg-green-500 hover:bg-green-600 text-white p-0.5 rounded transition-all duration-200 shadow-sm hover:shadow-md w-6 h-6 flex items-center justify-center"
+                            title="Ajouter une série"
+                          >
+                            <Plus className="h-2.5 w-2.5" />
+                          </button>
+                          <button
+                            onClick={() => removeSet(exercise.id, setIndex)}
+                            className="bg-red-500 hover:bg-red-600 text-white p-0.5 rounded transition-all duration-200 shadow-sm hover:shadow-md w-6 h-6 flex items-center justify-center"
+                            title="Supprimer la série"
+                          >
+                            <X className="h-2.5 w-2.5" />
+                          </button>
+                        </div>
                       </>
                     )}
                   </div>
@@ -939,10 +940,10 @@ function WorkoutList({
                 }`}
               >
                 <div
-                  className={`p-2 rounded-full mb-2 ${
+                  className={`p-3 rounded-full mb-2 ${
                     selectedFeeling === feeling.value
                       ? 'bg-white/20'
-                      : `bg-${feeling.color}-100 text-${feeling.color}-600`
+                      : `bg-${feeling.color}-100 text-${feeling.color}-600 shadow-sm`
                   }`}
                 >
                   {feeling.icon}
