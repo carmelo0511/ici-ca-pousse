@@ -47,9 +47,9 @@ const ChatbotBubble = (props) => {
           </button>
         )}
         {open && (
-          <div className="fixed bottom-16 left-2 right-2 sm:bottom-20 sm:left-8 sm:right-auto sm:w-[350px] sm:max-w-[95vw] w-full max-w-[calc(100vw-1rem)] modal flex flex-col z-50 animate-fade-in">
+          <div className="absolute bottom-12 left-0 right-0 sm:bottom-16 sm:left-0 sm:right-auto sm:w-[350px] sm:max-w-[95vw] w-full max-w-[calc(100vw-1rem)] modal flex flex-col z-50 animate-fade-in">
             <div className="flex justify-between items-center p-2 sm:p-3 border-b border-glass-border section bg-glass-bg-secondary rounded-t-2xl">
-              <span className="section-title text-sm sm:text-lg font-medium">
+              <span className="section-title text-xs sm:text-lg font-medium">
                 Coach Lex IA
               </span>
               <button
@@ -59,7 +59,7 @@ const ChatbotBubble = (props) => {
                 <X className="w-3 h-3 sm:w-5 sm:h-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto max-h-[45vh] sm:max-h-[60vh]">
+            <div className="flex-1 overflow-y-auto max-h-[35vh] sm:max-h-[55vh]">
               <Chatbot {...props} minimalMode onClose={handleClose} />
             </div>
           </div>

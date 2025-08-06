@@ -1088,13 +1088,9 @@ const Chatbot = ({
   };
 
   return (
-    <div className="p-3 sm:p-6 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg">
-      {/* Header avec titre et boutons de contrôle */}
-      <div className="flex items-center justify-between mb-3 sm:mb-4">
-        <div className="flex items-center">
-          <h2 className="text-lg sm:text-3xl font-bold text-gray-800">Coach Lex IA 🤖</h2>
-        </div>
-
+    <div className="p-2 sm:p-6 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg">
+      {/* Header avec boutons de contrôle */}
+      <div className="flex items-center justify-end mb-2 sm:mb-4">
         {/* Dashboard unifié */}
         <ChatbotDashboard
           onMonitoring={() => setShowMonitoring(true)}
@@ -1106,11 +1102,11 @@ const Chatbot = ({
       </div>
 
       {/* Boutons d'action principaux */}
-      <div className="mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
+      <div className="mb-2 sm:mb-4 flex items-center gap-1 sm:gap-3">
         {/* Bouton création séance IA */}
         <button
           onClick={() => setShowMenu((v) => !v)}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all text-xs sm:text-sm border border-white/20 flex items-center gap-1 sm:gap-2"
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg shadow-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all text-xs sm:text-sm border border-white/20 flex items-center gap-1 sm:gap-2"
           title="Créer une séance personnalisée avec l'IA"
         >
           <span>🤖</span>
@@ -1129,19 +1125,19 @@ const Chatbot = ({
 
       {/* Menu de création de séance */}
       {showMenu && (
-        <div className="mb-4 p-4 bg-white border rounded-xl shadow-xl">
-          <h3 className="font-semibold text-gray-800 mb-3">
+        <div className="mb-2 sm:mb-4 p-2 sm:p-4 bg-white border rounded-xl shadow-xl">
+          <h3 className="font-semibold text-gray-800 mb-2 sm:mb-3 text-sm sm:text-base">
             Créer une séance personnalisée
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
             <div>
-              <label className="font-semibold text-gray-700 block mb-2">
+              <label className="font-semibold text-gray-700 block mb-1 sm:mb-2 text-xs sm:text-sm">
                 Type de séance
               </label>
               <select
                 value={sessionType}
                 onChange={(e) => setSessionType(e.target.value)}
-                className="w-full border rounded px-3 py-2 text-sm"
+                className="w-full border rounded px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
               >
                 {SESSION_TYPES.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -1151,13 +1147,13 @@ const Chatbot = ({
               </select>
             </div>
             <div>
-              <label className="font-semibold text-gray-700 block mb-2">
+              <label className="font-semibold text-gray-700 block mb-1 sm:mb-2 text-xs sm:text-sm">
                 Intensité
               </label>
               <select
                 value={intensity}
                 onChange={(e) => setIntensity(e.target.value)}
-                className="w-full border rounded px-3 py-2 text-sm"
+                className="w-full border rounded px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
               >
                 {INTENSITIES.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -1167,16 +1163,16 @@ const Chatbot = ({
               </select>
             </div>
           </div>
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-1 sm:gap-2 mt-2 sm:mt-4">
             <button
               onClick={handleSuggestWorkout}
-              className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded font-semibold shadow hover:from-green-600 hover:to-green-700 transition border border-white/20"
+              className="bg-gradient-to-r from-green-500 to-green-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded font-semibold shadow hover:from-green-600 hover:to-green-700 transition border border-white/20 text-xs sm:text-sm"
             >
-              💪 Générer la séance
+              💪 Générer
             </button>
             <button
               onClick={() => setShowMenu(false)}
-              className="text-gray-500 px-4 py-2 rounded hover:bg-gray-100 transition"
+              className="text-gray-500 px-2 sm:px-4 py-1 sm:py-2 rounded hover:bg-gray-100 transition text-xs sm:text-sm"
             >
               Annuler
             </button>
@@ -1185,7 +1181,7 @@ const Chatbot = ({
       )}
 
       {/* Zone de messages */}
-      <div className="border rounded-xl p-2 sm:p-4 h-48 sm:h-64 overflow-y-auto bg-white space-y-2 shadow-inner mb-3 sm:mb-4">
+      <div className="border rounded-xl p-2 sm:p-4 h-32 sm:h-64 overflow-y-auto bg-white space-y-2 shadow-inner mb-2 sm:mb-4">
         {messages.map((m, i) => (
           <div
             key={i}

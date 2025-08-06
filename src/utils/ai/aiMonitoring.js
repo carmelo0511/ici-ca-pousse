@@ -14,8 +14,19 @@ class AIMonitoring {
       safetyValidations: [],
     };
 
+    // Base de connaissances RAG
+    this.knowledgeBase = {
+      documents: new Map(),
+      categories: new Set(),
+      tags: new Set(),
+      totalWords: 0,
+    };
+
     this.startTime = Date.now();
     this.sessionId = this.generateSessionId();
+    
+    // Initialiser avec quelques documents de base
+    this.initializeKnowledgeBase();
   }
 
   // Générer un ID de session unique
@@ -63,9 +74,6 @@ class AIMonitoring {
         100;
     }
 
-    console.log(
-      `📊 Fonction ${functionName} appelée - Temps: ${executionTime}ms, Succès: ${isValidResponse}`
-    );
   }
 
   // Enregistrer le temps de réponse
@@ -448,9 +456,8 @@ class AIMonitoring {
     try {
       const report = this.generatePerformanceReport();
       localStorage.setItem('ai_monitoring_report', JSON.stringify(report));
-      console.log('📊 Rapport de monitoring sauvegardé');
     } catch (error) {
-      console.error('Erreur lors de la sauvegarde des métriques:', error);
+      // Erreur lors de la sauvegarde des métriques
     }
   }
 
@@ -460,11 +467,10 @@ class AIMonitoring {
       const saved = localStorage.getItem('ai_monitoring_report');
       if (saved) {
         const report = JSON.parse(saved);
-        console.log('📊 Rapport de monitoring chargé:', report);
         return report;
       }
     } catch (error) {
-      console.error('Erreur lors du chargement des métriques:', error);
+      // Erreur lors du chargement des métriques
     }
     return null;
   }
@@ -485,7 +491,6 @@ class AIMonitoring {
     };
     this.startTime = Date.now();
     this.sessionId = this.generateSessionId();
-    console.log('📊 Métriques réinitialisées');
   }
 
   // Enregistrer une validation de sécurité
@@ -505,10 +510,6 @@ class AIMonitoring {
     if (this.metrics.safetyValidations.length > 100) {
       this.metrics.safetyValidations.shift();
     }
-
-    console.log(
-      `🔒 Validation de sécurité pour ${functionName}: Score ${validation.safetyScore}/100`
-    );
   }
 
   // Obtenir les statistiques de sécurité
@@ -548,6 +549,174 @@ class AIMonitoring {
       safeRecommendations,
       safetyRate: Math.round((safeRecommendations / totalValidations) * 100),
     };
+  }
+
+  // ===== FONCTIONS RAG =====
+
+  // Initialiser la base de connaissances avec des documents de base
+  initializeKnowledgeBase() {
+    const baseDocuments = [
+      {
+        id: 'anatomy_muscles',
+        title: 'Anatomie des muscles principaux',
+        content: 'Les muscles principaux du corps humain incluent les pectoraux (poitrine), les dorsaux (dos), les deltoïdes (épaules), les biceps et triceps (bras), les quadriceps et ischio-jambiers (cuisses), les mollets et les abdominaux.',
+        category: 'anatomy',
+        tags: ['muscles', 'anatomie', 'corps humain']
+      },
+      {
+        id: 'exercise_basic',
+        title: 'Exercices de base pour débutants',
+        content: 'Les exercices de base recommandés pour les débutants incluent les pompes pour les pectoraux, les squats pour les jambes, le gainage pour les abdominaux, et les tractions pour le dos.',
+        category: 'exercises',
+        tags: ['débutant', 'exercices', 'base']
+      },
+      {
+        id: 'nutrition_basics',
+        title: 'Bases de la nutrition sportive',
+        content: 'Une nutrition sportive équilibrée inclut des protéines (1,6-2,2g par kg de poids), des glucides complexes pour l\'énergie, et des lipides essentiels. L\'hydratation est cruciale.',
+        category: 'nutrition',
+        tags: ['nutrition', 'protéines', 'hydratation']
+      },
+      {
+        id: 'recovery_sleep',
+        title: 'Importance du sommeil pour la récupération',
+        content: 'Le sommeil est essentiel pour la récupération musculaire. 7-9 heures de sommeil de qualité permettent la synthèse des protéines et la régénération des tissus musculaires.',
+        category: 'recovery',
+        tags: ['sommeil', 'récupération', 'régénération']
+      }
+    ];
+
+    baseDocuments.forEach(doc => {
+      this.knowledgeBase.documents.set(doc.id, doc);
+      this.knowledgeBase.categories.add(doc.category);
+      doc.tags.forEach(tag => this.knowledgeBase.tags.add(tag));
+      this.knowledgeBase.totalWords += doc.content.split(' ').length;
+    });
+  }
+
+  // Obtenir les statistiques de la base de connaissances
+  getKnowledgeBaseStats() {
+    return {
+      totalDocuments: this.knowledgeBase.documents.size,
+      totalWords: this.knowledgeBase.totalWords,
+      categories: Array.from(this.knowledgeBase.categories),
+      tags: Array.from(this.knowledgeBase.tags),
+      lastUpdated: new Date().toISOString()
+    };
+  }
+
+  // Ajouter une connaissance personnalisée
+  addCustomKnowledge(title, content, category, tags = []) {
+    try {
+      const id = `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const document = {
+        id,
+        title,
+        content,
+        category,
+        tags: Array.isArray(tags) ? tags : [],
+        createdAt: new Date().toISOString(),
+        custom: true
+      };
+
+      this.knowledgeBase.documents.set(id, document);
+      this.knowledgeBase.categories.add(category);
+      tags.forEach(tag => this.knowledgeBase.tags.add(tag));
+      this.knowledgeBase.totalWords += content.split(' ').length;
+      
+      return {
+        success: true,
+        documentId: id,
+        message: 'Document ajouté avec succès'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message || 'Erreur inconnue'
+      };
+    }
+  }
+
+  // Rechercher dans la base de connaissances
+  searchKnowledgeBase(query, limit = 5) {
+    const queryLower = query.toLowerCase();
+    const results = [];
+
+    this.knowledgeBase.documents.forEach((document, id) => {
+      let score = 0;
+      
+      // Recherche dans le titre (poids plus élevé)
+      if (document.title.toLowerCase().includes(queryLower)) {
+        score += 0.5;
+      }
+      
+      // Recherche dans le contenu
+      if (document.content.toLowerCase().includes(queryLower)) {
+        score += 0.3;
+      }
+      
+      // Recherche dans les tags
+      document.tags.forEach(tag => {
+        if (tag.toLowerCase().includes(queryLower)) {
+          score += 0.2;
+        }
+      });
+
+      // Recherche dans la catégorie
+      if (document.category.toLowerCase().includes(queryLower)) {
+        score += 0.1;
+      }
+
+      if (score > 0) {
+        results.push({
+          document,
+          score,
+          matchedIn: this.getMatchedFields(document, queryLower)
+        });
+      }
+    });
+
+    // Trier par score décroissant et limiter les résultats
+    return results
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit);
+  }
+
+  // Obtenir les documents par catégorie
+  getKnowledgeByCategory(category, limit = 10) {
+    const results = [];
+    
+    this.knowledgeBase.documents.forEach((document, id) => {
+      if (document.category === category) {
+        results.push({
+          document,
+          score: 1.0, // Score parfait pour les résultats par catégorie
+          matchedIn: ['category']
+        });
+      }
+    });
+
+    return results.slice(0, limit);
+  }
+
+  // Déterminer dans quels champs la requête a été trouvée
+  getMatchedFields(document, queryLower) {
+    const matched = [];
+    
+    if (document.title.toLowerCase().includes(queryLower)) {
+      matched.push('title');
+    }
+    if (document.content.toLowerCase().includes(queryLower)) {
+      matched.push('content');
+    }
+    if (document.tags.some(tag => tag.toLowerCase().includes(queryLower))) {
+      matched.push('tags');
+    }
+    if (document.category.toLowerCase().includes(queryLower)) {
+      matched.push('category');
+    }
+    
+    return matched;
   }
 }
 

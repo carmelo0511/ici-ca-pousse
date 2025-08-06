@@ -100,7 +100,7 @@ const KnowledgeBaseManager = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-glass-bg border border-glass-border rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden backdrop-blur-md">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
           <div className="flex justify-between items-center">
@@ -117,15 +117,15 @@ const KnowledgeBaseManager = ({
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b">
+        <div className="flex border-b border-glass-border bg-glass-bg-secondary">
           {['overview', 'search', 'category', 'add'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-6 py-3 font-semibold transition-colors ${
                 activeTab === tab
-                  ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 hover:text-blue-600'
+                  ? 'bg-glass-bg text-glass-text border-b-2 border-blue-600 backdrop-blur-md'
+                  : 'text-glass-text-secondary hover:text-glass-text hover:bg-glass-bg'
               }`}
             >
               {tab === 'overview' && "📊 Vue d'ensemble"}
@@ -147,43 +147,43 @@ const KnowledgeBaseManager = ({
 
               {stats && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">
+                  <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
+                    <div className="text-2xl font-bold text-glass-text">
                       {stats.totalDocuments}
                     </div>
-                    <div className="text-sm text-gray-600">Documents</div>
+                    <div className="text-sm text-glass-text-secondary">Documents</div>
                   </div>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">
+                  <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
+                    <div className="text-2xl font-bold text-glass-text">
                       {stats.totalWords}
                     </div>
-                    <div className="text-sm text-gray-600">Mots indexés</div>
+                    <div className="text-sm text-glass-text-secondary">Mots indexés</div>
                   </div>
-                  <div className="bg-purple-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-purple-600">
+                  <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
+                    <div className="text-2xl font-bold text-glass-text">
                       {stats.categories.length}
                     </div>
-                    <div className="text-sm text-gray-600">Catégories</div>
+                    <div className="text-sm text-glass-text-secondary">Catégories</div>
                   </div>
-                  <div className="bg-orange-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-orange-600">
+                  <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
+                    <div className="text-2xl font-bold text-glass-text">
                       {stats.tags.length}
                     </div>
-                    <div className="text-sm text-gray-600">Tags</div>
+                    <div className="text-sm text-glass-text-secondary">Tags</div>
                   </div>
                 </div>
               )}
 
               {/* Catégories disponibles */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-3">
+              <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
+                <h4 className="font-semibold mb-3 text-glass-text">
                   📂 Catégories Disponibles
                 </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   {categories.map((category) => (
                     <div
                       key={category}
-                      className="bg-white p-2 rounded border text-sm"
+                      className="bg-glass-bg-secondary border border-glass-border p-2 rounded backdrop-blur-sm text-sm text-glass-text"
                     >
                       {categoryLabels[category]}
                     </div>
@@ -193,13 +193,13 @@ const KnowledgeBaseManager = ({
 
               {/* Tags populaires */}
               {stats && (
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-3">🏷️ Tags Populaires</h4>
+                <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <h4 className="font-semibold mb-3 text-glass-text">🏷️ Tags Populaires</h4>
                   <div className="flex flex-wrap gap-2">
                     {stats.tags.slice(0, 20).map((tag) => (
                       <span
                         key={tag}
-                        className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm"
+                        className="bg-glass-bg-secondary border border-glass-border text-glass-text px-2 py-1 rounded text-sm backdrop-blur-sm"
                       >
                         {tag}
                       </span>
@@ -241,19 +241,19 @@ const KnowledgeBaseManager = ({
                     Résultats ({searchResults.length})
                   </h4>
                   {searchResults.map((result, index) => (
-                    <div key={index} className="border rounded-lg p-4">
+                    <div key={index} className="bg-glass-bg border border-glass-border rounded-lg p-4 backdrop-blur-md shadow-glass">
                       <div className="flex justify-between items-start mb-2">
-                        <h5 className="font-semibold text-lg">
+                        <h5 className="font-semibold text-lg text-glass-text">
                           {result.document.title}
                         </h5>
-                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">
+                        <span className="bg-glass-bg-secondary border border-glass-border text-glass-text px-2 py-1 rounded text-sm backdrop-blur-sm">
                           {Math.round(result.score * 100)}% pertinent
                         </span>
                       </div>
-                      <div className="text-sm text-gray-600 mb-2">
+                      <div className="text-sm text-glass-text-secondary mb-2">
                         Catégorie: {categoryLabels[result.document.category]}
                       </div>
-                      <div className="text-sm text-gray-700 line-clamp-3">
+                      <div className="text-sm text-glass-text line-clamp-3">
                         {result.document.content.substring(0, 200)}...
                       </div>
                     </div>
@@ -300,11 +300,11 @@ const KnowledgeBaseManager = ({
                     {categoryResults.length})
                   </h4>
                   {categoryResults.map((result, index) => (
-                    <div key={index} className="border rounded-lg p-4">
-                      <h5 className="font-semibold text-lg mb-2">
+                    <div key={index} className="bg-glass-bg border border-glass-border rounded-lg p-4 backdrop-blur-md shadow-glass">
+                      <h5 className="font-semibold text-lg mb-2 text-glass-text">
                         {result.document.title}
                       </h5>
-                      <div className="text-sm text-gray-700 line-clamp-3">
+                      <div className="text-sm text-glass-text line-clamp-3">
                         {result.document.content.substring(0, 200)}...
                       </div>
                     </div>
@@ -411,8 +411,8 @@ const KnowledgeBaseManager = ({
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-50 p-4 border-t">
-          <div className="text-sm text-gray-600">
+        <div className="bg-glass-bg-secondary border-t border-glass-border p-4 backdrop-blur-sm">
+          <div className="text-sm text-glass-text-secondary">
             💡 La base de connaissances RAG enrichit automatiquement les
             réponses du chatbot avec des informations spécialisées en fitness.
           </div>

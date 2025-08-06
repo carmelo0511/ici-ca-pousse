@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-const MonitoringDashboard = ({
+function MonitoringDashboard({
   monitoringStats,
   functionStats,
   performanceTrends,
   alerts,
   safetyStats,
   onClose,
-}) => {
-  const [activeTab, setActiveTab] = useState('overview');
+}) {
+  // Test simple pour voir si React.useState fonctionne
+  const [activeTab, setActiveTab] = React.useState('overview');
 
   const formatUptime = (uptime) => {
     const hours = Math.floor(uptime / (1000 * 60 * 60));
@@ -42,15 +43,15 @@ const MonitoringDashboard = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-1 sm:p-4">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[85vh] sm:max-h-[95vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2 sm:p-6 flex-shrink-0">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">📊 Dashboard Monitoring IA</h2>
+            <h2 className="text-base sm:text-2xl font-bold">📊 Dashboard IA</h2>
             <button
               onClick={onClose}
-              className="text-white hover:text-gray-200 text-xl"
+              className="text-white hover:text-gray-200 text-2xl p-2 sm:p-1"
             >
               ✕
             </button>
@@ -58,19 +59,19 @@ const MonitoringDashboard = ({
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b">
+        <div className="flex border-b overflow-x-auto flex-shrink-0 bg-gray-50">
           {['overview', 'functions', 'trends', 'alerts', 'safety'].map(
             (tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 font-semibold ${
+                className={`px-2 sm:px-6 py-1 sm:py-3 font-semibold whitespace-nowrap text-xs sm:text-sm ${
                   activeTab === tab
-                    ? 'border-b-2 border-blue-600 text-blue-600'
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'border-b-2 border-blue-600 text-blue-600 bg-white'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                 }`}
               >
-                {tab === 'overview' && "📈 Vue d'ensemble"}
+                {tab === 'overview' && "📈 Vue"}
                 {tab === 'functions' && '🔧 Fonctions'}
                 {tab === 'trends' && '📊 Tendances'}
                 {tab === 'alerts' && '⚠️ Alertes'}
@@ -81,88 +82,88 @@ const MonitoringDashboard = ({
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[60vh]">
+        <div className="p-2 sm:p-6 overflow-y-auto flex-1 min-h-0">
           {activeTab === 'overview' && (
-            <div className="space-y-6">
+            <div className="space-y-3 sm:space-y-6">
               {/* Statistiques globales */}
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {monitoringStats?.totalRequests || 0}
                   </div>
-                  <div className="text-sm text-gray-600">Requêtes totales</div>
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Requêtes</div>
                 </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {monitoringStats?.successRate || '0%'}
                   </div>
-                  <div className="text-sm text-gray-600">Taux de succès</div>
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Succès</div>
                 </div>
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {monitoringStats?.averageResponseTime || '0ms'}
                   </div>
-                  <div className="text-sm text-gray-600">Temps de réponse</div>
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Réponse</div>
                 </div>
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-orange-600">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {monitoringStats?.averageSatisfaction || '0%'}
                   </div>
-                  <div className="text-sm text-gray-600">Satisfaction</div>
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Satisfaction</div>
                 </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {safetyStats?.safetyRate || '100%'}
                   </div>
-                  <div className="text-sm text-gray-600">Sécurité</div>
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Sécurité</div>
                 </div>
               </div>
 
               {/* Métriques détaillées */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-lg mb-3">📊 Performance</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Uptime:</span>
-                      <span className="font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
+                <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <h3 className="font-semibold text-sm sm:text-lg mb-2 sm:mb-3 text-glass-text">📊 Performance</h3>
+                  <div className="space-y-1 sm:space-y-2">
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-glass-text-secondary">Uptime:</span>
+                      <span className="font-mono text-glass-text">
                         {formatUptime(monitoringStats?.uptime || 0)}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Cache hit rate:</span>
-                      <span className="font-mono">
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-glass-text-secondary">Cache:</span>
+                      <span className="font-mono text-glass-text">
                         {monitoringStats?.cacheHitRate || '0%'}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Fonctions utilisées:</span>
-                      <span className="font-mono">
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-glass-text-secondary">Fonctions:</span>
+                      <span className="font-mono text-glass-text">
                         {monitoringStats?.functionCallCount || 0}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Appels de fonctions:</span>
-                      <span className="font-mono">
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-glass-text-secondary">Appels:</span>
+                      <span className="font-mono text-glass-text">
                         {monitoringStats?.totalFunctionCalls || 0}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-lg mb-3">🎯 Qualité</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Requêtes réussies:</span>
-                      <span className="font-mono">
+                <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <h3 className="font-semibold text-sm sm:text-lg mb-2 sm:mb-3 text-glass-text">🎯 Qualité</h3>
+                  <div className="space-y-1 sm:space-y-2">
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-glass-text-secondary">Réussies:</span>
+                      <span className="font-mono text-glass-text">
                         {monitoringStats?.successfulRequests || 0}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Session ID:</span>
-                      <span className="font-mono text-xs">
-                        {monitoringStats?.sessionId || 'N/A'}
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-glass-text-secondary">Session:</span>
+                      <span className="font-mono text-xs text-glass-text truncate">
+                        {monitoringStats?.sessionId?.substring(0, 8) || 'N/A'}
                       </span>
                     </div>
                   </div>
@@ -172,59 +173,59 @@ const MonitoringDashboard = ({
           )}
 
           {activeTab === 'functions' && (
-            <div className="space-y-4">
-              <h3 className="font-semibold text-lg">
+            <div className="space-y-2 sm:space-y-4">
+              <h3 className="font-semibold text-sm sm:text-lg text-gray-800">
                 🔧 Statistiques par fonction
               </h3>
               {functionStats && functionStats.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {functionStats.map((fn, index) => (
-                    <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                    <div key={index} className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
                       <div className="flex justify-between items-center mb-2">
-                        <h4 className="font-semibold text-blue-600">
+                        <h4 className="font-semibold text-glass-text text-sm sm:text-base truncate">
                           {fn.name}
                         </h4>
                         <span
-                          className={`px-2 py-1 rounded text-xs ${
+                          className={`px-2 py-1 rounded text-xs font-medium ml-2 ${
                             parseFloat(fn.successRate) >= 90
-                              ? 'bg-green-100 text-green-800'
+                              ? 'bg-glass-bg-secondary text-glass-text border border-glass-border'
                               : parseFloat(fn.successRate) >= 80
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-red-100 text-red-800'
+                                ? 'bg-glass-bg-secondary text-glass-text border border-glass-border'
+                                : 'bg-glass-bg-secondary text-glass-text border border-glass-border'
                           }`}
                         >
                           {fn.successRate}
                         </span>
                       </div>
-                      <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
                         <div>
-                          <span className="text-gray-600">Appels:</span>
-                          <span className="font-mono ml-2">{fn.count}</span>
+                          <span className="text-glass-text-secondary">Appels:</span>
+                          <span className="font-mono ml-1 sm:ml-2 text-glass-text">{fn.count}</span>
                         </div>
                         <div>
-                          <span className="text-gray-600">Temps moyen:</span>
-                          <span className="font-mono ml-2">
+                          <span className="text-glass-text-secondary">Temps:</span>
+                          <span className="font-mono ml-1 sm:ml-2 text-glass-text">
                             {fn.averageExecutionTime}
                           </span>
                         </div>
                         <div>
-                          <span className="text-gray-600">Erreurs:</span>
-                          <span className="font-mono ml-2">
+                          <span className="text-glass-text-secondary">Erreurs:</span>
+                          <span className="font-mono ml-1 sm:ml-2 text-glass-text">
                             {fn.errorCount}
                           </span>
                         </div>
                       </div>
                       {fn.lastCalled && (
-                        <div className="text-xs text-gray-500 mt-2">
-                          Dernier appel:{' '}
-                          {new Date(fn.lastCalled).toLocaleString()}
+                        <div className="text-xs text-glass-text-secondary mt-2">
+                          Dernier:{' '}
+                          {new Date(fn.lastCalled).toLocaleDateString()}
                         </div>
                       )}
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center text-gray-500 py-8">
+                <div className="text-center text-gray-500 py-6 sm:py-8 text-sm">
                   Aucune fonction utilisée pour le moment
                 </div>
               )}
@@ -232,43 +233,43 @@ const MonitoringDashboard = ({
           )}
 
           {activeTab === 'trends' && (
-            <div className="space-y-6">
-              <h3 className="font-semibold text-lg">
+            <div className="space-y-3 sm:space-y-6">
+              <h3 className="font-semibold text-sm sm:text-lg text-gray-800">
                 📊 Tendances de performance
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-3">Temps de réponse</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
+                <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <h4 className="font-semibold mb-2 sm:mb-3 text-glass-text text-sm sm:text-base">Temps de réponse</h4>
                   <div className="flex items-center space-x-2">
-                    <span className="text-2xl">
+                    <span className="text-xl sm:text-2xl">
                       {getTrendIcon(performanceTrends?.responseTimeTrend)}
                     </span>
-                    <span className="capitalize">
+                    <span className="capitalize text-glass-text text-sm sm:text-base">
                       {performanceTrends?.responseTimeTrend || 'stable'}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600 mt-2">
-                    Moyenne récente:{' '}
+                  <div className="text-xs sm:text-sm text-glass-text-secondary mt-2">
+                    Moyenne:{' '}
                     {performanceTrends?.recentPerformance?.avgResponseTime || 0}
                     ms
                   </div>
                 </div>
 
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-3">
-                    Satisfaction utilisateur
+                <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <h4 className="font-semibold mb-2 sm:mb-3 text-glass-text text-sm sm:text-base">
+                    Satisfaction
                   </h4>
                   <div className="flex items-center space-x-2">
-                    <span className="text-2xl">
+                    <span className="text-xl sm:text-2xl">
                       {getTrendIcon(performanceTrends?.satisfactionTrend)}
                     </span>
-                    <span className="capitalize">
+                    <span className="capitalize text-glass-text text-sm sm:text-base">
                       {performanceTrends?.satisfactionTrend || 'stable'}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600 mt-2">
-                    Moyenne récente:{' '}
+                  <div className="text-xs sm:text-sm text-glass-text-secondary mt-2">
+                    Moyenne:{' '}
                     {performanceTrends?.recentPerformance?.avgSatisfaction || 0}
                     %
                   </div>
@@ -278,33 +279,33 @@ const MonitoringDashboard = ({
           )}
 
           {activeTab === 'alerts' && (
-            <div className="space-y-4">
-              <h3 className="font-semibold text-lg">
+            <div className="space-y-2 sm:space-y-4">
+              <h3 className="font-semibold text-sm sm:text-lg text-gray-800">
                 ⚠️ Alertes de performance
               </h3>
 
               {alerts && alerts.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {alerts.map((alert, index) => (
                     <div
                       key={index}
-                      className={`p-4 rounded-lg border-l-4 ${
+                      className={`p-3 sm:p-4 rounded-lg border-l-4 bg-glass-bg backdrop-blur-md shadow-glass ${
                         alert.severity === 'high'
-                          ? 'bg-red-50 border-red-500'
+                          ? 'border-red-500'
                           : alert.severity === 'medium'
-                            ? 'bg-yellow-50 border-yellow-500'
-                            : 'bg-green-50 border-green-500'
+                            ? 'border-yellow-500'
+                            : 'border-green-500'
                       }`}
                     >
-                      <div className="flex items-start space-x-3">
-                        <span className="text-xl">
+                      <div className="flex items-start space-x-2 sm:space-x-3">
+                        <span className="text-lg sm:text-xl">
                           {getAlertIcon(alert.severity)}
                         </span>
-                        <div>
-                          <div className="font-semibold capitalize">
+                        <div className="flex-1">
+                          <div className="font-semibold capitalize text-sm sm:text-base text-glass-text">
                             {alert.type}
                           </div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-xs sm:text-sm text-glass-text-secondary">
                             {alert.message}
                           </div>
                         </div>
@@ -313,7 +314,7 @@ const MonitoringDashboard = ({
                   ))}
                 </div>
               ) : (
-                <div className="text-center text-green-600 py-8">
+                <div className="text-center text-green-600 py-6 sm:py-8 text-sm sm:text-base">
                   ✅ Aucune alerte - Tout fonctionne correctement !
                 </div>
               )}
@@ -321,60 +322,60 @@ const MonitoringDashboard = ({
           )}
 
           {activeTab === 'safety' && (
-            <div className="space-y-6">
-              <h3 className="font-semibold text-lg">
+            <div className="space-y-3 sm:space-y-6">
+              <h3 className="font-semibold text-sm sm:text-lg text-gray-800">
                 🔒 Validation de Sécurité
               </h3>
 
               {/* Statistiques de sécurité */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {safetyStats?.totalValidations || 0}
                   </div>
-                  <div className="text-sm text-gray-600">Validations</div>
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Validations</div>
                 </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {safetyStats?.averageSafetyScore || 100}
                   </div>
-                  <div className="text-sm text-gray-600">Score moyen</div>
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Score</div>
                 </div>
-                <div className="bg-red-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-red-600">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {safetyStats?.criticalIssues || 0}
                   </div>
-                  <div className="text-sm text-gray-600">
-                    Problèmes critiques
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">
+                    Critiques
                   </div>
                 </div>
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <div className="text-2xl font-bold text-yellow-600">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
                     {safetyStats?.warnings || 0}
                   </div>
-                  <div className="text-sm text-gray-600">Avertissements</div>
+                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Alertes</div>
                 </div>
               </div>
 
               {/* Détails de sécurité */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-3">📊 Détails de Sécurité</h4>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>Recommandations sûres:</span>
-                    <span className="font-mono">
+              <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                <h4 className="font-semibold mb-2 sm:mb-3 text-glass-text text-sm sm:text-base">📊 Détails de Sécurité</h4>
+                <div className="space-y-1 sm:space-y-2">
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span className="text-glass-text-secondary">Recommandations sûres:</span>
+                    <span className="font-mono text-glass-text">
                       {safetyStats?.safeRecommendations || 0}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Taux de sécurité:</span>
-                    <span className="font-mono">
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span className="text-glass-text-secondary">Taux de sécurité:</span>
+                    <span className="font-mono text-glass-text">
                       {safetyStats?.safetyRate || 100}%
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Score de sécurité moyen:</span>
-                    <span className="font-mono">
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span className="text-glass-text-secondary">Score moyen:</span>
+                    <span className="font-mono text-glass-text">
                       {safetyStats?.averageSafetyScore || 100}/100
                     </span>
                   </div>
@@ -382,23 +383,22 @@ const MonitoringDashboard = ({
               </div>
 
               {/* Recommandations de sécurité */}
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-3">
+              <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                <h4 className="font-semibold mb-2 sm:mb-3 text-glass-text text-sm sm:text-base">
                   💡 Recommandations de Sécurité
                 </h4>
-                <div className="space-y-2 text-sm">
+                <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-glass-text-secondary">
                   <div>
-                    • Toutes les recommandations sont validées automatiquement
+                    • Recommandations validées automatiquement
                   </div>
                   <div>
-                    • Les exercices dangereux sont automatiquement détectés
+                    • Exercices dangereux détectés
                   </div>
                   <div>
-                    • Les limites d'intensité sont adaptées au niveau
-                    utilisateur
+                    • Limites adaptées au niveau utilisateur
                   </div>
-                  <div>• Les conditions médicales sont prises en compte</div>
-                  <div>• Les avertissements sont affichés en cas de risque</div>
+                  <div>• Conditions médicales prises en compte</div>
+                  <div>• Avertissements en cas de risque</div>
                 </div>
               </div>
             </div>
@@ -406,18 +406,18 @@ const MonitoringDashboard = ({
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-50 p-4 border-t">
-          <div className="flex justify-between items-center text-sm text-gray-600">
-            <span>Dernière mise à jour: {new Date().toLocaleString()}</span>
-            <span>
-              Session: {monitoringStats?.sessionId?.substring(0, 8) || 'N/A'}
+        <div className="bg-gray-50 border-t border-gray-300 p-1 sm:p-4 flex-shrink-0">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs text-gray-600 space-y-1 sm:space-y-0">
+            <span className="truncate">MAJ: {new Date().toLocaleTimeString()}</span>
+            <span className="truncate">
+              Session: {monitoringStats?.sessionId?.substring(0, 6) || 'N/A'}
             </span>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 MonitoringDashboard.propTypes = {
   monitoringStats: PropTypes.object,
