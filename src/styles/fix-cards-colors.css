@@ -776,6 +776,49 @@ div:contains("nickname") {
     overflow-y: auto !important;
 }
 
+/* Amélioration du scroll des modales sur desktop */
+.modal-backdrop::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-backdrop::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.modal-backdrop::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.6);
+    border-radius: 4px;
+}
+
+.modal-backdrop::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.8);
+}
+
+/* Scroll spécifique pour les modales de création de template */
+.max-w-2xl.max-h-\[95vh\].overflow-y-auto {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139, 92, 246, 0.6) transparent;
+}
+
+.max-w-2xl.max-h-\[95vh\].overflow-y-auto::-webkit-scrollbar {
+    width: 8px;
+}
+
+.max-w-2xl.max-h-\[95vh\].overflow-y-auto::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.max-w-2xl.max-h-\[95vh\].overflow-y-auto::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.6);
+    border-radius: 4px;
+}
+
+.max-w-2xl.max-h-\[95vh\].overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.8);
+}
+
 /* Correction globale pour tous les modals */
 .fixed.inset-0.z-50.flex.items-stretch {
     padding: 4px !important;

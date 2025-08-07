@@ -621,9 +621,7 @@ const WorkoutTemplates = ({
       {/* Modal créer template depuis zéro */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
-          <div
-            className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto p-3 sm:p-4"
-          >
+          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto p-3 sm:p-4">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-gray-800">
                 Créer un nouveau template
