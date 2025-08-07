@@ -748,10 +748,10 @@ body::before {
 .lex-ia-button {
     position: fixed !important;
     left: 32px !important;
-    bottom: 24px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     z-index: 1000 !important;
     pointer-events: auto !important;
-    transform: none !important;
     transition: all 0.3s ease !important;
 }
 

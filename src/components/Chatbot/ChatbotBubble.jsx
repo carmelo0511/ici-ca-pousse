@@ -35,7 +35,8 @@ const ChatbotBubble = (props) => {
       <div style={{ 
         position: 'fixed', 
         left: 32, 
-        bottom: 24, 
+        top: '50%', 
+        transform: 'translateY(-50%)',
         zIndex: 1000,
         pointerEvents: 'auto'
       }}>
@@ -64,7 +65,7 @@ const ChatbotBubble = (props) => {
           </button>
         )}
         {open && (
-          <div className="absolute bottom-12 left-0 right-0 sm:bottom-16 sm:left-0 sm:right-auto sm:w-[350px] sm:max-w-[95vw] w-full max-w-[calc(100vw-1rem)] modal flex flex-col z-50 animate-fade-in">
+          <div className="absolute top-12 left-0 right-0 sm:top-16 sm:left-0 sm:right-auto sm:w-[350px] sm:max-w-[95vw] w-full max-w-[calc(100vw-1rem)] modal flex flex-col z-50 animate-fade-in">
             <div className="flex justify-between items-center p-2 sm:p-3 border-b border-glass-border section bg-glass-bg-secondary rounded-t-2xl">
               <span className="section-title text-xs sm:text-lg font-medium">
                 Coach Lex IA
