@@ -200,8 +200,8 @@ body::before {
     background: var(--glass-bg-light);
     color: var(--text-tertiary);
     border: none;
-    border-radius: 15px;
-    padding: 15px 8px;
+    border-radius: 16px;
+    padding: 12px 8px;
     transition: all 0.3s ease;
     cursor: pointer;
     text-align: center;
@@ -209,6 +209,10 @@ body::before {
     font-weight: 600;
     position: relative;
     overflow: hidden;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-tab.active, .tab.active, .menu-item.active {
@@ -744,20 +748,95 @@ body::before {
     50% { transform: scale(1.05); }
 }
 
-/* Bouton LEX IA - toujours visible à l'écran */
-.lex-ia-button {
+/* Conteneur LEX IA - fixe par rapport au viewport */
+.lex-ia-container {
     position: fixed !important;
-    left: 32px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 1000 !important;
+    left: 20px !important;
+    bottom: 20px !important;
+    z-index: 10001 !important;
     pointer-events: auto !important;
-    transition: all 0.3s ease !important;
+    transform: none !important;
 }
 
-.lex-ia-button:hover {
+/* Bouton LEX IA - styles optimisés */
+.lex-ia-container button {
+    position: static !important;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4) !important;
+    transform: none !important;
+}
+
+.lex-ia-container button:hover {
     transform: scale(1.05) !important;
     box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6) !important;
+    backdrop-filter: blur(15px) !important;
+}
+
+/* Styles pour le chatbot dans le portail */
+.lex-ia-container input,
+.lex-ia-container textarea,
+.lex-ia-container .form-control,
+.lex-ia-container .input {
+    background: rgba(15, 15, 35, 0.6) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* Responsive pour le chatbot modal */
+@media (min-width: 1024px) {
+    .lex-ia-container > div[style*="position: fixed"] {
+        width: min(700px, calc(100vw - 40px)) !important;
+        height: min(75vh, 700px) !important;
+        right: 30px !important;
+        bottom: 100px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .lex-ia-container > div[style*="position: fixed"] {
+        width: calc(100vw - 20px) !important;
+        height: min(80vh, calc(100vh - 100px)) !important;
+        right: 10px !important;
+        bottom: 80px !important;
+        left: 10px !important;
+    }
+}
+
+.lex-ia-container input::placeholder,
+.lex-ia-container textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.lex-ia-container input:focus,
+.lex-ia-container textarea:focus {
+    outline: none !important;
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+    background: rgba(15, 15, 35, 0.8) !important;
+}
+
+/* Messages du chatbot dans le portail */
+.lex-ia-container .message,
+.lex-ia-container .chat-message {
+    background: rgba(15, 15, 35, 0.5) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.lex-ia-container .user-message {
+    background: rgba(59, 130, 246, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.lex-ia-container .bot-message {
+    background: rgba(15, 15, 35, 0.6) !important;
+    color: #ffffff !important;
 }
 
 /* Status et badges animés */
@@ -809,3 +888,19 @@ body::before {
 /* ========================================
    FIN DU CODE GLASSMORPHISME SOMBRE PREMIUM
    ======================================== */
+
+/* Animation pour le badge de notification */
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
+    50% { 
+        opacity: 0.8; 
+        transform: scale(1.1); 
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

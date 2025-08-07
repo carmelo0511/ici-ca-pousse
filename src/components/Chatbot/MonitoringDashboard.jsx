@@ -43,48 +43,50 @@ function MonitoringDashboard({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-1 sm:p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[85vh] sm:max-h-[95vh] overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2 sm:p-6 flex-shrink-0">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-2 sm:p-4 pt-4 sm:pt-8">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl h-[90vh] sm:h-[85vh] flex flex-col overflow-hidden">
+        {/* Header - Always visible */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2 sm:p-3 flex-none rounded-t-lg">
           <div className="flex justify-between items-center">
-            <h2 className="text-base sm:text-2xl font-bold">📊 Dashboard IA</h2>
+            <h2 className="text-lg sm:text-2xl font-bold">📊 Dashboard IA</h2>
             <button
               onClick={onClose}
-              className="text-white hover:text-gray-200 text-2xl p-2 sm:p-1"
+              className="text-white hover:text-gray-200 text-xl sm:text-2xl p-1 hover:bg-white hover:bg-opacity-20 rounded"
             >
               ✕
             </button>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b overflow-x-auto flex-shrink-0 bg-gray-50">
+        {/* Tabs - Always visible */}
+        <div className="flex border-b overflow-x-auto flex-none bg-gray-50 min-h-[45px]" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
           {['overview', 'functions', 'trends', 'alerts', 'safety'].map(
             (tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-2 sm:px-6 py-1 sm:py-3 font-semibold whitespace-nowrap text-xs sm:text-sm ${
+                className={`px-4 py-2 font-semibold whitespace-nowrap text-sm flex-shrink-0 transition-colors ${
                   activeTab === tab
                     ? 'border-b-2 border-blue-600 text-blue-600 bg-white'
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                 }`}
               >
-                {tab === 'overview' && "📈 Vue"}
-                {tab === 'functions' && '🔧 Fonctions'}
-                {tab === 'trends' && '📊 Tendances'}
-                {tab === 'alerts' && '⚠️ Alertes'}
-                {tab === 'safety' && '🔒 Sécurité'}
+                <span className="flex items-center gap-1">
+                  {tab === 'overview' && (<>📈 <span className="hidden sm:inline">Vue</span></>)}
+                  {tab === 'functions' && (<>🔧 <span className="hidden sm:inline">Fonctions</span></>)}
+                  {tab === 'trends' && (<>📊 <span className="hidden sm:inline">Tendances</span></>)}
+                  {tab === 'alerts' && (<>⚠️ <span className="hidden sm:inline">Alertes</span></>)}
+                  {tab === 'safety' && (<>🔒 <span className="hidden sm:inline">Sécurité</span></>)}
+                </span>
               </button>
             )
           )}
         </div>
 
-        {/* Content */}
-        <div className="p-2 sm:p-6 overflow-y-auto flex-1 min-h-0">
+        {/* Content - Scrollable area */}
+        <div className="flex-1 overflow-y-auto bg-white p-1 sm:p-2" style={{minHeight: 0}}>
           {activeTab === 'overview' && (
-            <div className="space-y-3 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-4">
               {/* Statistiques globales */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
                 <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
@@ -120,7 +122,7 @@ function MonitoringDashboard({
               </div>
 
               {/* Métriques détaillées */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
                   <h3 className="font-semibold text-sm sm:text-lg mb-2 sm:mb-3 text-glass-text">📊 Performance</h3>
                   <div className="space-y-1 sm:space-y-2">
@@ -322,60 +324,60 @@ function MonitoringDashboard({
           )}
 
           {activeTab === 'safety' && (
-            <div className="space-y-3 sm:space-y-6">
-              <h3 className="font-semibold text-sm sm:text-lg text-gray-800">
+            <div className="space-y-2 sm:space-y-3">
+              <h3 className="font-semibold text-base sm:text-lg text-glass-text flex items-center gap-2 mb-1">
                 🔒 Validation de Sécurité
               </h3>
 
-              {/* Statistiques de sécurité */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
-                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
+              {/* Statistiques de sécurité - Mobile optimized */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                <div className="bg-glass-bg border border-glass-border p-2 sm:p-3 rounded-lg text-center backdrop-blur-md shadow-glass">
+                  <div className="text-base sm:text-lg font-bold text-glass-text">
                     {safetyStats?.totalValidations || 0}
                   </div>
-                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Validations</div>
+                  <div className="text-xs text-glass-text-secondary font-medium">Validations</div>
                 </div>
-                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
-                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
+                <div className="bg-glass-bg-secondary border border-glass-border p-2 sm:p-3 rounded-lg text-center backdrop-blur-md shadow-glass">
+                  <div className="text-base sm:text-lg font-bold text-glass-text">
                     {safetyStats?.averageSafetyScore || 100}
                   </div>
-                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Score</div>
+                  <div className="text-xs text-glass-text-secondary font-medium">Score</div>
                 </div>
-                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
-                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
+                <div className="bg-glass-bg border border-glass-border-light p-2 sm:p-3 rounded-lg text-center backdrop-blur-md shadow-glass">
+                  <div className="text-base sm:text-lg font-bold text-glass-text">
                     {safetyStats?.criticalIssues || 0}
                   </div>
-                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">
-                    Critiques
-                  </div>
+                  <div className="text-xs text-glass-text-secondary font-medium">Critiques</div>
                 </div>
-                <div className="bg-glass-bg border border-glass-border p-2 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
-                  <div className="text-lg sm:text-2xl font-bold text-glass-text">
+                <div className="bg-glass-bg-light border border-glass-border p-2 sm:p-3 rounded-lg text-center backdrop-blur-md shadow-glass">
+                  <div className="text-base sm:text-lg font-bold text-glass-text">
                     {safetyStats?.warnings || 0}
                   </div>
-                  <div className="text-xs sm:text-sm text-glass-text-secondary font-medium">Alertes</div>
+                  <div className="text-xs text-glass-text-secondary font-medium">Alertes</div>
                 </div>
               </div>
 
               {/* Détails de sécurité */}
-              <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
-                <h4 className="font-semibold mb-2 sm:mb-3 text-glass-text text-sm sm:text-base">📊 Détails de Sécurité</h4>
+              <div className="bg-glass-bg-secondary border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                <h4 className="font-semibold mb-2 text-glass-text flex items-center gap-2 text-sm sm:text-base">
+                  📊 Détails de Sécurité
+                </h4>
                 <div className="space-y-1 sm:space-y-2">
-                  <div className="flex justify-between text-xs sm:text-sm">
-                    <span className="text-glass-text-secondary">Recommandations sûres:</span>
-                    <span className="font-mono text-glass-text">
+                  <div className="flex justify-between items-center">
+                    <span className="text-glass-text-secondary text-xs sm:text-sm">Recommandations sûres:</span>
+                    <span className="font-mono text-glass-text font-semibold text-xs sm:text-sm">
                       {safetyStats?.safeRecommendations || 0}
                     </span>
                   </div>
-                  <div className="flex justify-between text-xs sm:text-sm">
-                    <span className="text-glass-text-secondary">Taux de sécurité:</span>
-                    <span className="font-mono text-glass-text">
+                  <div className="flex justify-between items-center">
+                    <span className="text-glass-text-secondary text-xs sm:text-sm">Taux de sécurité:</span>
+                    <span className="font-mono text-glass-text font-semibold text-xs sm:text-sm">
                       {safetyStats?.safetyRate || 100}%
                     </span>
                   </div>
-                  <div className="flex justify-between text-xs sm:text-sm">
-                    <span className="text-glass-text-secondary">Score moyen:</span>
-                    <span className="font-mono text-glass-text">
+                  <div className="flex justify-between items-center">
+                    <span className="text-glass-text-secondary text-xs sm:text-sm">Score moyen:</span>
+                    <span className="font-mono text-glass-text font-semibold text-xs sm:text-sm">
                       {safetyStats?.averageSafetyScore || 100}/100
                     </span>
                   </div>
@@ -384,29 +386,38 @@ function MonitoringDashboard({
 
               {/* Recommandations de sécurité */}
               <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
-                <h4 className="font-semibold mb-2 sm:mb-3 text-glass-text text-sm sm:text-base">
+                <h4 className="font-semibold mb-2 text-glass-text flex items-center gap-2 text-sm sm:text-base">
                   💡 Recommandations de Sécurité
                 </h4>
-                <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-glass-text-secondary">
-                  <div>
-                    • Recommandations validées automatiquement
+                <div className="space-y-1 text-xs sm:text-sm text-glass-text-secondary">
+                  <div className="flex items-start gap-2">
+                    <span className="text-glass-text mt-1">•</span>
+                    <span>Recommandations validées automatiquement</span>
                   </div>
-                  <div>
-                    • Exercices dangereux détectés
+                  <div className="flex items-start gap-2">
+                    <span className="text-glass-text mt-1">•</span>
+                    <span>Exercices dangereux détectés</span>
                   </div>
-                  <div>
-                    • Limites adaptées au niveau utilisateur
+                  <div className="flex items-start gap-2">
+                    <span className="text-glass-text mt-1">•</span>
+                    <span>Limites adaptées au niveau utilisateur</span>
                   </div>
-                  <div>• Conditions médicales prises en compte</div>
-                  <div>• Avertissements en cas de risque</div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-glass-text mt-1">•</span>
+                    <span>Conditions médicales prises en compte</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-glass-text mt-1">•</span>
+                    <span>Avertissements en cas de risque</span>
+                  </div>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Footer */}
-        <div className="bg-gray-50 border-t border-gray-300 p-1 sm:p-4 flex-shrink-0">
+        {/* Footer - Always visible */}
+        <div className="bg-gray-50 border-t border-gray-300 p-1 flex-none rounded-b-lg">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs text-gray-600 space-y-1 sm:space-y-0">
             <span className="truncate">MAJ: {new Date().toLocaleTimeString()}</span>
             <span className="truncate">

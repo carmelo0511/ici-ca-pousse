@@ -620,9 +620,10 @@ const WorkoutTemplates = ({
 
       {/* Modal créer template depuis zéro */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto p-3 sm:p-4">
-            <div className="flex justify-between items-center mb-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 p-2 sm:p-4 pt-4 sm:pt-8">
+          <div className="bg-white rounded-2xl w-full max-w-2xl h-[90vh] sm:h-[85vh] flex flex-col overflow-hidden">
+            {/* Header - Always visible */}
+            <div className="flex justify-between items-center p-3 sm:p-4 flex-none border-b border-gray-200">
               <h3 className="text-xl font-bold text-gray-800">
                 Créer un nouveau template
               </h3>
@@ -633,13 +634,15 @@ const WorkoutTemplates = ({
                   setTemplateDescription('');
                   setNewTemplateExercises([]);
                 }}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 p-1 hover:bg-gray-100 rounded"
               >
                 <X className="h-6 w-6" />
               </button>
             </div>
 
-            <div className="space-y-4">
+            {/* Content - Scrollable area */}
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4" style={{minHeight: 0}}>
+              <div className="space-y-4">
               {/* Informations du template */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -832,26 +835,28 @@ const WorkoutTemplates = ({
                 )}
               </div>
 
-              {/* Boutons d'action */}
-              <div className="flex gap-3 pt-4 border-t">
-                <button
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    setTemplateName('');
-                    setTemplateDescription('');
-                    setNewTemplateExercises([]);
-                  }}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium transition-colors duration-200"
-                >
-                  Annuler
-                </button>
-                <button
-                  onClick={handleCreateTemplate}
-                  className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20"
-                >
-                  Créer le template
-                </button>
               </div>
+            </div>
+
+            {/* Footer - Always visible */}
+            <div className="flex gap-3 p-3 sm:p-4 border-t border-gray-200 bg-gray-50 flex-none">
+              <button
+                onClick={() => {
+                  setShowCreateModal(false);
+                  setTemplateName('');
+                  setTemplateDescription('');
+                  setNewTemplateExercises([]);
+                }}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleCreateTemplate}
+                className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20"
+              >
+                Créer le template
+              </button>
             </div>
           </div>
         </div>

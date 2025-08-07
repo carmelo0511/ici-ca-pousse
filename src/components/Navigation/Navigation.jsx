@@ -120,7 +120,7 @@ const Navigation = ({
               key={id}
               data-tab={id}
               onClick={() => setActiveTab(id)}
-              className={`nav-tab ripple-effect group relative flex-shrink-0 py-1.5 px-2.5 md:py-2 md:px-4 lg:px-6 font-semibold text-xs md:text-sm focus:outline-none max-w-[90px] md:max-w-[140px] lg:max-w-[160px] truncate text-ellipsis text-center ${
+              className={`nav-tab ripple-effect group relative flex-shrink-0 py-2 px-3 md:py-2.5 md:px-4 font-semibold text-xs md:text-sm focus:outline-none w-[85px] md:w-[100px] lg:w-[120px] text-center ${
                 activeTab === id ? 'active' : ''
               }`}
               aria-current={activeTab === id ? 'page' : undefined}
@@ -130,7 +130,7 @@ const Navigation = ({
                 <Icon
                   className={`nav-icon h-4 w-4 md:h-5 md:w-5 transition-transform duration-200 ${activeTab === id ? 'animate-pulse' : 'group-hover:scale-110'}`}
                 />
-                <span className="truncate w-full">{label}</span>
+                <span className="truncate w-full leading-tight">{label}</span>
               </div>
               {/* Indicateur de progression pour certains onglets */}
               {id === 'challenges' &&

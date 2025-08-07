@@ -99,91 +99,91 @@ const KnowledgeBaseManager = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-glass-bg border border-glass-border rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden backdrop-blur-md">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-2 sm:p-4 pt-4 sm:pt-8">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl h-[90vh] sm:h-[85vh] flex flex-col overflow-hidden">
+        {/* Header - Always visible */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2 sm:p-3 flex-none rounded-t-lg">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">
-              📚 Gestionnaire de Base de Connaissances RAG
-            </h2>
+            <h2 className="text-lg sm:text-2xl font-bold">📚 Base de Connaissances RAG</h2>
             <button
               onClick={onClose}
-              className="text-white hover:text-gray-200 text-2xl"
+              className="text-white hover:text-gray-200 text-xl sm:text-2xl p-1 hover:bg-white hover:bg-opacity-20 rounded"
             >
               ×
             </button>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b border-glass-border bg-glass-bg-secondary">
+        {/* Tabs - Always visible */}
+        <div className="flex border-b overflow-x-auto flex-none bg-gray-50 min-h-[45px]" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
           {['overview', 'search', 'category', 'add'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 font-semibold transition-colors ${
+              className={`px-4 py-2 font-semibold whitespace-nowrap text-sm flex-shrink-0 transition-colors ${
                 activeTab === tab
-                  ? 'bg-glass-bg text-glass-text border-b-2 border-blue-600 backdrop-blur-md'
-                  : 'text-glass-text-secondary hover:text-glass-text hover:bg-glass-bg'
+                  ? 'border-b-2 border-blue-600 text-blue-600 bg-white'
+                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
-              {tab === 'overview' && "📊 Vue d'ensemble"}
-              {tab === 'search' && '🔍 Recherche'}
-              {tab === 'category' && '📂 Par Catégorie'}
-              {tab === 'add' && '➕ Ajouter'}
+              <span className="flex items-center gap-1">
+                {tab === 'overview' && (<>📊 <span className="hidden sm:inline">Vue d'ensemble</span></>)}
+                {tab === 'search' && (<>🔍 <span className="hidden sm:inline">Recherche</span></>)}
+                {tab === 'category' && (<>📂 <span className="hidden sm:inline">Par Catégorie</span></>)}
+                {tab === 'add' && (<>➕ <span className="hidden sm:inline">Ajouter</span></>)}
+              </span>
             </button>
           ))}
         </div>
 
-        {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[60vh]">
+        {/* Content - Scrollable area */}
+        <div className="flex-1 overflow-y-auto bg-white p-1 sm:p-2" style={{minHeight: 0}}>
           {/* Vue d'ensemble */}
           {activeTab === 'overview' && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
                 📊 Statistiques de la Base de Connaissances
               </h3>
 
               {stats && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
-                    <div className="text-2xl font-bold text-glass-text">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                  <div className="bg-glass-bg border border-glass-border p-2 sm:p-3 rounded-lg backdrop-blur-md shadow-glass text-center">
+                    <div className="text-base sm:text-lg font-bold text-glass-text">
                       {stats.totalDocuments}
                     </div>
-                    <div className="text-sm text-glass-text-secondary">Documents</div>
+                    <div className="text-xs text-glass-text-secondary font-medium">Documents</div>
                   </div>
-                  <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
-                    <div className="text-2xl font-bold text-glass-text">
+                  <div className="bg-glass-bg-secondary border border-glass-border p-2 sm:p-3 rounded-lg backdrop-blur-md shadow-glass text-center">
+                    <div className="text-base sm:text-lg font-bold text-glass-text">
                       {stats.totalWords}
                     </div>
-                    <div className="text-sm text-glass-text-secondary">Mots indexés</div>
+                    <div className="text-xs text-glass-text-secondary font-medium">Mots indexés</div>
                   </div>
-                  <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
-                    <div className="text-2xl font-bold text-glass-text">
+                  <div className="bg-glass-bg border border-glass-border-light p-2 sm:p-3 rounded-lg backdrop-blur-md shadow-glass text-center">
+                    <div className="text-base sm:text-lg font-bold text-glass-text">
                       {stats.categories.length}
                     </div>
-                    <div className="text-sm text-glass-text-secondary">Catégories</div>
+                    <div className="text-xs text-glass-text-secondary font-medium">Catégories</div>
                   </div>
-                  <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
-                    <div className="text-2xl font-bold text-glass-text">
+                  <div className="bg-glass-bg-light border border-glass-border p-2 sm:p-3 rounded-lg backdrop-blur-md shadow-glass text-center">
+                    <div className="text-base sm:text-lg font-bold text-glass-text">
                       {stats.tags.length}
                     </div>
-                    <div className="text-sm text-glass-text-secondary">Tags</div>
+                    <div className="text-xs text-glass-text-secondary font-medium">Tags</div>
                   </div>
                 </div>
               )}
 
               {/* Catégories disponibles */}
-              <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
-                <h4 className="font-semibold mb-3 text-glass-text">
+              <div className="bg-glass-bg-secondary border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                <h4 className="font-semibold mb-2 text-glass-text text-sm sm:text-base">
                   📂 Catégories Disponibles
                 </h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {categories.map((category) => (
                     <div
                       key={category}
-                      className="bg-glass-bg-secondary border border-glass-border p-2 rounded backdrop-blur-sm text-sm text-glass-text"
+                      className="bg-glass-bg border border-glass-border p-2 rounded backdrop-blur-sm text-xs sm:text-sm text-glass-text text-center"
                     >
                       {categoryLabels[category]}
                     </div>
@@ -193,13 +193,13 @@ const KnowledgeBaseManager = ({
 
               {/* Tags populaires */}
               {stats && (
-                <div className="bg-glass-bg border border-glass-border p-4 rounded-lg backdrop-blur-md shadow-glass">
-                  <h4 className="font-semibold mb-3 text-glass-text">🏷️ Tags Populaires</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {stats.tags.slice(0, 20).map((tag) => (
+                <div className="bg-glass-bg border border-glass-border p-3 sm:p-4 rounded-lg backdrop-blur-md shadow-glass">
+                  <h4 className="font-semibold mb-2 text-glass-text text-sm sm:text-base">🏷️ Tags Populaires</h4>
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
+                    {stats.tags.slice(0, 15).map((tag) => (
                       <span
                         key={tag}
-                        className="bg-glass-bg-secondary border border-glass-border text-glass-text px-2 py-1 rounded text-sm backdrop-blur-sm"
+                        className="bg-glass-bg-secondary border border-glass-border text-glass-text px-2 py-1 rounded text-xs backdrop-blur-sm"
                       >
                         {tag}
                       </span>
@@ -212,8 +212,8 @@ const KnowledgeBaseManager = ({
 
           {/* Recherche */}
           {activeTab === 'search' && (
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
                 🔍 Recherche dans la Base de Connaissances
               </h3>
 
@@ -265,8 +265,8 @@ const KnowledgeBaseManager = ({
 
           {/* Recherche par catégorie */}
           {activeTab === 'category' && (
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
                 📂 Recherche par Catégorie
               </h3>
 
@@ -316,8 +316,8 @@ const KnowledgeBaseManager = ({
 
           {/* Ajouter du contenu */}
           {activeTab === 'add' && (
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
                 ➕ Ajouter du Contenu Personnalisé
               </h3>
 
@@ -410,11 +410,10 @@ const KnowledgeBaseManager = ({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="bg-glass-bg-secondary border-t border-glass-border p-4 backdrop-blur-sm">
-          <div className="text-sm text-glass-text-secondary">
-            💡 La base de connaissances RAG enrichit automatiquement les
-            réponses du chatbot avec des informations spécialisées en fitness.
+        {/* Footer - Always visible */}
+        <div className="bg-gray-50 border-t border-gray-300 p-1 flex-none rounded-b-lg">
+          <div className="text-xs text-gray-600">
+            💡 La base de connaissances RAG enrichit automatiquement les réponses du chatbot avec des informations spécialisées en fitness.
           </div>
         </div>
       </div>
