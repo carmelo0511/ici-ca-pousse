@@ -61,14 +61,14 @@ const StreakCounter = ({ streak, className = '' }) => {
     >
       <span
         className={`text-xs md:text-sm ${getStreakColor(streak)} mr-0.5 md:mr-1`}
-        style={{ minWidth: 12, minWidth: '12px' }}
+        style={{ minWidth: '12px' }}
       >
         {getStreakIcon(streak)}
       </span>
       <div className="flex flex-col items-center">
         <span
           className="text-[10px] md:text-xs font-bold text-gray-800 dark:text-white"
-          style={{ letterSpacing: 0.3, letterSpacing: '0.3px' }}
+          style={{ letterSpacing: '0.3px' }}
         >
           {displayStreak}{' '}
           <span className="text-[8px] md:text-[10px] font-normal text-gray-500 dark:text-gray-400">

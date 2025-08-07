@@ -32,7 +32,6 @@ const OptimizedImage = ({
     if (!baseSrc) return [];
     
     const baseUrl = baseSrc.split('.').slice(0, -1).join('.');
-    const extension = baseSrc.split('.').pop();
     
     const breakpoints = [
       { width: 320, suffix: '-sm' },

@@ -182,15 +182,13 @@ export const LazyHooks = {
 };
 
 // Préchargement intelligent des composants
-export const preloadComponents = (componentNames = [], priority = 'low') => {
+export const preloadComponents = (componentNames = [], priority = 'low', deviceInfo = null) => {
   if (!Array.isArray(componentNames)) {
     componentNames = [componentNames];
   }
 
-  const { deviceInfo } = useMobilePerformance();
-  
   // Ne pas précharger sur appareils bas de gamme ou réseau lent
-  if (deviceInfo.isLowEnd || deviceInfo.isSlowNetwork) {
+  if (deviceInfo && (deviceInfo.isLowEnd || deviceInfo.isSlowNetwork)) {
     return Promise.resolve();
   }
 
@@ -232,10 +230,8 @@ export const preloadForRoute = (routeName) => {
 };
 
 // Optimisation du prefetch selon la connexion
-export const intelligentPrefetch = () => {
-  const { deviceInfo } = useMobilePerformance();
-  
-  if (deviceInfo.isSlowNetwork || deviceInfo.isLowEnd) {
+export const intelligentPrefetch = (deviceInfo = null) => {
+  if (deviceInfo && (deviceInfo.isSlowNetwork || deviceInfo.isLowEnd)) {
     return; // Pas de prefetch sur connexions lentes
   }
 
@@ -295,7 +291,7 @@ if (typeof window !== 'undefined') {
   intelligentPrefetch();
 }
 
-export default {
+const CodeSplittingUtils = {
   MobileSuspense,
   LazyComponents,
   LazyHooks,
@@ -303,3 +299,5 @@ export default {
   preloadForRoute,
   measureComponentLoad
 };
+
+export default CodeSplittingUtils;

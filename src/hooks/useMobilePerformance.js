@@ -281,7 +281,7 @@ export default function useMobilePerformance() {
     }
 
     return cleanup;
-  }, []); // Dépendances vides pour éviter les re-renders
+  }, [detectDeviceCapabilities, initCoreWebVitals]);
 
   // Cleanup des observers de manière sécurisée
   useEffect(() => {

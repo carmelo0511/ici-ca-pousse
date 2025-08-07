@@ -128,7 +128,7 @@ class RateLimitService {
     if (attempts.length === 0) return Date.now();
     
     const oldestAttempt = Math.min(...attempts);
-    const [identifier, action, type] = key.split(':');
+    const [, action, type] = key.split(':');
     const windowMs = this.getWindowMs(action, type);
     
     return oldestAttempt + windowMs;
