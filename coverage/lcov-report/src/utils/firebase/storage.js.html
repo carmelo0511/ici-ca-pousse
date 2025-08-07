@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.64% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/17</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.64% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/17</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -96,25 +96,25 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -128,7 +128,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { STORAGE_KEYS } from '../../constants';
-export const load = <span class="fstat-no" title="function not covered" >(k</span>ey, defaultValue) =&gt; {
+export const load = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(k</span>ey, defaultValue) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const raw = <span class="cstat-no" title="statement not covered" >localStorage.getItem(key);</span>
 <span class="cstat-no" title="statement not covered" >    return raw ? JSON.parse(raw) : defaultValue;</span>
@@ -138,7 +138,7 @@ export const load = <span class="fstat-no" title="function not covered" >(k</spa
   }
 };
 &nbsp;
-export const save = <span class="fstat-no" title="function not covered" >(k</span>ey, value) =&gt; {
+export const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(k</span>ey, value) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    localStorage.setItem(key, JSON.stringify(value));</span>
   } catch (err) {
@@ -146,7 +146,7 @@ export const save = <span class="fstat-no" title="function not covered" >(k</spa
   }
 };
 &nbsp;
-export const migrateLocalWorkoutsToCloud = <span class="fstat-no" title="function not covered" >as</span>ync (user, addWorkoutCloud) =&gt; {
+export const migrateLocalWorkoutsToCloud = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (user, addWorkoutCloud) =&gt; {</span>
   const localWorkouts = <span class="cstat-no" title="statement not covered" >load(STORAGE_KEYS.WORKOUTS, []);</span>
 <span class="cstat-no" title="statement not covered" >  if (user &amp;&amp; localWorkouts.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    for (const workout of localWorkouts) {</span>
@@ -166,7 +166,7 @@ export const migrateLocalWorkoutsToCloud = <span class="fstat-no" title="functio
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-04T22:09:40.466Z
+                at 2025-08-07T19:00:16.819Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

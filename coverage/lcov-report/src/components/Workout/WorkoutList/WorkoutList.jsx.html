@@ -1200,7 +1200,8 @@
 <a name='L1135'></a><a href='#L1135'>1135</a>
 <a name='L1136'></a><a href='#L1136'>1136</a>
 <a name='L1137'></a><a href='#L1137'>1137</a>
-<a name='L1138'></a><a href='#L1138'>1138</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1138'></a><a href='#L1138'>1138</a>
+<a name='L1139'></a><a href='#L1139'>1139</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1230,9 +1231,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1510,7 +1508,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1558,10 +1555,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1710,7 +1703,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2352,9 +2354,6 @@ import {
   Shield,
   Zap,
   Apple,
-  Smile,
-  Meh,
-  Frown,
   Bookmark,
   Star,
 } from 'lucide-react';
@@ -2362,7 +2361,7 @@ import { exerciseDatabase } from '../../../utils/workout/exerciseDatabase';
 import Modal from '../Modal';
 import GradientButton from '../../GradientButton';
 import Card from '../../Card';
-import IconButton from '../../IconButton';
+&nbsp;
 import LexIA from '../../IAInfoBox';
 import MLWeightPrediction from '../../MLWeightPrediction';
 &nbsp;
@@ -2435,85 +2434,85 @@ function <span class="fstat-no" title="function not covered" >WorkoutList(</span
     {
       value: 'easy',
       label: t('feeling_easy'),
-      icon: &lt;Smile className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;😊&lt;/span&gt;,
       color: 'green',
     },
     {
       value: 'medium',
       label: t('feeling_medium'),
-      icon: &lt;Meh className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;😐&lt;/span&gt;,
       color: 'yellow',
     },
     {
       value: 'hard',
       label: t('feeling_hard'),
-      icon: &lt;Frown className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;😔&lt;/span&gt;,
       color: 'red',
     },
     {
       value: 'weak',
       label: t('feeling_weak'),
-      icon: &lt;Frown className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;😞&lt;/span&gt;,
       color: 'orange',
     },
     {
       value: 'strong',
       label: t('feeling_strong'),
-      icon: &lt;Smile className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;💪&lt;/span&gt;,
       color: 'green',
     },
     {
       value: 'tired',
       label: t('feeling_tired'),
-      icon: &lt;Meh className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;😴&lt;/span&gt;,
       color: 'gray',
     },
     {
       value: 'energized',
       label: t('feeling_energized'),
-      icon: &lt;Smile className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;⚡&lt;/span&gt;,
       color: 'blue',
     },
     {
       value: 'motivated',
       label: t('feeling_motivated'),
-      icon: &lt;Smile className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;🔥&lt;/span&gt;,
       color: 'purple',
     },
     {
       value: 'demotivated',
       label: t('feeling_demotivated'),
-      icon: &lt;Frown className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;😕&lt;/span&gt;,
       color: 'gray',
     },
     {
       value: 'great',
       label: t('feeling_great'),
-      icon: &lt;Smile className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;🎉&lt;/span&gt;,
       color: 'green',
     },
     {
       value: 'good',
       label: t('feeling_good'),
-      icon: &lt;Smile className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;👍&lt;/span&gt;,
       color: 'blue',
     },
     {
       value: 'ok',
       label: t('feeling_ok'),
-      icon: &lt;Meh className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;🤷&lt;/span&gt;,
       color: 'yellow',
     },
     {
       value: 'bad',
       label: t('feeling_bad'),
-      icon: &lt;Frown className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;😟&lt;/span&gt;,
       color: 'orange',
     },
     {
       value: 'terrible',
       label: t('feeling_terrible'),
-      icon: &lt;Frown className="h-5 w-5" /&gt;,
+      icon: &lt;span className="text-3xl"&gt;😭&lt;/span&gt;,
       color: 'red',
     },
   ];
@@ -2696,14 +2695,9 @@ function <span class="fstat-no" title="function not covered" >WorkoutList(</span
                   &lt;/div&gt;
                 &lt;/div&gt;
                 &lt;div className="flex items-center space-x-2 ml-4"&gt;
-                  &lt;IconButton
-                    icon={Plus}
-                    onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >addSet(exercise.id)}</span>
-                    className="btn-primary ripple-effect shadow-md hover:shadow-lg"
-                  /&gt;
                   &lt;button
                     onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >removeExerciseFromWorkout(exercise.id)}</span>
-                    className="btn-secondary ripple-effect hover:badge-danger text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
+                    className="bg-red-500 hover:bg-red-600 text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
                     title="Supprimer l'exercice"
                   &gt;
                     &lt;X className="h-3 w-3" /&gt;
@@ -2846,13 +2840,22 @@ function <span class="fstat-no" title="function not covered" >WorkoutList(</span
                         &lt;span className="text-sm font-semibold text-blue-600 bg-blue-50 rounded-lg px-3 py-2 text-center"&gt;
                           {set.reps * set.weight} kg
                         &lt;/span&gt;
-                        &lt;button
-                          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >removeSet(exercise.id, setIndex)}</span>
-                          className="bg-red-500 hover:bg-red-600 text-white p-0.5 rounded transition-all duration-200 shadow-sm hover:shadow-md w-6 h-6 flex items-center justify-center"
-                          title="Supprimer la série"
-                        &gt;
-                          &lt;X className="h-2.5 w-2.5" /&gt;
-                        &lt;/button&gt;
+                        &lt;div className="flex items-center space-x-1"&gt;
+                          &lt;button
+                            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >addSet(exercise.id)}</span>
+                            className="bg-green-500 hover:bg-green-600 text-white p-0.5 rounded transition-all duration-200 shadow-sm hover:shadow-md w-6 h-6 flex items-center justify-center"
+                            title="Ajouter une série"
+                          &gt;
+                            &lt;Plus className="h-2.5 w-2.5" /&gt;
+                          &lt;/button&gt;
+                          &lt;button
+                            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >removeSet(exercise.id, setIndex)}</span>
+                            className="bg-red-500 hover:bg-red-600 text-white p-0.5 rounded transition-all duration-200 shadow-sm hover:shadow-md w-6 h-6 flex items-center justify-center"
+                            title="Supprimer la série"
+                          &gt;
+                            &lt;X className="h-2.5 w-2.5" /&gt;
+                          &lt;/button&gt;
+                        &lt;/div&gt;
                       &lt;/&gt;
                     )}
                   &lt;/div&gt;
@@ -3278,10 +3281,10 @@ function <span class="fstat-no" title="function not covered" >WorkoutList(</span
                 }`}
               &gt;
                 &lt;div
-                  className={`p-2 rounded-full mb-2 ${
+                  className={`p-3 rounded-full mb-2 ${
                     selectedFeeling === feeling.value
                       ? 'bg-white/20'
-                      : `bg-${feeling.color}-100 text-${feeling.color}-600`
+                      : `bg-${feeling.color}-100 text-${feeling.color}-600 shadow-sm`
                   }`}
                 &gt;
                   {feeling.icon}
@@ -3481,7 +3484,7 @@ export default memo(WorkoutList);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-04T22:09:40.466Z
+                at 2025-08-07T19:00:16.819Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

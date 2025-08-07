@@ -1077,7 +1077,10 @@
 <a name='L1012'></a><a href='#L1012'>1012</a>
 <a name='L1013'></a><a href='#L1013'>1013</a>
 <a name='L1014'></a><a href='#L1014'>1014</a>
-<a name='L1015'></a><a href='#L1015'>1015</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1015'></a><a href='#L1015'>1015</a>
+<a name='L1016'></a><a href='#L1016'>1016</a>
+<a name='L1017'></a><a href='#L1017'>1017</a>
+<a name='L1018'></a><a href='#L1018'>1018</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1708,11 +1711,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1917,11 +1921,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2091,7 +2097,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Bookmark,
@@ -2713,11 +2719,10 @@ const WorkoutTemplates = <span class="cstat-no" title="statement not covered" ><
 &nbsp;
       {/* Modal créer template depuis zéro */}
       {showCreateModal &amp;&amp; (
-        &lt;div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4"&gt;
-          &lt;div
-            className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto p-3 sm:p-4"
-          &gt;
-            &lt;div className="flex justify-between items-center mb-4"&gt;
+        &lt;div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 p-2 sm:p-4 pt-4 sm:pt-8"&gt;
+          &lt;div className="bg-white rounded-2xl w-full max-w-2xl h-[90vh] sm:h-[85vh] flex flex-col overflow-hidden"&gt;
+            {/* Header - Always visible */}
+            &lt;div className="flex justify-between items-center p-3 sm:p-4 flex-none border-b border-gray-200"&gt;
               &lt;h3 className="text-xl font-bold text-gray-800"&gt;
                 Créer un nouveau template
               &lt;/h3&gt;
@@ -2728,13 +2733,15 @@ const WorkoutTemplates = <span class="cstat-no" title="statement not covered" ><
 <span class="cstat-no" title="statement not covered" >                  setTemplateDescription('');</span>
 <span class="cstat-no" title="statement not covered" >                  setNewTemplateExercises([]);</span>
                 }}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 p-1 hover:bg-gray-100 rounded"
               &gt;
                 &lt;X className="h-6 w-6" /&gt;
               &lt;/button&gt;
             &lt;/div&gt;
 &nbsp;
-            &lt;div className="space-y-4"&gt;
+            {/* Content - Scrollable area */}
+            &lt;div className="flex-1 overflow-y-auto p-3 sm:p-4" style={{minHeight: 0}}&gt;
+              &lt;div className="space-y-4"&gt;
               {/* Informations du template */}
               &lt;div className="grid grid-cols-1 sm:grid-cols-2 gap-4"&gt;
                 &lt;div&gt;
@@ -2927,26 +2934,28 @@ const WorkoutTemplates = <span class="cstat-no" title="statement not covered" ><
                 )}
               &lt;/div&gt;
 &nbsp;
-              {/* Boutons d'action */}
-              &lt;div className="flex gap-3 pt-4 border-t"&gt;
-                &lt;button
-                  onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >                    setShowCreateModal(false);</span>
-<span class="cstat-no" title="statement not covered" >                    setTemplateName('');</span>
-<span class="cstat-no" title="statement not covered" >                    setTemplateDescription('');</span>
-<span class="cstat-no" title="statement not covered" >                    setNewTemplateExercises([]);</span>
-                  }}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium transition-colors duration-200"
-                &gt;
-                  Annuler
-                &lt;/button&gt;
-                &lt;button
-                  onClick={handleCreateTemplate}
-                  className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20"
-                &gt;
-                  Créer le template
-                &lt;/button&gt;
               &lt;/div&gt;
+            &lt;/div&gt;
+&nbsp;
+            {/* Footer - Always visible */}
+            &lt;div className="flex gap-3 p-3 sm:p-4 border-t border-gray-200 bg-gray-50 flex-none"&gt;
+              &lt;button
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                  setShowCreateModal(false);</span>
+<span class="cstat-no" title="statement not covered" >                  setTemplateName('');</span>
+<span class="cstat-no" title="statement not covered" >                  setTemplateDescription('');</span>
+<span class="cstat-no" title="statement not covered" >                  setNewTemplateExercises([]);</span>
+                }}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+              &gt;
+                Annuler
+              &lt;/button&gt;
+              &lt;button
+                onClick={handleCreateTemplate}
+                className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20"
+              &gt;
+                Créer le template
+              &lt;/button&gt;
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/div&gt;
@@ -3112,7 +3121,7 @@ export default WorkoutTemplates;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-04T22:09:40.466Z
+                at 2025-08-07T19:00:16.819Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

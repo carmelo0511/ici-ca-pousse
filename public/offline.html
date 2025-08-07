@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#6366f1" />
+    <title>Hors ligne - Ici Ça Pousse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .offline-container {
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .offline-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .offline-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .offline-message {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .offline-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 200px;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            border-color: transparent;
+        }
+        
+        .btn-primary:hover {
+            background: white;
+            color: #5a67d8;
+        }
+        
+        .offline-features {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .features-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .features-list {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .features-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .features-list li::before {
+            content: "💪";
+            font-size: 1.2rem;
+        }
+        
+        .connection-status {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .connection-status.offline {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .connection-status.online {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        @media (max-width: 640px) {
+            .offline-title {
+                font-size: 1.5rem;
+            }
+            
+            .offline-message {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">🔄</div>
+        
+        <h1 class="offline-title">Mode Hors Ligne</h1>
+        
+        <p class="offline-message">
+            Vous êtes actuellement hors ligne, mais vous pouvez continuer à utiliser certaines fonctionnalités de l'application.
+        </p>
+        
+        <div class="offline-actions">
+            <button onclick="checkConnection()" class="btn btn-primary">
+                🔄 Vérifier la connexion
+            </button>
+            
+            <a href="/" class="btn">
+                🏠 Retour à l'accueil
+            </a>
+        </div>
+        
+        <div class="offline-features">
+            <h3 class="features-title">Fonctionnalités disponibles hors ligne :</h3>
+            <ul class="features-list">
+                <li>Consulter vos entraînements sauvegardés</li>
+                <li>Voir vos statistiques récentes</li>
+                <li>Accéder à vos badges et défis</li>
+                <li>Utiliser le chronomètre d'entraînement</li>
+                <li>Consulter votre profil</li>
+            </ul>
+        </div>
+        
+        <div id="connection-status" class="connection-status offline">
+            📡 Connexion : Hors ligne
+        </div>
+    </div>
+
+    <script>
+        let isOnline = navigator.onLine;
+        
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connection-status');
+            const icon = document.querySelector('.offline-icon');
+            
+            if (isOnline) {
+                statusElement.textContent = '📡 Connexion : En ligne';
+                statusElement.className = 'connection-status online';
+                icon.textContent = '✅';
+                
+                // Rediriger automatiquement après 2 secondes
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            } else {
+                statusElement.textContent = '📡 Connexion : Hors ligne';
+                statusElement.className = 'connection-status offline';
+                icon.textContent = '🔄';
+            }
+        }
+        
+        function checkConnection() {
+            isOnline = navigator.onLine;
+            updateConnectionStatus();
+            
+            if (!isOnline) {
+                // Tenter une requête réseau pour vérifier la connectivité réelle
+                fetch('/', { method: 'HEAD', cache: 'no-cache' })
+                    .then(() => {
+                        isOnline = true;
+                        updateConnectionStatus();
+                    })
+                    .catch(() => {
+                        // Toujours hors ligne
+                        console.log('Still offline');
+                    });
+            }
+        }
+        
+        // Écouter les changements de connexion
+        window.addEventListener('online', () => {
+            isOnline = true;
+            updateConnectionStatus();
+        });
+        
+        window.addEventListener('offline', () => {
+            isOnline = false;
+            updateConnectionStatus();
+        });
+        
+        // Vérifier la connexion toutes les 30 secondes
+        setInterval(checkConnection, 30000);
+        
+        // Animation de l'icône de chargement
+        function animateIcon() {
+            const icon = document.querySelector('.offline-icon');
+            if (!isOnline && icon.textContent === '🔄') {
+                icon.style.transform = `rotate(${Date.now() / 10 % 360}deg)`;
+            }
+        }
+        
+        setInterval(animateIcon, 100);
+        
+        // Initialiser le statut
+        updateConnectionStatus();
+    </script>
+</body>
+</html>

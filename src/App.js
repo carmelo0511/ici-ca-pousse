@@ -27,6 +27,10 @@ import {
 import { LoadingScreen, WeightNotification, AppToast } from './components/UI';
 import TabContent from './components/Layout/TabContent';
 
+// Performance Components
+import MobileOptimizer from './components/Performance/MobileOptimizer';
+import CoreWebVitals from './components/Performance/CoreWebVitals';
+
 // Hooks
 import {
   useWorkouts,
@@ -271,15 +275,16 @@ function App() {
 
   return (
     <I18nextProvider i18n={i18n}>
-      {/* Notification hebdo poids */}
-      <WeightNotification
-        show={showWeightNotif}
-        isFading={isFading}
-        onUpdateWeight={handleUpdateWeight}
-        onSameWeight={handleSameWeight}
-      />
+      <MobileOptimizer>
+        {/* Notification hebdo poids */}
+        <WeightNotification
+          show={showWeightNotif}
+          isFading={isFading}
+          onUpdateWeight={handleUpdateWeight}
+          onSameWeight={handleSameWeight}
+        />
 
-      <div className="min-h-screen w-full">
+        <div className="min-h-screen w-full">
         <div
           id="main-content"
           className="main-container mx-auto max-w-4xl w-full px-2 sm:px-6 py-4 main-safe-area compact"
@@ -398,6 +403,10 @@ function App() {
           {/* Vercel Analytics et Speed Insights - Initialized via useEffect */}
         </div>
       </div>
+      
+      {/* Composants de monitoring des performances */}
+      <CoreWebVitals />
+      </MobileOptimizer>
     </I18nextProvider>
   );
 }

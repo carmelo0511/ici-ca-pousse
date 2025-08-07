@@ -8,7 +8,6 @@ import {
   Challenges,
   BadgesPage,
   ProfilePage,
-  PageTransition,
 } from '../index';
 
 const TabContent = ({ 
@@ -25,44 +24,60 @@ const TabContent = ({
   return (
     <div className="relative">
       {/* Onglet Séance */}
-      <PageTransition isActive={activeTab === 'workout'}>
-        <WorkoutList {...workoutProps} />
-      </PageTransition>
+      {activeTab === 'workout' && (
+        <div>
+          <WorkoutList {...workoutProps} />
+        </div>
+      )}
 
       {/* Onglet Calendrier */}
-      <PageTransition isActive={activeTab === 'calendar'}>
-        <CalendarView {...calendarProps} />
-      </PageTransition>
+      {activeTab === 'calendar' && (
+        <div>
+          <CalendarView {...calendarProps} />
+        </div>
+      )}
 
       {/* Onglet Statistiques */}
-      <PageTransition isActive={activeTab === 'stats'}>
-        <StatsView {...statsProps} />
-      </PageTransition>
+      {activeTab === 'stats' && (
+        <div>
+          <StatsView {...statsProps} />
+        </div>
+      )}
 
       {/* Onglet Templates */}
-      <PageTransition isActive={activeTab === 'templates'}>
-        <WorkoutTemplates {...templateProps} />
-      </PageTransition>
+      {activeTab === 'templates' && (
+        <div>
+          <WorkoutTemplates {...templateProps} />
+        </div>
+      )}
 
       {/* Onglet Classement */}
-      <PageTransition isActive={activeTab === 'leaderboard'}>
-        <LeaderboardView {...leaderboardProps} />
-      </PageTransition>
+      {activeTab === 'leaderboard' && (
+        <div>
+          <LeaderboardView {...leaderboardProps} />
+        </div>
+      )}
 
       {/* Onglet Défis */}
-      <PageTransition isActive={activeTab === 'challenges'}>
-        <Challenges {...challengeProps} />
-      </PageTransition>
+      {activeTab === 'challenges' && (
+        <div>
+          <Challenges {...challengeProps} />
+        </div>
+      )}
 
       {/* Onglet Badges */}
-      <PageTransition isActive={activeTab === 'badges'}>
-        <BadgesPage {...badgeProps} />
-      </PageTransition>
+      {activeTab === 'badges' && (
+        <div>
+          <BadgesPage {...badgeProps} />
+        </div>
+      )}
 
       {/* Onglet Profil */}
-      <PageTransition isActive={activeTab === 'profile'}>
-        <ProfilePage {...profileProps} />
-      </PageTransition>
+      {activeTab === 'profile' && (
+        <div>
+          <ProfilePage {...profileProps} />
+        </div>
+      )}
     </div>
   );
 };

@@ -1326,11 +1326,7 @@
 <a name='L1261'></a><a href='#L1261'>1261</a>
 <a name='L1262'></a><a href='#L1262'>1262</a>
 <a name='L1263'></a><a href='#L1263'>1263</a>
-<a name='L1264'></a><a href='#L1264'>1264</a>
-<a name='L1265'></a><a href='#L1265'>1265</a>
-<a name='L1266'></a><a href='#L1266'>1266</a>
-<a name='L1267'></a><a href='#L1267'>1267</a>
-<a name='L1268'></a><a href='#L1268'>1268</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1264'></a><a href='#L1264'>1264</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2420,10 +2416,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2849,7 +2841,7 @@ const Chatbot = <span class="cstat-no" title="statement not covered" ><span clas
 <span class="cstat-no" title="statement not covered" >      setMessages([</span>
         {
           role: 'assistant',
-          content: `${prenom ? 'Bonjour ' + prenom + ', ' : 'Bonjour,'}je suis Coach Lex IA. Je peux t'aider avec tes séances de sport, la nutrition et le bien-être. Prêt pour une nouvelle séance ?`,
+          content: `${prenom ? 'Bonjour ' + prenom + ', ' : 'Bonjour,'}je suis Coach Lex IA. Je peux t'aider avec tes séances de sport, la nutrition, le bien-être et bien d'autres sujets ! Comment puis-je t'aider aujourd'hui ?`,
         },
       ]);
     }
@@ -3687,13 +3679,9 @@ const Chatbot = <span class="cstat-no" title="statement not covered" ><span clas
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div className="p-3 sm:p-6 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg"&gt;
-      {/* Header avec titre et boutons de contrôle */}
-      &lt;div className="flex items-center justify-between mb-3 sm:mb-4"&gt;
-        &lt;div className="flex items-center"&gt;
-          &lt;h2 className="text-lg sm:text-3xl font-bold text-gray-800"&gt;Coach Lex IA&lt;/h2&gt;
-        &lt;/div&gt;
-&nbsp;
+    &lt;div className="p-2 sm:p-6 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg"&gt;
+      {/* Header avec boutons de contrôle */}
+      &lt;div className="flex items-center justify-end mb-2 sm:mb-4"&gt;
         {/* Dashboard unifié */}
         &lt;ChatbotDashboard
           onMonitoring={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowMonitoring(true)}</span>
@@ -3705,11 +3693,11 @@ const Chatbot = <span class="cstat-no" title="statement not covered" ><span clas
       &lt;/div&gt;
 &nbsp;
       {/* Boutons d'action principaux */}
-      &lt;div className="mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3"&gt;
+      &lt;div className="mb-2 sm:mb-4 flex items-center gap-1 sm:gap-3"&gt;
         {/* Bouton création séance IA */}
         &lt;button
           onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowMenu(<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >!v)</span>}</span>
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all text-xs sm:text-sm border border-white/20 flex items-center gap-1 sm:gap-2"
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg shadow-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all text-xs sm:text-sm border border-white/20 flex items-center gap-1 sm:gap-2"
           title="Créer une séance personnalisée avec l'IA"
         &gt;
           &lt;span&gt;🤖&lt;/span&gt;
@@ -3728,19 +3716,19 @@ const Chatbot = <span class="cstat-no" title="statement not covered" ><span clas
 &nbsp;
       {/* Menu de création de séance */}
       {showMenu &amp;&amp; (
-        &lt;div className="mb-4 p-4 bg-white border rounded-xl shadow-xl"&gt;
-          &lt;h3 className="font-semibold text-gray-800 mb-3"&gt;
+        &lt;div className="mb-2 sm:mb-4 p-2 sm:p-4 bg-white border rounded-xl shadow-xl"&gt;
+          &lt;h3 className="font-semibold text-gray-800 mb-2 sm:mb-3 text-sm sm:text-base"&gt;
             Créer une séance personnalisée
           &lt;/h3&gt;
-          &lt;div className="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;
+          &lt;div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4"&gt;
             &lt;div&gt;
-              &lt;label className="font-semibold text-gray-700 block mb-2"&gt;
+              &lt;label className="font-semibold text-gray-700 block mb-1 sm:mb-2 text-xs sm:text-sm"&gt;
                 Type de séance
               &lt;/label&gt;
               &lt;select
                 value={sessionType}
                 onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >setSessionType(e.target.value)}</span>
-                className="w-full border rounded px-3 py-2 text-sm"
+                className="w-full border rounded px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
               &gt;
                 {SESSION_TYPES.map(<span class="fstat-no" title="function not covered" >(o</span>pt) =&gt; (
 <span class="cstat-no" title="statement not covered" >                  &lt;option key={opt.value} value={opt.value}&gt;</span>
@@ -3750,13 +3738,13 @@ const Chatbot = <span class="cstat-no" title="statement not covered" ><span clas
               &lt;/select&gt;
             &lt;/div&gt;
             &lt;div&gt;
-              &lt;label className="font-semibold text-gray-700 block mb-2"&gt;
+              &lt;label className="font-semibold text-gray-700 block mb-1 sm:mb-2 text-xs sm:text-sm"&gt;
                 Intensité
               &lt;/label&gt;
               &lt;select
                 value={intensity}
                 onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >setIntensity(e.target.value)}</span>
-                className="w-full border rounded px-3 py-2 text-sm"
+                className="w-full border rounded px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
               &gt;
                 {INTENSITIES.map(<span class="fstat-no" title="function not covered" >(o</span>pt) =&gt; (
 <span class="cstat-no" title="statement not covered" >                  &lt;option key={opt.value} value={opt.value}&gt;</span>
@@ -3766,16 +3754,16 @@ const Chatbot = <span class="cstat-no" title="statement not covered" ><span clas
               &lt;/select&gt;
             &lt;/div&gt;
           &lt;/div&gt;
-          &lt;div className="flex gap-2 mt-4"&gt;
+          &lt;div className="flex gap-1 sm:gap-2 mt-2 sm:mt-4"&gt;
             &lt;button
               onClick={handleSuggestWorkout}
-              className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded font-semibold shadow hover:from-green-600 hover:to-green-700 transition border border-white/20"
+              className="bg-gradient-to-r from-green-500 to-green-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded font-semibold shadow hover:from-green-600 hover:to-green-700 transition border border-white/20 text-xs sm:text-sm"
             &gt;
-              💪 Générer la séance
+              💪 Générer
             &lt;/button&gt;
             &lt;button
               onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowMenu(false)}</span>
-              className="text-gray-500 px-4 py-2 rounded hover:bg-gray-100 transition"
+              className="text-gray-500 px-2 sm:px-4 py-1 sm:py-2 rounded hover:bg-gray-100 transition text-xs sm:text-sm"
             &gt;
               Annuler
             &lt;/button&gt;
@@ -3784,7 +3772,7 @@ const Chatbot = <span class="cstat-no" title="statement not covered" ><span clas
       )}
 &nbsp;
       {/* Zone de messages */}
-      &lt;div className="border rounded-xl p-2 sm:p-4 h-48 sm:h-64 overflow-y-auto bg-white space-y-2 shadow-inner mb-3 sm:mb-4"&gt;
+      &lt;div className="border rounded-xl p-2 sm:p-4 h-32 sm:h-64 overflow-y-auto bg-white space-y-2 shadow-inner mb-2 sm:mb-4"&gt;
         {messages.map(<span class="fstat-no" title="function not covered" >(m</span>, i) =&gt; (
 <span class="cstat-no" title="statement not covered" >          &lt;div</span>
             key={i}
@@ -3871,7 +3859,7 @@ export default Chatbot;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-04T22:09:40.466Z
+                at 2025-08-07T19:00:16.819Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

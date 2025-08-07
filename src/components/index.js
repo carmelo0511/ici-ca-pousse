@@ -13,7 +13,6 @@ export { default as Card } from './Card';
 export { default as GradientButton } from './GradientButton';
 export { default as IconButton } from './IconButton';
 export { default as Toast } from './Toast';
-export { default as PageTransition } from './PageTransition';
 export { default as MigrationPrompt } from './MigrationPrompt';
 export { default as PWAInstallButton } from './PWAInstallButton';
 export { default as StreakCounter } from './StreakCounter';

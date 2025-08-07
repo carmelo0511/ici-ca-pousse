@@ -17,7 +17,6 @@ export { useNotifications } from './useNotifications';
 // UI/UX Hooks
 export { useBadges } from './useBadges';
 export { useKeyboardNavigation } from './useKeyboardNavigation';
-export { useSwipeNavigation } from './useSwipeNavigation';
 export { usePWA } from './usePWA';
 
 // AI & Chat Hooks

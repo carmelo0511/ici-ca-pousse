@@ -444,18 +444,6 @@ button:focus {
   transform: translateY(-20px);
 }
 
-/* Onglets (PageTransition) */
-.page-transition {
-  transition:
-    opacity 0.5s,
-    transform 0.5s;
-  opacity: 1;
-  transform: translateX(0);
-}
-.page-transition-exit {
-  opacity: 0;
-  transform: translateX(40px);
-}
 
 /* Boutons principaux */
 button,
