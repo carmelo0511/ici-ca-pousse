@@ -22,6 +22,7 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
       // Simuler un petit délai pour l'effet ML
       setTimeout(() => {
         const result = getProgressionInsights(exerciseName, workouts);
+        console.log('Prédiction IA pour', exerciseName, ':', result);
         setPrediction(result);
         setIsLoading(false);
       }, 300);

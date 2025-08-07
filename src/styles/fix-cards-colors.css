@@ -1135,6 +1135,22 @@ div[class*="bg-gradient-to-r from-purple-50 to-blue-50"] .text-gray-600 {
     color: #eab308 !important;
 }
 
+/* Section des facteurs d'ajustement (zone jaune) */
+.bg-yellow-50 {
+    background: rgba(234, 179, 8, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(234, 179, 8, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.border-yellow-100 {
+    border-color: rgba(234, 179, 8, 0.3) !important;
+}
+
+.text-yellow-700, .text-yellow-800 {
+    color: #fbbf24 !important;
+}
+
 /* Corrections générales pour border-gray-100 */
 .border-gray-100 {
     border-color: rgba(255, 255, 255, 0.1) !important;
