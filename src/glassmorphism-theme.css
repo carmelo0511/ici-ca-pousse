@@ -744,6 +744,22 @@ body::before {
     50% { transform: scale(1.05); }
 }
 
+/* Bouton LEX IA - toujours visible à l'écran */
+.lex-ia-button {
+    position: fixed !important;
+    left: 32px !important;
+    bottom: 24px !important;
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.lex-ia-button:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6) !important;
+}
+
 /* Status et badges animés */
 .status-badge, .date-badge {
     background: var(--purple-gradient);

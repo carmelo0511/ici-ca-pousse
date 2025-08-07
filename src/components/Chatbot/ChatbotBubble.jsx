@@ -31,14 +31,31 @@ const ChatbotBubble = (props) => {
 
   return (
     <>
-      {/* Bouton texte flottant en bas à gauche */}
-      <div style={{ position: 'fixed', left: 32, bottom: 24, zIndex: 1000 }}>
+      {/* Bouton texte flottant en bas à gauche - toujours visible */}
+      <div style={{ 
+        position: 'fixed', 
+        left: 32, 
+        bottom: 24, 
+        zIndex: 1000,
+        pointerEvents: 'auto'
+      }}>
         {!open && (
           <button
             onClick={() => setOpen(true)}
-            className="floating-btn ripple-effect flex items-center justify-center relative transition-all duration-300 px-4 py-2"
+            className="lex-ia-button ripple-effect flex items-center justify-center relative transition-all duration-300 px-4 py-2"
             aria-label="Ouvrir Coach Lex IA"
-            style={{ position: 'static', width: 'auto', height: 'auto', borderRadius: '0.75rem' }}
+            style={{ 
+              position: 'static', 
+              width: 'auto', 
+              height: 'auto', 
+              borderRadius: '0.75rem',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 8px 25px rgba(139, 92, 246, 0.4)',
+              zIndex: 1001
+            }}
           >
             <span className="font-semibold text-sm tracking-wide">LEX IA</span>
             {unread && (
