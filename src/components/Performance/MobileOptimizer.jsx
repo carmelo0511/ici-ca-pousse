@@ -65,7 +65,7 @@ const MobileOptimizer = ({ children }) => {
     <>
       {children}
       {/* Styles CSS injectés pour les optimisations */}
-      <style jsx global>{`
+      <style>{`
         .low-end-device * {
           animation-duration: 0s !important;
           transition-duration: 0s !important;
