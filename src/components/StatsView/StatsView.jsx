@@ -245,15 +245,6 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               >
                 {showMLDashboard ? '📊 Masquer Dashboard' : '📊 Dashboard ML'}
               </button>
-              {mlPipeline && (
-                <button
-                  onClick={() => window.location.reload()}
-                  className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-200"
-                  title="Réentraîner les modèles"
-                >
-                  🔄
-                </button>
-              )}
             </div>
           </div>
 
