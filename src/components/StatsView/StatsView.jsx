@@ -490,8 +490,8 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
       )}
 
       {/* Statistiques principales */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="card hover-lift">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stats-metrics-grid">
+        <div className="card hover-lift stats-metric-card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -505,7 +505,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="card hover-lift">
+        <div className="card hover-lift stats-metric-card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -519,7 +519,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="card hover-lift">
+        <div className="card hover-lift stats-metric-card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -533,7 +533,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="card hover-lift">
+        <div className="card hover-lift stats-metric-card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -547,7 +547,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="card hover-lift">
+        <div className="card hover-lift stats-metric-card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -563,7 +563,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
         </div>
 
-        <div className="card hover-lift">
+        <div className="card hover-lift stats-metric-card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-secondary text-sm font-medium">
@@ -582,7 +582,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
       {/* Habitudes d'entraînement */}
       {workoutHabits.totalWithTime > 0 && (
-        <div className="card">
+        <div className="card stats-habits-section">
           <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
             <Clock className="h-6 w-6" />
             <span>Habitudes d'entraînement</span>
@@ -590,7 +590,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Moment préféré */}
-            <div className="card">
+            <div className="card stats-habits-card">
               <h4 className="text-lg font-semibold text-gray-800 mb-3">
                 Moment préféré
               </h4>
@@ -663,28 +663,28 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               Durée moyenne par moment
             </h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="card text-center">
+              <div className="card stats-habits-card text-center">
                 <div className="text-2xl mb-1">🌅</div>
                 <div className="font-bold text-white">
                   {avgDurationByTime.morning} min
                 </div>
                 <div className="text-sm text-white">Matin</div>
               </div>
-              <div className="card text-center">
+              <div className="card stats-habits-card text-center">
                 <div className="text-2xl mb-1">☀️</div>
                 <div className="font-bold text-white">
                   {avgDurationByTime.afternoon} min
                 </div>
                 <div className="text-sm text-white">Après-midi</div>
               </div>
-              <div className="card text-center">
+              <div className="card stats-habits-card text-center">
                 <div className="text-2xl mb-1">🌆</div>
                 <div className="font-bold text-white">
                   {avgDurationByTime.evening} min
                 </div>
                 <div className="text-sm text-white">Soir</div>
               </div>
-              <div className="card text-center">
+              <div className="card stats-habits-card text-center">
                 <div className="text-2xl mb-1">🌙</div>
                 <div className="font-bold text-white">
                   {avgDurationByTime.night} min
@@ -697,7 +697,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
       )}
 
       {/* Section Recommandations */}
-      <div className="card">
+      <div className="card stats-reco-section">
         <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
           <Target className="h-6 w-6" />
           <span>Recommandations personnalisées</span>
@@ -705,7 +705,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Recommandation basée sur la fréquence */}
-          <div className="card">
+          <div className="card stats-reco-card">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>📊</span>
               <span>Fréquence d'entraînement</span>
@@ -757,7 +757,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur le groupe musculaire */}
-          <div className="card">
+          <div className="card stats-reco-card">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>💪</span>
               <span>Équilibre musculaire</span>
@@ -813,7 +813,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur la durée */}
-          <div className="card">
+          <div className="card stats-reco-card">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>⏱️</span>
               <span>Durée des séances</span>
@@ -867,7 +867,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           </div>
 
           {/* Recommandation basée sur le moment */}
-          <div className="card">
+          <div className="card stats-reco-card">
             <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
               <span>🌅</span>
               <span>Moment d'entraînement</span>
@@ -951,7 +951,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
         </div>
 
         {/* Recommandation générale */}
-        <div className="mt-6 card">
+        <div className="mt-6 card stats-goal-card">
           <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center space-x-2">
             <span>🎯</span>
             <span>Objectif du mois</span>
