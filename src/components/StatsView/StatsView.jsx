@@ -11,7 +11,7 @@ import {
 } from 'recharts';
 import { Dumbbell, Target, TrendingUp, Clock, Zap, ChevronDown, ChevronUp, Search, Filter } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import '../styles/ml-dashboard.css';
+import '../../styles/ml-dashboard.css';
 import {
   analyzeWorkoutHabits,
   getPreferredWorkoutTime,
