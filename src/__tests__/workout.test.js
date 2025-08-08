@@ -259,7 +259,7 @@ describe('Workout Functionality', () => {
     ];
 
     const template = saveTemplate('Upper Body', exercisesData);
-    expect(template).not.toBe(false);
+    expect(template).not.toBeNull();
     expect(template.name).toBe('Upper Body');
     expect(template.exercises).toHaveLength(2);
     expect(template.usageCount).toBe(0);
@@ -283,4 +283,32 @@ describe('Workout Functionality', () => {
     expect(deleteTemplate('invalid-id')).toBe(false);
     expect(templates).toHaveLength(0);
   });
+
+  test('set removal logic - should keep at least one set', () => {
+    // Test de la logique de suppression des séries
+    const removeSet = (sets, setIndex) => {
+      return sets.length > 1 
+        ? sets.filter((_, idx) => idx !== setIndex)
+        : [{ reps: 0, weight: 0, duration: 0 }]; // Garde au moins une série vide
+    };
+
+    // Test avec plusieurs séries
+    const multipleSets = [
+      { reps: 10, weight: 50, duration: 0 },
+      { reps: 8, weight: 55, duration: 0 },
+      { reps: 6, weight: 60, duration: 0 }
+    ];
+
+    const result1 = removeSet(multipleSets, 0);
+    expect(result1).toHaveLength(2);
+    expect(result1[0]).toEqual({ reps: 8, weight: 55, duration: 0 });
+    expect(result1[1]).toEqual({ reps: 6, weight: 60, duration: 0 });
+
+    // Test avec une seule série
+    const singleSet = [{ reps: 10, weight: 50, duration: 0 }];
+    const result2 = removeSet(singleSet, 0);
+    expect(result2).toHaveLength(1);
+    expect(result2[0]).toEqual({ reps: 0, weight: 0, duration: 0 });
+  });
 });
+

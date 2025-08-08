@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -9,7 +9,7 @@ import {
   CartesianGrid,
   LabelList,
 } from 'recharts';
-import { Dumbbell, Target, TrendingUp, Clock, Zap } from 'lucide-react';
+import { Dumbbell, Target, TrendingUp, Clock, Zap, ChevronDown, ChevronUp, Search, Filter } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
   analyzeWorkoutHabits,
@@ -38,6 +38,12 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
   const preferredTime = getPreferredWorkoutTime(workouts);
   const avgDurationByTime = getAverageDurationByTime(workouts);
 
+  // État pour le menu déroulant Madame Irma
+  const [showAllExercises, setShowAllExercises] = useState(false);
+  const [filterConfidence, setFilterConfidence] = useState('all');
+  const [sortBy, setSortBy] = useState('confidence');
+  const [searchTerm, setSearchTerm] = useState('');
+
   // Préparer les données pour la courbe de poids
   const weightData = (user?.weightHistory || [])
     .map((w) => ({
@@ -50,6 +56,50 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
     }))
     .filter((w) => w.weight > 0)
     .sort((a, b) => new Date(a.week) - new Date(b.week));
+
+  // Analyse des exercices pour Madame Irma
+  const exerciseAnalysis = useMemo(() => {
+    if (workouts.length === 0) return {};
+    return analyzeAllExercises(workouts);
+  }, [workouts]);
+
+  const exercisesWithData = useMemo(() => {
+    return Object.entries(exerciseAnalysis).filter(
+      ([_, analysis]) => analysis.confidence > 0
+    );
+  }, [exerciseAnalysis]);
+
+  // Logique de filtrage et tri pour Madame Irma
+  const filteredExercises = useMemo(() => {
+    return exercisesWithData
+      .filter(([name, analysis]) => {
+        // Filtre par confiance
+        if (filterConfidence === 'high' && analysis.confidence < 70) return false;
+        if (filterConfidence === 'medium' && (analysis.confidence < 40 || analysis.confidence >= 70)) return false;
+        if (filterConfidence === 'low' && analysis.confidence >= 40) return false;
+        
+        // Filtre par recherche
+        if (searchTerm && !name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+        
+        return true;
+      })
+      .sort((a, b) => {
+        switch (sortBy) {
+          case 'confidence': return b[1].confidence - a[1].confidence;
+          case 'name': return a[0].localeCompare(b[0]);
+          case 'progression': return (b[1].predictedWeight - b[1].lastWeight) - (a[1].predictedWeight - a[1].lastWeight);
+          default: return 0;
+        }
+      });
+  }, [exercisesWithData, filterConfidence, searchTerm, sortBy]);
+
+  const displayedExercises = showAllExercises ? filteredExercises : filteredExercises.slice(0, 6);
+  
+  const irmaStats = useMemo(() => ({
+    total: exercisesWithData.length,
+    avgConfidence: exercisesWithData.length > 0 ? Math.round(exercisesWithData.reduce((sum, [, analysis]) => sum + analysis.confidence, 0) / exercisesWithData.length) : 0,
+    highConfidence: exercisesWithData.filter(([, analysis]) => analysis.confidence >= 70).length
+  }), [exercisesWithData]);
 
   return (
     <div className={`p-6 space-y-8 ${className}`}>
@@ -109,96 +159,178 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
             <span>Madame IrmIA - Progression des Poids</span>
           </h3>
 
-          {(() => {
-            const exerciseAnalysis = analyzeAllExercises(workouts);
-            const exercisesWithData = Object.entries(exerciseAnalysis).filter(
-              ([_, analysis]) => analysis.confidence > 0
-            );
-
-            if (exercisesWithData.length === 0) {
-              return (
-                <div className="text-center py-8">
-                  <div className="text-6xl mb-4">🧠</div>
-                  <p className="mb-2 text-secondary">Pas encore assez de données</p>
-                  <p className="text-sm text-tertiary">
-                    Continuez à vous entraîner pour obtenir des prédictions de Madame IrmIA
-                  </p>
+          {exercisesWithData.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-6xl mb-4">🧠</div>
+              <p className="mb-2 text-secondary">Pas encore assez de données</p>
+              <p className="text-sm text-tertiary">
+                Continuez à vous entraîner pour obtenir des prédictions de Madame IrmIA
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <p className="mb-6 text-secondary">
+                Madame IrmIA analyse vos données d'entraînement pour prédire vos prochains poids recommandés
+              </p>
+              
+              {/* Statistiques globales */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="card text-center">
+                  <div className="text-lg font-bold text-primary">{irmaStats.total}</div>
+                  <div className="text-xs text-tertiary">Exercices analysés</div>
                 </div>
-              );
-            }
+                <div className="card text-center">
+                  <div className="text-lg font-bold text-primary">{irmaStats.avgConfidence}%</div>
+                  <div className="text-xs text-tertiary">Confiance moyenne</div>
+                </div>
+                <div className="card text-center">
+                  <div className="text-lg font-bold text-primary">{irmaStats.highConfidence}</div>
+                  <div className="text-xs text-tertiary">Haute confiance (≥70%)</div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {displayedExercises.map(([exerciseName, analysis]) => (
+                  <div key={exerciseName} className="card">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-semibold text-primary text-sm truncate">
+                        {exerciseName}
+                      </h4>
+                      <span className={`status-badge text-xs font-medium px-2 py-1 rounded-full ${
+                        analysis.confidence >= 70 
+                          ? 'badge-success'
+                          : analysis.confidence >= 40
+                            ? 'badge-warning'
+                            : 'badge-danger'
+                      }`}>
+                        {analysis.confidence}%
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-tertiary">Actuel</span>
+                        <span className="text-sm font-medium text-primary">
+                          {analysis.lastWeight}kg
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-tertiary">Prédiction</span>
+                        <span className="text-sm font-bold badge">
+                          {analysis.predictedWeight}kg
+                        </span>
+                      </div>
+                      
+                      {analysis.predictedWeight > analysis.lastWeight && (
+                        <div className="flex items-center space-x-1 text-xs text-green-600">
+                          <TrendingUp className="h-3 w-3" />
+                          <span>+{(analysis.predictedWeight - analysis.lastWeight).toFixed(1)}kg</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="mt-3 pt-3 border-t border-purple-100">
+                      <p className="text-xs text-gray-600">
+                        {analysis.recommendation}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Menu déroulant pour voir tous les exercices */}
+              {exercisesWithData.length > 6 && (
+                <div className="space-y-4">
+                  <div className="text-center">
+                    <button
+                      onClick={() => setShowAllExercises(!showAllExercises)}
+                      className="inline-flex items-center space-x-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200"
+                    >
+                      <span>
+                        {showAllExercises 
+                          ? `Voir moins d'exercices` 
+                          : `Voir tous les exercices (${exercisesWithData.length})`
+                        }
+                      </span>
+                      {showAllExercises ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                  </div>
 
-            return (
-              <div className="space-y-4">
-                <p className="mb-6 text-secondary">
-                  Madame IrmIA analyse vos données d'entraînement pour prédire vos prochains poids recommandés
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {exercisesWithData
-                    .sort((a, b) => b[1].confidence - a[1].confidence)
-                    .slice(0, 6)
-                    .map(([exerciseName, analysis]) => (
-                      <div
-                        key={exerciseName}
-                        className="card"
-                      >
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-semibold text-primary text-sm truncate">
-                            {exerciseName}
-                          </h4>
-                          <span className={`status-badge text-xs font-medium px-2 py-1 rounded-full ${
-                            analysis.confidence >= 70 
-                              ? 'badge-success'
-                              : analysis.confidence >= 40
-                                ? 'badge-warning'
-                                : 'badge-danger'
-                          }`}>
-                            {analysis.confidence}%
-                          </span>
+                  {/* Menu de filtres et tri */}
+                  {showAllExercises && (
+                    <div className="card space-y-4 transition-all duration-300 ease-in-out">
+                      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                        {/* Recherche */}
+                        <div className="relative flex-1 max-w-xs">
+                          <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="text"
+                            placeholder="Rechercher un exercice..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                          />
                         </div>
                         
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-tertiary">Actuel</span>
-                            <span className="text-sm font-medium text-primary">
-                              {analysis.lastWeight}kg
-                            </span>
+                        {/* Filtres par confiance */}
+                        <div className="flex items-center space-x-2">
+                          <Filter className="h-4 w-4 text-gray-400" />
+                          <div className="flex space-x-1">
+                            {[
+                              { key: 'all', label: 'Tous' },
+                              { key: 'high', label: '70%+' },
+                              { key: 'medium', label: '40-69%' },
+                              { key: 'low', label: '<40%' }
+                            ].map(filter => (
+                              <button
+                                key={filter.key}
+                                onClick={() => setFilterConfidence(filter.key)}
+                                className={`px-3 py-1 text-xs rounded-full transition-colors duration-200 ${
+                                  filterConfidence === filter.key
+                                    ? 'bg-purple-600 text-white'
+                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                }`}
+                              >
+                                {filter.label}
+                              </button>
+                            ))}
                           </div>
-                          
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-tertiary">Prédiction</span>
-                            <span className="text-sm font-bold badge">
-                              {analysis.predictedWeight}kg
-                            </span>
-                          </div>
-                          
-                          {analysis.predictedWeight > analysis.lastWeight && (
-                            <div className="flex items-center space-x-1 text-xs text-green-600">
-                              <TrendingUp className="h-3 w-3" />
-                              <span>+{(analysis.predictedWeight - analysis.lastWeight).toFixed(1)}kg</span>
-                            </div>
-                          )}
                         </div>
                         
-                        <div className="mt-3 pt-3 border-t border-purple-100">
-                          <p className="text-xs text-gray-600">
-                            {analysis.recommendation}
-                          </p>
+                        {/* Tri */}
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm text-gray-400">Tri:</span>
+                          <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className="px-3 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-purple-500"
+                          >
+                            <option value="confidence">Confiance</option>
+                            <option value="name">Nom</option>
+                            <option value="progression">Progression</option>
+                          </select>
                         </div>
                       </div>
-                    ))}
+                      
+                      {/* Résultats filtrés */}
+                      {filteredExercises.length === 0 && (searchTerm || filterConfidence !== 'all') && (
+                        <div className="text-center py-4 text-gray-400">
+                          Aucun exercice trouvé avec ces critères
+                        </div>
+                      )}
+                      
+                      {filteredExercises.length > 0 && filteredExercises.length !== exercisesWithData.length && (
+                        <div className="text-sm text-gray-400 text-center">
+                          {filteredExercises.length} exercice(s) sur {exercisesWithData.length}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-                
-                {exercisesWithData.length > 6 && (
-                  <div className="text-center mt-4">
-                    <p className="text-sm text-gray-500">
-                      +{exercisesWithData.length - 6} autres exercices analysés
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })()}
+              )}
+            </div>
+          )}
         </div>
       )}
 

@@ -96,7 +96,12 @@ export const useExercises = () => {
     setExercises((prev) =>
       prev.map((ex) =>
         ex.id === exerciseId
-          ? { ...ex, sets: ex.sets.filter((_, idx) => idx !== setIndex) }
+          ? {
+              ...ex,
+              sets: ex.sets.length > 1 
+                ? ex.sets.filter((_, idx) => idx !== setIndex)
+                : [{ reps: 0, weight: 0, duration: 0 }] // Garde au moins une série vide
+            }
           : ex
       )
     );
