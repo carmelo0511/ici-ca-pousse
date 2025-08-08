@@ -117,6 +117,35 @@
 .ml-prediction-card {
   position: relative;
   overflow: hidden;
+  min-height: 240px; /* Hauteur minimale pour éviter la troncature */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Amélioration pour desktop */
+@media (min-width: 1024px) {
+  .ml-prediction-card {
+    min-height: 260px;
+    padding: 1.25rem; /* Plus d'espace sur desktop */
+    border-radius: 16px !important; /* Moins arrondi sur desktop */
+  }
+  
+  /* Espacement amélioré pour le texte */
+  .ml-prediction-card .space-y-2 {
+    gap: 0.75rem;
+  }
+  
+  /* Amélioration de la lisibilité du texte */
+  .ml-prediction-card .text-xs {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  /* Plus d'espace pour les recommandations */
+  .ml-prediction-card .text-secondary {
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
 }
 
 .ml-prediction-card::before {

@@ -374,20 +374,20 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                       )}
                     </div>
                     
-                    <div className="mt-3 pt-3 border-t border-purple-500/30">
-                      <div className="space-y-1">
-                        <p className="text-xs text-secondary">
+                    <div className="mt-auto pt-3 border-t border-purple-500/30">
+                      <div className="space-y-2">
+                        <p className="text-xs text-secondary leading-relaxed">
                           {analysis.recommendation}
                         </p>
                         {analysis.modelInfo && (
-                                                  <p className="text-xs text-tertiary flex items-center space-x-1">
-                          <span>🧠</span>
-                          <span>
-                            {analysis.modelInfo.type === 'EnsembleModel' ? 'Ensemble ML' : 
-                             analysis.modelInfo.type === 'Fallback' ? 'IA Simple' :
-                             analysis.modelInfo.type}
-                          </span>
-                        </p>
+                          <p className="text-xs text-tertiary flex items-center space-x-1">
+                            <span>🧠</span>
+                            <span>
+                              {analysis.modelInfo.type === 'EnsembleModel' ? 'Ensemble ML' : 
+                               analysis.modelInfo.type === 'Fallback' ? 'IA Simple' :
+                               analysis.modelInfo.type}
+                            </span>
+                          </p>
                         )}
                       </div>
                     </div>
