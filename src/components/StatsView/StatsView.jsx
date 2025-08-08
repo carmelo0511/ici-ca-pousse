@@ -232,7 +232,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           <div className="flex items-center justify-between mb-4">
             <h3 className="section-title text-xl flex items-center space-x-2">
               <span>🤖</span>
-              <span>Madame IrmIA v2.0 - IA Avancée</span>
+              <span>Madame IrmIA - Votre Coach IA</span>
             </h3>
             <div className="flex space-x-2">
               <button
@@ -251,28 +251,30 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           {isAnalyzing ? (
             <div className="text-center py-8">
               <div className="animate-spin text-6xl mb-4">🧠</div>
-              <p className="mb-2 text-secondary">Analyse ML en cours...</p>
+              <p className="mb-2 text-secondary">Votre coach IA analyse vos performances...</p>
               <p className="text-sm text-tertiary">
-                Traitement des modèles d'intelligence artificielle
+                Prépare vos prédictions personnalisées
               </p>
             </div>
           ) : exercisesWithData.length === 0 ? (
             <div className="text-center py-8">
-              <div className="text-6xl mb-4">🧠</div>
-              <p className="mb-2 text-secondary">Pas encore assez de données</p>
+              <div className="text-6xl mb-4">💪</div>
+              <p className="mb-2 text-secondary">Votre coach IA se prépare !</p>
               <p className="text-sm text-tertiary">
-                Continuez à vous entraîner pour obtenir des prédictions de Madame IrmIA
+                Ajoutez quelques entraînements pour débloquer vos prédictions personnalisées
               </p>
             </div>
           ) : (
             <div className="space-y-4">
               <div className="mb-6">
                 <p className="text-secondary mb-2">
-                  🚀 <strong>Nouveau!</strong> Madame IrmIA v2.0 utilise un ensemble de 3 modèles ML avancés :
-                  Régression Linéaire + Random Forest + Réseau de Neurones
+                  🚀 <strong>Madame IrmIA v2.0</strong> - Votre coach IA personnel !
                 </p>
                 <p className="text-sm text-tertiary">
-                  Contraintes réalistes de musculation • Détection de plateaux • 20+ features avancées
+                  {mlPipeline && mlPipeline.isTrained ? 
+                    '🧠 IA Avancée • Détection de plateaux • Prédictions personnalisées' :
+                    '💡 IA Simple • Continuez à vous entraîner pour débloquer l\'IA avancée !'
+                  }
                 </p>
               </div>
 
@@ -378,10 +380,14 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                           {analysis.recommendation}
                         </p>
                         {analysis.modelInfo && (
-                          <p className="text-xs text-tertiary flex items-center space-x-1">
-                            <span>🧠</span>
-                            <span>{analysis.modelInfo.type === 'EnsembleModel' ? 'Ensemble ML' : analysis.modelInfo.type}</span>
-                          </p>
+                                                  <p className="text-xs text-tertiary flex items-center space-x-1">
+                          <span>🧠</span>
+                          <span>
+                            {analysis.modelInfo.type === 'EnsembleModel' ? 'Ensemble ML' : 
+                             analysis.modelInfo.type === 'Fallback' ? 'IA Simple' :
+                             analysis.modelInfo.type}
+                          </span>
+                        </p>
                         )}
                       </div>
                     </div>

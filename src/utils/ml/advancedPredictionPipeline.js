@@ -213,7 +213,7 @@ export class AdvancedPredictionPipeline {
         recommendations,
         
         // Détails ML
-        modelInfo: ensemblePrediction?.modelInfo || { type: 'RuleBased' },
+        modelInfo: ensemblePrediction?.modelInfo || { type: 'Fallback' },
         features: this.getKeyFeatures(features),
         constraints: validatedPrediction.constraints || [],
         
@@ -703,7 +703,7 @@ export class AdvancedPredictionPipeline {
       validatedPrediction: currentWeight + increment,
       increment,
       confidence: 60,
-      modelInfo: { type: 'RuleBased' }
+      modelInfo: { type: 'Fallback' }
     };
   }
 

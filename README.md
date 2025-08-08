@@ -299,7 +299,7 @@ Node.js 18+ | npm | Firebase Account | OpenAI API Key
 
 ### **Installation**
 ```bash
-git clone https://github.com/bryannakache/ici-ca-pousse.git
+git clone https://github.com/carmelo0511/ici-ca-pousse.git
 cd ici-ca-pousse
 npm install
 cp .env.example .env.local
@@ -428,6 +428,7 @@ const severityLevels = {
 | **Plateau Detection** | Simple stagnation | 5 types with behavioral analysis | **Advanced AI analysis** |
 | **Dashboard** | Basic predictions | Professional ML interface | **Enterprise-grade** |
 | **Constraints** | Fixed rules | Dynamic musculation constraints | **Realistic gym physics** |
+| **User Experience** | Technical interface | Friendly coach messaging | **User-friendly design** |
 
 #### **💡 Real-World Impact**
 - **Smarter Predictions**: Confidence-based recommendations (70%+ high confidence rate)
@@ -435,12 +436,36 @@ const severityLevels = {
 - **Professional Interface**: ML dashboard with real-time model monitoring
 - **Gym-Ready Constraints**: Realistic weight increments (0.5kg min, 2.5kg max)
 - **Behavioral Insights**: Motivation tracking with personalized interventions
+- **🎨 User-Friendly Experience**: Scrollable predictions, friendly messaging, progressive AI unlocking
+
+---
+
+## 🎨 Recent UX Improvements
+
+### **Enhanced User Experience**
+- **📜 Scrollable Predictions**: All exercises now visible with smooth scrolling interface
+- **🤗 Friendly Messaging**: "Your coach IA" instead of technical ML terms
+- **🎯 Progressive AI Unlocking**: Clear messaging about advancing from "IA Simple" to "Ensemble ML"
+- **💪 Encouraging Language**: Motivational messages that encourage continued training
+- **🎨 Modern UI**: Custom scrollbars, animations, and responsive design
+- **📱 Mobile-Optimized**: Touch-friendly interface with mobile-first approach
+
+### **Coach IA Experience**
+```javascript
+// User-friendly messaging system
+const coachMessages = {
+  loading: "Votre coach IA analyse vos performances...",
+  noData: "Votre coach IA se prépare ! Ajoutez quelques entraînements...",
+  simple: "IA Simple • Continuez à vous entraîner pour débloquer l'IA avancée !",
+  advanced: "IA Avancée • Détection de plateaux • Prédictions personnalisées"
+};
+```
 
 ---
 
 ## 📞 Contact
 
-**GitHub**: [@bryannakache](https://github.com/bryannakache)  
+**GitHub**: [@carmelo0511](https://github.com/carmelo0511)  
 **LinkedIn**: Professional AI/ML Developer  
 **Portfolio**: AI Integration Specialist  
 
