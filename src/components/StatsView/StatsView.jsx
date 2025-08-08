@@ -360,6 +360,86 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               ))}
             </div>
           )}
+
+          {/* Contrôles: Voir tous les exercices + filtres */}
+          {exercisesWithData.length > 6 && (
+            <div className="space-y-4 mt-4">
+              <div className="text-center">
+                <button
+                  onClick={() => setShowAllExercises(!showAllExercises)}
+                  className="inline-flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors duration-200 ml-toggle-button"
+                >
+                  <span>
+                    {showAllExercises ? `Masquer les exercices` : `Voir tous les exercices (${exercisesWithData.length})`}
+                  </span>
+                  {showAllExercises ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </button>
+              </div>
+
+              {showAllExercises && (
+                <div className="card space-y-4 transition-all duration-300 ease-in-out ml-filters-container">
+                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                    {/* Recherche */}
+                    <div className="relative flex-1 max-w-xs">
+                      <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Rechercher un exercice..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 rounded-lg text-white placeholder-gray-400 focus:outline-none ml-search-input"
+                      />
+                    </div>
+                    {/* Filtres */}
+                    <div className="flex items-center space-x-2">
+                      <Filter className="h-4 w-4 text-gray-400" />
+                      <div className="flex space-x-1">
+                        {[
+                          { key: 'all', label: 'Tous' },
+                          { key: 'high', label: '70%+' },
+                          { key: 'medium', label: '40-69%' },
+                          { key: 'low', label: '<40%' }
+                        ].map(filter => (
+                          <button
+                            key={filter.key}
+                            onClick={() => setFilterConfidence(filter.key)}
+                            className={`px-3 py-1 text-xs rounded-full transition-colors duration-200 ml-filter-button ${
+                              filterConfidence === filter.key ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            }`}
+                          >
+                            {filter.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Tri */}
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-gray-400">Tri:</span>
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="px-3 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-purple-500"
+                      >
+                        <option value="confidence">Confiance</option>
+                        <option value="name">Nom</option>
+                        <option value="progression">Progression</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {filteredExercises.length === 0 && (
+                    <div className="text-center py-4 text-gray-400">Aucun exercice trouvé avec ces critères</div>
+                  )}
+
+                  {filteredExercises.length > 0 && filteredExercises.length !== exercisesWithData.length && (
+                    <div className="text-sm text-gray-400 text-center">
+                      {filteredExercises.length} exercice(s) sur {exercisesWithData.length}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
