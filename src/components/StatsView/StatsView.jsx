@@ -185,47 +185,6 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
         <p className="text-secondary mt-1">{t('stats_subtitle')}</p>
       </div>
 
-      {/* Courbe d'évolution du poids */}
-      <div className="card mb-8">
-        <h3 className="section-title text-xl mb-4 flex items-center space-x-2">
-          <TrendingUp className="h-6 w-6 nav-icon" />
-          <span>Évolution du poids</span>
-        </h3>
-        {weightData.length === 0 ? (
-                  <div className="text-center py-8 text-white">
-          Aucune donnée de poids enregistrée.
-          <br />
-          Ajoutez votre poids dans le profil pour voir la courbe !
-        </div>
-        ) : (
-          <ResponsiveContainer width="100%" height={220}>
-            <LineChart
-              data={weightData}
-              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="weekFormatted" fontSize={12} fill="white" />
-              <YAxis domain={['auto', 'auto']} tickCount={6} fill="white" />
-              <Tooltip
-                formatter={(value, name) => [value + ' kg', 'Poids']}
-                labelFormatter={(label) => `Semaine du ${label}`}
-                contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', border: 'none', borderRadius: '8px', color: 'white' }}
-              />
-              <Line
-                type="monotone"
-                dataKey="weight"
-                stroke="#6366f1"
-                strokeWidth={2}
-                dot={{ r: 4, fill: '#6366f1' }}
-                activeDot={{ r: 6 }}
-              >
-                <LabelList position="top" offset={12} fontSize={12} fill="white" />
-              </Line>
-            </LineChart>
-          </ResponsiveContainer>
-        )}
-      </div>
-
       {/* Madame IrmIA */}
       {workouts.length > 0 && (
         <div className="card mb-8">
@@ -265,7 +224,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <>
               <div className="mb-6">
                 <p className="text-secondary mb-2">
                   🚀 <strong>Madame IrmIA v2.0</strong> - Votre coach IA personnel !
@@ -300,194 +259,136 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                   />
                 </div>
               )}
-              
-              {/* Statistiques globales */}
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="card text-center ml-stats-card">
-                  <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
-                    <span>🎯</span>
-                    <span>{irmaStats.total}</span>
-                  </div>
-                  <div className="text-xs text-tertiary">Exercices analysés</div>
+            </>
+          )}
+          
+          {/* Statistiques globales */}
+          {exercisesWithData.length > 0 && (
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="card text-center ml-stats-card">
+                <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
+                  <span>🎯</span>
+                  <span>{irmaStats.total}</span>
                 </div>
-                <div className="card text-center ml-stats-card">
-                  <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
-                    <span>🧠</span>
-                    <span>{irmaStats.avgConfidence}%</span>
-                  </div>
-                  <div className="text-xs text-tertiary">Confiance ML</div>
-                </div>
-                <div className="card text-center ml-stats-card">
-                  <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
-                    <span>⭐</span>
-                    <span>{irmaStats.highConfidence}</span>
-                  </div>
-                  <div className="text-xs text-tertiary">Haute confiance (≥70%)</div>
-                </div>
+                <div className="text-xs text-tertiary">Exercices analysés</div>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto ml-predictions-scroll pr-2">
-                {displayedExercises.map(([exerciseName, analysis]) => (
-                  <div key={exerciseName} className="card ml-prediction-card">
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold text-primary text-sm truncate">
-                        {exerciseName}
-                      </h4>
-                      <span className={`status-badge text-xs font-medium px-2 py-1 rounded-full ml-confidence-badge ${
-                        analysis.confidence >= 70 
-                          ? 'badge-success high'
-                          : analysis.confidence >= 40
-                            ? 'badge-warning medium'
-                            : 'badge-danger low'
-                      }`}>
-                        {analysis.confidence}%
+              <div className="card text-center ml-stats-card">
+                <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
+                  <span>🧠</span>
+                  <span>{irmaStats.avgConfidence}%</span>
+                </div>
+                <div className="text-xs text-tertiary">Confiance ML</div>
+              </div>
+              <div className="card text-center ml-stats-card">
+                <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
+                  <span>⭐</span>
+                  <span>{irmaStats.highConfidence}</span>
+                </div>
+                <div className="text-xs text-tertiary">Haute confiance (≥70%)</div>
+              </div>
+            </div>
+          )}
+          
+          {/* Liste des cartes prédictions */}
+          {exercisesWithData.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto ml-predictions-scroll pr-2">
+              {displayedExercises.map(([exerciseName, analysis]) => (
+                <div key={exerciseName} className="card ml-prediction-card">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-primary text-sm truncate">
+                      {exerciseName}
+                    </h4>
+                    <span className={`status-badge text-xs font-medium px-2 py-1 rounded-full ml-confidence-badge ${
+                      analysis.confidence >= 70 
+                        ? 'badge-success high'
+                        : analysis.confidence >= 40
+                          ? 'badge-warning medium'
+                          : 'badge-danger low'
+                    }`}>
+                      {analysis.confidence}%
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-tertiary">💪 Actuel</span>
+                      <span className="text-sm font-medium text-primary">
+                        {analysis.lastWeight}kg
                       </span>
                     </div>
                     
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-tertiary">💪 Actuel</span>
-                        <span className="text-sm font-medium text-primary">
-                          {analysis.lastWeight}kg
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-tertiary">🤖 IA Prédiction</span>
-                        <span className="text-sm font-bold badge">
-                          {analysis.predictedWeight}kg
-                        </span>
-                      </div>
-                      
-                      {analysis.increment !== undefined && analysis.increment > 0 && (
-                        <div className="flex items-center space-x-1 text-xs text-green-400">
-                          <TrendingUp className="h-3 w-3" />
-                          <span>+{analysis.increment.toFixed(1)}kg progression</span>
-                        </div>
-                      )}
-                      
-                      {analysis.plateauAnalysis?.isPlateau && (
-                        <div className="flex items-center space-x-1 text-xs text-orange-400">
-                          <span>⚠️</span>
-                          <span>Plateau détecté ({analysis.plateauAnalysis.weeksStuck} sem)</span>
-                        </div>
-                      )}
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-tertiary">🤖 IA Prédiction</span>
+                      <span className="text-sm font-bold badge">
+                        {analysis.predictedWeight}kg
+                      </span>
                     </div>
                     
-                    <div className="mt-auto pt-3 border-t border-purple-500/30">
-                      <div className="space-y-2">
-                        <p className="text-xs text-secondary leading-relaxed">
-                          {analysis.recommendation}
-                        </p>
-                        {analysis.modelInfo && (
-                          <p className="text-xs text-tertiary flex items-center space-x-1">
-                            <span>🧠</span>
-                            <span>
-                              {analysis.modelInfo.type === 'EnsembleModel' ? 'Ensemble ML' : 
-                               analysis.modelInfo.type === 'Fallback' ? 'IA Simple' :
-                               analysis.modelInfo.type}
-                            </span>
-                          </p>
-                        )}
+                    {analysis.increment !== undefined && analysis.increment > 0 && (
+                      <div className="flex items-center space-x-1 text-xs text-green-400">
+                        <TrendingUp className="h-3 w-3" />
+                        <span>+{analysis.increment.toFixed(1)}kg progression</span>
                       </div>
+                    )}
+                    
+                    {analysis.plateauAnalysis?.isPlateau && (
+                      <div className="flex items-center space-x-1 text-xs text-orange-400">
+                        <span>⚠️</span>
+                        <span>Plateau détecté ({analysis.plateauAnalysis.weeksStuck} sem)</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="mt-auto pt-3 border-t border-purple-500/30">
+                    <div className="space-y-2">
+                      <p className="text-xs text-secondary leading-relaxed">
+                        {analysis.recommendation}
+                      </p>
+                      {analysis.modelInfo && (
+                        <p className="text-xs text-tertiary flex items-center space-x-1">
+                          <span>🧠</span>
+                          <span>
+                            {analysis.modelInfo.type === 'EnsembleModel' ? 'Ensemble ML' : 
+                             analysis.modelInfo.type === 'Fallback' ? 'IA Simple' :
+                             analysis.modelInfo.type}
+                          </span>
+                        </p>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
-              
-              {/* Section scrollable avec tous les exercices */}
-              <div className="space-y-4">
-                <div className="text-center">
-                  <button
-                    onClick={() => setShowAllExercises(!showAllExercises)}
-                    className="inline-flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors duration-200 ml-toggle-button"
-                  >
-                    <span>
-                      {showAllExercises 
-                        ? `Masquer les exercices` 
-                        : `Voir tous les exercices (${exercisesWithData.length})`
-                      }
-                    </span>
-                    {showAllExercises ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                  </button>
                 </div>
-
-                {/* Menu de filtres et tri */}
-                {showAllExercises && (
-                    <div className="card space-y-4 transition-all duration-300 ease-in-out ml-filters-container">
-                      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                        {/* Recherche */}
-                        <div className="relative flex-1 max-w-xs">
-                          <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                          <input
-                            type="text"
-                            placeholder="Rechercher un exercice..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 rounded-lg text-white placeholder-gray-400 focus:outline-none ml-search-input"
-                          />
-                        </div>
-                        
-                        {/* Filtres par confiance */}
-                        <div className="flex items-center space-x-2">
-                          <Filter className="h-4 w-4 text-gray-400" />
-                          <div className="flex space-x-1">
-                            {[
-                              { key: 'all', label: 'Tous' },
-                              { key: 'high', label: '70%+' },
-                              { key: 'medium', label: '40-69%' },
-                              { key: 'low', label: '<40%' }
-                            ].map(filter => (
-                              <button
-                                key={filter.key}
-                                onClick={() => setFilterConfidence(filter.key)}
-                                className={`px-3 py-1 text-xs rounded-full transition-colors duration-200 ml-filter-button ${
-                                  filterConfidence === filter.key
-                                    ? 'bg-purple-600 text-white'
-                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                                }`}
-                              >
-                                {filter.label}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        {/* Tri */}
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-400">Tri:</span>
-                          <select
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value)}
-                            className="px-3 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-purple-500"
-                          >
-                            <option value="confidence">Confiance</option>
-                            <option value="name">Nom</option>
-                            <option value="progression">Progression</option>
-                          </select>
-                        </div>
-                      </div>
-                      
-                      {/* Résultats filtrés */}
-                      {filteredExercises.length === 0 && (searchTerm || filterConfidence !== 'all') && (
-                        <div className="text-center py-4 text-gray-400">
-                          Aucun exercice trouvé avec ces critères
-                        </div>
-                      )}
-                      
-                      {filteredExercises.length > 0 && filteredExercises.length !== exercisesWithData.length && (
-                        <div className="text-sm text-gray-400 text-center">
-                          {filteredExercises.length} exercice(s) sur {exercisesWithData.length}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
+              ))}
             </div>
           )}
         </div>
       )}
+
+      {/* Courbe d'évolution du poids (désormais après IrmIA) */}
+      <div className="card mb-8">
+        <h3 className="section-title text-xl mb-4 flex items-center space-x-2">
+          <TrendingUp className="h-6 w-6 nav-icon" />
+          <span>Évolution du poids</span>
+        </h3>
+        {weightData.length === 0 ? (
+          <div className="text-center py-8 text-white">
+            Aucune donnée de poids enregistrée.
+            <br />
+            Ajoutez votre poids dans le profil pour voir la courbe !
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height={220}>
+            <LineChart data={weightData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="weekFormatted" fontSize={12} fill="white" />
+              <YAxis domain={['auto', 'auto']} tickCount={6} fill="white" />
+              <Tooltip formatter={(value, name) => [value + ' kg', 'Poids']} labelFormatter={(label) => `Semaine du ${label}`} contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', border: 'none', borderRadius: '8px', color: 'white' }} />
+              <Line type="monotone" dataKey="weight" stroke="#6366f1" strokeWidth={2} dot={{ r: 4, fill: '#6366f1' }} activeDot={{ r: 6 }}>
+                <LabelList position="top" offset={12} fontSize={12} fill="white" />
+              </Line>
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+      </div>
 
       {/* Statistiques principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 stats-metrics-grid">

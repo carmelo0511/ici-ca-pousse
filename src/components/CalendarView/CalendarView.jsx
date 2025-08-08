@@ -175,8 +175,8 @@ const CalendarView = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="card hover-lift">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 calendar-summary-grid">
+        <div className="card hover-lift calendar-summary-card">
           <div className="flex items-center space-x-3 mb-3">
             <div className="icon-success w-4 h-4 rounded-full"></div>
             <span className="text-sm font-bold text-secondary">
@@ -186,7 +186,7 @@ const CalendarView = ({
           <p className="text-3xl font-bold text-primary">{workouts.length}</p>
         </div>
 
-        <div className="card hover-lift">
+        <div className="card hover-lift calendar-summary-card">
           <div className="flex items-center space-x-3 mb-3">
             <Clock className="h-5 w-5 nav-icon" />
             <span className="text-sm font-bold text-secondary">
@@ -210,7 +210,7 @@ const CalendarView = ({
           </p>
         </div>
 
-        <div className="card hover-lift">
+        <div className="card hover-lift calendar-summary-card">
           <div className="flex items-center space-x-3 mb-3">
             <Zap className="h-5 w-5 nav-icon" />
             <span className="text-sm font-bold text-secondary">

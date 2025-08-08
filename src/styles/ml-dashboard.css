@@ -297,3 +297,23 @@
     line-height: 1.9rem;
   }
 } 
+
+/* Section ciblée: Récap du calendrier (Séances effectuées / Cette semaine / Motivation) */
+@media (min-width: 1024px) {
+  .calendar-summary-grid {
+    gap: 1rem !important;
+  }
+  .calendar-summary-card {
+    border-radius: 14px !important;
+    padding: 0.875rem !important;
+    min-height: auto !important;
+  }
+  .calendar-summary-card .text-3xl {
+    font-size: 1.5rem;
+    line-height: 1.9rem;
+  }
+  .calendar-summary-card .text-2xl {
+    font-size: 1.25rem;
+    line-height: 1.6rem;
+  }
+} 
