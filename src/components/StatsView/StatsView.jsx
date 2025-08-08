@@ -11,12 +11,14 @@ import {
 } from 'recharts';
 import { Dumbbell, Target, TrendingUp, Clock, Zap, ChevronDown, ChevronUp, Search, Filter } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import '../styles/ml-dashboard.css';
 import {
   analyzeWorkoutHabits,
   getPreferredWorkoutTime,
   getAverageDurationByTime,
 } from '../../utils/workout/workoutUtils';
-import { analyzeAllExercises } from '../../utils/ml/weightPrediction';
+import { AdvancedPredictionPipeline } from '../../utils/ml/advancedPredictionPipeline.js';
+import MLDashboard from '../ML/MLDashboard.jsx';
 import PropTypes from 'prop-types';
 
 function getMostWorkedMuscleGroup(workouts) {
@@ -43,6 +45,9 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
   const [filterConfidence, setFilterConfidence] = useState('all');
   const [sortBy, setSortBy] = useState('confidence');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showMLDashboard, setShowMLDashboard] = useState(false);
+  const [mlPipeline, setMlPipeline] = useState(null);
+  const [mlMetrics, setMlMetrics] = useState(null);
 
   // Préparer les données pour la courbe de poids
   const weightData = (user?.weightHistory || [])
@@ -57,17 +62,87 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
     .filter((w) => w.weight > 0)
     .sort((a, b) => new Date(a.week) - new Date(b.week));
 
-  // Analyse des exercices pour Madame Irma
-  const exerciseAnalysis = useMemo(() => {
+  // Fonction d'analyse ML avancée
+  const performMLAnalysis = React.useCallback(async () => {
     if (workouts.length === 0) return {};
-    return analyzeAllExercises(workouts);
-  }, [workouts]);
+    
+    try {
+      // Initialiser le pipeline ML avancé
+      const pipeline = new AdvancedPredictionPipeline({
+        minDataPoints: 3,
+        modelConfig: {
+          linear: { learningRate: 0.01, maxIterations: 1000 },
+          forest: { nTrees: 12, maxDepth: 5 },
+          neural: { epochs: 200, batchSize: 16 }
+        }
+      });
+      
+      // Initialiser avec les données utilisateur
+      const initResult = await pipeline.initialize(workouts, user);
+      console.log('🚀 Pipeline ML initialisé:', initResult);
+      
+      // Analyser tous les exercices
+      const mlAnalysis = await pipeline.analyzeAllExercises(workouts);
+      
+      // Stocker le pipeline et ses métriques pour le dashboard
+      setMlPipeline(pipeline);
+      setMlMetrics(pipeline.getPipelineMetrics());
+      
+      // Convertir le format ML vers le format attendu par l'interface
+      const convertedAnalysis = {};
+      Object.entries(mlAnalysis).forEach(([exerciseName, mlPrediction]) => {
+        if (mlPrediction.confidence > 0) {
+          convertedAnalysis[exerciseName] = {
+            confidence: Math.round(mlPrediction.confidence),
+            lastWeight: mlPrediction.currentWeight,
+            predictedWeight: mlPrediction.predictedWeight,
+            recommendation: mlPrediction.recommendations?.[0] || 
+              `Prédiction ML basée sur ${mlPrediction.features?.progression_2weeks || 'vos données'} d'entraînement`,
+            increment: mlPrediction.increment,
+            plateauAnalysis: mlPrediction.plateauAnalysis,
+            insights: mlPrediction.insights,
+            modelInfo: mlPrediction.modelInfo
+          };
+        }
+      });
+      
+      return convertedAnalysis;
+    } catch (error) {
+      console.warn('⚠️ Erreur du pipeline ML, fallback vers analyse simple:', error);
+      // Fallback vers l'ancienne méthode en cas d'erreur
+      const { analyzeAllExercises } = await import('../../utils/ml/weightPrediction');
+      return analyzeAllExercises(workouts);
+    }
+  }, [workouts, user]);
+
+  // State pour gérer l'analyse asynchrone
+  const [analysisData, setAnalysisData] = useState({});
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Effet pour exécuter l'analyse ML
+  React.useEffect(() => {
+    if (workouts.length > 0) {
+      setIsAnalyzing(true);
+      performMLAnalysis().then(result => {
+        setAnalysisData(result);
+        setIsAnalyzing(false);
+      }).catch(error => {
+        console.error('Erreur analyse ML:', error);
+        setAnalysisData({});
+        setIsAnalyzing(false);
+      });
+    } else {
+      setAnalysisData({});
+      setIsAnalyzing(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workouts.length, user]);
 
   const exercisesWithData = useMemo(() => {
-    return Object.entries(exerciseAnalysis).filter(
+    return Object.entries(analysisData).filter(
       ([_, analysis]) => analysis.confidence > 0
     );
-  }, [exerciseAnalysis]);
+  }, [analysisData]);
 
   // Logique de filtrage et tri pour Madame Irma
   const filteredExercises = useMemo(() => {
@@ -154,12 +229,43 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
       {/* Madame IrmIA */}
       {workouts.length > 0 && (
         <div className="card mb-8">
-          <h3 className="section-title text-xl mb-4 flex items-center space-x-2">
-            <span>👩‍💼</span>
-            <span>Madame IrmIA - Progression des Poids</span>
-          </h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="section-title text-xl flex items-center space-x-2">
+              <span>🤖</span>
+              <span>Madame IrmIA v2.0 - IA Avancée</span>
+            </h3>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setShowMLDashboard(!showMLDashboard)}
+                className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
+                  showMLDashboard
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                }`}
+              >
+                {showMLDashboard ? '📊 Masquer Dashboard' : '📊 Dashboard ML'}
+              </button>
+              {mlPipeline && (
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-200"
+                  title="Réentraîner les modèles"
+                >
+                  🔄
+                </button>
+              )}
+            </div>
+          </div>
 
-          {exercisesWithData.length === 0 ? (
+          {isAnalyzing ? (
+            <div className="text-center py-8">
+              <div className="animate-spin text-6xl mb-4">🧠</div>
+              <p className="mb-2 text-secondary">Analyse ML en cours...</p>
+              <p className="text-sm text-tertiary">
+                Traitement des modèles d'intelligence artificielle
+              </p>
+            </div>
+          ) : exercisesWithData.length === 0 ? (
             <div className="text-center py-8">
               <div className="text-6xl mb-4">🧠</div>
               <p className="mb-2 text-secondary">Pas encore assez de données</p>
@@ -169,39 +275,77 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="mb-6 text-secondary">
-                Madame IrmIA analyse vos données d'entraînement pour prédire vos prochains poids recommandés
-              </p>
+              <div className="mb-6">
+                <p className="text-secondary mb-2">
+                  🚀 <strong>Nouveau!</strong> Madame IrmIA v2.0 utilise un ensemble de 3 modèles ML avancés :
+                  Régression Linéaire + Random Forest + Réseau de Neurones
+                </p>
+                <p className="text-sm text-tertiary">
+                  Contraintes réalistes de musculation • Détection de plateaux • 20+ features avancées
+                </p>
+              </div>
+
+              {/* Dashboard ML intégré */}
+              {showMLDashboard && mlPipeline && (
+                <div className="mb-6 border border-purple-500/30 rounded-lg p-4">
+                  <MLDashboard
+                    predictions={analysisData}
+                    modelPerformance={mlPipeline.trainingMetrics?.individualPerformances}
+                    plateauAnalysis={Object.fromEntries(
+                      Object.entries(analysisData).map(([name, analysis]) => [
+                        name,
+                        analysis.plateauAnalysis || { isPlateau: false }
+                      ])
+                    )}
+                    constraints={{
+                      minIncrement: 0.5,
+                      maxIncrement: 2.5,
+                      plateauThreshold: 4
+                    }}
+                    pipelineMetrics={mlMetrics}
+                    onRefresh={() => window.location.reload()}
+                  />
+                </div>
+              )}
               
               {/* Statistiques globales */}
               <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="card text-center">
-                  <div className="text-lg font-bold text-primary">{irmaStats.total}</div>
+                <div className="card text-center ml-stats-card">
+                  <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
+                    <span>🎯</span>
+                    <span>{irmaStats.total}</span>
+                  </div>
                   <div className="text-xs text-tertiary">Exercices analysés</div>
                 </div>
-                <div className="card text-center">
-                  <div className="text-lg font-bold text-primary">{irmaStats.avgConfidence}%</div>
-                  <div className="text-xs text-tertiary">Confiance moyenne</div>
+                <div className="card text-center ml-stats-card">
+                  <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
+                    <span>🧠</span>
+                    <span>{irmaStats.avgConfidence}%</span>
+                  </div>
+                  <div className="text-xs text-tertiary">Confiance ML</div>
                 </div>
-                <div className="card text-center">
-                  <div className="text-lg font-bold text-primary">{irmaStats.highConfidence}</div>
+                <div className="card text-center ml-stats-card">
+                  <div className="text-lg font-bold text-primary flex items-center justify-center space-x-1">
+                    <span>⭐</span>
+                    <span>{irmaStats.highConfidence}</span>
+                  </div>
                   <div className="text-xs text-tertiary">Haute confiance (≥70%)</div>
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto ml-predictions-scroll pr-2">
                 {displayedExercises.map(([exerciseName, analysis]) => (
-                  <div key={exerciseName} className="card">
+                  <div key={exerciseName} className="card ml-prediction-card">
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="font-semibold text-primary text-sm truncate">
                         {exerciseName}
                       </h4>
-                      <span className={`status-badge text-xs font-medium px-2 py-1 rounded-full ${
+                      <span className={`status-badge text-xs font-medium px-2 py-1 rounded-full ml-confidence-badge ${
                         analysis.confidence >= 70 
-                          ? 'badge-success'
+                          ? 'badge-success high'
                           : analysis.confidence >= 40
-                            ? 'badge-warning'
-                            : 'badge-danger'
+                            ? 'badge-warning medium'
+                            : 'badge-danger low'
                       }`}>
                         {analysis.confidence}%
                       </span>
@@ -209,57 +353,71 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                     
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-tertiary">Actuel</span>
+                        <span className="text-xs text-tertiary">💪 Actuel</span>
                         <span className="text-sm font-medium text-primary">
                           {analysis.lastWeight}kg
                         </span>
                       </div>
                       
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-tertiary">Prédiction</span>
+                        <span className="text-xs text-tertiary">🤖 IA Prédiction</span>
                         <span className="text-sm font-bold badge">
                           {analysis.predictedWeight}kg
                         </span>
                       </div>
                       
-                      {analysis.predictedWeight > analysis.lastWeight && (
-                        <div className="flex items-center space-x-1 text-xs text-green-600">
+                      {analysis.increment !== undefined && analysis.increment > 0 && (
+                        <div className="flex items-center space-x-1 text-xs text-green-400">
                           <TrendingUp className="h-3 w-3" />
-                          <span>+{(analysis.predictedWeight - analysis.lastWeight).toFixed(1)}kg</span>
+                          <span>+{analysis.increment.toFixed(1)}kg progression</span>
+                        </div>
+                      )}
+                      
+                      {analysis.plateauAnalysis?.isPlateau && (
+                        <div className="flex items-center space-x-1 text-xs text-orange-400">
+                          <span>⚠️</span>
+                          <span>Plateau détecté ({analysis.plateauAnalysis.weeksStuck} sem)</span>
                         </div>
                       )}
                     </div>
                     
-                    <div className="mt-3 pt-3 border-t border-purple-100">
-                      <p className="text-xs text-gray-600">
-                        {analysis.recommendation}
-                      </p>
+                    <div className="mt-3 pt-3 border-t border-purple-500/30">
+                      <div className="space-y-1">
+                        <p className="text-xs text-secondary">
+                          {analysis.recommendation}
+                        </p>
+                        {analysis.modelInfo && (
+                          <p className="text-xs text-tertiary flex items-center space-x-1">
+                            <span>🧠</span>
+                            <span>{analysis.modelInfo.type === 'EnsembleModel' ? 'Ensemble ML' : analysis.modelInfo.type}</span>
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
               
-              {/* Menu déroulant pour voir tous les exercices */}
-              {exercisesWithData.length > 6 && (
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <button
-                      onClick={() => setShowAllExercises(!showAllExercises)}
-                      className="inline-flex items-center space-x-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200"
-                    >
-                      <span>
-                        {showAllExercises 
-                          ? `Voir moins d'exercices` 
-                          : `Voir tous les exercices (${exercisesWithData.length})`
-                        }
-                      </span>
-                      {showAllExercises ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                    </button>
-                  </div>
+              {/* Section scrollable avec tous les exercices */}
+              <div className="space-y-4">
+                <div className="text-center">
+                  <button
+                    onClick={() => setShowAllExercises(!showAllExercises)}
+                    className="inline-flex items-center space-x-2 px-4 py-2 text-white rounded-lg transition-colors duration-200 ml-toggle-button"
+                  >
+                    <span>
+                      {showAllExercises 
+                        ? `Masquer les exercices` 
+                        : `Voir tous les exercices (${exercisesWithData.length})`
+                      }
+                    </span>
+                    {showAllExercises ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  </button>
+                </div>
 
-                  {/* Menu de filtres et tri */}
-                  {showAllExercises && (
-                    <div className="card space-y-4 transition-all duration-300 ease-in-out">
+                {/* Menu de filtres et tri */}
+                {showAllExercises && (
+                    <div className="card space-y-4 transition-all duration-300 ease-in-out ml-filters-container">
                       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
                         {/* Recherche */}
                         <div className="relative flex-1 max-w-xs">
@@ -269,7 +427,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                             placeholder="Rechercher un exercice..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                            className="w-full pl-10 pr-4 py-2 rounded-lg text-white placeholder-gray-400 focus:outline-none ml-search-input"
                           />
                         </div>
                         
@@ -286,7 +444,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                               <button
                                 key={filter.key}
                                 onClick={() => setFilterConfidence(filter.key)}
-                                className={`px-3 py-1 text-xs rounded-full transition-colors duration-200 ${
+                                className={`px-3 py-1 text-xs rounded-full transition-colors duration-200 ml-filter-button ${
                                   filterConfidence === filter.key
                                     ? 'bg-purple-600 text-white'
                                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'

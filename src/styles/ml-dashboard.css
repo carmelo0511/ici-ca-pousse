@@ -1,0 +1,192 @@
+/* Styles pour le dashboard ML et la section scrollable */
+
+/* Scrollbar personnalisée pour la section des prédictions */
+.ml-predictions-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #9333ea #374151;
+}
+
+.ml-predictions-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ml-predictions-scroll::-webkit-scrollbar-track {
+  background: #374151;
+  border-radius: 4px;
+}
+
+.ml-predictions-scroll::-webkit-scrollbar-thumb {
+  background: #9333ea;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.ml-predictions-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a855f7;
+}
+
+/* Animation pour l'apparition des cartes */
+.ml-prediction-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Styles pour les filtres et la recherche */
+.ml-filters-container {
+  backdrop-filter: blur(10px);
+  background: rgba(55, 65, 81, 0.8);
+  border: 1px solid rgba(147, 51, 234, 0.3);
+}
+
+.ml-search-input {
+  background: rgba(31, 41, 55, 0.8);
+  border: 1px solid rgba(75, 85, 99, 0.5);
+  transition: all 0.2s ease;
+}
+
+.ml-search-input:focus {
+  border-color: #9333ea;
+  box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.2);
+}
+
+/* Boutons de filtre */
+.ml-filter-button {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ml-filter-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.ml-filter-button:hover::before {
+  left: 100%;
+}
+
+/* Indicateur de chargement */
+.ml-loading-indicator {
+  background: linear-gradient(90deg, #9333ea, #a855f7, #9333ea);
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive design pour mobile */
+@media (max-width: 768px) {
+  .ml-predictions-scroll {
+    max-height: 60vh;
+  }
+  
+  .ml-filters-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .ml-search-input {
+    max-width: none;
+  }
+}
+
+/* Styles pour les cartes de prédiction */
+.ml-prediction-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.ml-prediction-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #9333ea, #a855f7, #9333ea);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.ml-prediction-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Badge de confiance avec animation */
+.ml-confidence-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.ml-confidence-badge.high {
+  background: linear-gradient(45deg, #10b981, #059669);
+}
+
+.ml-confidence-badge.medium {
+  background: linear-gradient(45deg, #f59e0b, #d97706);
+}
+
+.ml-confidence-badge.low {
+  background: linear-gradient(45deg, #ef4444, #dc2626);
+}
+
+/* Animation pour les statistiques */
+.ml-stats-card {
+  transition: all 0.3s ease;
+}
+
+.ml-stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(147, 51, 234, 0.2);
+}
+
+/* Styles pour le bouton "Voir tous les exercices" */
+.ml-toggle-button {
+  background: linear-gradient(45deg, #9333ea, #a855f7);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ml-toggle-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+}
+
+.ml-toggle-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.ml-toggle-button:hover::before {
+  left: 100%;
+} 
