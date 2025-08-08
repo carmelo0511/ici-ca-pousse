@@ -122,7 +122,7 @@
   flex-direction: column;
 }
 
-/* Amélioration pour desktop */
+/* Amélioration pour desktop - Cartes ML */
 @media (min-width: 1024px) {
   .ml-prediction-card {
     min-height: 260px;
@@ -145,6 +145,44 @@
   .ml-prediction-card .text-secondary {
     line-height: 1.5;
     word-wrap: break-word;
+  }
+}
+
+/* Amélioration générale pour toutes les cartes sur desktop */
+@media (min-width: 1024px) {
+  /* Toutes les cartes moins arrondies sur desktop */
+  .card, .item, .section, .block {
+    border-radius: 16px !important; /* Moins arrondi sur desktop */
+    padding: 1.25rem !important; /* Plus d'espace */
+    min-height: 120px; /* Hauteur minimale */
+  }
+  
+  /* Cartes de statistiques avec plus d'espace */
+  .ml-stats-card {
+    min-height: 140px;
+    padding: 1.5rem !important;
+  }
+  
+  /* Amélioration du texte dans toutes les cartes */
+  .card .text-xs, .item .text-xs, .section .text-xs, .block .text-xs {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  .card .text-sm, .item .text-sm, .section .text-sm, .block .text-sm {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  /* Espacement amélioré pour tous les textes secondaires */
+  .card .text-secondary, .item .text-secondary, .section .text-secondary, .block .text-secondary {
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+  
+  /* Cartes de recommandations plus hautes */
+  .card:has(.text-secondary) {
+    min-height: 180px;
   }
 }
 
