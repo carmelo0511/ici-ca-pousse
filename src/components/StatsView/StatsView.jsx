@@ -329,7 +329,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                     {analysis.increment !== undefined && analysis.increment > 0 && (
                       <div className="flex items-center space-x-1 text-xs text-green-400">
                         <TrendingUp className="h-3 w-3" />
-                        <span>+{analysis.increment.toFixed(1)}kg progression</span>
+                        <span>+{analysis.increment.toFixed(2)}kg progression</span>
                       </div>
                     )}
                     
