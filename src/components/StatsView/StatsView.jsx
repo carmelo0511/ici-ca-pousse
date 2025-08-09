@@ -79,7 +79,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
       });
       
       // Initialiser avec les données utilisateur
-      const initResult = await pipeline.initialize(workouts, user);
+      await pipeline.initialize(workouts, user);
       
       // Analyser tous les exercices
       const mlAnalysis = await pipeline.analyzeAllExercises(workouts);

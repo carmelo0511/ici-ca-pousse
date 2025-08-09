@@ -37,11 +37,11 @@ export class FeatureEngineer {
           // Calculer le poids maximum de tous les sets pour cet exercice
           let maxWeight = 0;
           let totalReps = 0;
-          let totalSets = 0;
+          // totalSets removed (no-unused-vars)
           if (exercise.sets && exercise.sets.length > 0) {
             maxWeight = Math.max(...exercise.sets.map(set => set.weight || 0));
             totalReps = exercise.sets.reduce((sum, set) => sum + (set.reps || 0), 0);
-            totalSets = exercise.sets.length;
+            // sets count unused for now
           }
           
           
@@ -64,110 +64,13 @@ export class FeatureEngineer {
     return history.sort((a, b) => a.timestamp - b.timestamp);
   }
 
-  /**
-   * Features temporelles (progression dans le temps)
-   */
-  extractTemporalFeatures(exerciseData) {
-    const recent = exerciseData.slice(-10); // 10 dernières sessions
-    
-    return {
-      // Progressions par période
-      progression_1week: this.calculateProgression(recent, 1),
-      progression_2weeks: this.calculateProgression(recent, 2),
-      progression_4weeks: this.calculateProgression(recent, 4),
-      progression_8weeks: this.calculateProgression(recent, 8),
-      
-      // Fréquences d'entraînement
-      frequency_1week: this.calculateFrequency(recent, 1),
-      frequency_2weeks: this.calculateFrequency(recent, 2),
-      frequency_4weeks: this.calculateFrequency(recent, 4),
-      
-      // Consistance et momentum
-      consistency_score: this.calculateConsistency(recent),
-      momentum_score: this.calculateMomentum(recent),
-      acceleration: this.calculateAcceleration(recent),
-      
-      // Timing et récupération
-      avg_recovery_time: this.calculateAverageRecoveryTime(recent),
-      last_recovery_time: this.getLastRecoveryTime(recent),
-      training_streak: this.calculateTrainingStreak(recent)
-    };
-  }
+  // NOTE: version de base remplacée par la version complète plus bas
 
-  /**
-   * Features de performance pure
-   */
-  extractPerformanceFeatures(exerciseData) {
-    const weights = exerciseData.map(d => d.weight);
-    const volumes = exerciseData.map(d => d.volume);
-    const recent = exerciseData.slice(-5);
-    
-    return {
-      // Statistiques de poids
-      current_weight: weights[weights.length - 1] || 0,
-      max_weight: Math.max(...weights),
-      min_weight: Math.min(...weights.filter(w => w > 0)),
-      avg_weight: weights.reduce((sum, w) => sum + w, 0) / weights.length,
-      
-      // Volume et intensité
-      total_volume: volumes.reduce((sum, v) => sum + v, 0),
-      avg_volume_per_session: volumes.reduce((sum, v) => sum + v, 0) / volumes.length,
-      volume_trend: this.calculateVolumeTrend(exerciseData),
-      intensity_score: this.calculateIntensityScore(exerciseData),
-      
-      // Performance récente
-      recent_avg_weight: recent.map(d => d.weight).reduce((sum, w) => sum + w, 0) / recent.length,
-      recent_max_weight: Math.max(...recent.map(d => d.weight)),
-      recent_volume_increase: this.calculateRecentVolumeIncrease(exerciseData),
-      
-      // Efficacité
-      weight_to_volume_ratio: this.calculateWeightVolumeRatio(exerciseData),
-      performance_efficiency: this.calculatePerformanceEfficiency(exerciseData)
-    };
-  }
+  // NOTE: version de base remplacée par la version complète plus bas
 
-  /**
-   * Features comportementales (patterns d'entraînement)
-   */
-  extractBehavioralFeatures(exerciseData, allWorkouts) {
-    return {
-      // Durée et timing
-      avg_session_duration: this.calculateAverageSessionDuration(exerciseData),
-      preferred_time_of_day: this.getPreferredTimeOfDay(exerciseData),
-      preferred_day_of_week: this.getPreferredDayOfWeek(exerciseData),
-      
-      // Patterns temporels
-      weekend_vs_weekday_performance: this.compareWeekendWeekdayPerformance(exerciseData),
-      seasonal_pattern: this.detectSeasonalPattern(exerciseData),
-      time_consistency: this.calculateTimeConsistency(exerciseData),
-      
-      // Comportement d'entraînement
-      session_position: this.getAverageSessionPosition(exerciseData, allWorkouts),
-      rest_day_pattern: this.calculateRestDayPattern(exerciseData),
-      training_intensity_pattern: this.getTrainingIntensityPattern(exerciseData)
-    };
-  }
+  // NOTE: version de base remplacée par la version complète plus bas
 
-  /**
-   * Features contextuelles (relation avec autres exercices)
-   */
-  extractContextualFeatures(exerciseName, allWorkouts) {
-    return {
-      // Performance relative
-      exercise_rank_in_session: this.getExerciseRankInSession(exerciseName, allWorkouts),
-      correlation_with_other_exercises: this.calculateCorrelationWithOthers(exerciseName, allWorkouts),
-      overall_workout_performance: this.calculateOverallPerformance(allWorkouts),
-      
-      // Volume contextuel
-      exercise_volume_share: this.calculateExerciseVolumeShare(exerciseName, allWorkouts),
-      session_exercise_count: this.getAverageExerciseCount(allWorkouts),
-      muscle_group_focus: this.getMuscleGroupFocus(exerciseName, allWorkouts),
-      
-      // Patterns d'entraînement
-      training_split_pattern: this.identifyTrainingSplit(allWorkouts),
-      exercise_frequency_vs_others: this.compareExerciseFrequency(exerciseName, allWorkouts)
-    };
-  }
+  // NOTE: version de base remplacée par la version complète plus bas
 
   /**
    * Features spécifiques à la musculation
