@@ -14,6 +14,11 @@ try {
   tf = null;
 }
 
+// Permet l'injection pour les tests
+export const setTensorFlowInstance = (tfInstance) => {
+  tf = tfInstance;
+};
+
 /**
  * Configuration des modèles TensorFlow
  */
