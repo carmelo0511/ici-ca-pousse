@@ -2,24 +2,10 @@
  * Tests pour le modèle TensorFlow
  */
 
-import { TensorFlowModel } from '../../utils/ml/models/tensorflowModel.js';
-
-// Mock TensorFlow.js pour les tests
-jest.mock('@tensorflow/tfjs', () => {
-  const mockTensor = {
-    dataSync: () => [1.5],
-    dispose: () => {},
-    shape: [1, 15],
-    mean: () => mockTensor,
-    std: () => mockTensor,
-    sub: () => mockTensor,
-    div: () => mockTensor,
-    add: () => mockTensor,
-    mul: () => mockTensor,
-    slice: () => mockTensor
-  };
-
-  const mockModel = {
+// Mock global require for TensorFlow BEFORE importing the module
+const mockTensorFlowAPI = {
+  sequential: jest.fn(() => ({
+    add: jest.fn(),
     compile: jest.fn(),
     fit: jest.fn().mockResolvedValue({
       history: {
@@ -28,52 +14,258 @@ jest.mock('@tensorflow/tfjs', () => {
       },
       epoch: [0, 1, 2]
     }),
-    predict: () => mockTensor,
-    dispose: jest.fn()
-  };
-
-  return {
-    sequential: () => ({
-      add: jest.fn(),
-      compile: jest.fn(),
-      fit: jest.fn().mockResolvedValue({
-        history: {
-          loss: [1.0, 0.8, 0.6],
-          val_loss: [1.1, 0.9, 0.7]
-        },
-        epoch: [0, 1, 2]
-      }),
-      predict: () => mockTensor,
+    predict: jest.fn(() => ({
+      dataSync: jest.fn(() => [1.5]),
+      dispose: jest.fn(),
+      shape: [1, 1],
+      mul: jest.fn(() => ({ 
+        dataSync: jest.fn(() => [1.5]),
+        dispose: jest.fn(),
+        add: jest.fn(() => ({
+          dataSync: jest.fn(() => [1.5]),
+          dispose: jest.fn()
+        }))
+      }))
+    })),
+    dispose: jest.fn(),
+    layers: [
+      {
+        getWeights: jest.fn(() => [{
+          abs: jest.fn().mockReturnValue({
+            sum: jest.fn().mockReturnValue({
+              dataSync: jest.fn().mockReturnValue([0.8, 0.6, 0.9, 0.4, 0.7, 0.5, 0.3, 1.0, 0.2, 0.6, 0.8, 0.9, 0.1, 0.5, 0.4])
+            })
+          })
+        }])
+      }
+    ]
+  })),
+  layers: {
+    inputLayer: jest.fn(() => ({})),
+    dense: jest.fn(() => ({})),
+    lstm: jest.fn(() => ({})),
+    conv1d: jest.fn(() => ({})),
+    maxPooling1d: jest.fn(() => ({})),
+    globalAveragePooling1d: jest.fn(() => ({})),
+    flatten: jest.fn(() => ({})),
+    dropout: jest.fn(() => ({})),
+    batchNormalization: jest.fn(() => ({}))
+  },
+  regularizers: {
+    l2: jest.fn(() => ({}))
+  },
+  train: {
+    adam: jest.fn(() => ({}))
+  },
+  losses: {
+    meanSquaredError: jest.fn(() => ({
+      dataSync: jest.fn(() => [1.5]),
       dispose: jest.fn()
-    }),
-    layers: {
-      inputLayer: () => ({}),
-      dense: () => ({}),
-      lstm: () => ({}),
-      conv1d: () => ({}),
-      maxPooling1d: () => ({}),
-      globalAveragePooling1d: () => ({}),
-      flatten: () => ({}),
-      dropout: () => ({}),
-      batchNormalization: () => ({})
-    },
-    regularizers: {
-      l2: () => ({})
-    },
-    train: {
-      adam: () => ({})
-    },
-    losses: {
-      meanSquaredError: () => mockTensor,
-      absoluteDifference: () => mockTensor
-    },
-    tensor1d: () => mockTensor,
-    tensor2d: () => mockTensor,
-    tensor3d: () => mockTensor,
-    scalar: () => mockTensor,
-    model: () => mockModel
-  };
+    })),
+    absoluteDifference: jest.fn(() => ({
+      dataSync: jest.fn(() => [1.5]),
+      dispose: jest.fn()
+    }))
+  },
+  tensor1d: jest.fn(() => ({
+    dataSync: jest.fn(() => [1.5]),
+    dispose: jest.fn(),
+    shape: [1, 15],
+    mean: jest.fn((axis) => ({
+      dataSync: jest.fn(() => axis ? [0, 0, 0] : [0]),
+      dispose: jest.fn()
+    })),
+    std: jest.fn((axis) => ({
+      dataSync: jest.fn(() => axis ? [1, 1, 1] : [1]),
+      dispose: jest.fn()
+    })),
+    sub: jest.fn(() => ({
+      dataSync: jest.fn(() => [1.5]),
+      dispose: jest.fn(),
+      div: jest.fn(() => ({
+        dataSync: jest.fn(() => [1.5]),
+        dispose: jest.fn(),
+        square: jest.fn(() => ({
+          dataSync: jest.fn(() => [1.5]),
+          dispose: jest.fn(),
+          mean: jest.fn(() => ({
+            dataSync: jest.fn(() => [1.5]),
+            dispose: jest.fn(),
+            sqrt: jest.fn(() => ({
+              dataSync: jest.fn(() => [1.5]),
+              dispose: jest.fn(),
+              add: jest.fn(() => ({
+                dataSync: jest.fn(() => [1.5]),
+                dispose: jest.fn()
+              }))
+            }))
+          }))
+        }))
+      }))
+    }))
+  })),
+  tensor2d: jest.fn(() => ({
+    dataSync: jest.fn(() => [1.5]),
+    dispose: jest.fn(),
+    shape: [1, 15],
+    mean: jest.fn((axis) => ({
+      dataSync: jest.fn(() => axis ? [0, 0, 0] : [0]),
+      dispose: jest.fn()
+    })),
+    sub: jest.fn(() => ({
+      dataSync: jest.fn(() => [1.5]),
+      dispose: jest.fn(),
+      div: jest.fn(() => ({
+        dataSync: jest.fn(() => [1.5]),
+        dispose: jest.fn()
+      }))
+    }))
+  })),
+  tensor3d: jest.fn(() => ({
+    dataSync: jest.fn(() => [1.5]),
+    dispose: jest.fn(),
+    shape: [1, 10, 15]
+  })),
+  scalar: jest.fn(() => ({
+    dataSync: jest.fn(() => [1.5]),
+    dispose: jest.fn()
+  }))
+};
+
+// Mock require globally
+const originalRequire = global.require;
+global.require = jest.fn().mockImplementation((module) => {
+  if (module === '@tensorflow/tfjs') {
+    return mockTensorFlowAPI;
+  }
+  return originalRequire ? originalRequire(module) : require(module);
 });
+
+// Now import the TensorFlowModel
+import { TensorFlowModel } from '../../utils/ml/models/tensorflowModel.js';
+
+// Mock complet TensorFlow.js pour éviter les conflits
+const createMockTensor = (value = [1.5]) => ({
+  dataSync: jest.fn(() => Array.isArray(value) ? value : [value]),
+  dispose: jest.fn(),
+  shape: [1, 15],
+  mean: jest.fn((axis) => createMockTensor(axis ? [0, 0, 0] : 0)),
+  std: jest.fn((axis) => createMockTensor(axis ? [1, 1, 1] : 1)),
+  sub: jest.fn(() => createMockTensor()),
+  div: jest.fn(() => createMockTensor()),
+  add: jest.fn(() => createMockTensor()),
+  mul: jest.fn(() => createMockTensor()),
+  slice: jest.fn(() => createMockTensor()),
+  square: jest.fn(() => createMockTensor()),
+  sqrt: jest.fn(() => createMockTensor()),
+  sum: jest.fn(() => createMockTensor()),
+  exp: jest.fn(() => createMockTensor()),
+  abs: jest.fn(() => createMockTensor()),
+  arraySync: jest.fn(() => [[1, 2, 3], [4, 5, 6]])
+});
+
+const createMockModel = () => ({
+  add: jest.fn(),
+  compile: jest.fn(),
+  fit: jest.fn().mockResolvedValue({
+    history: {
+      loss: [1.0, 0.8, 0.6],
+      val_loss: [1.1, 0.9, 0.7]
+    },
+    epoch: [0, 1, 2]
+  }),
+  predict: jest.fn(() => createMockTensor()),
+  dispose: jest.fn(),
+  layers: [
+    {
+      getWeights: jest.fn(() => [{
+        abs: jest.fn().mockReturnValue({
+          sum: jest.fn().mockReturnValue({
+            dataSync: jest.fn().mockReturnValue([0.8, 0.6, 0.9, 0.4, 0.7, 0.5, 0.3, 1.0, 0.2, 0.6, 0.8, 0.9, 0.1, 0.5, 0.4])
+          })
+        })
+      }])
+    }
+  ]
+});
+
+jest.mock('@tensorflow/tfjs', () => ({
+  sequential: jest.fn(() => ({
+    add: jest.fn(),
+    compile: jest.fn(),
+    fit: jest.fn().mockResolvedValue({
+      history: {
+        loss: [1.0, 0.8, 0.6],
+        val_loss: [1.1, 0.9, 0.7]
+      },
+      epoch: [0, 1, 2]
+    }),
+    predict: jest.fn(() => ({
+      dataSync: jest.fn(() => [1.5]),
+      dispose: jest.fn(),
+      shape: [1, 1],
+      mul: jest.fn(() => ({ 
+        dataSync: jest.fn(() => [1.5]),
+        dispose: jest.fn(),
+        add: jest.fn(() => ({
+          dataSync: jest.fn(() => [1.5]),
+          dispose: jest.fn()
+        }))
+      }))
+    })),
+    dispose: jest.fn(),
+    layers: [
+      {
+        getWeights: jest.fn(() => [{
+          abs: jest.fn().mockReturnValue({
+            sum: jest.fn().mockReturnValue({
+              dataSync: jest.fn().mockReturnValue([0.8, 0.6, 0.9, 0.4, 0.7, 0.5, 0.3, 1.0, 0.2, 0.6, 0.8, 0.9, 0.1, 0.5, 0.4])
+            })
+          })
+        }])
+      }
+    ]
+  })),
+  layers: {
+    inputLayer: jest.fn(() => ({})),
+    dense: jest.fn(() => ({})),
+    lstm: jest.fn(() => ({})),
+    conv1d: jest.fn(() => ({})),
+    maxPooling1d: jest.fn(() => ({})),
+    globalAveragePooling1d: jest.fn(() => ({})),
+    flatten: jest.fn(() => ({})),
+    dropout: jest.fn(() => ({})),
+    batchNormalization: jest.fn(() => ({}))
+  },
+  regularizers: {
+    l2: jest.fn(() => ({}))
+  },
+  train: {
+    adam: jest.fn(() => ({}))
+  },
+  losses: {
+    meanSquaredError: jest.fn(() => createMockTensor()),
+    absoluteDifference: jest.fn(() => createMockTensor())
+  },
+  tensor1d: jest.fn(() => createMockTensor()),
+  tensor2d: jest.fn(() => ({
+    dataSync: jest.fn(() => [1.5]),
+    dispose: jest.fn(),
+    shape: [1, 15],
+    sub: jest.fn(() => ({
+      dataSync: jest.fn(() => [1.5]),
+      dispose: jest.fn(),
+      div: jest.fn(() => ({
+        dataSync: jest.fn(() => [1.5]),
+        dispose: jest.fn()
+      }))
+    }))
+  })),
+  tensor3d: jest.fn(() => createMockTensor()),
+  scalar: jest.fn(() => createMockTensor()),
+  model: jest.fn(() => createMockModel()),
+  ready: jest.fn().mockResolvedValue(true)
+}));
 
 // Mock des contraintes de musculation
 jest.mock('../../utils/ml/musculationConstraints.js', () => ({
@@ -215,25 +407,14 @@ describe('TensorFlowModel', () => {
     beforeEach(async () => {
       // Simuler un modèle entraîné
       model.isTrained = true;
-      model.model = {
-        predict: () => ({
-          mul: () => ({
-            add: () => ({
-              dataSync: () => [102.5]
-            })
-          }),
-          dataSync: () => [102.5],
-          dispose: () => {}
-        }),
-        dispose: () => {}
-      };
+      model.model = createMockModel();
       model.scalers.features = {
-        mean: { dataSync: () => Array(15).fill(0) },
-        std: { dataSync: () => Array(15).fill(1) }
+        mean: createMockTensor(Array(15).fill(0)),
+        std: createMockTensor(Array(15).fill(1))
       };
       model.scalers.targets = {
-        mean: { dataSync: () => [0] },
-        std: { dataSync: () => [1] }
+        mean: createMockTensor([0]),
+        std: createMockTensor([1])
       };
     });
 
@@ -284,28 +465,36 @@ describe('TensorFlowModel', () => {
 
   describe('Gestion mémoire', () => {
     test('devrait nettoyer les ressources', () => {
-      model.model = { dispose: jest.fn() };
-      model.uncertaintyModel = { dispose: jest.fn() };
-      model.scalers.features.mean = { dispose: jest.fn() };
-      model.scalers.features.std = { dispose: jest.fn() };
-      model.scalers.targets.mean = { dispose: jest.fn() };
-      model.scalers.targets.std = { dispose: jest.fn() };
+      const mockModel = createMockModel();
+      const mockUncertaintyModel = createMockModel();
+      const mockMean = createMockTensor();
+      const mockStd = createMockTensor();
+      const mockTargetMean = createMockTensor();
+      const mockTargetStd = createMockTensor();
+
+      model.model = mockModel;
+      model.uncertaintyModel = mockUncertaintyModel;
+      model.scalers.features.mean = mockMean;
+      model.scalers.features.std = mockStd;
+      model.scalers.targets.mean = mockTargetMean;
+      model.scalers.targets.std = mockTargetStd;
 
       model.dispose();
 
-      expect(model.model.dispose).toHaveBeenCalled();
-      expect(model.uncertaintyModel.dispose).toHaveBeenCalled();
-      expect(model.scalers.features.mean.dispose).toHaveBeenCalled();
+      expect(mockModel.dispose).toHaveBeenCalled();
+      expect(mockUncertaintyModel.dispose).toHaveBeenCalled();
+      expect(mockMean.dispose).toHaveBeenCalled();
     });
   });
 
   describe('Sauvegarde et chargement', () => {
     test('devrait sauvegarder les métadonnées du modèle', async () => {
+      model.model = createMockModel();
       model.isTrained = true;
-      model.scalers.features.mean = { dataSync: () => [1, 2, 3] };
-      model.scalers.features.std = { dataSync: () => [0.5, 1, 1.5] };
-      model.scalers.targets.mean = { dataSync: () => [100] };
-      model.scalers.targets.std = { dataSync: () => [10] };
+      model.scalers.features.mean = createMockTensor([1, 2, 3]);
+      model.scalers.features.std = createMockTensor([0.5, 1, 1.5]);
+      model.scalers.targets.mean = createMockTensor([100]);
+      model.scalers.targets.std = createMockTensor([10]);
 
       const savedData = await model.save();
 
@@ -344,17 +533,7 @@ describe('TensorFlowModel', () => {
   describe('Importance des features', () => {
     test('devrait calculer une approximation de l\'importance', () => {
       // Mock d'un modèle avec des couches
-      model.model = {
-        layers: [{
-          getWeights: () => [{
-            abs: () => ({
-              sum: () => ({
-                dataSync: () => [0.8, 0.6, 0.9, 0.4, 0.7, 0.5, 0.3, 1.0, 0.2, 0.6, 0.8, 0.9, 0.1, 0.5, 0.4]
-              })
-            })
-          }]
-        }]
-      };
+      model.model = createMockModel();
 
       const importance = model.getFeatureImportance();
 
@@ -370,7 +549,11 @@ describe('TensorFlowModel', () => {
     });
 
     test('devrait gérer l\'absence de poids', () => {
-      model.model = { layers: [{ getWeights: () => [] }] };
+      model.model = { 
+        layers: [{ 
+          getWeights: jest.fn(() => []) 
+        }] 
+      };
       
       const importance = model.getFeatureImportance();
       expect(importance).toEqual({});
@@ -388,11 +571,10 @@ describe('TensorFlowModel', () => {
 
     test('devrait gérer les erreurs de prédiction', () => {
       model.isTrained = true;
-      model.model = {
-        predict: () => {
-          throw new Error('Erreur de prédiction');
-        }
-      };
+      model.model = createMockModel();
+      model.model.predict.mockImplementation(() => {
+        throw new Error('Erreur de prédiction');
+      });
 
       expect(() => model.predict({})).toThrow('Erreur de prédiction TensorFlow');
     });

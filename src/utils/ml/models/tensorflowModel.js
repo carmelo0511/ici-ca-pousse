@@ -5,20 +5,14 @@
 
 import { validateMusculationPrediction } from '../musculationConstraints.js';
 
-// Import conditionnel de TensorFlow pour éviter les conflits
-let tf = null;
-
-const loadTensorFlow = async () => {
-  if (tf) return tf;
-  
-  try {
-    tf = await import('@tensorflow/tfjs');
-    return tf;
-  } catch (error) {
-    console.warn('TensorFlow.js non disponible:', error.message);
-    return null;
-  }
-};
+// Import TensorFlow avec gestion d'erreurs
+let tf;
+try {
+  tf = require('@tensorflow/tfjs');
+} catch (error) {
+  console.warn('TensorFlow.js import failed:', error.message);
+  tf = null;
+}
 
 /**
  * Configuration des modèles TensorFlow
@@ -90,6 +84,10 @@ export class TensorFlowModel {
    * Construit l'architecture du modèle selon le type
    */
   buildModel() {
+    if (!tf) {
+      throw new Error('TensorFlow.js non disponible');
+    }
+    
     const { features, sequenceLength } = this.config;
     
     if (this.modelType === 'lstm') {
@@ -234,7 +232,7 @@ export class TensorFlowModel {
    * Construit le modèle d'uncertainty quantification
    */
   buildUncertaintyModel() {
-    if (!this.uncertaintyEnabled) return null;
+    if (!this.uncertaintyEnabled || !tf) return null;
     
     const { features } = this.config;
     const inputShape = this.modelType === 'mlp' ? [features] : [this.config.sequenceLength, features];
@@ -267,6 +265,10 @@ export class TensorFlowModel {
    * Prépare les données pour l'entraînement
    */
   prepareTrainingData(features, targets) {
+    if (!tf) {
+      throw new Error('TensorFlow.js non disponible pour préparation données');
+    }
+    
     // Normalisation des features
     const featureTensor = tf.tensor2d(features);
     const targetTensor = tf.tensor1d(targets);
@@ -444,6 +446,10 @@ export class TensorFlowModel {
   predict(features) {
     if (!this.isTrained || !this.model) {
       throw new Error('Le modèle TensorFlow doit être entraîné avant de faire des prédictions');
+    }
+
+    if (!tf) {
+      throw new Error('TensorFlow.js non disponible pour prédictions');
     }
 
     try {
