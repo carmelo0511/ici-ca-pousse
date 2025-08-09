@@ -213,8 +213,8 @@ describe('AdvancedPlateauDetector', () => {
         totalVolume: 1920
       }));
 
-      // Simuler moins d'entraînements récents
-      const recentLowFreq = frequencyData.slice(0, 3); // Seulement 3 des 4 dernières semaines
+      // Simuler moins d'entraînements récents (contexte uniquement)
+      frequencyData.slice(0, 3);
 
       const result = detector.detectFrequencyPlateau(frequencyData, 'intermediate');
 

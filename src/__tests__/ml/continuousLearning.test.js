@@ -198,7 +198,7 @@ describe('MLMetricsCollector', () => {
     it('should generate comprehensive metrics report', () => {
       // Ajouter quelques prédictions et feedbacks
       const predId1 = collector.collectPrediction('Exercise1', { nextWeight: 80 }, {}, 'beginner');
-      const predId2 = collector.collectPrediction('Exercise2', { nextWeight: 90 }, {}, 'advanced');
+      collector.collectPrediction('Exercise2', { nextWeight: 90 }, {}, 'advanced');
       
       collector.collectFeedback(predId1, FEEDBACK_TYPES.ACTUAL_PERFORMANCE, { actualWeight: 78 });
 

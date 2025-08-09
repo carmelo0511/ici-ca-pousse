@@ -326,14 +326,13 @@ describe('ML System Integration Tests', () => {
       expect(prediction.confidence).toBeGreaterThan(0);
       expect(validation.isValid).toBeDefined();
 
-      // Les composants doivent être cohérents
-      if (plateauAnalysis.hasPlateaus) {
-        expect(prediction.confidence).toBeLessThan(0.9); // Confiance réduite en cas de plateau
-      }
-
-      if (!validation.isValid) {
-        expect(validation.warnings.length).toBeGreaterThan(0);
-      }
+      // Les composants doivent être cohérents (pas d'expects conditionnels)
+      const hasPlateaus = !!plateauAnalysis.hasPlateaus;
+      const isValid = !!validation.isValid;
+      const expectedConfidenceUpperBound = hasPlateaus ? 0.9 : 1;
+      const expectedWarningsMin = isValid ? 0 : 1;
+      expect(prediction.confidence).toBeLessThanOrEqual(expectedConfidenceUpperBound);
+      expect((validation.warnings || []).length).toBeGreaterThanOrEqual(expectedWarningsMin);
 
       expect(predictionId).toBeDefined();
     });

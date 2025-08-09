@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -365,9 +365,7 @@
 <a name='L300'></a><a href='#L300'>300</a>
 <a name='L301'></a><a href='#L301'>301</a>
 <a name='L302'></a><a href='#L302'>302</a>
-<a name='L303'></a><a href='#L303'>303</a>
-<a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L303'></a><a href='#L303'>303</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -556,9 +554,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -601,9 +597,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -663,6 +657,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -855,15 +851,13 @@ export const LazyHooks = <span class="cstat-no" title="statement not covered" >{
 };
 &nbsp;
 // Préchargement intelligent des composants
-export const preloadComponents = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>omponentNames = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span> priority = <span class="branch-0 cbranch-no" title="branch not covered" >'low')</span> =&gt; {</span>
+export const preloadComponents = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>omponentNames = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span> priority = <span class="branch-0 cbranch-no" title="branch not covered" >'low',</span> deviceInfo = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  if (!Array.isArray(componentNames)) {</span>
 <span class="cstat-no" title="statement not covered" >    componentNames = [componentNames];</span>
   }
 &nbsp;
-  const { deviceInfo } = <span class="cstat-no" title="statement not covered" >useMobilePerformance();</span>
-  
   // Ne pas précharger sur appareils bas de gamme ou réseau lent
-<span class="cstat-no" title="statement not covered" >  if (deviceInfo.isLowEnd || deviceInfo.isSlowNetwork) {</span>
+<span class="cstat-no" title="statement not covered" >  if (deviceInfo &amp;&amp; (deviceInfo.isLowEnd || deviceInfo.isSlowNetwork)) {</span>
 <span class="cstat-no" title="statement not covered" >    return Promise.resolve();</span>
   }
 &nbsp;
@@ -905,10 +899,8 @@ export const preloadForRoute = <span class="cstat-no" title="statement not cover
 };
 &nbsp;
 // Optimisation du prefetch selon la connexion
-export const intelligentPrefetch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { deviceInfo } = <span class="cstat-no" title="statement not covered" >useMobilePerformance();</span>
-  
-<span class="cstat-no" title="statement not covered" >  if (deviceInfo.isSlowNetwork || deviceInfo.isLowEnd) {</span>
+export const intelligentPrefetch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>eviceInfo = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  if (deviceInfo &amp;&amp; (deviceInfo.isSlowNetwork || deviceInfo.isLowEnd)) {</span>
 <span class="cstat-no" title="statement not covered" >    return; </span>// Pas de prefetch sur connexions lentes
   }
 &nbsp;
@@ -968,21 +960,23 @@ export const measureComponentLoad = <span class="cstat-no" title="statement not 
 <span class="cstat-no" title="statement not covered" >  intelligentPrefetch();</span>
 }
 &nbsp;
-export default {
+const CodeSplittingUtils = <span class="cstat-no" title="statement not covered" >{</span>
   MobileSuspense,
   LazyComponents,
   LazyHooks,
   preloadComponents,
   preloadForRoute,
   measureComponentLoad
-};</pre></td></tr></table></pre>
+};
+&nbsp;
+export default CodeSplittingUtils;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-07T19:00:16.819Z
+                at 2025-08-09T03:55:32.472Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
