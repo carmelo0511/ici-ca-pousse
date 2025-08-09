@@ -18,7 +18,7 @@ import {
   Settings,
   RefreshCw,
   Clock,
-  Weight
+  Dumbbell
 } from 'lucide-react';
 import PlateauAnalysisView from './PlateauAnalysisView.jsx';
 
@@ -551,7 +551,7 @@ const SettingsTab = ({ constraints, pipelineMetrics }) => {
 const MusculationConstraints = ({ constraints }) => (
   <div className="card">
     <h4 className="text-lg font-semibold text-primary mb-4 flex items-center space-x-2">
-      <Weight className="h-5 w-5" />
+      <Dumbbell className="h-5 w-5" />
       <span>Contraintes de Musculation</span>
     </h4>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

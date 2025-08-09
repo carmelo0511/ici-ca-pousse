@@ -3,9 +3,9 @@
  * Utilise des poids dynamiques basés sur les performances pour optimiser les prédictions
  */
 
-import AdvancedLinearRegression from './linearRegression.js';
-import RandomForestModel from './randomForest.js';
-import NeuralNetworkModel from './neuralNetwork.js';
+import AdvancedLinearRegressionModule, { AdvancedLinearRegression as AdvancedLinearRegressionNamed } from './linearRegression.js';
+import RandomForestModule, { RandomForestModel as RandomForestNamed } from './randomForest.js';
+import NeuralNetworkModule, { NeuralNetworkModel as NeuralNetworkNamed } from './neuralNetwork.js';
 import { validateMusculationPrediction } from '../musculationConstraints.js';
 
 /**
@@ -38,10 +38,13 @@ export class EnsembleModel {
     };
     
     // Initialiser les modèles
+    const LinearCtor = AdvancedLinearRegressionNamed || AdvancedLinearRegressionModule;
+    const ForestCtor = RandomForestNamed || RandomForestModule;
+    const NeuralCtor = NeuralNetworkNamed || NeuralNetworkModule;
     this.models = {
-      linear: new AdvancedLinearRegression(this.modelConfigs.linear),
-      forest: new RandomForestModel(this.modelConfigs.forest),
-      neural: new NeuralNetworkModel(this.modelConfigs.neural)
+      linear: new LinearCtor(this.modelConfigs.linear),
+      forest: new ForestCtor(this.modelConfigs.forest),
+      neural: new NeuralCtor(this.modelConfigs.neural)
     };
     
     // Poids d'ensemble (initialisés de manière équilibrée)
@@ -117,6 +120,10 @@ export class EnsembleModel {
       ensemblePerformance: this.trainingMetrics.ensemblePerformance,
       featureImportances: this.trainingMetrics.featureImportances
     };
+  }
+
+  getModelWeights() {
+    return { ...this.ensembleWeights };
   }
 
   /**
