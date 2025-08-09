@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">25.6% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/125</span>
+                <span class='fraction'>32/125</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.57% </span>
+                <span class="strong">23.15% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/95</span>
+                <span class='fraction'>22/95</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">13.33% </span>
+                <span class="strong">26.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/15</span>
+                <span class='fraction'>4/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.83% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/120</span>
+                <span class='fraction'>30/120</span>
             </div>
         
             
@@ -708,22 +708,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -733,27 +733,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1089,12 +1089,12 @@ export const determineUserLevel = (workouts) =&gt; {
   // Analyser la progression des poids
   const progressionRate = calculateAverageProgression(workouts);
   
-  if (monthsTraining &lt; 6 || <span class="branch-1 cbranch-no" title="branch not covered" >progressionRate &gt; 1.5)</span> {
+  if (monthsTraining &lt; 6 || progressionRate &gt; 1.5) {
     return 'beginner';
-  } else <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="else path not taken" >E</span>if (monthsTraining &lt; 24 || progressionRate &gt; 0.5) {</span>
+  } else <span class="missing-if-branch" title="if path not taken" >I</span>if (monthsTraining &lt; 24 || progressionRate &gt; 0.5) {
 <span class="cstat-no" title="statement not covered" >    return 'intermediate';</span>
   } else {
-<span class="cstat-no" title="statement not covered" >    return 'advanced';</span>
+    return 'advanced';
   }
 };
 &nbsp;
@@ -1104,7 +1104,7 @@ export const determineUserLevel = (workouts) =&gt; {
  * @returns {number} Progression moyenne en kg par séance
  */
 export const calculateAverageProgression = (workouts) =&gt; {
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!workouts || workouts.length &lt; 2) <span class="cstat-no" title="statement not covered" >return 0;</span>
+  if (!workouts || workouts.length &lt; 2) return 0;
   
   const firstWorkout = workouts[0];
   const lastWorkout = workouts[workouts.length - 1];
@@ -1114,10 +1114,10 @@ export const calculateAverageProgression = (workouts) =&gt; {
   let totalProgression = 0;
   let exerciseCount = 0;
   
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (firstWorkout.exercises &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >lastWorkout.exercises)</span> {
-<span class="cstat-no" title="statement not covered" >    firstWorkout.exercises.forEach(<span class="fstat-no" title="function not covered" >fi</span>rstEx =&gt; {</span>
-      const lastEx = <span class="cstat-no" title="statement not covered" >lastWorkout.exercises.find(<span class="fstat-no" title="function not covered" >ex</span> =&gt; <span class="cstat-no" title="statement not covered" >ex.name === firstEx.name)</span>;</span>
-<span class="cstat-no" title="statement not covered" >      if (lastEx &amp;&amp; firstEx.weight &amp;&amp; lastEx.weight) {</span>
+  if (firstWorkout.exercises &amp;&amp; lastWorkout.exercises) {
+    firstWorkout.exercises.forEach(firstEx =&gt; {
+      const lastEx = lastWorkout.exercises.find(ex =&gt; ex.name === firstEx.name);
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (lastEx &amp;&amp; firstEx.weight &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >lastEx.weight)</span> {
 <span class="cstat-no" title="statement not covered" >        totalProgression += (lastEx.weight - firstEx.weight);</span>
 <span class="cstat-no" title="statement not covered" >        exerciseCount++;</span>
       }
@@ -1183,7 +1183,7 @@ export const calculateWeeklyProgression = <span class="fstat-no" title="function
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-09T03:55:32.472Z
+                at 2025-08-09T16:13:57.122Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

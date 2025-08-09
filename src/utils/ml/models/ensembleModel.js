@@ -6,6 +6,8 @@
 import AdvancedLinearRegressionModule, { AdvancedLinearRegression as AdvancedLinearRegressionNamed } from './linearRegression.js';
 import RandomForestModule, { RandomForestModel as RandomForestNamed } from './randomForest.js';
 import NeuralNetworkModule, { NeuralNetworkModel as NeuralNetworkNamed } from './neuralNetwork.js';
+// Utiliser le fallback TensorFlow pour éviter les conflits
+import TensorFlowModelModule, { TensorFlowModel as TensorFlowModelNamed } from './tensorflowFallback.js';
 import { validateMusculationPrediction } from '../musculationConstraints.js';
 
 /**
@@ -13,6 +15,10 @@ import { validateMusculationPrediction } from '../musculationConstraints.js';
  */
 export class EnsembleModel {
   constructor(options = {}) {
+    // Configuration du type de modèle neural
+    this.usesTensorFlow = options.useTensorFlow !== false; // Par défaut TensorFlow
+    this.tensorFlowModelType = options.tensorFlowModelType || 'mlp'; // 'lstm', 'cnn1d', 'mlp'
+    
     // Configuration des modèles individuels
     this.modelConfigs = {
       linear: options.linear || {
@@ -34,18 +40,33 @@ export class EnsembleModel {
         batchSize: 16,
         dropoutRate: 0.3,
         regularization: 0.01
+      },
+      tensorflow: options.tensorflow || {
+        modelType: this.tensorFlowModelType,
+        uncertaintyEnabled: true,
+        learningRate: 0.001,
+        epochs: 100,
+        batchSize: 16
       }
     };
     
     // Initialiser les modèles
     const LinearCtor = AdvancedLinearRegressionNamed || AdvancedLinearRegressionModule;
     const ForestCtor = RandomForestNamed || RandomForestModule;
-    const NeuralCtor = NeuralNetworkNamed || NeuralNetworkModule;
+    
     this.models = {
       linear: new LinearCtor(this.modelConfigs.linear),
-      forest: new ForestCtor(this.modelConfigs.forest),
-      neural: new NeuralCtor(this.modelConfigs.neural)
+      forest: new ForestCtor(this.modelConfigs.forest)
     };
+    
+    // Choisir le modèle neural : TensorFlow ou custom
+    if (this.usesTensorFlow) {
+      const TensorFlowCtor = TensorFlowModelNamed || TensorFlowModelModule;
+      this.models.neural = new TensorFlowCtor(this.modelConfigs.tensorflow);
+    } else {
+      const NeuralCtor = NeuralNetworkNamed || NeuralNetworkModule;
+      this.models.neural = new NeuralCtor(this.modelConfigs.neural);
+    }
     
     // Poids d'ensemble (initialisés de manière équilibrée)
     this.ensembleWeights = {
@@ -188,10 +209,15 @@ export class EnsembleModel {
       // Informations sur le modèle
       modelInfo: {
         type: 'EnsembleModel',
-        models: ['LinearRegression', 'RandomForest', 'NeuralNetwork'],
+        models: [
+          'LinearRegression', 
+          'RandomForest', 
+          this.usesTensorFlow ? `TensorFlow_${this.tensorFlowModelType.toUpperCase()}` : 'NeuralNetwork'
+        ],
         ensembleWeights: this.ensembleWeights,
         adaptiveWeighting: this.adaptiveWeighting,
-        trainingPerformance: this.trainingMetrics.ensemblePerformance
+        trainingPerformance: this.trainingMetrics.ensemblePerformance,
+        usesTensorFlow: this.usesTensorFlow
       }
     };
   }
@@ -508,12 +534,21 @@ export class EnsembleModel {
       const modelName = {
         linear: 'régression linéaire',
         forest: 'random forest',
-        neural: 'réseau de neurones'
+        neural: this.usesTensorFlow ? `TensorFlow ${this.tensorFlowModelType.toUpperCase()}` : 'réseau de neurones'
       }[dominantModel];
       
       recommendations.push(`🧠 Prédiction principalement basée sur ${modelName}`);
     } else {
       recommendations.push('⚖️ Prédiction équilibrée entre tous les modèles');
+    }
+    
+    // Recommandations spécifiques à TensorFlow
+    if (this.usesTensorFlow && predictions.neural.uncertainty !== undefined) {
+      if (predictions.neural.uncertainty > 1.0) {
+        recommendations.push('🔄 Incertitude élevée - Ajoutez plus de données d\'entraînement');
+      } else if (predictions.neural.uncertainty < 0.3) {
+        recommendations.push('✅ Prédiction TensorFlow très fiable');
+      }
     }
     
     return recommendations;

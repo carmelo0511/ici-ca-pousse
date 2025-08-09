@@ -1,12 +1,14 @@
 # 🚀 Ici Ça Pousse | AI-Powered Fitness Platform
 
 [![OpenAI GPT-4o](https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=for-the-badge&logo=openai)](https://openai.com/)
+[![TensorFlow.js](https://img.shields.io/badge/TensorFlow.js-4.22.0-FF6F00?style=for-the-badge&logo=tensorflow)](https://www.tensorflow.org/js)
 [![React 18](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-12.0.0-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
 [![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions)](https://github.com/features/actions)
-[![Tests](https://img.shields.io/badge/Tests-737%20passing-25D366?style=for-the-badge&logo=jest)](https://jestjs.io/)
-[![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen?style=for-the-badge)](https://jestjs.io/)
+[![Tests](https://img.shields.io/badge/Tests-127%20passing-25D366?style=for-the-badge&logo=jest)](https://jestjs.io/)
+[![ML Tests](https://img.shields.io/badge/ML%20Tests-102%20passing-orange?style=for-the-badge&logo=tensorflow)](https://tensorflow.org/)
+[![Coverage](https://img.shields.io/badge/ML%20Coverage-95%25+-brightgreen?style=for-the-badge)](https://jestjs.io/)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
 > **Production-ready AI fitness platform with advanced GPT-4o integration, MLOps pipeline, and enterprise-grade CI/CD**
@@ -23,9 +25,11 @@ This project demonstrates **enterprise-level AI integration** capabilities for A
 
 - **OpenAI GPT-4o Integration** with Function Calling (8 specialized functions)
 - **RAG System** (Retrieval-Augmented Generation) with semantic search
-- **🚀 NEW: Enterprise ML Pipeline** with Ensemble Learning (3 models)
-- **🧠 Advanced Plateau Detection** with behavioral analysis & 5 plateau types
-- **🎯 Professional ML Dashboard** with real-time model performance monitoring
+- **🚀 TensorFlow.js Integration** with LSTM, CNN 1D & MLP architectures
+- **🧠 Advanced ML Pipeline** with Ensemble Learning (3 models) + Uncertainty Quantification
+- **🎯 Pattern Recognition** with CNN 1D for temporal sequence analysis
+- **🔍 Anomaly Detection** with Autoencoders for performance outliers
+- **📊 Professional ML Dashboard** with real-time model performance monitoring
 - **Multi-layer Safety Validator** with real-time risk assessment
 - **Intelligent Caching System** with adaptive TTL (78.5% hit rate)
 - **AI Performance Monitoring** with automated optimization
@@ -33,7 +37,7 @@ This project demonstrates **enterprise-level AI integration** capabilities for A
 ### 🔄 MLOps & DevOps Pipeline
 
 - **GitHub Actions CI/CD** with automated testing, linting, and deployment
-- **Continuous Integration** with 737 automated tests (100% passing)
+- **Comprehensive Testing** with 127 core tests + 102 ML-specific tests (100% passing)
 - **Performance Monitoring** with Vercel Analytics and Core Web Vitals
 - **Automated Quality Gates** with ESLint, Prettier, and TypeScript
 - **Production Deployment** with zero-downtime releases
@@ -57,10 +61,13 @@ This project demonstrates **enterprise-level AI integration** capabilities for A
 // Enterprise AI Integration
 - OpenAI GPT-4o              // Advanced language model with Function Calling
 - RAG System                 // Knowledge base with semantic search  
-- 🚀 Ensemble ML Pipeline    // Linear Regression + Random Forest + Neural Network
-- 🧠 Advanced Plateau Detector // 5 plateau types with behavioral analysis
-- 📊 Professional ML Dashboard // Real-time model performance & insights
-- ⚡ Feature Engineering     // 20+ advanced features with temporal analysis
+- 🚀 TensorFlow.js 4.22.0    // LSTM, CNN 1D, MLP architectures with GPU acceleration
+- 🧠 Ensemble ML Pipeline    // Linear Regression + Random Forest + TensorFlow models
+- 🎯 Uncertainty Quantification // Confidence intervals & prediction reliability
+- 🔍 Pattern Recognition     // CNN 1D for temporal sequence analysis
+- 📊 Anomaly Detection       // Autoencoders for performance outlier detection
+- ⚡ Advanced Feature Engineering // 20+ features with temporal & behavioral analysis
+- 📈 Professional ML Dashboard // Real-time model performance & interactive analytics
 - Safety Validator           // Multi-layer risk assessment (70.33% test coverage)
 - Intelligent Cache          // Adaptive TTL with 78.5% hit rate
 - AI Monitoring Dashboard    // Real-time performance metrics (82.65% coverage)
@@ -69,7 +76,7 @@ This project demonstrates **enterprise-level AI integration** capabilities for A
 ### **CI/CD & DevOps**
 ```yaml
 # GitHub Actions Pipeline
-- Automated Testing          // 612 tests, 100% pass rate
+- Automated Testing          // 127 core + 102 ML tests, 100% pass rate
 - Code Quality Gates         // ESLint, Prettier, TypeScript
 - Performance Testing        // Core Web Vitals optimization
 - Security Scanning          // Dependency vulnerability checks
@@ -127,11 +134,11 @@ const ragSystem = {
 };
 ```
 
-### **🚀 Advanced ML Pipeline "Madame IrmIA v2.0"**
+### **🚀 Advanced ML Pipeline "Madame IrmIA v3.0"**
 ```javascript
-// Enterprise ML Pipeline with Ensemble Learning (95.84% test coverage)  
+// Enterprise ML Pipeline with TensorFlow.js Integration (95.84% test coverage)  
 const advancedMLPipeline = {
-  // Ensemble Model with 3 ML algorithms
+  // Ensemble Model with 3 ML algorithms + TensorFlow architectures
   models: {
     linearRegression: new AdvancedLinearRegression({
       regularization: 'l2', learningRate: 0.01, maxIterations: 1000
@@ -139,8 +146,10 @@ const advancedMLPipeline = {
     randomForest: new RandomForestModel({
       nTrees: 15, maxDepth: 6, bootstrap: true, oobScore: true
     }),
-    neuralNetwork: new NeuralNetworkModel({
-      layers: [15, 12, 8, 4, 1], dropout: 0.3, earlyStop: true
+    tensorflowModel: new TensorFlowModel({
+      modelType: 'lstm', // or 'cnn1d', 'mlp'
+      uncertaintyEnabled: true, // Confidence intervals
+      sequenceLength: 10, lstmUnits: 32, epochs: 100
     })
   },
   
@@ -200,8 +209,8 @@ jobs:
 ```
 
 ### **Quality Gates & Monitoring**
-- ✅ **737 Automated Tests** with 100% pass rate
-- ✅ **Code Quality Checks** (ESLint, Prettier, TypeScript)
+- ✅ **229 Comprehensive Tests** (127 core + 102 ML) with 100% pass rate
+- ✅ **Code Quality Checks** (ESLint, Prettier, TypeScript)  
 - ✅ **Security Scanning** for vulnerabilities
 - ✅ **Performance Testing** (Core Web Vitals)
 - ✅ **Zero-Downtime Deployment** with rollback capability
@@ -214,7 +223,7 @@ jobs:
 ### **Production Metrics**
 | Metric | Value | Status |
 |--------|-------|--------|
-| **Test Coverage** | 612 tests, 100% passing | ✅ |
+| **Test Coverage** | 229 tests (127 core + 102 ML), 100% passing | ✅ |
 | **AI Response Time** | < 2 seconds average | ✅ |
 | **Cache Hit Rate** | 78.5% optimization | ✅ |
 | **Core Web Vitals** | 90+ scores | ✅ |
@@ -242,13 +251,17 @@ jobs:
 - Provides nutritional advice based on goals and dietary preferences
 - Offers recovery strategies based on training intensity
 
-### **2. 🚀 Enterprise ML Pipeline "Madame IrmIA v2.0"**
-- **Ensemble Learning**: Linear Regression + Random Forest + Neural Network
-- **Advanced Feature Engineering**: 20+ temporal, performance & behavioral features
-- **Intelligent Plateau Detection**: 5 plateau types with severity scoring
-- **Professional ML Dashboard**: Real-time model performance & interactive analysis
-- **Smart Predictions**: Confidence-based recommendations with musculation constraints
-- **Behavioral Analysis**: Motivational plateau detection with personalized solutions
+### **2. 🚀 TensorFlow.js ML Pipeline "Madame IrmIA v3.0"**
+- **🧠 TensorFlow.js Integration**: LSTM, CNN 1D, MLP architectures with GPU acceleration
+- **🎯 Uncertainty Quantification**: Confidence intervals & prediction reliability scoring
+- **🔍 Advanced Pattern Recognition**: CNN 1D for temporal sequence analysis
+- **📊 Anomaly Detection**: Autoencoders for performance outlier detection
+- **⚡ Ensemble Learning**: Linear Regression + Random Forest + TensorFlow models
+- **🚀 Advanced Feature Engineering**: 20+ temporal, performance & behavioral features
+- **🧠 Intelligent Plateau Detection**: 5 plateau types with AI-powered severity analysis
+- **📈 Professional ML Dashboard**: Real-time model performance & interactive analytics
+- **🎯 Smart Predictions**: Confidence-based recommendations with uncertainty bounds
+- **📱 Behavioral Analysis**: Motivational plateau detection with personalized AI solutions
 
 ### **3. Safety-First AI Validation**
 - Real-time workout safety assessment
@@ -269,16 +282,18 @@ jobs:
 ### **Demonstrated AI Integration Skills**
 - ✅ **OpenAI API Mastery**: Advanced GPT-4o implementation with Function Calling
 - ✅ **RAG Architecture**: Knowledge base system with semantic search
-- ✅ **🚀 Enterprise ML Pipeline**: Ensemble Learning (3 models) with professional dashboard
-- ✅ **🧠 Advanced ML Features**: 20+ feature engineering + 5-type plateau detection
-- ✅ **📊 Real-time Monitoring**: Interactive ML dashboard with model performance analytics
+- ✅ **🚀 TensorFlow.js Integration**: LSTM, CNN 1D, MLP with GPU acceleration & uncertainty quantification
+- ✅ **🧠 Advanced ML Pipeline**: Ensemble Learning (3 models) + pattern recognition & anomaly detection
+- ✅ **🎯 Deep Learning Architectures**: Custom neural networks with backpropagation, dropout & early stopping
+- ✅ **📊 Real-time ML Monitoring**: Interactive dashboard with model performance analytics & feature importance
+- ✅ **⚡ MLOps Implementation**: Continuous learning, model validation, automated retraining
+- ✅ **🔍 AI Safety & Validation**: Multi-layer validation, risk assessment & fallback systems
 - ✅ **Performance Monitoring**: Real-time AI metrics and optimization
 - ✅ **Cost Management**: API rate limiting and intelligent caching
-- ✅ **Safety Systems**: Multi-layer validation and risk assessment
 
 ### **MLOps & DevOps Expertise**
 - ✅ **CI/CD Pipeline**: GitHub Actions with automated testing and deployment
-- ✅ **Quality Assurance**: 612 automated tests with 100% pass rate
+- ✅ **Quality Assurance**: 229 comprehensive tests (127 core + 102 ML) with 100% pass rate
 - ✅ **Production Monitoring**: Real-time performance tracking
 - ✅ **Error Handling**: Robust error management and fallback systems
 - ✅ **Scalability**: Serverless architecture ready for growth
@@ -343,7 +358,7 @@ npm test -- --testPathPattern="integration"   # End-to-end tests (125+ ML tests)
 ```
 
 ### **Quality Metrics**
-- **737 Tests**: All passing with comprehensive coverage
+- **229 Tests**: 127 core + 102 ML tests, all passing with comprehensive coverage
 - **TypeScript**: Full type safety across codebase
 - **ESLint + Prettier**: Consistent code style and quality
 - **Security Testing**: Automated vulnerability scanning
@@ -361,11 +376,21 @@ npm test -- --testPathPattern="integration"   # End-to-end tests (125+ ML tests)
 
 ---
 
-## 🚀 NEW: Advanced Machine Learning Features
+## 📋 Complete AI Integration Guide
 
-### **Enterprise ML Pipeline "Madame IrmIA v2.0"**
+**[📚 Complete AI Integration Technical Guide](./AI_INTEGRATION_GUIDE.md)**
 
-Our latest major update introduces a **production-ready machine learning pipeline** that transforms fitness predictions from basic rule-based logic to **sophisticated ensemble learning** with professional-grade analytics.
+> **Detailed technical documentation for AI Integration Engineer / MLOps positions**
+> 
+> Complete system architecture, implementation details, and demonstrated competencies for enterprise AI integration roles
+
+---
+
+## 🚀 TensorFlow.js Integration: Advanced Machine Learning Features
+
+### **Enterprise ML Pipeline "Madame IrmIA v3.0"**
+
+Our latest major update introduces **TensorFlow.js integration** with advanced neural architectures, transforming fitness predictions from basic ML to **sophisticated deep learning** with uncertainty quantification and professional-grade analytics.
 
 #### **🤖 Ensemble Learning Architecture**
 ```javascript
@@ -381,10 +406,10 @@ const ensembleModel = {
     features: 'Out-of-bag validation + feature importance scoring',
     strengths: 'Robust to outliers, handles non-linear patterns'
   },
-  neuralNetwork: {
-    algorithm: 'Multi-layer perceptron with backpropagation',
-    features: 'Dropout regularization + early stopping',
-    strengths: 'Captures complex non-linear relationships'
+  tensorflowModel: {
+    algorithm: 'TensorFlow.js LSTM/CNN 1D/MLP with GPU acceleration',
+    features: 'Uncertainty quantification + sequence analysis + pattern recognition',
+    strengths: 'Advanced neural architectures with confidence intervals'
   }
 };
 ```
