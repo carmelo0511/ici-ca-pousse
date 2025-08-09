@@ -57,7 +57,6 @@ export class AdvancedPredictionPipeline {
    * Initialise le pipeline avec les données utilisateur
    */
   async initialize(workouts, user = null) {
-    console.log('🚀 Initialisation du pipeline ML avancé...');
     
     if (!workouts || workouts.length === 0) {
       throw new Error('Aucune donnée d\'entraînement fournie');
@@ -68,14 +67,12 @@ export class AdvancedPredictionPipeline {
       const dataQuality = this.analyzeDataQuality(workouts);
       
       if (dataQuality.score < 50) {
-        console.warn('⚠️ Qualité des données insuffisante:', dataQuality.issues);
       }
       
       // Préparer les données pour l'entraînement
       const trainingData = await this.prepareTrainingData(workouts);
       
       if (trainingData.totalSamples < this.minDataPoints) {
-        console.warn(`⚠️ Pas assez de données (${trainingData.totalSamples} < ${this.minDataPoints})`);
         this.isInitialized = true; // Permettre les prédictions de base
         return {
           initialized: true,
@@ -86,7 +83,6 @@ export class AdvancedPredictionPipeline {
       }
       
       // Entraîner le modèle d'ensemble
-      console.log('🧠 Entraînement du modèle d\'ensemble...');
       this.isTraining = true;
       this.trainingProgress = 0;
       
@@ -99,7 +95,6 @@ export class AdvancedPredictionPipeline {
       // Mettre à jour les métriques
       this.updatePipelineMetrics(trainingResults);
       
-      console.log('✅ Pipeline initialisé avec succès');
       
       return {
         initialized: true,
@@ -110,7 +105,6 @@ export class AdvancedPredictionPipeline {
       };
       
     } catch (error) {
-      console.error('❌ Erreur lors de l\'initialisation:', error);
       this.isTraining = false;
       
       // Mode fallback
@@ -146,7 +140,6 @@ export class AdvancedPredictionPipeline {
       }
       
       // 1. Extraction des features avancées
-      console.log(`🔍 Extraction des features pour ${exerciseName}...`);
       const features = this.featureEngineer.extractExerciseFeatures(exerciseName, workouts);
       
       if (features.totalDataPoints === 0) {
@@ -198,12 +191,16 @@ export class AdvancedPredictionPipeline {
       );
       
       // 7. Préparer la réponse finale
+      const currentWeight = features.currentWeight || features.current_weight || 0;
+      const predictedWeight = validatedPrediction.validatedPrediction;
+      const actualIncrement = predictedWeight - currentWeight; // Recalculer pour assurer la cohérence
+      
       const finalPrediction = {
         // Prédiction principale
         exerciseName,
-        predictedWeight: validatedPrediction.validatedPrediction,
-        currentWeight: features.currentWeight,
-        increment: validatedPrediction.increment,
+        predictedWeight: predictedWeight,
+        currentWeight: currentWeight,
+        increment: actualIncrement, // Utiliser l'increment recalculé
         confidence: modelConfidence,
         
         // Analyses avancées
@@ -235,7 +232,6 @@ export class AdvancedPredictionPipeline {
       return finalPrediction;
       
     } catch (error) {
-      console.error(`❌ Erreur lors de la prédiction pour ${exerciseName}:`, error);
       
       // Prédiction de fallback en cas d'erreur
       return this.generateErrorFallbackPrediction(exerciseName, error.message);
@@ -267,7 +263,6 @@ export class AdvancedPredictionPipeline {
         const prediction = await this.predict(exerciseName, workouts);
         analyses[exerciseName] = prediction;
       } catch (error) {
-        console.warn(`Erreur analyse ${exerciseName}:`, error.message);
         analyses[exerciseName] = this.generateErrorFallbackPrediction(exerciseName, error.message);
       }
     });
@@ -372,7 +367,6 @@ export class AdvancedPredictionPipeline {
       };
       
     } catch (error) {
-      console.error('Erreur lors de l\'entraînement:', error);
       throw error;
     }
   }
@@ -415,7 +409,6 @@ export class AdvancedPredictionPipeline {
     try {
       return this.plateauDetector.analyzeExercisePlateau(exerciseName, exerciseHistory, userLevel);
     } catch (error) {
-      console.warn('⚠️ Erreur lors de l\'analyse de plateau avancée:', error);
       // Fallback vers l'analyse basique
       return {
         hasPlateaus: false,

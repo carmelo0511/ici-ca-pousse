@@ -253,7 +253,6 @@ export class NeuralNetworkModel {
           patienceCounter++;
           
           if (patienceCounter >= this.earlyStoppingPatience) {
-            console.log(`Early stopping à l'époque ${epoch + 1}`);
             break;
           }
         }
@@ -263,7 +262,6 @@ export class NeuralNetworkModel {
       
       // Logging périodique
       if ((epoch + 1) % 50 === 0) {
-        console.log(`Époque ${epoch + 1}/${this.epochs}, Loss: ${epochLoss.toFixed(4)}, Val Loss: ${validationLoss.toFixed(4)}`);
       }
     }
     

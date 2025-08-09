@@ -19,39 +19,6 @@ export class FeatureEngineer {
    * @param {Array} workouts - Historique des entraînements
    * @returns {Object} Objet contenant toutes les features
    */
-  extractExerciseFeatures(exerciseName, workouts) {
-    // Filtrer les données pour cet exercice spécifique
-    const exerciseData = this.extractExerciseHistory(exerciseName, workouts);
-    
-    if (exerciseData.length === 0) {
-      return this.getDefaultFeatures(exerciseName);
-    }
-
-    // Extraire chaque catégorie de features
-    const temporalFeatures = this.extractTemporalFeatures(exerciseData);
-    const performanceFeatures = this.extractPerformanceFeatures(exerciseData);
-    const behavioralFeatures = this.extractBehavioralFeatures(exerciseData, workouts);
-    const contextualFeatures = this.extractContextualFeatures(exerciseName, workouts);
-    const musculationFeatures = this.extractMusculationFeatures(exerciseData, exerciseName);
-    const statisticalFeatures = this.extractStatisticalFeatures(exerciseData);
-
-    return {
-      // Métadonnées
-      exerciseName,
-      exerciseHistory: exerciseData,
-      totalDataPoints: exerciseData.length,
-      currentWeight: this.getCurrentWeight(exerciseData),
-      userLevel: determineUserLevel(workouts),
-      
-      // Features catégorisées
-      ...temporalFeatures,
-      ...performanceFeatures,
-      ...behavioralFeatures,
-      ...contextualFeatures,
-      ...musculationFeatures,
-      ...statisticalFeatures
-    };
-  }
 
   /**
    * Extrait l'historique d'un exercice spécifique
@@ -62,17 +29,29 @@ export class FeatureEngineer {
   extractExerciseHistory(exerciseName, workouts) {
     const history = [];
     
+    
     workouts.forEach(workout => {
       if (workout.exercises) {
         const exercise = workout.exercises.find(ex => ex.name === exerciseName);
         if (exercise) {
+          // Calculer le poids maximum de tous les sets pour cet exercice
+          let maxWeight = 0;
+          let totalReps = 0;
+          let totalSets = 0;
+          if (exercise.sets && exercise.sets.length > 0) {
+            maxWeight = Math.max(...exercise.sets.map(set => set.weight || 0));
+            totalReps = exercise.sets.reduce((sum, set) => sum + (set.reps || 0), 0);
+            totalSets = exercise.sets.length;
+          }
+          
+          
           history.push({
             date: workout.date,
             timestamp: new Date(workout.date).getTime(),
-            weight: exercise.weight || 0,
-            reps: exercise.reps || 0,
-            sets: exercise.sets || 0,
-            volume: (exercise.weight || 0) * (exercise.reps || 0) * (exercise.sets || 0),
+            weight: maxWeight, // Utiliser le poids max des sets au lieu de exercise.weight
+            reps: totalReps, // Utiliser le total des reps des sets
+            sets: exercise.sets || [],
+            volume: maxWeight * totalReps, // Recalculer le volume avec les bonnes valeurs
             duration: workout.duration || 0,
             startTime: workout.startTime,
             dayOfWeek: new Date(workout.date).getDay()
@@ -250,7 +229,11 @@ export class FeatureEngineer {
 
   getCurrentWeight(exerciseData) {
     const lastEntry = exerciseData[exerciseData.length - 1];
-    return lastEntry ? lastEntry.weight : 0;
+    const weight = lastEntry ? lastEntry.weight : 0;
+    
+    // 🔍 DEBUG: Vérifier le poids actuel calculé
+    
+    return weight;
   }
 
   calculateProgression(data, weeks) {
@@ -384,12 +367,12 @@ export class FeatureEngineer {
     
     if (name.includes('squat') || name.includes('leg') || name.includes('cuisse')) {
       return 'legs';
+    } else if (name.includes('shoulder') || name.includes('épaule') || name.includes('deltoid')) {
+      return 'shoulders';
     } else if (name.includes('bench') || name.includes('press') || name.includes('pec')) {
       return 'chest';
     } else if (name.includes('pull') || name.includes('row') || name.includes('dos')) {
       return 'back';
-    } else if (name.includes('shoulder') || name.includes('épaule') || name.includes('deltoid')) {
-      return 'shoulders';
     } else if (name.includes('curl') || name.includes('tricep') || name.includes('bicep')) {
       return 'arms';
     }
@@ -535,6 +518,354 @@ export class FeatureEngineer {
   countOutliers(values) { return 0; }
   calculateDataStability(data) { return 80; }
   calculateNoiseLevel(values) { return 10; }
+
+  // Méthodes manquantes pour les tests
+  calculateTrend(values) {
+    return this.calculateLinearTrendSlope(values.map((v, i) => ({ weight: v, timestamp: i })));
+  }
+
+  classifyMuscleGroup(exerciseName) {
+    return this.identifyMuscleGroup(exerciseName);
+  }
+
+  isCompoundMovement(exerciseName) {
+    return this.identifyExerciseType(exerciseName) === 'compound';
+  }
+
+  // Mise à jour de extractExerciseFeatures pour compatibilité
+  extractExerciseFeatures(exerciseName, workouts, options = {}) {
+    if (options.exerciseHistory) {
+      // Mode avec historique fourni directement
+      const exerciseData = options.exerciseHistory.map(h => ({
+        ...h,
+        timestamp: new Date(h.date).getTime(),
+        volume: (h.weight || 0) * (h.reps || 0) * (h.sets || 3)
+      }));
+
+      const temporalFeatures = this.extractTemporalFeatures(exerciseData);
+      const performanceFeatures = this.extractPerformanceFeatures(exerciseData);
+      const contextualFeatures = this.extractContextualFeatures(exerciseName, workouts);
+
+      const currentWeight = this.getCurrentWeight(exerciseData);
+      
+      return {
+        // Features catégorisées
+        ...temporalFeatures,
+        ...performanceFeatures,
+        ...contextualFeatures,
+        
+        // Métadonnées
+        exerciseName,
+        exerciseHistory: options.exerciseHistory,
+        totalDataPoints: exerciseData.length,
+        currentWeight, // Nouvelle API pour ML Dashboard
+        current_weight: currentWeight, // Compatibilité avec ML pipeline
+        max_weight_last_session: exerciseData.length > 0 ? exerciseData[exerciseData.length - 1].weight : 0,
+        user_level: options.userLevel || 'intermediate',
+        experience_months: options.experienceMonths || 0,
+        exercise_frequency: this.calculateFrequency(exerciseData, 1),
+        muscle_group: this.identifyMuscleGroup(exerciseName),
+        exercise_type: this.identifyExerciseType(exerciseName),
+        compound_movement: this.identifyExerciseType(exerciseName) === 'compound'
+      };
+    }
+
+    // Mode original avec workouts
+    const exerciseData = this.extractExerciseHistory(exerciseName, workouts);
+    
+    if (exerciseData.length === 0) {
+      return this.getDefaultFeatures(exerciseName);
+    }
+
+    const temporalFeatures = this.extractTemporalFeatures(exerciseData);
+    const performanceFeatures = this.extractPerformanceFeatures(exerciseData);
+    const behavioralFeatures = this.extractBehavioralFeatures(exerciseData, workouts);
+    const contextualFeatures = this.extractContextualFeatures(exerciseName, workouts);
+    const musculationFeatures = this.extractMusculationFeatures(exerciseData, exerciseName);
+    const statisticalFeatures = this.extractStatisticalFeatures(exerciseData);
+
+    const currentWeight = this.getCurrentWeight(exerciseData);
+    
+    return {
+      // Features catégorisées (spread first to avoid overwriting metadata)
+      ...temporalFeatures,
+      ...performanceFeatures,
+      ...behavioralFeatures,
+      ...contextualFeatures,
+      ...musculationFeatures,
+      ...statisticalFeatures,
+      
+      // Métadonnées (override any conflicting properties from features)
+      exerciseName,
+      exerciseHistory: exerciseData,
+      totalDataPoints: exerciseData.length,
+      currentWeight, // Nouvelle API pour ML Dashboard
+      current_weight: currentWeight, // Compatibilité avec ML pipeline
+      max_weight_last_session: exerciseData.length > 0 ? exerciseData[exerciseData.length - 1].weight : 0,
+      userLevel: determineUserLevel(workouts),
+      exercise_frequency: this.calculateFrequency(exerciseData, 1)
+    };
+  }
+
+  // Méthodes pour les tests de features temporelles
+  extractTemporalFeatures(exerciseData) {
+    if (!exerciseData || exerciseData.length === 0) {
+      return {
+        progression_1week: 0,
+        progression_2weeks: 0,
+        progression_4weeks: 0,
+        progression_8weeks: 0,
+        frequency_1week: 0,
+        frequency_2weeks: 0,
+        frequency_4weeks: 0,
+        consistency_score: 0,
+        momentum_score: 0,
+        acceleration: 0,
+        avg_recovery_time: 0,
+        last_recovery_time: 0,
+        training_streak: 0,
+        recent_pr: false,
+        days_since_pr: 0,
+        time_since_last_session: 0
+      };
+    }
+
+    const recent = exerciseData.slice(-10);
+    
+    return {
+      progression_1week: this.calculateProgression(recent, 1),
+      progression_2weeks: this.calculateProgression(recent, 2),
+      progression_4weeks: this.calculateProgression(recent, 4),
+      progression_8weeks: this.calculateProgression(recent, 8),
+      
+      frequency_1week: this.calculateFrequency(recent, 1),
+      frequency_2weeks: this.calculateFrequency(recent, 2),
+      frequency_4weeks: this.calculateFrequency(recent, 4),
+      
+      consistency_score: this.calculateConsistency(recent),
+      momentum_score: this.calculateMomentum(recent),
+      acceleration: this.calculateAcceleration(recent),
+      
+      avg_recovery_time: this.calculateAverageRecoveryTime(recent),
+      last_recovery_time: this.getLastRecoveryTime(recent),
+      training_streak: this.calculateTrainingStreak(recent),
+      
+      recent_pr: this.hasRecentPR(exerciseData),
+      days_since_pr: this.calculateDaysSincePR(exerciseData),
+      time_since_last_session: this.getTimeSinceLastSession(exerciseData)
+    };
+  }
+
+  // Méthodes pour les tests de features de performance
+  extractPerformanceFeatures(exerciseData) {
+    if (!exerciseData || exerciseData.length === 0) {
+      return {
+        current_weight: 0,
+        max_weight: 0,
+        min_weight: 0,
+        avg_weight: 0,
+        total_volume: 0,
+        avg_volume_per_session: 0,
+        volume_trend: 0,
+        intensity_score: 0,
+        recent_avg_weight: 0,
+        recent_max_weight: 0,
+        recent_volume_increase: 0,
+        weight_to_volume_ratio: 0,
+        performance_efficiency: 0,
+        current_volume: 0,
+        max_volume_last_4weeks: 0
+      };
+    }
+
+    const weights = exerciseData.map(d => d.weight || 0).filter(w => w > 0);
+    const volumes = exerciseData.map(d => d.volume || (d.weight * d.reps * (d.sets || 3)));
+    const recent = exerciseData.slice(-5);
+    
+    return {
+      current_weight: weights.length > 0 ? weights[weights.length - 1] : 0,
+      max_weight: weights.length > 0 ? Math.max(...weights) : 0,
+      min_weight: weights.length > 0 ? Math.min(...weights) : 0,
+      avg_weight: weights.length > 0 ? weights.reduce((sum, w) => sum + w, 0) / weights.length : 0,
+      
+      total_volume: volumes.reduce((sum, v) => sum + v, 0),
+      avg_volume_per_session: volumes.length > 0 ? volumes.reduce((sum, v) => sum + v, 0) / volumes.length : 0,
+      volume_trend: this.calculateVolumeTrend(exerciseData),
+      intensity_score: this.calculateIntensityScore(exerciseData),
+      
+      recent_avg_weight: recent.length > 0 ? recent.map(d => d.weight || 0).reduce((sum, w) => sum + w, 0) / recent.length : 0,
+      recent_max_weight: recent.length > 0 ? Math.max(...recent.map(d => d.weight || 0)) : 0,
+      recent_volume_increase: this.calculateRecentVolumeIncrease(exerciseData),
+      
+      weight_to_volume_ratio: this.calculateWeightVolumeRatio(exerciseData),
+      performance_efficiency: this.calculatePerformanceEfficiency(exerciseData),
+      current_volume: volumes.length > 0 ? volumes[volumes.length - 1] : 0,
+      max_volume_last_4weeks: Math.max(...volumes.slice(-4))
+    };
+  }
+
+  // Méthodes pour les tests de features comportementales  
+  extractBehavioralFeatures(exerciseData, allWorkouts) {
+    if (!exerciseData || exerciseData.length === 0) {
+      return {
+        workout_frequency: 0,
+        average_session_duration: 0,
+        duration_consistency: 0,
+        training_consistency: 0,
+        rest_day_patterns: 0,
+        preferred_time_of_day: 'morning',
+        preferred_day_of_week: 'monday',
+        weekend_vs_weekday_performance: 0,
+        seasonal_pattern: 'stable',
+        time_consistency: 50,
+        session_position: 1,
+        rest_day_pattern: 2,
+        training_intensity_pattern: 'moderate'
+      };
+    }
+
+    const durations = exerciseData.map(d => d.duration || 0).filter(d => d > 0);
+    
+    // Calculer la fréquence d'entraînement
+    const now = Date.now();
+    const oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000);
+    const recentSessions = exerciseData.filter(d => d.timestamp > oneWeekAgo);
+    
+    return {
+      workout_frequency: recentSessions.length / 1, // Fréquence par semaine
+      average_session_duration: durations.length > 0 ? durations.reduce((sum, d) => sum + d, 0) / durations.length / 60 : 0, // en minutes
+      duration_consistency: this.calculateDurationConsistency(durations),
+      training_consistency: this.calculateTrainingConsistency(exerciseData),
+      rest_day_patterns: this.calculateRestDayPattern(exerciseData),
+      
+      preferred_time_of_day: this.getPreferredTimeOfDay(exerciseData),
+      preferred_day_of_week: this.getPreferredDayOfWeek(exerciseData),
+      weekend_vs_weekday_performance: this.compareWeekendWeekdayPerformance(exerciseData),
+      seasonal_pattern: this.detectSeasonalPattern(exerciseData),
+      time_consistency: this.calculateTimeConsistency(exerciseData),
+      session_position: this.getAverageSessionPosition(exerciseData, allWorkouts),
+      rest_day_pattern: this.calculateRestDayPattern(exerciseData),
+      training_intensity_pattern: this.getTrainingIntensityPattern(exerciseData)
+    };
+  }
+
+  // Méthodes pour les tests de features contextuelles
+  extractContextualFeatures(exerciseName, allWorkouts, options = {}) {
+    return {
+      exercise_type: this.identifyExerciseType(exerciseName),
+      muscle_group: this.identifyMuscleGroup(exerciseName),
+      user_level: options.userLevel || 'intermediate', // Utiliser l'option fournie
+      experience_months: options.experienceMonths || 12, // Utiliser l'option fournie
+      compound_movement: this.identifyExerciseType(exerciseName) === 'compound',
+      
+      exercise_rank_in_session: this.getExerciseRankInSession(exerciseName, allWorkouts),
+      correlation_with_other_exercises: this.calculateCorrelationWithOthers(exerciseName, allWorkouts),
+      overall_workout_performance: this.calculateOverallPerformance(allWorkouts),
+      exercise_volume_share: this.calculateExerciseVolumeShare(exerciseName, allWorkouts),
+      session_exercise_count: this.getAverageExerciseCount(allWorkouts),
+      muscle_group_focus: this.getMuscleGroupFocus(exerciseName, allWorkouts),
+      training_split_pattern: this.identifyTrainingSplit(allWorkouts),
+      exercise_frequency_vs_others: this.compareExerciseFrequency(exerciseName, allWorkouts)
+    };
+  }
+
+  // Méthodes pour la normalisation
+  normalizeFeatures(features) {
+    const normalized = {};
+    
+    Object.entries(features).forEach(([key, value]) => {
+      if (typeof value === 'number') {
+        // Normalisation numérique
+        switch (key) {
+          case 'current_weight':
+            normalized[key] = Math.min(1, Math.max(0, value / 100)); // 0-100kg -> 0-1
+            break;
+          case 'progression_1week':
+            normalized[key] = Math.min(1, Math.max(-1, value / 0.1)); // -10% à +10% -> -1 à 1
+            break;
+          case 'volume_trend':
+            normalized[key] = Math.min(1, Math.max(0, value / 1000)); // 0-1000 -> 0-1
+            break;
+          case 'experience_months':
+            normalized[key] = Math.min(1, value / 100); // 0-100 mois -> 0-1
+            break;
+          default:
+            normalized[key] = value;
+        }
+      } else if (typeof value === 'string') {
+        // Encodage catégoriel
+        switch (key) {
+          case 'user_level':
+            const levelMap = { beginner: 1, intermediate: 2, advanced: 3 };
+            normalized.user_level_encoded = levelMap[value] || 2;
+            break;
+          case 'exercise_type':
+            normalized.exercise_type_encoded = value === 'compound' ? 1 : 0;
+            break;
+          case 'muscle_group':
+            const muscleMap = { chest: 1, legs: 2, back: 3, shoulders: 4, arms: 5, other: 0 };
+            normalized.muscle_group_encoded = muscleMap[value] || 0;
+            break;
+          default:
+            normalized[key] = value;
+        }
+      } else if (value === null || value === undefined) {
+        // Valeurs par défaut pour nulls
+        normalized[key] = 0;
+      } else {
+        normalized[key] = value;
+      }
+    });
+    
+    return normalized;
+  }
+
+  // Méthodes utilitaires supplémentaires
+  hasRecentPR(exerciseData) {
+    if (exerciseData.length < 2) return false;
+    const recent = exerciseData.slice(-3);
+    const maxRecent = Math.max(...recent.map(d => d.weight));
+    const maxOlder = Math.max(...exerciseData.slice(0, -3).map(d => d.weight));
+    return maxRecent > maxOlder;
+  }
+
+  calculateDaysSincePR(exerciseData) {
+    if (exerciseData.length === 0) return 0;
+    const maxWeight = Math.max(...exerciseData.map(d => d.weight));
+    const prSession = exerciseData.findIndex(d => d.weight === maxWeight);
+    if (prSession === -1) return 0;
+    const now = Date.now();
+    return Math.floor((now - exerciseData[prSession].timestamp) / (24 * 60 * 60 * 1000));
+  }
+
+  getTimeSinceLastSession(exerciseData) {
+    if (exerciseData.length === 0) return 0;
+    const lastSession = exerciseData[exerciseData.length - 1];
+    return Math.floor((Date.now() - lastSession.timestamp) / (24 * 60 * 60 * 1000));
+  }
+
+  calculateDurationConsistency(durations) {
+    if (durations.length < 2) return 0;
+    const variance = this.calculateVariance(durations);
+    const mean = durations.reduce((sum, d) => sum + d, 0) / durations.length;
+    return mean > 0 ? Math.max(0, 100 - (Math.sqrt(variance) / mean) * 100) : 0;
+  }
+
+  calculateTrainingConsistency(exerciseData) {
+    if (exerciseData.length < 3) return 0;
+    
+    // Calculer les intervalles entre sessions
+    const intervals = [];
+    for (let i = 1; i < exerciseData.length; i++) {
+      intervals.push(exerciseData[i].timestamp - exerciseData[i-1].timestamp);
+    }
+    
+    // Consistance = inverse de la variance des intervalles
+    const variance = this.calculateVariance(intervals);
+    const meanInterval = intervals.reduce((sum, i) => sum + i, 0) / intervals.length;
+    
+    return meanInterval > 0 ? Math.max(0, 1 - (Math.sqrt(variance) / meanInterval)) : 0;
+  }
 }
 
 export default FeatureEngineer;

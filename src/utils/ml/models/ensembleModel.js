@@ -73,7 +73,6 @@ export class EnsembleModel {
       throw new Error('Features et targets ne peuvent pas être vides');
     }
 
-    console.log('🚀 Début de l\'entraînement du modèle d\'ensemble...');
     
     // Split temporel pour validation
     const { trainFeatures, trainTargets, valFeatures, valTargets } = 
@@ -83,7 +82,6 @@ export class EnsembleModel {
     const preparedData = this.prepareDataForModels(trainFeatures, trainTargets, valFeatures, valTargets);
     
     // Entraîner tous les modèles en parallèle
-    console.log('📊 Entraînement des modèles individuels...');
     const trainingPromises = [
       this.trainLinearModel(preparedData.linear),
       this.trainForestModel(preparedData.forest),
@@ -101,7 +99,6 @@ export class EnsembleModel {
     
     // Optimiser les poids d'ensemble
     if (this.adaptiveWeighting && valFeatures.length > 0) {
-      console.log('⚖️ Optimisation des poids d\'ensemble...');
       await this.optimizeEnsembleWeights(preparedData);
     }
     
@@ -113,8 +110,6 @@ export class EnsembleModel {
     
     this.isTrained = true;
     
-    console.log('✅ Entraînement du modèle d\'ensemble terminé');
-    console.log('🎯 Poids finaux:', this.ensembleWeights);
     
     return {
       individualPerformances: this.trainingMetrics.individualPerformances,
@@ -213,7 +208,6 @@ export class EnsembleModel {
         modelType: 'linear'
       };
     } catch (error) {
-      console.warn('Erreur lors de l\'entraînement du modèle linéaire:', error.message);
       return {
         error: error.message,
         modelType: 'linear',
@@ -242,7 +236,6 @@ export class EnsembleModel {
         modelType: 'forest'
       };
     } catch (error) {
-      console.warn('Erreur lors de l\'entraînement du Random Forest:', error.message);
       return {
         error: error.message,
         modelType: 'forest',
@@ -271,7 +264,6 @@ export class EnsembleModel {
         modelType: 'neural'
       };
     } catch (error) {
-      console.warn('Erreur lors de l\'entraînement du réseau de neurones:', error.message);
       return {
         error: error.message,
         modelType: 'neural',
@@ -288,7 +280,6 @@ export class EnsembleModel {
     const valData = preparedData.linear; // Utiliser les données de validation du modèle linéaire
     
     if (valData.valFeatures.length === 0) {
-      console.warn('Pas de données de validation disponibles pour optimiser les poids');
       return;
     }
     
@@ -568,7 +559,6 @@ export class EnsembleModel {
       });
       
     } catch (error) {
-      console.warn('Erreur lors du calcul de l\'importance des features:', error.message);
     }
     
     this.trainingMetrics.featureImportances = featureImportances;

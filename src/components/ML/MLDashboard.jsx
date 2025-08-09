@@ -642,7 +642,7 @@ const PredictionCard = ({ exerciseName, prediction }) => {
         <div className="flex items-center space-x-2">
           <IncrementIcon className="h-4 w-4 text-gray-400" />
           <span className="text-secondary">
-            {prediction.currentWeight}kg → {prediction.predictedWeight}kg
+            {prediction.currentWeight || prediction.lastWeight}kg → {prediction.nextWeight || prediction.predictedWeight}kg
           </span>
         </div>
         

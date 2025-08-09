@@ -154,7 +154,6 @@ export const predictNextWeight = (exerciseName, workouts, currentWeight = null) 
     };
     
   } catch (error) {
-    console.error('Erreur dans la prédiction de poids:', error);
     return {
       predictedWeight: currentWeight || 0,
       confidence: 0,

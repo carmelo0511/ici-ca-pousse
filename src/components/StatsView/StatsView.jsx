@@ -66,6 +66,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
   const performMLAnalysis = React.useCallback(async () => {
     if (workouts.length === 0) return {};
     
+    
     try {
       // Initialiser le pipeline ML avancé
       const pipeline = new AdvancedPredictionPipeline({
@@ -79,10 +80,10 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
       
       // Initialiser avec les données utilisateur
       const initResult = await pipeline.initialize(workouts, user);
-      console.log('🚀 Pipeline ML initialisé:', initResult);
       
       // Analyser tous les exercices
       const mlAnalysis = await pipeline.analyzeAllExercises(workouts);
+      
       
       // Stocker le pipeline et ses métriques pour le dashboard
       setMlPipeline(pipeline);
@@ -95,7 +96,9 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
           convertedAnalysis[exerciseName] = {
             confidence: Math.round(mlPrediction.confidence),
             lastWeight: mlPrediction.currentWeight,
+            currentWeight: mlPrediction.currentWeight, // Pour compatibilité MLDashboard
             predictedWeight: mlPrediction.predictedWeight,
+            nextWeight: mlPrediction.predictedWeight, // Pour compatibilité MLDashboard  
             recommendation: mlPrediction.recommendations?.[0] || 
               `Prédiction ML basée sur ${mlPrediction.features?.progression_2weeks || 'vos données'} d'entraînement`,
             increment: mlPrediction.increment,
@@ -106,9 +109,9 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
         }
       });
       
+      
       return convertedAnalysis;
     } catch (error) {
-      console.warn('⚠️ Erreur du pipeline ML, fallback vers analyse simple:', error);
       // Fallback vers l'ancienne méthode en cas d'erreur
       const { analyzeAllExercises } = await import('../../utils/ml/weightPrediction');
       return analyzeAllExercises(workouts);
@@ -127,7 +130,6 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
         setAnalysisData(result);
         setIsAnalyzing(false);
       }).catch(error => {
-        console.error('Erreur analyse ML:', error);
         setAnalysisData({});
         setIsAnalyzing(false);
       });
@@ -551,7 +553,7 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                 Groupe préféré
               </p>
               <p className="text-2xl font-bold text-white">
-                {getMostWorkedMuscleGroup(workouts)}
+                {(getMostWorkedMuscleGroup(workouts) || '').toString().toUpperCase()}
               </p>
             </div>
             <div className="icon-success p-3 rounded-lg">
@@ -579,10 +581,10 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                 <span className="text-3xl">{preferredTime.icon}</span>
                 <div>
                   <p className="text-xl font-bold text-white">
-                    {preferredTime.name}
+                    {(preferredTime.name || '').toString().toUpperCase()}
                   </p>
                   <p className="text-sm text-white">
-                    {preferredTime.count} séances ({preferredTime.percentage}%)
+                    {`${preferredTime.count} séances (${preferredTime.percentage}%)`.toUpperCase()}
                   </p>
                 </div>
               </div>
