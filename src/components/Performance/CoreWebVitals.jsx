@@ -98,19 +98,19 @@ const CoreWebVitals = ({ className = '' }) => {
           </div>
         </div>
 
-        {/* Recommandations simplifiées */}
+        {/* Optimisations recommandées */}
         <div className="border-t pt-3">
           <div 
             className="flex items-center gap-2 text-xs font-medium text-gray-900 cursor-pointer"
             onClick={() => setExpandedSection(
-              expandedSection === 'recommendations' ? null : 'recommendations'
+              expandedSection === 'optimizations' ? null : 'optimizations'
             )}
           >
             <AlertTriangle className="w-3 h-3 text-yellow-500" />
             Optimisations
           </div>
           
-          {expandedSection === 'recommendations' && (
+          {expandedSection === 'optimizations' && (
             <div className="mt-2 space-y-1">
               {isLowEndDevice && (
                 <div className="text-xs text-gray-600 p-2 bg-yellow-50 rounded">
