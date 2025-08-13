@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, lazy, Suspense } from 'react';
 import {
   LineChart,
   Line,
@@ -17,11 +17,13 @@ import {
   getPreferredWorkoutTime,
   getAverageDurationByTime,
 } from '../../utils/workout/workoutUtils';
-import { AdvancedPredictionPipeline } from '../../utils/ml/advancedPredictionPipeline.js';
-import MLDashboard from '../ML/MLDashboard.jsx';
+// Lazy loading du composant ML lourd
+const AdvancedPredictionPipeline = lazy(() => import('../../utils/ml/advancedPredictionPipeline.js'));
+const MLDashboard = lazy(() => import('../ML/MLDashboard.jsx'));
 import PropTypes from 'prop-types';
 
-function getMostWorkedMuscleGroup(workouts) {
+// Mémorisation de la fonction pour éviter les recalculs
+const getMostWorkedMuscleGroup = useCallback((workouts) => {
   const muscleCount = {};
   workouts.forEach((w) => {
     w.exercises.forEach((ex) => {
@@ -32,13 +34,15 @@ function getMostWorkedMuscleGroup(workouts) {
   });
   const sorted = Object.entries(muscleCount).sort((a, b) => b[1] - a[1]);
   return sorted.length > 0 ? sorted[0][0] : 'Aucun';
-}
+}, []);
 
 const StatsView = ({ stats, workouts, user, className = '' }) => {
   const { t } = useTranslation();
-  const workoutHabits = analyzeWorkoutHabits(workouts);
-  const preferredTime = getPreferredWorkoutTime(workouts);
-  const avgDurationByTime = getAverageDurationByTime(workouts);
+  
+  // Mémorisation des calculs coûteux
+  const workoutHabits = useMemo(() => analyzeWorkoutHabits(workouts), [workouts]);
+  const preferredTime = useMemo(() => getPreferredWorkoutTime(workouts), [workouts]);
+  const avgDurationByTime = useMemo(() => getAverageDurationByTime(workouts), [workouts]);
 
   // État pour le menu déroulant Madame Irma
   const [showAllExercises, setShowAllExercises] = useState(false);
@@ -49,8 +53,8 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
   const [mlPipeline, setMlPipeline] = useState(null);
   const [mlMetrics, setMlMetrics] = useState(null);
 
-  // Préparer les données pour la courbe de poids
-  const weightData = (user?.weightHistory || [])
+  // Mémorisation des données de poids pour éviter les recalculs
+  const weightData = useMemo(() => (user?.weightHistory || [])
     .map((w) => ({
       week: w.weekKey,
       weekFormatted: new Date(w.weekKey).toLocaleDateString('fr-FR', {
@@ -60,14 +64,16 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
       weight: Number(w.value),
     }))
     .filter((w) => w.weight > 0)
-    .sort((a, b) => new Date(a.week) - new Date(b.week));
+    .sort((a, b) => new Date(a.week) - new Date(b.week)), [user?.weightHistory]);
 
-  // Fonction d'analyse ML avancée
-  const performMLAnalysis = React.useCallback(async () => {
+  // Fonction d'analyse ML avancée mémorisée
+  const performMLAnalysis = useCallback(async () => {
     if (workouts.length === 0) return {};
     
-    
     try {
+      // Lazy loading du pipeline ML
+      const { AdvancedPredictionPipeline } = await import('../../utils/ml/advancedPredictionPipeline.js');
+      
       // Initialiser le pipeline ML avancé
       const pipeline = new AdvancedPredictionPipeline({
         minDataPoints: 3,
@@ -83,7 +89,6 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
       
       // Analyser tous les exercices
       const mlAnalysis = await pipeline.analyzeAllExercises(workouts);
-      
       
       // Stocker le pipeline et ses métriques pour le dashboard
       setMlPipeline(pipeline);
@@ -239,26 +244,28 @@ const StatsView = ({ stats, workouts, user, className = '' }) => {
                 </p>
               </div>
 
-              {/* Dashboard ML intégré */}
+              {/* Dashboard ML intégré avec Suspense */}
               {showMLDashboard && mlPipeline && (
                 <div className="mb-6 border border-purple-500/30 rounded-lg p-4">
-                  <MLDashboard
-                    predictions={analysisData}
-                    modelPerformance={mlPipeline.trainingMetrics?.individualPerformances}
-                    plateauAnalysis={Object.fromEntries(
-                      Object.entries(analysisData).map(([name, analysis]) => [
-                        name,
-                        analysis.plateauAnalysis || { isPlateau: false }
-                      ])
-                    )}
-                    constraints={{
-                      minIncrement: 0.5,
-                      maxIncrement: 2.5,
-                      plateauThreshold: 4
-                    }}
-                    pipelineMetrics={mlMetrics}
-                    onRefresh={() => window.location.reload()}
-                  />
+                  <Suspense fallback={<div className="text-center py-8">Chargement du dashboard ML...</div>}>
+                    <MLDashboard
+                      predictions={analysisData}
+                      modelPerformance={mlPipeline.trainingMetrics?.individualPerformances}
+                      plateauAnalysis={Object.fromEntries(
+                        Object.entries(analysisData).map(([name, analysis]) => [
+                          name,
+                          analysis.plateauAnalysis || { isPlateau: false }
+                        ])
+                      )}
+                      constraints={{
+                        minIncrement: 0.5,
+                        maxIncrement: 2.5,
+                        plateauThreshold: 4
+                      }}
+                      pipelineMetrics={mlMetrics}
+                      onRefresh={() => window.location.reload()}
+                    />
+                  </Suspense>
                 </div>
               )}
             </>

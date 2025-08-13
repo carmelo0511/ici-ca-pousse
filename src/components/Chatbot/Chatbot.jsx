@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import useChatGPT from '../../hooks/useChatGPTRefactored';
-import MonitoringDashboard from './MonitoringDashboard';
-import KnowledgeBaseManager from './KnowledgeBaseManager';
-import ChatbotDashboard from './ChatbotDashboard';
-import RecommendationsMenu from './RecommendationsMenu';
+// Lazy loading des composants lourds
+const MonitoringDashboard = lazy(() => import('./MonitoringDashboard'));
+const KnowledgeBaseManager = lazy(() => import('./KnowledgeBaseManager'));
+const ChatbotDashboard = lazy(() => import('./ChatbotDashboard'));
+const RecommendationsMenu = lazy(() => import('./RecommendationsMenu'));
 import {
   getMuscleGroupDistribution,
   getWorkoutWeightDetails,
@@ -12,7 +13,8 @@ import {
 } from '../../utils/workout/workoutUtils';
 import { exerciseDatabase } from '../../utils/workout/exerciseDatabase';
 
-const SESSION_TYPES = [
+// Mémorisation des constantes pour éviter les recréations
+const SESSION_TYPES = useMemo(() => [
   { value: 'fullbody', label: 'Full body' },
   { value: 'haut', label: 'Haut du corps' },
   { value: 'bas', label: 'Bas du corps' },
@@ -22,15 +24,16 @@ const SESSION_TYPES = [
   { value: 'abdos', label: 'Abdos' },
   { value: 'hiit', label: 'HIIT' },
   { value: 'mobilite', label: 'Mobilité/Etirements' },
-];
+], []);
 
-const INTENSITIES = [
+const INTENSITIES = useMemo(() => [
   { value: 'facile', label: 'Facile' },
   { value: 'moyen', label: 'Moyen' },
   { value: 'difficile', label: 'Difficile' },
-];
+], []);
 
-const EXERCISES_BY_TYPE = {
+// Mémorisation de la base d'exercices
+const EXERCISES_BY_TYPE = useMemo(() => ({
   fullbody: [
     'Pompes',
     'Squats',
@@ -110,9 +113,10 @@ const EXERCISES_BY_TYPE = {
     'Étirement quadriceps',
     'Étirement fessiers',
   ],
-};
+}), []);
 
-function getSetsForIntensity(intensity, exercise) {
+// Mémorisation de la fonction pour éviter les recalculs
+const getSetsForIntensity = useCallback((intensity, exercise) => {
   // Nombre de séries aléatoire entre 3 et 4
   const nbSeries = Math.floor(Math.random() * 2) + 3; // 3 ou 4
   // Pour le cardio/hiit/mobilité, on privilégie la durée
@@ -141,10 +145,55 @@ function getSetsForIntensity(intensity, exercise) {
     weight: '',
     duration: 0,
   }));
-}
+}, []);
 
-// Fonction pour déterminer le groupe musculaire d'un exercice
-function getMuscleGroupForExercise(exerciseName) {
+// Mémorisation du mapping des exercices
+const exerciseMapping = useMemo(() => ({
+  Pompes: 'pectoraux',
+  Squats: 'jambes',
+  Gainage: 'abdos',
+  Burpees: 'cardio',
+  Fentes: 'jambes',
+  Tractions: 'dos',
+  Dips: 'triceps',
+  Grimpeur: 'cardio',
+  Crunchs: 'abdos',
+  'Développé militaire': 'épaules',
+  Rowing: 'dos',
+  'Élévations latérales': 'épaules',
+  'Pompes diamant': 'triceps',
+  'Curl biceps': 'biceps',
+  'Mollets debout': 'jambes',
+  'Hip thrust': 'jambes',
+  'Soulevé de terre jambes tendues': 'jambes',
+  'Leg curl': 'jambes',
+  'Montées de banc': 'jambes',
+  'Développé couché': 'pectoraux',
+  'Tirage horizontal': 'dos',
+  'Face pull': 'épaules',
+  Shrugs: 'dos',
+  'Reverse fly': 'épaules',
+  'Sauts étoiles': 'cardio',
+  'Corde à sauter': 'cardio',
+  'Course sur place': 'cardio',
+  'Genoux hauts': 'cardio',
+  'Relevé de jambes': 'abdos',
+  'Russian twist': 'abdos',
+  'Planche latérale': 'abdos',
+  'Sit-ups': 'abdos',
+  'Squats sautés': 'jambes',
+  'Fentes sautées': 'jambes',
+  'Sprints sur place': 'cardio',
+  'Étirement dos': 'mobilite',
+  'Étirement ischio': 'mobilite',
+  'Étirement pectoraux': 'mobilite',
+  'Étirement épaules': 'mobilite',
+  'Étirement quadriceps': 'mobilite',
+  'Étirement fessiers': 'mobilite',
+}), []);
+
+// Fonction pour déterminer le groupe musculaire d'un exercice (mémorisée)
+const getMuscleGroupForExercise = useCallback((exerciseName) => {
   // Vérifier dans la base de données d'exercices
   for (const [muscleGroup, exercises] of Object.entries(exerciseDatabase)) {
     if (exercises.includes(exerciseName)) {
@@ -152,53 +201,8 @@ function getMuscleGroupForExercise(exerciseName) {
     }
   }
 
-  // Mapping spécifique pour les exercices du chatbot
-  const exerciseMapping = {
-    Pompes: 'pectoraux',
-    Squats: 'jambes',
-    Gainage: 'abdos',
-    Burpees: 'cardio',
-    Fentes: 'jambes',
-    Tractions: 'dos',
-    Dips: 'triceps',
-    Grimpeur: 'cardio',
-    Crunchs: 'abdos',
-    'Développé militaire': 'épaules',
-    Rowing: 'dos',
-    'Élévations latérales': 'épaules',
-    'Pompes diamant': 'triceps',
-    'Curl biceps': 'biceps',
-    'Mollets debout': 'jambes',
-    'Hip thrust': 'jambes',
-    'Soulevé de terre jambes tendues': 'jambes',
-    'Leg curl': 'jambes',
-    'Montées de banc': 'jambes',
-    'Développé couché': 'pectoraux',
-    'Tirage horizontal': 'dos',
-    'Face pull': 'épaules',
-    Shrugs: 'dos',
-    'Reverse fly': 'épaules',
-    'Sauts étoiles': 'cardio',
-    'Corde à sauter': 'cardio',
-    'Course sur place': 'cardio',
-    'Genoux hauts': 'cardio',
-    'Relevé de jambes': 'abdos',
-    'Russian twist': 'abdos',
-    'Planche latérale': 'abdos',
-    'Sit-ups': 'abdos',
-    'Squats sautés': 'jambes',
-    'Fentes sautées': 'jambes',
-    'Sprints sur place': 'cardio',
-    'Étirement dos': 'mobilite',
-    'Étirement ischio': 'mobilite',
-    'Étirement pectoraux': 'mobilite',
-    'Étirement épaules': 'mobilite',
-    'Étirement quadriceps': 'mobilite',
-    'Étirement fessiers': 'mobilite',
-  };
-
   return exerciseMapping[exerciseName] || 'custom';
-}
+}, [exerciseMapping]);
 
 const Chatbot = ({
   workouts,
@@ -1152,14 +1156,16 @@ const Chatbot = ({
     <div className="p-2 sm:p-6 bg-white/60 backdrop-blur-lg rounded-xl shadow-lg">
       {/* Header avec boutons de contrôle */}
       <div className="flex items-center justify-end mb-2 sm:mb-4">
-        {/* Dashboard unifié */}
-        <ChatbotDashboard
-          onMonitoring={() => setShowMonitoring(true)}
-          onKnowledgeBase={() => setShowKnowledgeBase(true)}
-          onExport={exportConversation}
-          onReset={clearMemory}
-          memoryStats={memoryStats}
-        />
+        {/* Dashboard unifié avec Suspense */}
+        <Suspense fallback={<div className="text-sm text-gray-500">Chargement...</div>}>
+          <ChatbotDashboard
+            onMonitoring={() => setShowMonitoring(true)}
+            onKnowledgeBase={() => setShowKnowledgeBase(true)}
+            onExport={exportConversation}
+            onReset={clearMemory}
+            memoryStats={memoryStats}
+          />
+        </Suspense>
       </div>
 
       {/* Boutons d'action principaux */}
@@ -1174,14 +1180,16 @@ const Chatbot = ({
           <span>Séance IA</span>
         </button>
         
-        {/* Menu de recommandations IA */}
-        <RecommendationsMenu
-          onRecapWorkouts={handleRecapLastWorkouts}
-          onPersonalizedRecommendation={() =>
-            handlePersonalizedRecommendation()
-          }
-          onGoalsAndProgress={() => handleGoalsAndProgress()}
-        />
+        {/* Menu de recommandations IA avec Suspense */}
+        <Suspense fallback={<div className="text-sm text-gray-500">Chargement...</div>}>
+          <RecommendationsMenu
+            onRecapWorkouts={handleRecapLastWorkouts}
+            onPersonalizedRecommendation={() =>
+              handlePersonalizedRecommendation()
+            }
+            onGoalsAndProgress={() => handleGoalsAndProgress()}
+          />
+        </Suspense>
       </div>
 
       {/* Menu de création de séance */}
@@ -1283,28 +1291,32 @@ const Chatbot = ({
         </button>
       </div>
 
-      {/* Dashboard de Monitoring */}
+      {/* Dashboard de Monitoring avec Suspense */}
       {showMonitoring && (
-        <MonitoringDashboard
-          monitoringStats={getMonitoringStats()}
-          functionStats={getFunctionStats()}
-          performanceTrends={getPerformanceTrends()}
-          alerts={getPerformanceAlerts()}
-          safetyStats={getSafetyStats()}
-          onClose={() => setShowMonitoring(false)}
-        />
+        <Suspense fallback={<div className="text-center py-8">Chargement du monitoring...</div>}>
+          <MonitoringDashboard
+            monitoringStats={getMonitoringStats()}
+            functionStats={getFunctionStats()}
+            performanceTrends={getPerformanceTrends()}
+            alerts={getPerformanceAlerts()}
+            safetyStats={getSafetyStats()}
+            onClose={() => setShowMonitoring(false)}
+          />
+        </Suspense>
       )}
 
-      {/* Gestionnaire de Base de Connaissances RAG */}
+      {/* Gestionnaire de Base de Connaissances RAG avec Suspense */}
       {showKnowledgeBase && (
-        <KnowledgeBaseManager
-          isOpen={showKnowledgeBase}
-          onClose={() => setShowKnowledgeBase(false)}
-          getKnowledgeBaseStats={getKnowledgeBaseStats}
-          addCustomKnowledge={addCustomKnowledge}
-          searchKnowledgeBase={searchKnowledgeBase}
-          getKnowledgeByCategory={getKnowledgeByCategory}
-        />
+        <Suspense fallback={<div className="text-center py-8">Chargement de la base de connaissances...</div>}>
+          <KnowledgeBaseManager
+            isOpen={showKnowledgeBase}
+            onClose={() => setShowKnowledgeBase(false)}
+            getKnowledgeBaseStats={getKnowledgeBaseStats}
+            addCustomKnowledge={addCustomKnowledge}
+            searchKnowledgeBase={searchKnowledgeBase}
+            getKnowledgeByCategory={getKnowledgeByCategory}
+          />
+        </Suspense>
       )}
     </div>
   );
