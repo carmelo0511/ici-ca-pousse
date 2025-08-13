@@ -20,7 +20,6 @@ import {
 import PropTypes from 'prop-types';
 
 // Lazy loading du composant ML lourd
-const AdvancedPredictionPipeline = lazy(() => import('../../utils/ml/advancedPredictionPipeline.js'));
 const MLDashboard = lazy(() => import('../ML/MLDashboard.jsx'));
 
 // Fonction pour obtenir le groupe musculaire le plus travaillé

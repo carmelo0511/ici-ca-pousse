@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import useChatGPT from '../../hooks/useChatGPTRefactored';
 import {

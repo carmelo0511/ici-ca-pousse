@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, Clock, Zap, Layers, Smartphone, Wifi, AlertTriangle } from 'lucide-react';
+import { Activity, Smartphone, Wifi, AlertTriangle } from 'lucide-react';
 import useMobilePerformance from '../../hooks/useMobilePerformance';
 
 const CoreWebVitals = ({ className = '' }) => {

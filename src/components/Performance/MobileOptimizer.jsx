@@ -7,8 +7,7 @@ const MobileOptimizer = ({ children }) => {
   const {
     isMobile,
     isLowEndDevice,
-    connectionSpeed,
-    optimizations
+    connectionSpeed
   } = useMobilePerformance();
   
   const { isOnline, registerSync } = useServiceWorker();
