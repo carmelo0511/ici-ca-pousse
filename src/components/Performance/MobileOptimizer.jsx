@@ -5,7 +5,10 @@ import useServiceWorker from '../../hooks/useServiceWorker';
 // Composant pour optimiser automatiquement les performances mobiles - Version corrigée
 const MobileOptimizer = ({ children }) => {
   const {
-    deviceInfo
+    isMobile,
+    isLowEndDevice,
+    connectionSpeed,
+    optimizations
   } = useMobilePerformance();
   
   const { isOnline, registerSync } = useServiceWorker();
@@ -19,7 +22,7 @@ const MobileOptimizer = ({ children }) => {
       const root = document.documentElement;
       
       // Optimisations CSS pour appareils bas de gamme
-      if (deviceInfo.isLowEnd) {
+      if (isLowEndDevice) {
         root.style.setProperty('--animation-duration', '0s');
         root.style.setProperty('--transition-duration', '0s');
         root.classList.add('low-end-device');
@@ -30,14 +33,14 @@ const MobileOptimizer = ({ children }) => {
       }
 
       // Optimisations pour réseau lent
-      if (deviceInfo.isSlowNetwork) {
+      if (connectionSpeed === 'slow') {
         root.classList.add('slow-network');
       } else {
         root.classList.remove('slow-network');
       }
 
       // Optimisations pour mobile
-      if (deviceInfo.isMobile) {
+      if (isMobile) {
         root.classList.add('mobile-device');
         document.body.style.touchAction = 'manipulation';
       }
@@ -46,11 +49,11 @@ const MobileOptimizer = ({ children }) => {
     } catch (error) {
       console.warn('Erreur lors de l\'application des optimisations:', error);
     }
-  }, [deviceInfo]);
+  }, [isMobile, isLowEndDevice, connectionSpeed]);
 
   // Synchronisation en arrière-plan quand retour en ligne - Version simplifiée
   useEffect(() => {
-    if (isOnline && !deviceInfo.isSlowNetwork) {
+    if (isOnline && connectionSpeed !== 'slow') {
       try {
         // Synchroniser les données en attente
         registerSync('sync-user-data');
@@ -59,7 +62,7 @@ const MobileOptimizer = ({ children }) => {
         console.warn('Erreur lors de la synchronisation:', error);
       }
     }
-  }, [isOnline, deviceInfo.isSlowNetwork, registerSync]);
+  }, [isOnline, connectionSpeed, registerSync]);
 
   return (
     <>
