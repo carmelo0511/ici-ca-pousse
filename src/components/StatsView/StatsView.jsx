@@ -17,13 +17,14 @@ import {
   getPreferredWorkoutTime,
   getAverageDurationByTime,
 } from '../../utils/workout/workoutUtils';
+import PropTypes from 'prop-types';
+
 // Lazy loading du composant ML lourd
 const AdvancedPredictionPipeline = lazy(() => import('../../utils/ml/advancedPredictionPipeline.js'));
 const MLDashboard = lazy(() => import('../ML/MLDashboard.jsx'));
-import PropTypes from 'prop-types';
 
-// Mémorisation de la fonction pour éviter les recalculs
-const getMostWorkedMuscleGroup = useCallback((workouts) => {
+// Fonction pour obtenir le groupe musculaire le plus travaillé
+function getMostWorkedMuscleGroup(workouts) {
   const muscleCount = {};
   workouts.forEach((w) => {
     w.exercises.forEach((ex) => {
@@ -34,7 +35,7 @@ const getMostWorkedMuscleGroup = useCallback((workouts) => {
   });
   const sorted = Object.entries(muscleCount).sort((a, b) => b[1] - a[1]);
   return sorted.length > 0 ? sorted[0][0] : 'Aucun';
-}, []);
+}
 
 const StatsView = ({ stats, workouts, user, className = '' }) => {
   const { t } = useTranslation();

@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import useChatGPT from '../../hooks/useChatGPTRefactored';
-// Lazy loading des composants lourds
-const MonitoringDashboard = lazy(() => import('./MonitoringDashboard'));
-const KnowledgeBaseManager = lazy(() => import('./KnowledgeBaseManager'));
-const ChatbotDashboard = lazy(() => import('./ChatbotDashboard'));
-const RecommendationsMenu = lazy(() => import('./RecommendationsMenu'));
 import {
   getMuscleGroupDistribution,
   getWorkoutWeightDetails,
@@ -13,8 +8,14 @@ import {
 } from '../../utils/workout/workoutUtils';
 import { exerciseDatabase } from '../../utils/workout/exerciseDatabase';
 
-// Mémorisation des constantes pour éviter les recréations
-const SESSION_TYPES = useMemo(() => [
+// Lazy loading des composants lourds
+const MonitoringDashboard = lazy(() => import('./MonitoringDashboard'));
+const KnowledgeBaseManager = lazy(() => import('./KnowledgeBaseManager'));
+const ChatbotDashboard = lazy(() => import('./ChatbotDashboard'));
+const RecommendationsMenu = lazy(() => import('./RecommendationsMenu'));
+
+// Constantes statiques (pas de hooks)
+const SESSION_TYPES = [
   { value: 'fullbody', label: 'Full body' },
   { value: 'haut', label: 'Haut du corps' },
   { value: 'bas', label: 'Bas du corps' },
@@ -24,16 +25,16 @@ const SESSION_TYPES = useMemo(() => [
   { value: 'abdos', label: 'Abdos' },
   { value: 'hiit', label: 'HIIT' },
   { value: 'mobilite', label: 'Mobilité/Etirements' },
-], []);
+];
 
-const INTENSITIES = useMemo(() => [
+const INTENSITIES = [
   { value: 'facile', label: 'Facile' },
   { value: 'moyen', label: 'Moyen' },
   { value: 'difficile', label: 'Difficile' },
-], []);
+];
 
-// Mémorisation de la base d'exercices
-const EXERCISES_BY_TYPE = useMemo(() => ({
+// Base d'exercices statique
+const EXERCISES_BY_TYPE = {
   fullbody: [
     'Pompes',
     'Squats',
@@ -113,10 +114,10 @@ const EXERCISES_BY_TYPE = useMemo(() => ({
     'Étirement quadriceps',
     'Étirement fessiers',
   ],
-}), []);
+};
 
-// Mémorisation de la fonction pour éviter les recalculs
-const getSetsForIntensity = useCallback((intensity, exercise) => {
+// Fonction pour calculer les séries selon l'intensité
+function getSetsForIntensity(intensity, exercise) {
   // Nombre de séries aléatoire entre 3 et 4
   const nbSeries = Math.floor(Math.random() * 2) + 3; // 3 ou 4
   // Pour le cardio/hiit/mobilité, on privilégie la durée
@@ -145,10 +146,10 @@ const getSetsForIntensity = useCallback((intensity, exercise) => {
     weight: '',
     duration: 0,
   }));
-}, []);
+}
 
-// Mémorisation du mapping des exercices
-const exerciseMapping = useMemo(() => ({
+// Mapping des exercices statique
+const exerciseMapping = {
   Pompes: 'pectoraux',
   Squats: 'jambes',
   Gainage: 'abdos',
@@ -190,10 +191,10 @@ const exerciseMapping = useMemo(() => ({
   'Étirement épaules': 'mobilite',
   'Étirement quadriceps': 'mobilite',
   'Étirement fessiers': 'mobilite',
-}), []);
+};
 
-// Fonction pour déterminer le groupe musculaire d'un exercice (mémorisée)
-const getMuscleGroupForExercise = useCallback((exerciseName) => {
+// Fonction pour déterminer le groupe musculaire d'un exercice
+function getMuscleGroupForExercise(exerciseName) {
   // Vérifier dans la base de données d'exercices
   for (const [muscleGroup, exercises] of Object.entries(exerciseDatabase)) {
     if (exercises.includes(exerciseName)) {
@@ -202,7 +203,7 @@ const getMuscleGroupForExercise = useCallback((exerciseName) => {
   }
 
   return exerciseMapping[exerciseName] || 'custom';
-}, [exerciseMapping]);
+}
 
 const Chatbot = ({
   workouts,
