@@ -4,10 +4,10 @@ import useMobilePerformance from '../../hooks/useMobilePerformance';
 
 const CoreWebVitals = ({ className = '' }) => {
   const {
-    performanceMetrics,
-    performanceScore,
-    recommendations,
-    deviceInfo
+    isMobile,
+    isLowEndDevice,
+    connectionSpeed,
+    optimizations
   } = useMobilePerformance();
 
   const [isVisible, setIsVisible] = useState(false);
@@ -25,61 +25,15 @@ const CoreWebVitals = ({ className = '' }) => {
 
   if (!isVisible) return null;
 
-  // Déterminer la couleur selon le score
-  const getScoreColor = (score) => {
-    if (score >= 90) return 'text-green-500 bg-green-100';
-    if (score >= 70) return 'text-yellow-500 bg-yellow-100';
-    return 'text-red-500 bg-red-100';
+  // Déterminer la couleur selon l'état de l'appareil
+  const getDeviceColor = () => {
+    if (isLowEndDevice) return 'text-red-500 bg-red-100';
+    if (connectionSpeed === 'slow') return 'text-yellow-500 bg-yellow-100';
+    return 'text-green-500 bg-green-100';
   };
 
-  // Déterminer la couleur selon la métrique
-  const getMetricColor = (value, thresholds) => {
-    if (value <= thresholds.good) return 'text-green-500';
-    if (value <= thresholds.needs_improvement) return 'text-yellow-500';
-    return 'text-red-500';
-  };
-
-  const metrics = [
-    {
-      key: 'fcp',
-      name: 'First Contentful Paint',
-      description: 'Temps avant le premier élément visible',
-      value: performanceMetrics.fcp,
-      unit: 'ms',
-      icon: Clock,
-      thresholds: { good: 1800, needs_improvement: 3000 }
-    },
-    {
-      key: 'lcp',
-      name: 'Largest Contentful Paint',
-      description: 'Temps de chargement du plus gros élément',
-      value: performanceMetrics.lcp,
-      unit: 'ms',
-      icon: Layers,
-      thresholds: { good: 2500, needs_improvement: 4000 }
-    },
-    {
-      key: 'fid',
-      name: 'First Input Delay',
-      description: 'Délai avant la première interaction',
-      value: performanceMetrics.fid,
-      unit: 'ms',
-      icon: Zap,
-      thresholds: { good: 100, needs_improvement: 300 }
-    },
-    {
-      key: 'cls',
-      name: 'Cumulative Layout Shift',
-      description: 'Stabilité visuelle de la page',
-      value: performanceMetrics.cls,
-      unit: '',
-      icon: Activity,
-      thresholds: { good: 0.1, needs_improvement: 0.25 }
-    }
-  ];
-
-  const deviceScore = deviceInfo.isLowEnd ? 'Bas de gamme' : 
-                     deviceInfo.isSlowNetwork ? 'Réseau lent' : 'Optimal';
+  const deviceScore = isLowEndDevice ? 'Bas de gamme' : 
+                     connectionSpeed === 'slow' ? 'Réseau lent' : 'Optimal';
 
   return (
     <div className={`fixed bottom-4 right-4 z-50 ${className}`}>
@@ -99,50 +53,22 @@ const CoreWebVitals = ({ className = '' }) => {
         </div>
 
         {/* Score global */}
-        {performanceScore && (
-          <div className={`text-center p-2 rounded-lg mb-3 ${getScoreColor(performanceScore)}`}>
-            <div className="text-2xl font-bold">{performanceScore}</div>
-            <div className="text-xs">Score Performance</div>
-          </div>
-        )}
+        <div className={`text-center p-2 rounded-lg mb-3 ${getDeviceColor()}`}>
+          <div className="text-2xl font-bold">{deviceScore}</div>
+          <div className="text-xs">État Appareil</div>
+        </div>
 
-        {/* Métriques Core Web Vitals */}
+        {/* Optimisations actives */}
         <div className="space-y-2 mb-3">
-          {metrics.map((metric) => {
-            const Icon = metric.icon;
-            const value = metric.value;
-            
-            if (value === null || value === undefined) return null;
-
-            const color = getMetricColor(value, metric.thresholds);
-            
-            return (
-              <div
-                key={metric.key}
-                className="flex items-center justify-between p-2 bg-gray-50 rounded cursor-pointer hover:bg-gray-100"
-                onClick={() => setExpandedSection(
-                  expandedSection === metric.key ? null : metric.key
-                )}
-              >
-                <div className="flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-gray-500" />
-                  <div>
-                    <div className="text-xs font-medium text-gray-900">
-                      {metric.name}
-                    </div>
-                    {expandedSection === metric.key && (
-                      <div className="text-xs text-gray-500 mt-1">
-                        {metric.description}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className={`text-sm font-semibold ${color}`}>
-                  {value}{metric.unit}
-                </div>
-              </div>
-            );
-          })}
+          <div className="p-2 bg-gray-50 rounded">
+            <div className="text-xs font-medium text-gray-900 mb-1">Optimisations actives</div>
+            <div className="text-xs text-gray-600 space-y-1">
+              <div>• Animations: {optimizations.enableAnimations ? 'Activées' : 'Désactivées'}</div>
+              <div>• Qualité image: {optimizations.imageQuality}</div>
+              <div>• Cache: {optimizations.cacheStrategy}</div>
+              <div>• Calculs complexes: {optimizations.enableComplexCalculations ? 'Oui' : 'Non'}</div>
+            </div>
+          </div>
         </div>
 
         {/* Info appareil */}
@@ -153,9 +79,9 @@ const CoreWebVitals = ({ className = '' }) => {
               <span>Appareil</span>
             </div>
             <span className={
-              deviceInfo.isLowEnd ? 'text-red-600' : 'text-green-600'
+              isLowEndDevice ? 'text-red-600' : 'text-green-600'
             }>
-              {deviceScore}
+              {isMobile ? 'Mobile' : 'Desktop'}
             </span>
           </div>
           
@@ -165,45 +91,60 @@ const CoreWebVitals = ({ className = '' }) => {
               <span>Connexion</span>
             </div>
             <span className={
-              deviceInfo.isSlowNetwork ? 'text-red-600' : 'text-green-600'
+              connectionSpeed === 'slow' ? 'text-red-600' : connectionSpeed === 'medium' ? 'text-yellow-600' : 'text-green-600'
             }>
-              {deviceInfo.connectionType.toUpperCase()}
+              {connectionSpeed.toUpperCase()}
             </span>
           </div>
         </div>
 
-        {/* Recommandations */}
-        {recommendations && recommendations.length > 0 && (
-          <div className="border-t pt-3">
-            <div 
-              className="flex items-center gap-2 text-xs font-medium text-gray-900 cursor-pointer"
-              onClick={() => setExpandedSection(
-                expandedSection === 'recommendations' ? null : 'recommendations'
-              )}
-            >
-              <AlertTriangle className="w-3 h-3 text-yellow-500" />
-              Recommandations ({recommendations.length})
-            </div>
-            
-            {expandedSection === 'recommendations' && (
-              <div className="mt-2 space-y-1">
-                {recommendations.slice(0, 3).map((rec, index) => (
-                  <div key={index} className="text-xs text-gray-600 p-2 bg-yellow-50 rounded">
-                    <div className="font-medium text-gray-800">{rec.message}</div>
-                    <div className="mt-1">
-                      {rec.actions.slice(0, 2).map((action, i) => (
-                        <div key={i} className="flex items-center gap-1">
-                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                          {action}
-                        </div>
-                      ))}
+        {/* Recommandations simplifiées */}
+        <div className="border-t pt-3">
+          <div 
+            className="flex items-center gap-2 text-xs font-medium text-gray-900 cursor-pointer"
+            onClick={() => setExpandedSection(
+              expandedSection === 'recommendations' ? null : 'recommendations'
+            )}
+          >
+            <AlertTriangle className="w-3 h-3 text-yellow-500" />
+            Optimisations
+          </div>
+          
+          {expandedSection === 'recommendations' && (
+            <div className="mt-2 space-y-1">
+              {isLowEndDevice && (
+                <div className="text-xs text-gray-600 p-2 bg-yellow-50 rounded">
+                  <div className="font-medium text-gray-800">Appareil bas de gamme détecté</div>
+                  <div className="mt-1">
+                    <div className="flex items-center gap-1">
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Animations réduites
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Cache agressif activé
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+                </div>
+              )}
+              {connectionSpeed === 'slow' && (
+                <div className="text-xs text-gray-600 p-2 bg-yellow-50 rounded">
+                  <div className="font-medium text-gray-800">Connexion lente détectée</div>
+                  <div className="mt-1">
+                    <div className="flex items-center gap-1">
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Lazy loading agressif
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Images compressées
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Actions rapides */}
         <div className="border-t pt-3 mt-3">
@@ -223,10 +164,12 @@ const CoreWebVitals = ({ className = '' }) => {
               onClick={() => {
                 const data = {
                   timestamp: new Date().toISOString(),
-                  performanceMetrics,
-                  deviceInfo,
-                  performanceScore,
-                  recommendations
+                  deviceInfo: {
+                    isMobile,
+                    isLowEndDevice,
+                    connectionSpeed
+                  },
+                  optimizations
                 };
                 
                 const blob = new Blob([JSON.stringify(data, null, 2)], {
