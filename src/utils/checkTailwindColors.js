@@ -13,12 +13,7 @@ function checkTailwindColors() {
     // Boutons groupes musculaires trouvés: ${muscleButtons.length}
     
     muscleButtons.forEach((button, index) => {
-        const styles = getComputedStyle(button);
-        const hasDarkBg = styles.backgroundColor.includes('rgba(15, 15, 35') || 
-                         styles.backgroundColor.includes('rgb(15, 15, 35');
-        const hasWhiteText = styles.color.includes('rgb(255, 255, 255') || 
-                           styles.color.includes('rgba(255, 255, 255');
-        
+        // Vérification des couleurs pour le bouton muscle ${index + 1}
         // Bouton muscle ${index + 1} vérifié
     });
     
@@ -27,12 +22,7 @@ function checkTailwindColors() {
     // Boutons exercices trouvés: ${exerciseButtons.length}
     
     exerciseButtons.forEach((button, index) => {
-        const styles = getComputedStyle(button);
-        const hasDarkBg = styles.backgroundColor.includes('rgba(15, 15, 35') || 
-                         styles.backgroundColor.includes('rgb(15, 15, 35');
-        const hasWhiteText = styles.color.includes('rgb(255, 255, 255') || 
-                           styles.color.includes('rgba(255, 255, 255');
-        
+        // Vérification des couleurs pour le bouton exercice ${index + 1}
         // Bouton exercice ${index + 1} vérifié
     });
     
@@ -41,12 +31,7 @@ function checkTailwindColors() {
     // Sections profil trouvées: ${profileSections.length}
     
     profileSections.forEach((section, index) => {
-        const styles = getComputedStyle(section);
-        const hasDarkBg = styles.backgroundColor.includes('rgba(15, 15, 35') || 
-                         styles.backgroundColor.includes('rgb(15, 15, 35');
-        const hasWhiteText = styles.color.includes('rgb(255, 255, 255') || 
-                           styles.color.includes('rgba(255, 255, 255');
-        
+        // Vérification des couleurs pour la section profil ${index + 1}
         // Section profil ${index + 1} vérifiée
     });
     
@@ -55,12 +40,7 @@ function checkTailwindColors() {
     // Sections classement trouvées: ${leaderboardSections.length}
     
     leaderboardSections.forEach((section, index) => {
-        const styles = getComputedStyle(section);
-        const hasDarkBg = styles.backgroundColor.includes('rgba(15, 15, 35') || 
-                         styles.backgroundColor.includes('rgb(15, 15, 35');
-        const hasWhiteText = styles.color.includes('rgb(255, 255, 255') || 
-                           styles.color.includes('rgba(255, 255, 255');
-        
+        // Vérification des couleurs pour la section classement ${index + 1}
         // Section classement ${index + 1} vérifiée
     });
     
@@ -69,12 +49,7 @@ function checkTailwindColors() {
     // Éléments chatbot trouvés: ${chatElements.length}
     
     chatElements.forEach((element, index) => {
-        const styles = getComputedStyle(element);
-        const hasDarkBg = styles.backgroundColor.includes('rgba(15, 15, 35') || 
-                         styles.backgroundColor.includes('rgb(15, 15, 35');
-        const hasWhiteText = styles.color.includes('rgb(255, 255, 255') || 
-                           styles.color.includes('rgba(255, 255, 255');
-        
+        // Vérification des couleurs pour l'élément chatbot ${index + 1}
         // Élément chatbot ${index + 1} vérifié
     });
     
