@@ -340,11 +340,7 @@ class KnowledgeBase {
       this.addDocument(doc);
     });
 
-    console.log(
-      '📚 Base de connaissances initialisée avec',
-      fitnessDocuments.length,
-      'documents'
-    );
+    // Base de connaissances initialisée avec ${fitnessDocuments.length} documents
   }
 
   // Ajouter un document à la base de connaissances

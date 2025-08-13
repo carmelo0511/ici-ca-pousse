@@ -242,18 +242,79 @@ const Chatbot = ({
   const [showMonitoring, setShowMonitoring] = useState(false);
   const [showKnowledgeBase, setShowKnowledgeBase] = useState(false);
 
-  // Message d'accueil automatique au premier rendu
+  // Message d'accueil automatique au premier rendu et écoute des changements localStorage
   useEffect(() => {
-    if (messages.length === 0) {
-      // Message d'accueil personnalisé
+    // Charger les messages existants depuis localStorage
+    const storedMessages = JSON.parse(localStorage.getItem('chatbot_memory') || '[]');
+    
+    if (storedMessages.length === 0) {
+      // Message d'accueil personnalisé si aucun message
       const prenom = user?.displayName ? user.displayName.split(' ')[0] : '';
-      setMessages([
-        {
-          role: 'assistant',
-          content: `${prenom ? 'Bonjour ' + prenom + ', ' : 'Bonjour,'}je suis Coach Lex IA. Je peux t'aider avec tes séances de sport, la nutrition, le bien-être et bien d'autres sujets ! Comment puis-je t'aider aujourd'hui ?`,
-        },
-      ]);
+      const welcomeMessage = {
+        role: 'assistant',
+        content: `${prenom ? 'Bonjour ' + prenom + ', ' : 'Bonjour,'}je suis Coach Lex IA. Je peux t'aider avec tes séances de sport, la nutrition, le bien-être et bien d'autres sujets ! Comment puis-je t'aider aujourd'hui ?`,
+        timestamp: Date.now()
+      };
+      setMessages([welcomeMessage]);
+      localStorage.setItem('chatbot_memory', JSON.stringify([welcomeMessage]));
+    } else {
+      // Charger les messages existants
+      setMessages(storedMessages);
     }
+    
+    // Écouter les changements dans localStorage
+    const handleStorageChange = () => {
+      const newStoredMessages = JSON.parse(localStorage.getItem('chatbot_memory') || '[]');
+      setMessages(newStoredMessages);
+    };
+    
+
+    
+    // Écouter l'événement pour traiter les messages de la bulle
+    const handleProcessMessage = async (event) => {
+      const userMessage = event.detail.message;
+      const eventUser = event.detail.user;
+      const eventWorkouts = event.detail.workouts;
+      
+      try {
+        // Contexte enrichi avec analyse des ressentis
+        const feelingsContext = analyzeFeelings();
+        const context = `Tu es un assistant personnel sportif et bien-être. Sois motivant, bienveillant et adapte tes réponses à mon niveau. Voici un résumé de mes dernières séances : ${getSummary()} ${getDetails()} ${getWeightDetails()} ${getSetRepDetails()} ${feelingsContext ? `\n\nAnalyse des ressentis : ${feelingsContext}` : ''}`;
+
+        await sendMessage(
+          userMessage,
+          context,
+          eventUser?.height,
+          eventUser?.weight,
+          eventUser?.goal,
+          false,
+          eventWorkouts,
+          eventUser
+        );
+      } catch (error) {
+        console.error('❌ Erreur lors du traitement IA:', error);
+        
+        // En cas d'erreur, ajouter une réponse de fallback
+        const fallbackMessage = {
+          role: 'assistant',
+          content: `Désolé, je n'ai pas pu traiter votre message "${userMessage}" pour le moment. Pouvez-vous réessayer ?`,
+          timestamp: Date.now()
+        };
+        
+        const existingMessages = JSON.parse(localStorage.getItem('chatbot_memory') || '[]');
+        const updatedMessages = [...existingMessages, fallbackMessage];
+        localStorage.setItem('chatbot_memory', JSON.stringify(updatedMessages));
+        window.dispatchEvent(new Event('storage'));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('processChatbotMessage', handleProcessMessage);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('processChatbotMessage', handleProcessMessage);
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -1106,10 +1167,10 @@ const Chatbot = ({
         {/* Bouton création séance IA */}
         <button
           onClick={() => setShowMenu((v) => !v)}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg shadow-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all text-xs sm:text-sm border border-white/20 flex items-center gap-1 sm:gap-2"
+          className="chatbot-action-button session-button"
           title="Créer une séance personnalisée avec l'IA"
         >
-          <span>🤖</span>
+          <span className="button-icon">🤖</span>
           <span>Séance IA</span>
         </button>
         
@@ -1125,19 +1186,19 @@ const Chatbot = ({
 
       {/* Menu de création de séance */}
       {showMenu && (
-        <div className="mb-2 sm:mb-4 p-2 sm:p-4 bg-white border rounded-xl shadow-xl">
-          <h3 className="font-semibold text-gray-800 mb-2 sm:mb-3 text-sm sm:text-base">
+        <div className="chatbot-menu">
+          <h3 className="chatbot-menu-title">
             Créer une séance personnalisée
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+          <div className="chatbot-menu-grid">
             <div>
-              <label className="font-semibold text-gray-700 block mb-1 sm:mb-2 text-xs sm:text-sm">
+              <label className="chatbot-menu-label">
                 Type de séance
               </label>
               <select
                 value={sessionType}
                 onChange={(e) => setSessionType(e.target.value)}
-                className="w-full border rounded px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
+                className="chatbot-menu-select"
               >
                 {SESSION_TYPES.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -1147,13 +1208,13 @@ const Chatbot = ({
               </select>
             </div>
             <div>
-              <label className="font-semibold text-gray-700 block mb-1 sm:mb-2 text-xs sm:text-sm">
+              <label className="chatbot-menu-label">
                 Intensité
               </label>
               <select
                 value={intensity}
                 onChange={(e) => setIntensity(e.target.value)}
-                className="w-full border rounded px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
+                className="chatbot-menu-select"
               >
                 {INTENSITIES.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -1163,16 +1224,16 @@ const Chatbot = ({
               </select>
             </div>
           </div>
-          <div className="flex gap-1 sm:gap-2 mt-2 sm:mt-4">
+          <div className="chatbot-menu-actions">
             <button
               onClick={handleSuggestWorkout}
-              className="bg-gradient-to-r from-green-500 to-green-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded font-semibold shadow hover:from-green-600 hover:to-green-700 transition border border-white/20 text-xs sm:text-sm"
+              className="chatbot-menu-button generate-button"
             >
               💪 Générer
             </button>
             <button
               onClick={() => setShowMenu(false)}
-              className="text-gray-500 px-2 sm:px-4 py-1 sm:py-2 rounded hover:bg-gray-100 transition text-xs sm:text-sm"
+              className="chatbot-menu-button cancel-button"
             >
               Annuler
             </button>

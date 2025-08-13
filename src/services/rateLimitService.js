@@ -157,7 +157,7 @@ class RateLimitService {
     
     setTimeout(() => {
       this.blockedIPs.delete(identifier);
-      console.log(`✅ IP ${identifier} débloquée`);
+      // IP ${identifier} débloquée
     }, duration);
   }
 
@@ -165,7 +165,7 @@ class RateLimitService {
   unblockIP(identifier) {
     this.blockedIPs.delete(identifier);
     this.suspiciousIPs.delete(identifier);
-    console.log(`✅ IP ${identifier} débloquée manuellement`);
+    // IP ${identifier} débloquée manuellement
   }
 
   // Nettoyer les clés expirées
@@ -209,7 +209,7 @@ class RateLimitService {
     keysToDelete.forEach(key => this.storage.delete(key));
     
     if (keysToDelete.length > 0) {
-      console.log(`🧹 Nettoyage: ${keysToDelete.length} clés supprimées`);
+      // Nettoyage: ${keysToDelete.length} clés supprimées
     }
   }
 
@@ -312,7 +312,7 @@ class RateLimitService {
     keysToDelete.forEach(key => this.storage.delete(key));
     this.unblockIP(identifier);
     
-    console.log(`🔄 IP ${identifier} réinitialisée: ${keysToDelete.length} clés supprimées`);
+    // IP ${identifier} réinitialisée: ${keysToDelete.length} clés supprimées
   }
 
   // Exporter les données pour sauvegarde
@@ -339,7 +339,7 @@ class RateLimitService {
       this.suspiciousIPs = new Set(data.suspiciousIPs);
     }
     
-    console.log(`📥 Données de rate limiting importées: ${this.storage.size} clés`);
+    // Données de rate limiting importées: ${this.storage.size} clés
   }
 }
 

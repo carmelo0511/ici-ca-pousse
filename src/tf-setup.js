@@ -16,11 +16,11 @@ export const initializeTensorFlow = async () => {
     // Attendre que TensorFlow soit prêt
     await tf.ready();
     
-    console.log('TensorFlow.js initialisé avec backend:', tf.getBackend());
+    // TensorFlow.js initialisé avec backend: ${tf.getBackend()}
     
     // Vérifier les backends disponibles
     const backends = tf.engine().registryFactory;
-    console.log('Backends disponibles:', Object.keys(backends));
+    // Backends disponibles: ${Object.keys(backends)}
     
     return true;
   } catch (error) {

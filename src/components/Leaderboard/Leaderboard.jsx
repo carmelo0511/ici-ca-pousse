@@ -171,12 +171,12 @@ function Leaderboard({
       </div>
 
       {/* Sélecteurs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+      <div className="leaderboard-filters">
         {/* Période */}
-        <div>
+        <div className="leaderboard-filter-group">
           <label
             htmlFor="period-select"
-            className="block text-sm font-medium text-gray-700 mb-1 md:mb-2"
+            className="leaderboard-filter-label"
           >
             Période
           </label>
@@ -184,7 +184,7 @@ function Leaderboard({
             id="period-select"
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+            className="leaderboard-filter-select"
           >
             <option value={PERIODS.WEEK}>Cette semaine</option>
             <option value={PERIODS.MONTH}>Ce mois</option>
@@ -194,10 +194,10 @@ function Leaderboard({
         </div>
 
         {/* Métrique */}
-        <div>
+        <div className="leaderboard-filter-group">
           <label
             htmlFor="metric-select"
-            className="block text-sm font-medium text-gray-700 mb-1 md:mb-2"
+            className="leaderboard-filter-label"
           >
             Métrique
           </label>
@@ -205,7 +205,7 @@ function Leaderboard({
             id="metric-select"
             value={selectedMetric}
             onChange={(e) => setSelectedMetric(e.target.value)}
-            className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+            className="leaderboard-filter-select"
           >
             <option value={METRICS.WORKOUTS}>Séances</option>
             <option value={METRICS.MAX_WEIGHT}>Poids max</option>
@@ -213,10 +213,10 @@ function Leaderboard({
         </div>
 
         {/* Exercice spécifique */}
-        <div className="sm:col-span-2 lg:col-span-1">
+        <div className="leaderboard-filter-group exercise-filter">
           <label
             htmlFor="exercise-select"
-            className="block text-sm font-medium text-gray-700 mb-1 md:mb-2"
+            className="leaderboard-filter-label"
           >
             Exercice spécifique
           </label>
@@ -224,7 +224,7 @@ function Leaderboard({
             id="exercise-select"
             value={selectedExercise || ''}
             onChange={(e) => setSelectedExercise(e.target.value || null)}
-            className="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+            className="leaderboard-filter-select"
           >
             <option value="">Tous les exercices</option>
             {getAllowedExercises().map((exercise) => (

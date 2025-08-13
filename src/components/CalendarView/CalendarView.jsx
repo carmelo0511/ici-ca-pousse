@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { parseLocalDate } from '../../utils/workout/workoutUtils';
 
 const groupWorkoutsByWeek = (workouts) => {
@@ -66,19 +66,27 @@ const CalendarView = ({
   const lastDay = new Date(year, month + 1, 0);
   const daysInMonth = lastDay.getDate();
   const startingDayOfWeek = firstDay.getDay();
-  const days = [];
-  for (let i = 0; i < startingDayOfWeek; i++) {
-    days.push(null);
-  }
-  for (let day = 1; day <= daysInMonth; day++) {
-    days.push(day);
-  }
+  // Optimisation du calcul des jours du mois
+  const days = useMemo(() => {
+    const daysArray = [];
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      daysArray.push(null);
+    }
+    for (let day = 1; day <= daysInMonth; day++) {
+      daysArray.push(day);
+    }
+    return daysArray;
+  }, [startingDayOfWeek, daysInMonth]);
 
   const [openWeeks, setOpenWeeks] = useState([]);
-  const sortedWorkouts = [...workouts].sort(
-    (a, b) => parseLocalDate(b.date) - parseLocalDate(a.date)
+  
+  // Optimisation des performances avec useMemo
+  const sortedWorkouts = useMemo(() => 
+    [...workouts].sort((a, b) => parseLocalDate(b.date) - parseLocalDate(a.date)),
+    [workouts]
   );
-  const weeks = groupWorkoutsByWeek(workouts);
+  
+  const weeks = useMemo(() => groupWorkoutsByWeek(workouts), [workouts]);
   const dateLocale = i18n.language === 'fr' ? 'fr-FR' : undefined;
 
   return (
@@ -150,9 +158,9 @@ const CalendarView = ({
               <div
                 key={dateString}
                 className={`
-                  h-10 sm:h-12 flex items-center justify-center text-xs sm:text-sm rounded-xl cursor-pointer font-medium transition-all duration-200 relative select-none hover:scale-105
-                  ${isToday ? 'btn-primary' : 'card'}
-                  ${hasWorkout ? 'badge-success' : 'hover:bg-blue-500/20'}
+                  h-10 sm:h-12 flex items-center justify-center text-xs sm:text-sm rounded-xl cursor-pointer font-medium transition-all duration-200 relative select-none
+                  ${isToday ? 'calendar-today' : 'calendar-day'}
+                  ${hasWorkout ? 'calendar-workout' : 'calendar-empty'}
                 `}
                 style={{ minWidth: '32px', maxWidth: '100%', margin: '0 auto' }}
                 onClick={() => {
@@ -162,14 +170,12 @@ const CalendarView = ({
                     onDateSelect(dateString);
                   }
                 }}
-                              >
-                  {day}
-                  {hasWorkout ? (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 status-badge rounded-full border-2 border-white"></div>
-                  ) : (
-                    <div className="absolute -bottom-1 -right-1 w-2 h-2 text-blue-400 opacity-50 text-xs">+</div>
-                  )}
-                </div>
+              >
+                {day}
+                {hasWorkout && (
+                  <div className="absolute -top-1 -right-1 w-2.5 h-2.5 calendar-indicator rounded-full"></div>
+                )}
+              </div>
             );
           })}
         </div>
@@ -234,7 +240,7 @@ const CalendarView = ({
             <span>{t('last_sessions')}</span>
           </h3>
           <div className="space-y-4">
-            {sortedWorkouts.slice(0, 5).map((workout) => (
+            {sortedWorkouts.slice(0, 3).map((workout) => (
               <div
                 key={workout.id}
                 className="card hover-lift flex justify-between items-center py-4 px-6"
@@ -287,7 +293,7 @@ const CalendarView = ({
               return (
                 <div key={week} className="mb-4">
                   <button
-                    className="btn-primary ripple-effect w-full flex justify-between items-center px-6 py-4"
+                    className="week-button ripple-effect w-full flex justify-between items-center px-6 py-4"
                     onClick={() =>
                       setOpenWeeks((prev) =>
                         prev.includes(week)

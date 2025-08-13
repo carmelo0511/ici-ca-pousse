@@ -270,7 +270,7 @@ export const measureComponentLoad = (componentName) => {
       const endTime = performance.now();
       const duration = endTime - startTime;
       
-      console.log(`📦 ${componentName} chargé en ${duration.toFixed(2)}ms`);
+      // ${componentName} chargé en ${duration.toFixed(2)}ms
       
       // Envoyer les métriques si nécessaire
       if (window.gtag) {

@@ -175,7 +175,6 @@ function App() {
 
 
   const handleDateSelect = (selectedDate) => {
-    console.log('Date sélectionnée:', selectedDate);
     setSelectedDate(selectedDate);
     setActiveTab('workout');
     showToastMsg(`Séance créée pour le ${selectedDate} !`);
@@ -249,6 +248,42 @@ function App() {
     setActiveTab,
     showToastMsg
   });
+
+  // Fonction pour gérer l'envoi de message depuis la bulle
+  const handleSendMessageFromBubble = (message) => {
+    showToastMsg(`Message envoyé: ${message}`);
+  };
+
+  // Écouter l'événement pour déclencher une réponse automatique du chatbot
+  useEffect(() => {
+    const handleTriggerResponse = async (event) => {
+      const userMessage = event.detail.message;
+      const eventUser = event.detail.user;
+      const eventWorkouts = event.detail.workouts;
+      
+      // Attendre un peu pour que le message soit bien ajouté
+      setTimeout(async () => {
+        try {
+          // Déclencher un événement pour que le chatbot traite le message
+          window.dispatchEvent(new CustomEvent('processChatbotMessage', { 
+            detail: { 
+              message: userMessage,
+              user: eventUser,
+              workouts: eventWorkouts
+            } 
+          }));
+        } catch (error) {
+          console.error('❌ Erreur lors de la réponse automatique dans App.js:', error);
+        }
+      }, 500);
+    };
+
+    window.addEventListener('triggerChatbotResponse', handleTriggerResponse);
+    
+    return () => {
+      window.removeEventListener('triggerChatbotResponse', handleTriggerResponse);
+    };
+  }, []);
 
   if (!authChecked || userLoading) {
     return <LoadingScreen userLoading={userLoading} />;
@@ -399,6 +434,7 @@ function App() {
             setExercisesFromWorkout={setExercisesFromWorkout}
             setShowAddExercise={setShowAddExercise}
             setActiveTab={setActiveTab}
+            onSendMessage={handleSendMessageFromBubble}
           />
 
           {/* Vercel Analytics et Speed Insights - Initialized via useEffect */}
@@ -411,5 +447,5 @@ function App() {
     </I18nextProvider>
   );
 }
-
 export default App;
+

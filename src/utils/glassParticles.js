@@ -510,7 +510,7 @@ export function initAllGlassEffects(particleCount = 20) {
   // Add shimmer effects
   addShimmerEffect('.header, .navbar');
   
-  console.log('🌟 All glass effects initialized');
+  // All glass effects initialized
 }
 
 // Default export

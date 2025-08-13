@@ -14,13 +14,13 @@ const ChatbotDashboard = ({
       {/* Bouton principal Dashboard */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded shadow font-semibold hover:from-indigo-600 hover:to-purple-700 transition text-sm whitespace-nowrap border border-white/20 flex items-center gap-2"
+        className="dashboard-button"
         title="Dashboard IA Avancée"
       >
-        <span>⚙️</span>
+        <span className="dashboard-icon">⚙️</span>
         <span>Dashboard</span>
         <span
-          className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`dashboard-arrow transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
         >
           ▼
         </span>
@@ -28,14 +28,14 @@ const ChatbotDashboard = ({
 
       {/* Menu déroulant */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 bg-white border rounded-xl shadow-xl p-3 min-w-48 z-50">
-          <div className="space-y-2">
+        <div className="dashboard-dropdown">
+          <div className="dashboard-content">
             {/* En-tête du dashboard */}
-            <div className="border-b pb-2 mb-2">
-              <h3 className="font-semibold text-gray-800 text-sm">
+            <div className="dashboard-header">
+              <h3 className="dashboard-title">
                 IA Avancée
               </h3>
-              <div className="text-xs text-gray-600 mt-1">
+              <div className="dashboard-stats">
                 💾 {memoryStats.totalMessages} messages
               </div>
             </div>
@@ -46,9 +46,9 @@ const ChatbotDashboard = ({
                 onMonitoring();
                 setIsOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded hover:bg-purple-50 transition flex items-center gap-2 text-sm"
+              className="dashboard-menu-item monitoring-item"
             >
-              <span>📊</span>
+              <span className="menu-icon">📊</span>
               <span>Monitoring</span>
             </button>
 
@@ -57,9 +57,9 @@ const ChatbotDashboard = ({
                 onKnowledgeBase();
                 setIsOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded hover:bg-blue-50 transition flex items-center gap-2 text-sm"
+              className="dashboard-menu-item knowledge-item"
             >
-              <span>📚</span>
+              <span className="menu-icon">📚</span>
               <span>Base de Connaissances</span>
             </button>
 
@@ -68,9 +68,9 @@ const ChatbotDashboard = ({
                 onExport();
                 setIsOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded hover:bg-green-50 transition flex items-center gap-2 text-sm"
+              className="dashboard-menu-item export-item"
             >
-              <span>📤</span>
+              <span className="menu-icon">📤</span>
               <span>Exporter</span>
             </button>
 
@@ -79,9 +79,9 @@ const ChatbotDashboard = ({
                 onReset();
                 setIsOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded hover:bg-orange-50 transition flex items-center gap-2 text-sm"
+              className="dashboard-menu-item reset-item"
             >
-              <span>🧠</span>
+              <span className="menu-icon">🧠</span>
               <span>Reset Mémoire</span>
             </button>
           </div>

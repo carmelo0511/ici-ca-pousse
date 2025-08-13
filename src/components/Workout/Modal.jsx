@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
+import { X } from 'lucide-react';
 
 const Modal = ({
   isOpen,
@@ -29,15 +30,15 @@ const Modal = ({
       <div
         ref={modalRef}
         tabIndex={-1}
-        className={`modal relative w-full ${maxWidth} max-h-[90vh] flex flex-col items-center justify-center mx-auto p-2 sm:p-6 overflow-y-auto ${className}`}
+        className={`modal relative w-full ${maxWidth} max-h-[90vh] flex flex-col items-stretch mx-auto p-2 sm:p-6 overflow-y-auto ${className}`}
         {...props}
       >
         <button
           onClick={onClose}
-          className="btn-secondary ripple-effect absolute top-2 right-2 sm:top-4 sm:right-4 !p-2"
+          className="btn-secondary absolute -top-2 right-2 sm:-top-1 sm:right-4 z-10 p-1"
           aria-label="Fermer la modale"
         >
-          <span aria-hidden="true">&times;</span>
+          <X className="h-4 w-4" />
         </button>
         <div className="w-full h-full overflow-y-auto flex-1 min-h-0 pr-2">
           {children}

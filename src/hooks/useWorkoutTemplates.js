@@ -102,7 +102,7 @@ export const useWorkoutTemplates = (user) => {
 
   const updateTemplate = useCallback(
     async (templateId, updatedTemplate) => {
-      console.log('updateTemplate appelé:', templateId, updatedTemplate.name);
+      // updateTemplate appelé: ${templateId}, ${updatedTemplate.name}
 
       const templateWithUpdate = {
         ...updatedTemplate,
@@ -119,19 +119,19 @@ export const useWorkoutTemplates = (user) => {
         try {
           const cleanedTemplate = { ...templateWithUpdate };
           delete cleanedTemplate.id; // Ne pas inclure l'ID dans les données
-          console.log('Mise à jour Firestore avec:', cleanedTemplate);
+          // Mise à jour Firestore
           await setDoc(
             doc(db, 'workoutTemplates', templateId),
             { ...cleanedTemplate, userId: user.uid },
             { merge: true }
           );
-          console.log('Mise à jour Firestore réussie');
+          // Mise à jour Firestore réussie
         } catch (error) {
           console.error('Erreur update template Firestore:', error);
           throw error;
         }
       } else {
-        console.log('Mise à jour locale');
+        // Mise à jour locale
         setTemplates((prev) =>
           prev.map((t) => (t.id === templateId ? templateWithUpdate : t))
         );
@@ -142,12 +142,7 @@ export const useWorkoutTemplates = (user) => {
 
   const deleteTemplate = useCallback(
     async (templateId) => {
-      console.log(
-        'Tentative suppression template ID:',
-        templateId,
-        'Type:',
-        typeof templateId
-      );
+          // Tentative suppression template
 
       if (user) {
         try {

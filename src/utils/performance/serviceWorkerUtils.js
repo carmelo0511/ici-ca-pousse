@@ -22,13 +22,13 @@ class ServiceWorkerManager {
       // Écouter les changements de contrôleur
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         this.controller = navigator.serviceWorker.controller;
-        console.log('🔄 Service Worker: Nouveau contrôleur');
+        // Service Worker: Nouveau contrôleur
         
         // Traiter les messages en file d'attente
         this.processMessageQueue();
       });
       
-      console.log('✅ Service Worker Manager initialisé');
+      // Service Worker Manager initialisé
     } catch (error) {
       console.error('Erreur lors de l\'initialisation du Service Worker Manager:', error);
     }
@@ -52,7 +52,7 @@ class ServiceWorkerManager {
           this.dispatchEvent('performanceData', data.data);
           break;
         default:
-          console.log('Message SW non géré:', data);
+          // Message SW non géré: ${data}
       }
     }
   }
@@ -156,7 +156,7 @@ class ServiceWorkerManager {
         localStorage.setItem(`sync_data_${tag}`, JSON.stringify(data));
       }
       
-      console.log(`📥 Background Sync enregistré: ${tag}`);
+      // Background Sync enregistré: ${tag}
       return true;
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement de la sync:', error);

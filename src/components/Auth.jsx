@@ -32,16 +32,16 @@ function Auth({ className = '' }) {
           const userDoc = await getDoc(doc(db, 'users', u.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            console.log('Données utilisateur dans Firestore:', userData);
+            // Données utilisateur dans Firestore
             const pseudo = userData.pseudo || userData.nickname || userData.displayName || u.displayName;
             setUserPseudo(pseudo);
-            console.log('Pseudo récupéré:', pseudo);
+            // Pseudo récupéré
           } else {
             setUserPseudo(u.displayName);
-            console.log('Pseudo depuis displayName:', u.displayName);
+            // Pseudo depuis displayName
           }
         } catch (error) {
-          console.log('Erreur lors de la récupération du pseudo:', error);
+          // Erreur lors de la récupération du pseudo
           setUserPseudo(u.displayName);
         }
       } else {
@@ -62,11 +62,11 @@ function Auth({ className = '' }) {
           if (userDoc.exists()) {
             const userData = userDoc.data();
             const pseudo = userData.pseudo || userData.displayName || user.displayName;
-            console.log('Pseudo forcé récupéré:', pseudo);
+            // Pseudo forcé récupéré
             setUserPseudo(pseudo);
           }
         } catch (error) {
-          console.log('Erreur lors de la récupération forcée du pseudo:', error);
+          // Erreur lors de la récupération forcée du pseudo
         }
       };
       fetchPseudo();
@@ -101,11 +101,11 @@ function Auth({ className = '' }) {
           throw new Error('Le pseudo est requis');
         }
         
-        console.log('Tentative d\'inscription avec:', { email, pseudo });
+        // Tentative d'inscription
         
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         
-        console.log('Compte créé avec succès, UID:', userCredential.user.uid);
+        // Compte créé avec succès
         
         // Sauvegarder d'abord dans Firestore
         const { doc, setDoc } = await import('firebase/firestore');
@@ -119,23 +119,23 @@ function Auth({ className = '' }) {
           nickname: pseudo
         };
         
-        console.log('Sauvegarde des données utilisateur:', userData);
+        // Sauvegarde des données utilisateur
         
         await setDoc(doc(db, 'users', userCredential.user.uid), userData);
         
-        console.log('Données sauvegardées dans Firestore');
+        // Données sauvegardées dans Firestore
         
         // Mettre à jour le profil utilisateur avec le pseudo
         await userCredential.user.updateProfile({
           displayName: pseudo
         });
         
-        console.log('Profil utilisateur mis à jour');
+        // Profil utilisateur mis à jour
         
         // Mettre à jour l'état local du pseudo
         setUserPseudo(pseudo);
         
-        console.log('Pseudo mis à jour dans l\'état local:', pseudo);
+        // Pseudo mis à jour dans l'état local
         
       } else {
         await signInWithEmailAndPassword(auth, email, password);

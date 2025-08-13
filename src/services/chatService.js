@@ -85,7 +85,7 @@ class ChatService {
     // Charger les métriques de monitoring
     const savedMetrics = aiMonitoring.loadMetrics();
     if (savedMetrics) {
-      console.log('📊 Métriques de monitoring chargées');
+      // Métriques de monitoring chargées
     }
     
     this.isInitialized = true;
@@ -114,7 +114,7 @@ class ChatService {
     const frequentResponse = this.checkFrequentResponses(content);
     if (frequentResponse) {
       const duration = performance.now() - startTime;
-      console.log(`⚡ Réponse instantanée en ${duration.toFixed(1)}ms`);
+      // Réponse instantanée en ${duration.toFixed(1)}ms
       
       // Métriques pour réponses fréquentes
       if (!aiMonitoring.metrics.frequentResponses) {
@@ -165,7 +165,7 @@ class ChatService {
     const cachedResponse = intelligentCache.get(cacheKey);
     if (cachedResponse) {
       const duration = performance.now() - startTime;
-      console.log(`💾 Réponse cache ${queryType} en ${duration.toFixed(1)}ms`);
+      // Réponse cache ${queryType} en ${duration.toFixed(1)}ms
       
       // Mettre à jour les métriques pour les réponses cachées
       typeStats.count++;
@@ -224,7 +224,7 @@ class ChatService {
         apiRateLimiter.recordRequest();
         
         const duration = performance.now() - startTime;
-        console.log(`🔧 Réponse avec fonction en ${duration.toFixed(1)}ms`);
+        // Réponse avec fonction en ${duration.toFixed(1)}ms
         
         return {
           success: true,
@@ -252,7 +252,7 @@ class ChatService {
       apiRateLimiter.recordRequest();
 
       const duration = performance.now() - startTime;
-      console.log(`💬 Réponse ${queryType} générée en ${duration.toFixed(1)}ms`);
+      // Réponse ${queryType} générée en ${duration.toFixed(1)}ms
 
       // Mettre à jour les métriques de performance
       typeStats.count++;
@@ -344,7 +344,7 @@ class ChatService {
       try {
         const enrichedContext = knowledgeBase.generateEnrichedContext(content, user);
         if (enrichedContext) {
-          console.log('📚 Contexte RAG ajouté pour enrichir la réponse');
+          // Contexte RAG ajouté pour enrichir la réponse
           return `Contexte spécialisé:\n${enrichedContext}\n\nQuestion utilisateur: ${content}`;
         }
       } catch (error) {

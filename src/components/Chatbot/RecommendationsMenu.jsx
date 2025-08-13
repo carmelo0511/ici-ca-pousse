@@ -12,13 +12,13 @@ const RecommendationsMenu = ({
       {/* Bouton principal Recommandations */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded shadow font-semibold hover:from-blue-600 hover:to-blue-700 transition text-sm whitespace-nowrap border border-white/20 flex items-center gap-2"
+        className="chatbot-action-button recommendations-button"
         title="Recommandations IA"
       >
-        <span>🧠</span>
+        <span className="button-icon">🧠</span>
         <span>Recommandations IA</span>
         <span
-          className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`recommendations-arrow transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
         >
           ▼
         </span>
@@ -26,28 +26,27 @@ const RecommendationsMenu = ({
 
       {/* Menu déroulant */}
       {isOpen && (
-        <div className="absolute left-0 top-full mt-2 bg-white border rounded-xl shadow-xl p-3 min-w-64 z-50">
-          <div className="space-y-3">
+        <div className="recommendations-dropdown">
+          <div className="recommendations-content">
             {/* En-tête du menu */}
-            <div className="border-b pb-2 mb-2">
-              <h3 className="font-semibold text-gray-800 text-sm">
+            <div className="recommendations-header">
+              <h3 className="recommendations-title">
                 Recommandations IA
               </h3>
-              <div className="text-xs text-gray-600 mt-1">
+              <div className="recommendations-subtitle">
                 Conseils personnalisés basés sur vos données
               </div>
             </div>
 
             {/* Boutons des recommandations */}
-
             <button
               onClick={() => {
                 onRecapWorkouts();
                 setIsOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded hover:bg-blue-50 transition flex items-center gap-2 text-sm"
+              className="recommendations-menu-item recap-item"
             >
-              <span>📋</span>
+              <span className="menu-icon">📋</span>
               <span>Récap des dernières séances</span>
             </button>
 
@@ -56,9 +55,9 @@ const RecommendationsMenu = ({
                 onPersonalizedRecommendation();
                 setIsOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded hover:bg-blue-50 transition flex items-center gap-2 text-sm"
+              className="recommendations-menu-item personalized-item"
             >
-              <span>🎯</span>
+              <span className="menu-icon">🎯</span>
               <span>Conseils personnalisés</span>
             </button>
 
@@ -67,9 +66,9 @@ const RecommendationsMenu = ({
                 onGoalsAndProgress();
                 setIsOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded hover:bg-blue-50 transition flex items-center gap-2 text-sm"
+              className="recommendations-menu-item progress-item"
             >
-              <span>📈</span>
+              <span className="menu-icon">📈</span>
               <span>Analyse de progression</span>
             </button>
           </div>

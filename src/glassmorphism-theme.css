@@ -195,6 +195,538 @@ body::before {
     transform: translateY(-2px);
 }
 
+/* Boutons de semaine personnalisés */
+.week-button {
+    background: var(--glass-bg-secondary);
+    backdrop-filter: blur(15px);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 16px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-glass);
+    position: relative;
+    overflow: hidden;
+}
+
+.week-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+    transition: left 0.6s;
+}
+
+.week-button:hover::before {
+    left: 100%;
+}
+
+.week-button:hover {
+    background: var(--glass-bg-primary);
+    border-color: rgba(168, 85, 247, 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-purple);
+}
+
+.week-button:active {
+    transform: scale(0.98);
+}
+
+/* Styles optimisés pour le calendrier */
+.calendar-day {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+    background: var(--glass-bg-secondary);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.calendar-today {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+    backdrop-filter: blur(15px);
+    color: var(--text-primary);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+    font-weight: 700;
+}
+
+.calendar-today:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+    border-color: rgba(168, 85, 247, 0.5);
+    transform: translateY(-1px);
+}
+
+.calendar-workout {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%);
+    backdrop-filter: blur(15px);
+    color: var(--text-primary);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    font-weight: 600;
+}
+
+.calendar-workout:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.25) 100%);
+    border-color: rgba(16, 185, 129, 0.4);
+    transform: translateY(-1px);
+}
+
+.calendar-empty {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    color: var(--text-tertiary);
+    border: 1px solid var(--glass-border);
+}
+
+.calendar-empty:hover {
+    background: var(--glass-bg-secondary);
+    color: var(--text-secondary);
+    transform: translateY(-1px);
+}
+
+.calendar-indicator {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+/* Styles pour le Dashboard du Chatbot */
+.dashboard-button {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+    backdrop-filter: blur(15px);
+    color: var(--text-primary);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
+    white-space: nowrap;
+}
+
+.dashboard-button:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+    border-color: rgba(168, 85, 247, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.25);
+}
+
+.dashboard-icon {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.dashboard-arrow {
+    font-size: 12px;
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+}
+
+.dashboard-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 8px;
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-glass);
+    padding: 16px;
+    min-width: 200px;
+    z-index: 50;
+    animation: slideInDown 0.3s ease;
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dashboard-header {
+    border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.dashboard-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.dashboard-stats {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+.dashboard-menu-item {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.dashboard-menu-item:hover {
+    background: rgba(168, 85, 247, 0.1);
+    transform: translateX(4px);
+}
+
+.menu-icon {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.monitoring-item:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+}
+
+.knowledge-item:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%);
+}
+
+.export-item:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%);
+}
+
+.reset-item:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%);
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Styles pour les boutons d'action du Chatbot */
+.chatbot-action-button {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+    backdrop-filter: blur(15px);
+    color: var(--text-primary);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
+    white-space: nowrap;
+}
+
+.chatbot-action-button:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+    border-color: rgba(168, 85, 247, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.25);
+}
+
+.button-icon {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.session-button {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.session-button:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
+}
+
+/* Styles pour le menu du Chatbot */
+.chatbot-menu {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-glass);
+}
+
+.chatbot-menu-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.chatbot-menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.chatbot-menu-label {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.chatbot-menu-select {
+    width: 100%;
+    background: var(--glass-bg-secondary);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.chatbot-menu-select:focus {
+    outline: none;
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+.chatbot-menu-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.chatbot-menu-button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.generate-button {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+    color: var(--text-primary);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.generate-button:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%);
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
+}
+
+.cancel-button {
+    background: var(--glass-bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+}
+
+.cancel-button:hover {
+    background: var(--glass-bg-primary);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+/* Styles pour les filtres du Classement */
+.leaderboard-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+.leaderboard-filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-filter-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.leaderboard-filter-select {
+    width: 100%;
+    background: var(--glass-bg-secondary);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.leaderboard-filter-select:focus {
+    outline: none;
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+    background: var(--glass-bg-primary);
+}
+
+.exercise-filter {
+    grid-column: span 2;
+}
+
+/* Styles pour la croix de fermeture des modales */
+.modal-close-button {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 6px;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+}
+
+.modal-close-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+.modal-close-icon {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* Styles pour le menu des recommandations */
+.recommendations-button {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.recommendations-button:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.3) 100%);
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+}
+
+.recommendations-arrow {
+    font-size: 12px;
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+}
+
+.recommendations-dropdown {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 8px;
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-glass);
+    padding: 16px;
+    min-width: 250px;
+    z-index: 50;
+    animation: slideInDown 0.3s ease;
+}
+
+.recommendations-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.recommendations-header {
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.recommendations-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.recommendations-subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+.recommendations-menu-item {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.recommendations-menu-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    transform: translateX(4px);
+}
+
+.recap-item:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%);
+}
+
+.personalized-item:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+}
+
+.progress-item:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%);
+}
+
 /* Navigation/Onglets avec animations premium */
 .nav-tab, .tab, .menu-item {
     background: var(--glass-bg-light);
