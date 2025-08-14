@@ -37,7 +37,8 @@ const Header = memo(
       <header
         className={`header mb-6 ${className}`}
       >
-        <div className="flex flex-row items-center w-full px-1.5 py-1 sm:px-8 sm:py-4 gap-1 sm:gap-3 min-h-0">
+        <div className="max-w-4xl mx-auto px-2 sm:px-6">
+          <div className="flex flex-row items-center w-full py-1 sm:py-4 gap-1 sm:gap-3 min-h-0">
           {/* Titre à gauche du header */}
           <h1 className="text-base sm:text-lg md:text-xl font-extrabold mr-3 whitespace-nowrap">
             Ici Ça Pousse
@@ -82,6 +83,7 @@ const Header = memo(
               </button>
             )}
           </div>
+        </div>
         </div>
         {/* Titre centré sur mobile (supprimé pour compacité) */}
       </header>

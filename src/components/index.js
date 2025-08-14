@@ -11,6 +11,7 @@ export { default as CalendarView } from './CalendarView/CalendarView';
 // Core UI Components
 export { default as Card } from './Card';
 export { default as GradientButton } from './GradientButton';
+export { default as ConicGradientButton } from './ConicGradientButton';
 export { default as IconButton } from './IconButton';
 export { default as Toast } from './Toast';
 export { default as MigrationPrompt } from './MigrationPrompt';

@@ -16,6 +16,7 @@ import {
 import { exerciseDatabase } from '../../utils/workout/exerciseDatabase';
 import Card from '../Card';
 import GradientButton from '../GradientButton';
+import ConicGradientButton from '../ConicGradientButton';
 import IconButton from '../IconButton';
 
 const WorkoutTemplates = ({
@@ -362,26 +363,37 @@ const WorkoutTemplates = ({
             return (
               <Card
                 key={template.id}
-                className="p-6 hover:shadow-lg transition-shadow duration-200"
+                className="p-5 hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border border-gray-200/50"
               >
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-800 mb-1">
-                      {template.name}
-                    </h3>
+                <div className="flex justify-between items-start mb-5">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-xl font-bold text-gray-800 truncate flex-1 mr-4">
+                        {template.name}
+                      </h3>
+                      <GradientButton
+                        icon={Play}
+                        from="green-500"
+                        to="emerald-600"
+                        onClick={() => onLoadTemplate(template)}
+                        className="px-4 py-2 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 flex-shrink-0"
+                      >
+                        Charger
+                      </GradientButton>
+                    </div>
                     {template.description && (
-                      <p className="text-sm text-gray-600 mb-3">
+                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                         {template.description}
                       </p>
                     )}
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <div className="flex items-center space-x-1">
-                        <Dumbbell className="h-4 w-4" />
-                        <span>{template.totalExercises} exercices</span>
+                      <div className="flex items-center space-x-1 bg-blue-50 px-2 py-1 rounded-full">
+                        <Dumbbell className="h-3 w-3 text-blue-600" />
+                        <span className="text-blue-700 font-medium">{template.totalExercises} exercices</span>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <Target className="h-4 w-4" />
-                        <span>{template.totalSets} séries</span>
+                      <div className="flex items-center space-x-1 bg-green-50 px-2 py-1 rounded-full">
+                        <Target className="h-3 w-3 text-green-600" />
+                        <span className="text-green-700 font-medium">{template.totalSets} séries</span>
                       </div>
                     </div>
                   </div>
@@ -448,38 +460,31 @@ const WorkoutTemplates = ({
                 </div>
 
                 {/* Liste des exercices */}
-                <div className="space-y-2 mb-4">
+                <div className="space-y-2 mb-6">
                   {template.exercises.slice(0, 3).map((exercise, index) => (
                     <div
                       key={index}
-                      className="flex items-center space-x-2 text-sm"
+                      className="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                      {getMuscleIcon(exercise.type)}
-                      <span className="text-gray-700 flex-1 truncate">
+                      <div className="flex-shrink-0">
+                        {getMuscleIcon(exercise.type)}
+                      </div>
+                      <span className="text-gray-700 flex-1 truncate font-medium">
                         {exercise.name}
                       </span>
-                      <span className="text-gray-500 text-xs">
+                      <span className="text-gray-500 text-xs bg-white px-2 py-1 rounded-full font-medium">
                         {exercise.sets.length} séries
                       </span>
                     </div>
                   ))}
                   {template.exercises.length > 3 && (
-                    <div className="text-xs text-gray-500 text-center">
+                    <div className="text-xs text-gray-500 text-center py-2 bg-gray-50 rounded-lg">
                       +{template.exercises.length - 3} autres exercices
                     </div>
                   )}
                 </div>
 
-                {/* Bouton charger template */}
-                <GradientButton
-                  icon={Play}
-                  from="green-500"
-                  to="emerald-600"
-                  onClick={() => onLoadTemplate(template)}
-                  className="w-full text-white"
-                >
-                  Charger ce template
-                </GradientButton>
+
               </Card>
             );
           })}
@@ -685,13 +690,14 @@ const WorkoutTemplates = ({
                   <h4 className="text-lg font-semibold text-gray-800">
                     Exercices
                   </h4>
-                  <button
+                  <ConicGradientButton
+                    icon={Plus}
                     onClick={openAddExerciseModal}
-                    className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200"
+                    variant="primary"
+                    size="sm"
                   >
-                    <Plus className="h-4 w-4" />
                     Ajouter un exercice
-                  </button>
+                  </ConicGradientButton>
                 </div>
 
                 {newTemplateExercises.length === 0 ? (
@@ -980,7 +986,7 @@ const WorkoutTemplates = ({
                     placeholder="Nom d'exercice personnalisé..."
                     className="border-2 border-indigo-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 w-full text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm mb-2 sm:mb-3 text-sm sm:text-base"
                   />
-                  <button
+                  <ConicGradientButton
                     onClick={() => {
                       if (customExerciseName.trim()) {
                         addExerciseToNewTemplate(
@@ -989,10 +995,11 @@ const WorkoutTemplates = ({
                         );
                       }
                     }}
-                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 w-full text-sm sm:text-base"
+                    variant="primary"
+                    className="w-full text-sm sm:text-base"
                   >
                     Ajouter l'exercice
-                  </button>
+                  </ConicGradientButton>
                 </div>
               </div>
             </div>

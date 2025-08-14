@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Calendar,
   BarChart3,
@@ -86,21 +86,7 @@ const Navigation = ({
 
 
 
-  useEffect(() => {
-    // Faire défiler vers l'onglet actif
-    if (scrollContainerRef.current) {
-      const activeElement = scrollContainerRef.current.querySelector(
-        `[data-tab="${activeTab}"]`
-      );
-      if (activeElement) {
-        activeElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center',
-        });
-      }
-    }
-  }, [activeTab]);
+
 
   return (
     <nav
@@ -108,12 +94,10 @@ const Navigation = ({
       role="navigation"
       aria-label="Navigation principale"
     >
-      <div className="relative px-4 md:px-6">
-
-
+      <div className="max-w-4xl mx-auto px-2 sm:px-6">
         <div
           ref={scrollContainerRef}
-          className="flex flex-row overflow-x-auto flex-nowrap min-w-0 w-full space-x-1 md:space-x-4 lg:space-x-6 py-3 px-1 max-w-6xl mx-auto"
+          className="flex flex-row overflow-x-auto flex-nowrap min-w-0 w-full space-x-1 md:space-x-4 lg:space-x-6 py-3"
         >
           {navItems.map(({ id, icon: Icon, label, color, shortcut }) => (
             <button

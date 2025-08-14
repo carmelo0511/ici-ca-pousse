@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { exerciseDatabase } from '../../../utils/workout/exerciseDatabase';
 import Modal from '../Modal';
-import GradientButton from '../../GradientButton';
+import ConicGradientButton from '../../ConicGradientButton';
 import Card from '../../Card';
 
 import LexIA from '../../IAInfoBox';
@@ -345,34 +345,30 @@ function WorkoutList({
           className="workout-main text-center py-6 sm:py-10 w-full max-w-[340px] sm:max-w-[400px] mx-auto overflow-visible"
           style={{ boxSizing: 'border-box' }}
         >
-          <div className="workout-icon mb-4">
-            <Dumbbell className="h-12 w-12 text-white" />
-          </div>
+
           <h3 className="section-title text-2xl mb-2 break-words overflow-wrap break-word truncate max-w-full">
             {t('ready_to_train')}
           </h3>
           <p className="text-secondary mb-6 max-w-[90%] mx-auto break-words overflow-wrap break-word truncate max-w-full">
             {t('start_workout')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <GradientButton
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <ConicGradientButton
               icon={Plus}
               onClick={() => setShowAddExercise(true)}
-              from="blue-500"
-              to="blue-600"
+              variant="primary"
             >
               {t('add_exercise')}
-            </GradientButton>
+            </ConicGradientButton>
             
             {isSupported && (
-              <GradientButton
+              <ConicGradientButton
                 icon={Mic}
                 onClick={handleStartVoiceRecognition}
-                from="green-500"
-                to="green-600"
+                variant="secondary"
               >
                 Ajouter par la voix
-              </GradientButton>
+              </ConicGradientButton>
             )}
 
           </div>
@@ -602,22 +598,24 @@ function WorkoutList({
           <div className="space-y-3 mt-4">
             {/* Première ligne : Ajouter exercice + Ajouter vocal + Vider séance */}
             <div className="flex gap-3 justify-center">
-              <button
+              <ConicGradientButton
+                icon={Plus}
                 onClick={() => setShowAddExercise(true)}
-                className="btn-primary ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
+                variant="primary"
+                className="flex-1 max-w-xs"
               >
-                <Plus className="h-5 w-5" />
                 {t('add_exercise')}
-              </button>
+              </ConicGradientButton>
               
               {isSupported && (
-                <button
+                <ConicGradientButton
+                  icon={Mic}
                   onClick={handleStartVoiceRecognition}
-                  className="btn-success ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
+                  variant="secondary"
+                  className="flex-1 max-w-xs"
                 >
-                  <Mic className="h-5 w-5" />
                   Ajouter par la voix
-                </button>
+                </ConicGradientButton>
               )}
 
               
@@ -971,7 +969,7 @@ function WorkoutList({
                   placeholder={t('custom_exercise_name')}
                   className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full max-w-md text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
                 />
-                <button
+                <ConicGradientButton
                   onClick={() => {
                     if (customExerciseName.trim()) {
                       // Passer l'exercice avec sa catégorie musculaire
@@ -984,10 +982,11 @@ function WorkoutList({
                       setSelectedMuscleGroup(null);
                     }
                   }}
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 w-full max-w-md"
+                  variant="primary"
+                  className="w-full max-w-md"
                 >
                   {t('add')}
-                </button>
+                </ConicGradientButton>
               </div>
             </>
           )}
