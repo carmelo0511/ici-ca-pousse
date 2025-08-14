@@ -4,7 +4,7 @@
  */
 
 import * as tf from '@tensorflow/tfjs';
-import { validateMusculationPrediction } from '../musculationConstraints.js';
+// import { validateMusculationPrediction } from '../musculationConstraints.js';
 
 /**
  * Modèle CNN 1D pour détection de patterns dans les séries temporelles
@@ -544,7 +544,9 @@ export class PerformanceAnomalyDetector {
   }
 }
 
-export default {
+const tensorflowAdvanced = {
   CNN1DPatternDetector,
   PerformanceAnomalyDetector
 };
+
+export default tensorflowAdvanced;

@@ -5,6 +5,7 @@ export const useSpeechRecognition = () => {
   const [transcript, setTranscript] = useState('');
   const [isSupported, setIsSupported] = useState(false);
   const recognitionRef = useRef(null);
+  const latestTranscriptRef = useRef('');
 
   // Vérifier le support au montage du composant
   useEffect(() => {
@@ -50,6 +51,7 @@ export const useSpeechRecognition = () => {
     recognition.onstart = () => {
       setIsListening(true);
       setTranscript('');
+      latestTranscriptRef.current = '';
     };
 
     recognition.onresult = (event) => {
@@ -67,6 +69,7 @@ export const useSpeechRecognition = () => {
 
       const fullTranscript = finalTranscript || interimTranscript;
       setTranscript(fullTranscript);
+      latestTranscriptRef.current = fullTranscript;
 
       if (onResult) {
         onResult(fullTranscript, event.results[event.results.length - 1].isFinal);
@@ -81,14 +84,14 @@ export const useSpeechRecognition = () => {
     recognition.onend = () => {
       setIsListening(false);
       if (onEnd) {
-        onEnd(transcript);
+        onEnd(latestTranscriptRef.current);
       }
     };
 
     recognitionRef.current = recognition;
     recognition.start();
     return true;
-  }, [initializeRecognition, transcript, isSupported]);
+  }, [initializeRecognition, isSupported]);
 
   // Arrêter l'écoute
   const stopListening = useCallback(() => {
@@ -104,105 +107,191 @@ export const useSpeechRecognition = () => {
     const cleanText = text.toLowerCase().trim();
     console.log('🎤 Parsing speech:', cleanText);
     
-    // Mapping simplifié et plus robuste
+    // Mapping complet basé sur la base de données des exercices
     const exerciseMapping = {
-      // Pectoraux - expressions exactes d'abord
-      'pompes': 'pompes',
-      'pompe': 'pompes', 
-      'pomes': 'pompes',
-      'développé couché': 'développé couché',
-      'developpe couche': 'développé couché',
-      'develope couche': 'développé couché',
-      'devole couche': 'développé couché',
-      'développer coucher': 'développé couché',
-      'developper coucher': 'développé couché',
-      'devlopper coucher': 'développé couché',
-      'dips': 'dips',
-      'écarté couché': 'écarté couché',
-      'ecarte couche': 'écarté couché',
+      // Pectoraux
+      'pompes': 'Pompes',
+      'pompe': 'Pompes', 
+      'pomes': 'Pompes',
+      'développé couché': 'Développé couché',
+      'developpe couche': 'Développé couché',
+      'develope couche': 'Développé couché',
+      'devole couche': 'Développé couché',
+      'développer coucher': 'Développé couché',
+      'developper coucher': 'Développé couché',
+      'devlopper coucher': 'Développé couché',
+      'développé coucher': 'Développé couché',
+      'developpe coucher': 'Développé couché',
+      'develope coucher': 'Développé couché',
+      'développer couché': 'Développé couché',
+      'developper couché': 'Développé couché',
+      'devlopper couché': 'Développé couché',
+      'devole couché': 'Développé couché',
+      'développé incliné': 'Développé incliné',
+      'developpe incline': 'Développé incliné',
+      'develope incline': 'Développé incliné',
+      'développer incliner': 'Développé incliné',
+      'developper incliner': 'Développé incliné',
+      'devlopper incliner': 'Développé incliné',
+      'devole incliner': 'Développé incliné',
+      'developpe incliné': 'Développé incliné',
+      'develope incliné': 'Développé incliné',
+      'développer incliné': 'Développé incliné',
+      'developper incliné': 'Développé incliné',
+      'devlopper incliné': 'Développé incliné',
+      'devole incliné': 'Développé incliné',
+      'développé décliné': 'Développé décliné',
+      'developpe decline': 'Développé décliné',
+      'develope decline': 'Développé décliné',
+      'développer décliner': 'Développé décliné',
+      'developper decliner': 'Développé décliné',
+      'devlopper decliner': 'Développé décliné',
+      'devole decliner': 'Développé décliné',
+      'développé decliner': 'Développé décliné',
+      'developpe decliner': 'Développé décliné',
+      'develope decliner': 'Développé décliné',
+      'développé haltères': 'Développé haltères',
+      'developpe haltere': 'Développé haltères',
+      'develope haltere': 'Développé haltères',
+      'développer haltères': 'Développé haltères',
+      'developper haltere': 'Développé haltères',
+      'devlopper haltere': 'Développé haltères',
+      'devole haltere': 'Développé haltères',
+      'développé haltere': 'Développé haltères',
+      'developpe halteres': 'Développé haltères',
+      'develope halteres': 'Développé haltères',
+      'dips': 'Dips',
+      'écarté couché': 'Écarté couché',
+      'ecarte couche': 'Écarté couché',
+      'écarté incliné': 'Écarté incliné',
+      'ecarte incline': 'Écarté incliné',
+      'pull-over': 'Pull-over',
+      'pull over': 'Pull-over',
+      'pec deck': 'Pec deck',
       
       // Dos
-      'tractions': 'tractions',
-      'traction': 'tractions',
-      'soulevé de terre': 'soulevé de terre',
-      'souleve de terre': 'soulevé de terre',
-      'tirage horizontal': 'tirage horizontal',
-      'rowing': 'rowing barre',
-      
-      // Jambes
-      'squats': 'squats',
-      'squat': 'squats',
-      'fentes': 'fentes',
-      'fente': 'fentes',
-      'leg press': 'leg press',
-      'mollets': 'mollets debout',
+      'tractions': 'Tractions',
+      'traction': 'Tractions',
+      'tractions barre': 'Tractions',
+      'traction barre': 'Tractions',
+      'pull up': 'Tractions',
+      'pull ups': 'Tractions',
+      'pullup': 'Tractions',
+      'pullups': 'Tractions',
+      'tractions lestées': 'Tractions lestées',
+      'traction lestee': 'Tractions lestées',
+      'tractions assistées': 'Tractions assistées',
+      'traction assistee': 'Tractions assistées',
+      'rowing barre': 'Rowing barre',
+      'rowing': 'Rowing barre',
+      'rowing haltères': 'Rowing haltères',
+      'rowing haltere': 'Rowing haltères',
+      'tirage horizontal': 'Tirage horizontal',
+      'tirage vertical': 'Tirage vertical',
+      'soulevé de terre': 'Soulevé de terre',
+      'souleve de terre': 'Soulevé de terre',
+      'rowing t-bar': 'Rowing T-bar',
+      'rowing t bar': 'Rowing T-bar',
+      'shrugs': 'Shrugs',
+      'hyperextensions': 'Hyperextensions',
+      'tirage poulie haute': 'Tirage poulie haute',
       
       // Épaules
-      'développé militaire': 'développé militaire',
-      'developpe militaire': 'développé militaire',
-      'élévations latérales': 'élévations latérales',
-      'elevation laterale': 'élévations latérales',
+      'développé militaire': 'Développé militaire',
+      'developpe militaire': 'Développé militaire',
+      'develope militaire': 'Développé militaire',
+      'élévations latérales': 'Élévations latérales',
+      'elevation laterale': 'Élévations latérales',
+      'élévation latérale': 'Élévations latérales',
+      'élévations frontales': 'Élévations frontales',
+      'elevation frontale': 'Élévations frontales',
+      'élévation frontale': 'Élévations frontales',
+      'oiseau': 'Oiseau',
+      'développé arnold': 'Développé Arnold',
+      'developpe arnold': 'Développé Arnold',
+      'upright row': 'Upright row',
+      'face pull': 'Face pull',
+      'handstand push-up': 'Handstand push-up',
       
       // Biceps
-      'curl': 'curl barre',
-      'curl barre': 'curl barre',
-      'curl haltères': 'curl haltères',
-      'curl haltere': 'curl haltères',
+      'curl barre': 'Curl barre',
+      'curl': 'Curl barre',
+      'curl haltères': 'Curl haltères',
+      'curl haltere': 'Curl haltères',
+      'curl marteau': 'Curl marteau',
+      'curl concentré': 'Curl concentré',
+      'curl concentre': 'Curl concentré',
+      'curl pupitre': 'Curl pupitre',
+      'curl 21': 'Curl 21',
+      'traction supination': 'Traction supination',
+      'curl câble': 'Curl câble',
+      'curl cable': 'Curl câble',
       
       // Triceps
-      'extension triceps': 'extension triceps',
-      'barre au front': 'barre au front',
+      'extension couché': 'Extension couché',
+      'extension couche': 'Extension couché',
+      'extension verticale': 'Extension verticale',
+      'pompes diamant': 'Pompes diamant',
+      'kick back': 'Kick back',
+      'extension poulie haute': 'Extension poulie haute',
+      'développé serré': 'Développé serré',
+      'developpe serre': 'Développé serré',
+      
+      // Jambes
+      'squat': 'Squat',
+      'squats': 'Squat',
+      'leg press': 'Leg press',
+      'fentes': 'Fentes',
+      'fente': 'Fentes',
+      'leg curl': 'Leg curl',
+      'leg extension': 'Leg extension',
+      'soulevé de terre roumain': 'Soulevé de terre roumain',
+      'souleve de terre roumain': 'Soulevé de terre roumain',
+      'mollets debout': 'Mollets debout',
+      'mollets assis': 'Mollets assis',
+      'hack squat': 'Hack squat',
+      'goblet squat': 'Goblet squat',
       
       // Abdos
-      'crunchs': 'crunchs',
-      'crunch': 'crunchs',
-      'gainage': 'gainage',
-      'planche': 'gainage',
+      'crunch': 'Crunch',
+      'crunchs': 'Crunch',
+      'planche': 'Planche',
+      'gainage': 'Planche',
+      'relevé de jambes': 'Relevé de jambes',
+      'releve de jambes': 'Relevé de jambes',
+      'russian twist': 'Russian twist',
+      'grimpeur': 'Grimpeur',
+      'bicycle crunch': 'Bicycle crunch',
+      'dead bug': 'Dead bug',
+      'hanging knee raise': 'Hanging knee raise',
       
-      // Cardio - ATTENTION: mettre en dernier
-      'course': 'course',
-      'rameur': 'rameur',
-      'elliptique': 'elliptique',
-      'vélo': 'vélo',
-      'velo': 'vélo'
+      // Cardio
+      'course à pied': 'Course à pied',
+      'course a pied': 'Course à pied',
+      'course': 'Course à pied',
+      'vélo': 'Vélo',
+      'velo': 'Vélo',
+      'elliptique': 'Elliptique',
+      'rameur': 'Rameur',
+      'tapis de course': 'Tapis de course',
+      'vélo spinning': 'Vélo spinning',
+      'velo spinning': 'Vélo spinning',
+      'stepper': 'Stepper',
+      'corde à sauter': 'Corde à sauter',
+      'corde a sauter': 'Corde à sauter',
+      'burpees': 'Burpees',
+      'sauts étoiles': 'Sauts étoiles',
+      'sauts etoiles': 'Sauts étoiles',
+      'genoux hauts': 'Genoux hauts',
+      'montées de genoux': 'Montées de genoux',
+      'montees de genoux': 'Montées de genoux',
+      'sprint': 'Sprint',
+      'marche rapide': 'Marche rapide',
+      'natation': 'Natation',
+      'aquabike': 'Aquabike',
+      'hiit': 'HIIT',
+      'tabata': 'Tabata'
     };
-
-    // Détection intelligente par mots-clés d'abord
-    const keywordDetection = {
-      // Recherche de mots-clés pour développé couché
-      'développé couché': ['développé', 'developpe', 'develope', 'devole', 'développer', 'developper', 'devlopper'],
-      'pompes': ['pompes', 'pompe', 'pomes'],
-      'squats': ['squats', 'squat'],
-      'tractions': ['tractions', 'traction'],
-      'curl barre': ['curl'],
-      'gainage': ['gainage', 'planche']
-    };
-
-    // Vérifier les mots-clés d'abord
-    for (const [exercise, keywords] of Object.entries(keywordDetection)) {
-      for (const keyword of keywords) {
-        if (cleanText.includes(keyword)) {
-          // Vérification spéciale pour développé couché
-          if (keyword.includes('développ') || keyword.includes('develo') || keyword.includes('devol')) {
-            if (cleanText.includes('couché') || cleanText.includes('couche') || cleanText.includes('coucher')) {
-              console.log('✅ Keyword match found for développé couché:', keyword);
-              return {
-                name: 'développé couché',
-                found: true,
-                confidence: 1
-              };
-            }
-          } else {
-            console.log('✅ Keyword match found:', keyword, '->', exercise);
-            return {
-              name: exercise,
-              found: true,
-              confidence: 1
-            };
-          }
-        }
-      }
-    }
 
     // Tri des clés par longueur décroissante pour vérifier les expressions longues d'abord
     const sortedKeys = Object.keys(exerciseMapping).sort((a, b) => b.length - a.length);
@@ -233,6 +322,139 @@ export const useSpeechRecognition = () => {
       }
     }
 
+    // Détection intelligente par mots-clés en dernier recours
+    const keywordDetection = {
+      // Élévations en premier (priorité haute)
+      'Élévations latérales': ['élévation', 'elevation', 'latérale', 'laterale'],
+      'Élévations frontales': ['élévation', 'elevation', 'frontale', 'frontale'],
+      
+      // Rowing en premier (priorité haute) - avec détection spécifique
+      'Rowing barre': ['rowing', 'roing', 'roin'],
+      'Rowing haltères': ['rowing', 'roing', 'roin'],
+      'Tractions': ['tractions', 'traction'],
+      'Soulevé de terre': ['soulevé', 'souleve', 'soulev'],
+      
+      // Développés avec variations
+      'Développé couché': ['développé', 'developpe', 'develope', 'devole', 'développer', 'developper', 'devlopper'],
+      'Développé incliné': ['développé', 'developpe', 'develope', 'devole', 'développer', 'developper', 'devlopper'],
+      'Développé décliné': ['développé', 'developpe', 'develope', 'devole', 'développer', 'developper', 'devlopper'],
+      'Développé haltères': ['développé', 'developpe', 'develope', 'devole', 'développer', 'developper', 'devlopper'],
+      
+      // Autres exercices
+      'Pompes': ['pompes', 'pompe', 'pomes'],
+      'Squat': ['squats', 'squat'],
+      'Curl barre': ['curl'],
+      'Planche': ['gainage', 'planche'],
+      'Vélo': ['vélo', 'velo'],
+      'Course à pied': ['course']
+    };
+
+    // Vérifier les mots-clés en dernier recours
+    for (const [exercise, keywords] of Object.entries(keywordDetection)) {
+      for (const keyword of keywords) {
+        if (cleanText.includes(keyword)) {
+          // Vérification spéciale pour les élévations (priorité haute)
+          if (exercise.includes('Élévations')) {
+            if (cleanText.includes('latérale') || cleanText.includes('laterale')) {
+              console.log('✅ Keyword match found for élévations latérales:', keyword);
+              return {
+                name: 'Élévations latérales',
+                found: true,
+                confidence: 1
+              };
+            } else if (cleanText.includes('frontale') || cleanText.includes('frontale')) {
+              console.log('✅ Keyword match found for élévations frontales:', keyword);
+              return {
+                name: 'Élévations frontales',
+                found: true,
+                confidence: 1
+              };
+            }
+          }
+          // Vérification spéciale pour les développés - seulement si le mot-clé est vraiment un développé
+          else if (exercise.includes('Développé') && (keyword.includes('développ') || keyword.includes('develo') || keyword.includes('devol'))) {
+            if (cleanText.includes('incliné') || cleanText.includes('incline') || cleanText.includes('incliner')) {
+              console.log('✅ Keyword match found for développé incliné:', keyword);
+              return {
+                name: 'Développé incliné',
+                found: true,
+                confidence: 1
+              };
+            } else if (cleanText.includes('décliné') || cleanText.includes('decline') || cleanText.includes('decliner')) {
+              console.log('✅ Keyword match found for développé décliné:', keyword);
+              return {
+                name: 'Développé décliné',
+                found: true,
+                confidence: 1
+              };
+            } else if (cleanText.includes('haltères') || cleanText.includes('haltere')) {
+              console.log('✅ Keyword match found for développé haltères:', keyword);
+              return {
+                name: 'Développé haltères',
+                found: true,
+                confidence: 1
+              };
+            } else if (cleanText.includes('couché') || cleanText.includes('couche') || cleanText.includes('coucher')) {
+              console.log('✅ Keyword match found for développé couché:', keyword);
+              return {
+                name: 'Développé couché',
+                found: true,
+                confidence: 1
+              };
+            }
+          } else if (exercise.includes('Curl') && keyword.includes('curl')) {
+            if (cleanText.includes('haltères') || cleanText.includes('haltere')) {
+              console.log('✅ Keyword match found for curl haltères:', keyword);
+              return {
+                name: 'Curl haltères',
+                found: true,
+                confidence: 1
+              };
+            } else {
+              console.log('✅ Keyword match found for curl barre:', keyword);
+              return {
+                name: 'Curl barre',
+                found: true,
+                confidence: 1
+              };
+            }
+          } else if (exercise.includes('Rowing')) {
+            // Logique spécifique pour distinguer rowing barre vs rowing haltères
+            if (cleanText.includes('bar') || cleanText.includes('barre')) {
+              console.log('✅ Keyword match found for rowing barre:', keyword);
+              return {
+                name: 'Rowing barre',
+                found: true,
+                confidence: 1
+              };
+            } else if (cleanText.includes('haltères') || cleanText.includes('haltere')) {
+              console.log('✅ Keyword match found for rowing haltères:', keyword);
+              return {
+                name: 'Rowing haltères',
+                found: true,
+                confidence: 1
+              };
+            } else {
+              // Par défaut, rowing barre
+              console.log('✅ Keyword match found for rowing barre (default):', keyword);
+              return {
+                name: 'Rowing barre',
+                found: true,
+                confidence: 1
+              };
+            }
+          } else {
+            console.log('✅ Keyword match found:', keyword, '->', exercise);
+            return {
+              name: exercise,
+              found: true,
+              confidence: 1
+            };
+          }
+        }
+      }
+    }
+
     console.log('❌ No match found, returning as custom exercise');
     // Si aucune correspondance, retourner le texte brut
     return {
@@ -246,18 +468,63 @@ export const useSpeechRecognition = () => {
   const getMuscleGroupFromExercise = useCallback((exerciseName) => {
     const exerciseLower = exerciseName.toLowerCase();
     
+    // Mapping précis basé sur la base de données des exercices
     const muscleGroups = {
-      pectoraux: ['développé couché', 'pompes', 'dips', 'écarté', 'pec'],
-      dos: ['tractions', 'tirage', 'rowing', 'soulevé de terre', 'pull'],
-      jambes: ['squats', 'fentes', 'leg press', 'mollets', 'quad', 'ischio'],
+      pectoraux: [
+        'développé couché', 'développé incliné', 'développé décliné', 'développé haltères',
+        'pompes', 'écarté couché', 'écarté incliné', 'pull-over', 'pec deck'
+      ],
+      dos: [
+        'tractions', 'tractions lestées', 'tractions assistées', 'rowing barre', 'rowing haltères',
+        'tirage horizontal', 'tirage vertical', 'soulevé de terre', 'rowing t-bar', 'shrugs',
+        'hyperextensions', 'tirage poulie haute'
+      ],
+      épaules: [
+        'développé militaire', 'élévations latérales', 'élévations frontales', 'oiseau',
+        'développé arnold', 'upright row', 'face pull', 'handstand push-up'
+      ],
+      biceps: [
+        'curl barre', 'curl haltères', 'curl marteau', 'curl concentré', 'curl pupitre',
+        'curl 21', 'traction supination', 'curl câble'
+      ],
+      triceps: [
+        'dips', 'extension couché', 'extension verticale', 'pompes diamant', 'kick back',
+        'extension poulie haute', 'développé serré'
+      ],
+      jambes: [
+        'squat', 'leg press', 'fentes', 'leg curl', 'leg extension', 'soulevé de terre roumain',
+        'mollets debout', 'mollets assis', 'hack squat', 'goblet squat'
+      ],
+      abdos: [
+        'crunch', 'planche', 'relevé de jambes', 'russian twist', 'grimpeur',
+        'bicycle crunch', 'dead bug', 'hanging knee raise'
+      ],
+      cardio: [
+        'course à pied', 'vélo', 'elliptique', 'rameur', 'tapis de course', 'vélo spinning',
+        'stepper', 'corde à sauter', 'burpees', 'sauts étoiles', 'genoux hauts',
+        'montées de genoux', 'sprint', 'marche rapide', 'natation', 'aquabike', 'hiit', 'tabata'
+      ]
+    };
+
+    for (const [muscle, exercises] of Object.entries(muscleGroups)) {
+      if (exercises.some(exercise => exerciseLower.includes(exercise.toLowerCase()))) {
+        return muscle;
+      }
+    }
+
+    // Fallback avec mots-clés génériques
+    const keywordMapping = {
+      pectoraux: ['développé', 'pompes', 'dips', 'écarté', 'pec'],
+      dos: ['tractions', 'tirage', 'rowing', 'soulevé', 'pull'],
+      jambes: ['squat', 'fentes', 'leg', 'mollets'],
       biceps: ['curl', 'biceps'],
-      triceps: ['extension triceps', 'barre au front', 'triceps'],
-      épaules: ['développé militaire', 'élévations latérales', 'épaules', 'deltoid'],
-      abdos: ['crunchs', 'gainage', 'planche', 'abdos'],
+      triceps: ['extension', 'triceps'],
+      épaules: ['militaire', 'élévations', 'épaules'],
+      abdos: ['crunch', 'gainage', 'planche', 'abdos'],
       cardio: ['course', 'vélo', 'rameur', 'elliptique', 'cardio']
     };
 
-    for (const [muscle, keywords] of Object.entries(muscleGroups)) {
+    for (const [muscle, keywords] of Object.entries(keywordMapping)) {
       if (keywords.some(keyword => exerciseLower.includes(keyword))) {
         return muscle;
       }

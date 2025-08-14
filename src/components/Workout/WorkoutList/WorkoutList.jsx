@@ -153,7 +153,7 @@ function WorkoutList({
       value: 'motivated',
       label: t('feeling_motivated'),
       icon: <span className="text-3xl">🔥</span>,
-      color: 'purple',
+      color: 'blue',
     },
     {
       value: 'demotivated',
@@ -268,9 +268,13 @@ function WorkoutList({
     startListening(
       (text, isFinal) => {
         setVoiceTranscript(text);
-        if (isFinal && text.trim()) {
+        // Toujours parser le texte pour un affichage en temps réel
+        if (text.trim()) {
           const parsed = parseExerciseFromSpeech(text);
           setParsedExercise(parsed);
+        } else {
+          // Si le texte est vide, vider l'exercice parsé
+          setParsedExercise(null);
         }
       },
       (finalText) => {
@@ -330,7 +334,7 @@ function WorkoutList({
           <p className="text-gray-600 mt-1">{t('create_program')}</p>
         </div>
         <div className="flex items-center space-x-3 bg-white rounded-xl p-3 shadow-md border border-gray-100">
-          <Calendar className="h-5 w-5 text-indigo-600" />
+          <Calendar className="h-5 w-5 text-blue-600" />
           <input
             type="date"
             value={selectedDate}
@@ -352,11 +356,13 @@ function WorkoutList({
           <p className="text-secondary mb-6 max-w-[90%] mx-auto break-words overflow-wrap break-word truncate max-w-full">
             {t('start_workout')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row gap-2 justify-center">
             <ConicGradientButton
               icon={Plus}
               onClick={() => setShowAddExercise(true)}
               variant="primary"
+              size="sm"
+              className="min-w-[140px]"
             >
               {t('add_exercise')}
             </ConicGradientButton>
@@ -366,8 +372,10 @@ function WorkoutList({
                 icon={Mic}
                 onClick={handleStartVoiceRecognition}
                 variant="secondary"
+                size="sm"
+                className="min-w-[140px]"
               >
-                Ajouter par la voix
+                Ajouter vocal
               </ConicGradientButton>
             )}
 
@@ -597,12 +605,13 @@ function WorkoutList({
 
           <div className="space-y-3 mt-4">
             {/* Première ligne : Ajouter exercice + Ajouter vocal + Vider séance */}
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-2 justify-center flex-wrap">
               <ConicGradientButton
                 icon={Plus}
                 onClick={() => setShowAddExercise(true)}
                 variant="primary"
-                className="flex-1 max-w-xs"
+                size="sm"
+                className="flex-1 max-w-[160px] min-w-[140px]"
               >
                 {t('add_exercise')}
               </ConicGradientButton>
@@ -612,15 +621,17 @@ function WorkoutList({
                   icon={Mic}
                   onClick={handleStartVoiceRecognition}
                   variant="secondary"
-                  className="flex-1 max-w-xs"
+                  size="sm"
+                  className="flex-1 max-w-[160px] min-w-[140px]"
                 >
-                  Ajouter par la voix
+                  Ajouter vocal
                 </ConicGradientButton>
               )}
 
               
               {exercises.length > 0 && (
-                <button
+                <ConicGradientButton
+                  icon={X}
                   onClick={() => {
                     if (
                       window.confirm(
@@ -632,44 +643,51 @@ function WorkoutList({
                       );
                     }
                   }}
-                  className="badge-danger ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
+                  variant="danger"
+                  size="sm"
+                  className="flex-1 max-w-[160px] min-w-[140px]"
                 >
-                  <X className="h-5 w-5" />
-                  <span className="font-medium">Vider la séance</span>
-                </button>
+                  Vider séance
+                </ConicGradientButton>
               )}
             </div>
 
             {/* Deuxième ligne : Template + Terminer séance */}
             {exercises.length > 0 && (
-              <div className="flex gap-3 justify-center">
-                <button
+              <div className="flex gap-2 justify-center">
+                <ConicGradientButton
+                  icon={Bookmark}
                   onClick={() => setShowSaveTemplateModal(true)}
-                  className="btn-primary ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
+                  variant="secondary"
+                  size="sm"
+                  className="flex-1 max-w-[160px] min-w-[140px]"
                 >
-                  <Bookmark className="h-5 w-5" />
-                  Sauvegarder en template
-                </button>
-                <button
+                  Template
+                </ConicGradientButton>
+                <ConicGradientButton
+                  icon={Target}
                   onClick={handleSaveWorkout}
-                  className="btn-primary ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
+                  variant="primary"
+                  size="sm"
+                  className="flex-1 max-w-[160px] min-w-[140px]"
                 >
-                  <Target className="h-5 w-5" />
                   {t('finish_workout')}
-                </button>
+                </ConicGradientButton>
               </div>
             )}
 
             {/* Si pas d'exercices, afficher seulement Terminer séance */}
             {exercises.length === 0 && (
               <div className="flex justify-center">
-                <button
+                <ConicGradientButton
+                  icon={Target}
                   onClick={handleSaveWorkout}
-                  className="btn-primary ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold max-w-xs"
+                  variant="primary"
+                  size="sm"
+                  className="max-w-[160px] min-w-[140px]"
                 >
-                  <Target className="h-5 w-5" />
                   {t('finish_workout')}
-                </button>
+                </ConicGradientButton>
               </div>
             )}
           </div>
@@ -874,7 +892,7 @@ function WorkoutList({
                 {t('back')}
               </button>
             )}
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold text-gray-800">
               {selectedMuscleGroup
                 ? `💪 ${selectedMuscleGroup.charAt(0).toUpperCase() + selectedMuscleGroup.slice(1)}`
                 : t('choose_muscle_group')}
@@ -890,11 +908,11 @@ function WorkoutList({
                   <button
                     key={muscle}
                     onClick={() => setSelectedMuscleGroup(muscle)}
-                    className="bg-gradient-to-br from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-2xl p-4 sm:p-6 border border-gray-200 hover:border-indigo-300 transition-all duration-200 hover:shadow-lg transform hover:scale-105"
+                    className="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-gray-200/30 hover:border-blue-300/50 transition-all duration-200 hover:shadow-lg transform hover:scale-105"
                   >
                                           <div className="flex flex-col items-center space-y-3 sm:space-y-4">
                         <div
-                          className={`p-3 sm:p-4 rounded-2xl ${muscle === 'cardio' ? 'bg-red-500' : 'bg-indigo-500'} shadow-lg`}
+                          className={`p-3 sm:p-4 rounded-2xl ${muscle === 'cardio' ? 'bg-red-500/20 backdrop-blur-sm' : 'bg-blue-500/20 backdrop-blur-sm'} shadow-lg`}
                         >
                           {getMuscleIcon(muscle)}
                         </div>
@@ -920,7 +938,7 @@ function WorkoutList({
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder={t('search_exercise')}
-                  className="border-2 border-gray-200 rounded-xl px-4 py-2 w-full max-w-md text-center font-medium focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
+                  className="border-2 border-gray-200/50 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 w-full max-w-md text-center font-medium focus:border-blue-400 focus:outline-none transition-colors duration-200 shadow-sm"
                   autoFocus
                 />
               </div>
@@ -937,11 +955,11 @@ function WorkoutList({
                           onClick={() =>
                             addExerciseToWorkout(exercise, selectedMuscleGroup)
                           }
-                          className="w-full text-left p-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50 rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200 hover:border-indigo-300 hover:shadow-md transform hover:scale-[1.02]"
+                          className="w-full text-left p-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl font-medium text-gray-700 transition-all duration-200 border border-gray-200/30 hover:border-blue-300/50 hover:shadow-md transform hover:scale-[1.02]"
                         >
                           <div className="flex items-center space-x-3">
                             <div
-                              className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'}`}
+                              className={`p-2 rounded-lg ${selectedMuscleGroup === 'cardio' ? 'bg-red-100/50 text-red-600' : 'bg-blue-100/50 text-blue-600'}`}
                             >
                               {selectedMuscleGroup === 'cardio' ? (
                                 <Heart className="h-4 w-4" />
@@ -967,7 +985,7 @@ function WorkoutList({
                   value={customExerciseName}
                   onChange={(e) => setCustomExerciseName(e.target.value)}
                   placeholder={t('custom_exercise_name')}
-                  className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full max-w-md text-center font-semibold focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
+                  className="border-2 border-blue-200/50 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 w-full max-w-md text-center font-semibold focus:border-blue-400 focus:outline-none transition-colors duration-200 shadow-sm"
                 />
                 <ConicGradientButton
                   onClick={() => {
@@ -1000,7 +1018,7 @@ function WorkoutList({
       >
         <div className="flex flex-col items-center justify-center gap-6 p-6">
           <div className="text-center">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">
               {t('workout_feeling')}
             </h3>
             <p className="text-gray-600">
@@ -1019,8 +1037,8 @@ function WorkoutList({
                 }}
                 className={`p-4 rounded-xl flex flex-col items-center justify-center transition-all duration-200 ${
                   selectedFeeling === feeling.value
-                    ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg transform scale-105'
-                    : 'bg-white hover:bg-gray-50 border border-gray-200 hover:border-indigo-300'
+                    ? 'bg-blue-500/20 backdrop-blur-sm text-blue-700 border border-blue-300/50 shadow-lg transform scale-105'
+                    : 'bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-gray-200/30 hover:border-blue-300/50'
                 }`}
               >
                 <div
@@ -1055,8 +1073,8 @@ function WorkoutList({
                 }}
                 className={`p-3 rounded-lg flex items-center gap-2 transition-all duration-200 ${
                   selectedFeeling === 'custom'
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                    ? 'bg-blue-500/20 backdrop-blur-sm text-blue-700 border border-blue-300/50'
+                    : 'bg-gray-100/50 backdrop-blur-sm hover:bg-gray-200/50 text-gray-700 border border-gray-200/30'
                 }`}
               >
                 <span className="text-sm font-medium">
@@ -1071,7 +1089,7 @@ function WorkoutList({
                 value={customFeeling}
                 onChange={(e) => setCustomFeeling(e.target.value)}
                 placeholder={t('feeling_placeholder')}
-                className="border-2 border-indigo-200 rounded-xl px-4 py-3 w-full text-center font-medium focus:border-indigo-500 focus:outline-none transition-colors duration-200 shadow-sm"
+                className="border-2 border-blue-200/50 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 w-full text-center font-medium focus:border-blue-400 focus:outline-none transition-colors duration-200 shadow-sm"
                 autoFocus
               />
             )}
@@ -1091,7 +1109,7 @@ function WorkoutList({
             </button>
             <button
               onClick={confirmSaveWorkout}
-              className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              className="flex-1 bg-blue-500/20 backdrop-blur-sm hover:bg-blue-500/30 text-blue-700 border border-blue-300/50 px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
             >
               {t('finish_workout')}
             </button>
@@ -1128,7 +1146,7 @@ function WorkoutList({
                   type="text"
                   value={templateName}
                   onChange={(e) => setTemplateName(e.target.value)}
-                  className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-indigo-500 focus:outline-none"
+                  className="w-full border-2 border-gray-200/50 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 focus:border-blue-400 focus:outline-none"
                   placeholder="Ex: Séance pectoraux"
                   maxLength={50}
                 />
@@ -1141,7 +1159,7 @@ function WorkoutList({
                 <textarea
                   value={templateDescription}
                   onChange={(e) => setTemplateDescription(e.target.value)}
-                  className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-indigo-500 focus:outline-none"
+                  className="w-full border-2 border-gray-200/50 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 focus:border-blue-400 focus:outline-none"
                   placeholder="Description du template..."
                   rows={3}
                   maxLength={200}
@@ -1171,10 +1189,7 @@ function WorkoutList({
               </button>
               <button
                 onClick={handleSaveAsTemplate}
-                className="flex-1 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-200"
-                style={{
-                  background: 'linear-gradient(to right, #a855f7, #7c3aed)',
-                }}
+                className="flex-1 bg-blue-500/20 backdrop-blur-sm hover:bg-blue-500/30 text-blue-700 border border-blue-300/50 px-4 py-3 rounded-lg font-semibold transition-all duration-200"
               >
                 Sauvegarder
               </button>
@@ -1285,7 +1300,12 @@ function WorkoutList({
               </button>
             ) : (
               <button
-                onClick={handleStartVoiceRecognition}
+                onClick={() => {
+                  // Réinitialiser les états avant de commencer
+                  setVoiceTranscript('');
+                  setParsedExercise(null);
+                  handleStartVoiceRecognition();
+                }}
                 className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 border border-emerald-500/50"
               >
                 <Mic className="h-5 w-5 inline mr-2" />

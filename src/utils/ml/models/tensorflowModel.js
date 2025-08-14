@@ -93,7 +93,7 @@ export class TensorFlowModel {
       throw new Error('TensorFlow.js non disponible');
     }
     
-    const { features, sequenceLength } = this.config;
+    // const { features, sequenceLength } = this.config;
     
     if (this.modelType === 'lstm') {
       return this.buildLSTMModel();

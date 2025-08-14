@@ -131,18 +131,20 @@ export default function useWorkoutLogic({
             }
           }
 
-          // Envoyer un message de félicitations du chatbot
-          try {
-            const { sendCongratsAfterWorkout } = await import(
-              '../components/Chatbot/sendCongratsAfterWorkout'
-            );
-            sendCongratsAfterWorkout({ user, workout, workouts, setMessages });
-          } catch (error) {
-            console.error(
-              "Erreur lors de l'envoi du message de félicitations:",
-              error
-            );
-            // Ne pas bloquer la sauvegarde si le message échoue
+          // Envoyer un message de félicitations du chatbot (si disponible)
+          if (setMessages) {
+            try {
+              const { sendCongratsAfterWorkout } = await import(
+                '../components/Chatbot/sendCongratsAfterWorkout'
+              );
+              sendCongratsAfterWorkout({ user, workout, workouts, setMessages });
+            } catch (error) {
+              console.error(
+                "Erreur lors de l'envoi du message de félicitations:",
+                error
+              );
+              // Ne pas bloquer la sauvegarde si le message échoue
+            }
           }
 
           showToastMsg(t('workout_saved'));

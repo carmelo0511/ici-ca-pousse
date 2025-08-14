@@ -19,25 +19,28 @@ const ConicGradientButton = ({
     lg: 'px-8 py-4 text-lg'
   };
 
-  // Variant styles
+  // Variant styles - style glassmorphe harmonisé avec l'app
   const variantStyles = {
     primary: {
-      background: 'conic-gradient(from 180deg at 50% 50%, #667eea 0deg, #764ba2 180deg, #667eea 360deg)',
-      hoverBackground: 'conic-gradient(from 180deg at 50% 50%, #5a67d8 0deg, #6b46c1 180deg, #5a67d8 360deg)',
-      textColor: 'text-white',
-      shadow: 'shadow-lg hover:shadow-xl'
+      background: 'rgba(59, 130, 246, 0.1)',
+      hoverBackground: 'rgba(59, 130, 246, 0.2)',
+      textColor: 'text-blue-600',
+      shadow: 'shadow-sm hover:shadow-md',
+      backdrop: 'backdrop-blur-sm'
     },
     secondary: {
-      background: 'conic-gradient(from 180deg at 50% 50%, #48bb78 0deg, #38a169 180deg, #48bb78 360deg)',
-      hoverBackground: 'conic-gradient(from 180deg at 50% 50%, #38a169 0deg, #2f855a 180deg, #38a169 360deg)',
-      textColor: 'text-white',
-      shadow: 'shadow-lg hover:shadow-xl'
+      background: 'rgba(16, 185, 129, 0.1)',
+      hoverBackground: 'rgba(16, 185, 129, 0.2)',
+      textColor: 'text-emerald-600',
+      shadow: 'shadow-sm hover:shadow-md',
+      backdrop: 'backdrop-blur-sm'
     },
     danger: {
-      background: 'conic-gradient(from 180deg at 50% 50%, #f56565 0deg, #e53e3e 180deg, #f56565 360deg)',
-      hoverBackground: 'conic-gradient(from 180deg at 50% 50%, #e53e3e 0deg, #c53030 180deg, #e53e3e 360deg)',
-      textColor: 'text-white',
-      shadow: 'shadow-lg hover:shadow-xl'
+      background: 'rgba(239, 68, 68, 0.1)',
+      hoverBackground: 'rgba(239, 68, 68, 0.2)',
+      textColor: 'text-red-600',
+      shadow: 'shadow-sm hover:shadow-md',
+      backdrop: 'backdrop-blur-sm'
     }
   };
 
@@ -49,43 +52,32 @@ const ConicGradientButton = ({
       onClick={onClick}
       disabled={disabled}
       className={`
-        relative overflow-hidden rounded-xl font-semibold transition-all duration-300 
+        relative overflow-hidden rounded-lg font-medium transition-all duration-200 
         ${sizeClasses[size]} 
         ${currentVariant.textColor} 
         ${currentVariant.shadow}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
+        ${currentVariant.backdrop}
+        ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-[0.98]'}
         ${className}
       `}
       style={{
-        background: disabled ? currentVariant.background : currentVariant.background,
-        backgroundSize: '200% 200%',
-        animation: disabled ? 'none' : 'gradientShift 3s ease infinite'
+        background: currentVariant.background
       }}
       {...props}
     >
-      {/* Animated background overlay */}
+      {/* Hover overlay */}
       <div 
-        className="absolute inset-0 opacity-0 hover:opacity-20 transition-opacity duration-300"
+        className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-200"
         style={{
-          background: currentVariant.hoverBackground,
-          backgroundSize: '200% 200%'
+          background: currentVariant.hoverBackground
         }}
       />
       
       {/* Content */}
       <div className="relative flex items-center justify-center gap-2">
-        {Icon && <Icon className="h-5 w-5" />}
-        <span>{children}</span>
+        {Icon && <Icon className="h-4 w-4" />}
+        <span className="text-sm font-medium">{children}</span>
       </div>
-
-      {/* CSS Animation */}
-      <style jsx>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-      `}</style>
     </button>
   );
 };

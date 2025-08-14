@@ -107,28 +107,77 @@ button:focus {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive improvements */
+/* Responsive improvements - Enhanced for mobile */
 @media (max-width: 768px) {
   .text-3xl {
-    font-size: 1.875rem;
+    font-size: 1.75rem;
   }
 
   .text-2xl {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  .text-xl {
+    font-size: 1.1rem;
+  }
+
+  .text-lg {
+    font-size: 1rem;
   }
 
   .p-8 {
-    padding: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  .p-6 {
+    padding: 1rem;
   }
 
   .px-8 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .py-4 {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .py-3 {
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* Optimiser les éléments tactiles pour mobile */
+  button, .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Améliorer l'espacement des grilles sur mobile */
+  .grid {
+    gap: 0.75rem;
+  }
+
+  .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.75rem;
+  }
+
+  .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem;
+  }
+
+  /* Optimiser les modals sur mobile */
+  .modal-content {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
   }
 }
 
@@ -389,7 +438,52 @@ button:focus {
   font-size: 0.85rem !important;
 }
 .compact .max-w-4xl {
-  max-width: 90vw !important;
+  max-width: 95vw !important;
+}
+
+/* Optimisations tactiles mobiles supplémentaires */
+@media (max-width: 768px) {
+  /* Zone tactile minimale recommandée : 44px */
+  .compact button, 
+  .compact .btn, 
+  .compact input[type="button"],
+  .compact input[type="submit"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* Espacement amélioré pour éviter les clics accidentels */
+  .compact .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 0.75rem !important;
+  }
+
+  .compact .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 1rem !important;
+  }
+
+  /* Améliorer la lisibilité des inputs sur mobile */
+  .compact input, 
+  .compact select, 
+  .compact textarea {
+    font-size: 16px !important; /* Évite le zoom sur iOS */
+    min-height: 44px !important;
+    padding: 0.75rem !important;
+  }
+
+  /* Cartes plus compactes sur mobile */
+  .compact .rounded-2xl,
+  .compact .rounded-xl {
+    margin: 0.5rem !important;
+    padding: 1rem !important;
+  }
+
+  /* Navigation plus accessible sur mobile */
+  .compact .menu-horizontal-scroll button {
+    min-width: 80px !important;
+    padding: 0.625rem 0.75rem !important;
+  }
 }
 .compact .space-y-8 > :not([hidden]) ~ :not([hidden]) {
   margin-top: 1.5rem !important;

@@ -19,7 +19,7 @@ export const initializeTensorFlow = async () => {
     // TensorFlow.js initialisé avec backend: ${tf.getBackend()}
     
     // Vérifier les backends disponibles
-    const backends = tf.engine().registryFactory;
+    // const backends = tf.engine().registryFactory;
     // Backends disponibles: ${Object.keys(backends)}
     
     return true;
@@ -36,4 +36,5 @@ export const tensorFlowConfig = {
   fallbackBackend: 'cpu'
 };
 
-export default { initializeTensorFlow, tensorFlowConfig };
+const tfSetup = { initializeTensorFlow, tensorFlowConfig };
+export default tfSetup;

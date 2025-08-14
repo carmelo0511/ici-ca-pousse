@@ -1,0 +1,254 @@
+/* Améliorations spécifiques pour mobile */
+
+/* Optimisations du scroll sur mobile */
+@media (max-width: 768px) {
+  /* Scroll momentum natif iOS */
+  .scroll-container,
+  .overflow-y-auto,
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Prévenir le rubber band effect */
+  body {
+    overscroll-behavior: contain;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+
+  #root {
+    overflow-y: auto;
+    height: 100vh;
+  }
+
+  /* Optimiser les interactions tactiles */
+  button, 
+  .btn, 
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    tap-highlight-color: rgba(0, 0, 0, 0.1);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+  }
+
+  /* Améliorer les zones tactiles */
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Optimiser les modals sur mobile */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+  }
+
+  .modal-container {
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Prévenir le zoom sur les inputs iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  select,
+  textarea {
+    font-size: 16px !important;
+    max-zoom: 1;
+    zoom: 1;
+  }
+
+  /* Optimiser les animations pour la performance */
+  @keyframes mobile-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes mobile-slide-up {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .mobile-fade-in {
+    animation: mobile-fade-in 0.3s ease-out;
+  }
+
+  .mobile-slide-up {
+    animation: mobile-slide-up 0.3s ease-out;
+  }
+
+  /* Optimiser les grilles sur mobile */
+  .mobile-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .mobile-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mobile-grid-1 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Améliorer la navigation mobile */
+  .mobile-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  /* Optimiser les cartes sur mobile */
+  .mobile-card {
+    margin: 0.5rem;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Améliorer la typography mobile */
+  .mobile-text-primary {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .mobile-text-secondary {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #6b7280;
+  }
+
+  .mobile-text-small {
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: #9ca3af;
+  }
+
+  /* Optimiser les formulaires mobile */
+  .mobile-form-group {
+    margin-bottom: 1rem;
+  }
+
+  .mobile-form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .mobile-form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .mobile-form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  /* Performance: Réduire la complexité des ombres */
+  .mobile-shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .mobile-shadow {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Optimiser les espaces pour économiser l'écran */
+  .mobile-compact {
+    padding: 0.5rem !important;
+    margin: 0.25rem !important;
+  }
+
+  .mobile-spacing-sm {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+  }
+
+  .mobile-spacing-md {
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+}
+
+/* Optimisations pour appareils très petits */
+@media (max-width: 480px) {
+  .mobile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-text-primary {
+    font-size: 0.95rem;
+  }
+
+  .mobile-form-input {
+    padding: 0.625rem;
+  }
+
+  .mobile-card {
+    margin: 0.25rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Optimisations pour les appareils en mode paysage */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-nav {
+    position: static;
+  }
+
+  .modal-container {
+    padding: 0.5rem;
+  }
+
+  .mobile-card {
+    margin: 0.25rem;
+    padding: 0.75rem;
+  }
+}

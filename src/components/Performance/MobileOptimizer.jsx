@@ -118,6 +118,52 @@ const MobileOptimizer = ({ children }) => {
         .slow-network .animation-heavy {
           animation: none !important;
         }
+
+        /* Optimisations de performance pour mobile */
+        .mobile-device {
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+        }
+
+        .mobile-device * {
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+          -webkit-perspective: 1000;
+          perspective: 1000;
+        }
+
+        /* Optimiser les transitions sur mobile */
+        @media (max-width: 768px) {
+          .mobile-device * {
+            transition-duration: 0.15s !important;
+          }
+          
+          .mobile-device .card-hover:hover {
+            transform: none !important;
+          }
+          
+          .mobile-device .btn-gradient:hover {
+            transform: none !important;
+          }
+
+          /* Réduire les ombres sur mobile pour améliorer les performances */
+          .mobile-device .shadow-lg {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+          }
+
+          .mobile-device .shadow-xl {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+          }
+
+          /* Simplifier les backdrop-filter sur mobile */
+          .mobile-device .backdrop-blur-lg {
+            backdrop-filter: blur(8px) !important;
+          }
+
+          .mobile-device .backdrop-blur-md {
+            backdrop-filter: blur(4px) !important;
+          }
+        }
       `}</style>
     </>
   );
