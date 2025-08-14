@@ -114,6 +114,9 @@ export const useSpeechRecognition = () => {
       'developpe couche': 'développé couché',
       'develope couche': 'développé couché',
       'devole couche': 'développé couché',
+      'développer coucher': 'développé couché',
+      'developper coucher': 'développé couché',
+      'devlopper coucher': 'développé couché',
       'dips': 'dips',
       'écarté couché': 'écarté couché',
       'ecarte couche': 'écarté couché',
@@ -163,6 +166,43 @@ export const useSpeechRecognition = () => {
       'vélo': 'vélo',
       'velo': 'vélo'
     };
+
+    // Détection intelligente par mots-clés d'abord
+    const keywordDetection = {
+      // Recherche de mots-clés pour développé couché
+      'développé couché': ['développé', 'developpe', 'develope', 'devole', 'développer', 'developper', 'devlopper'],
+      'pompes': ['pompes', 'pompe', 'pomes'],
+      'squats': ['squats', 'squat'],
+      'tractions': ['tractions', 'traction'],
+      'curl barre': ['curl'],
+      'gainage': ['gainage', 'planche']
+    };
+
+    // Vérifier les mots-clés d'abord
+    for (const [exercise, keywords] of Object.entries(keywordDetection)) {
+      for (const keyword of keywords) {
+        if (cleanText.includes(keyword)) {
+          // Vérification spéciale pour développé couché
+          if (keyword.includes('développ') || keyword.includes('develo') || keyword.includes('devol')) {
+            if (cleanText.includes('couché') || cleanText.includes('couche') || cleanText.includes('coucher')) {
+              console.log('✅ Keyword match found for développé couché:', keyword);
+              return {
+                name: 'développé couché',
+                found: true,
+                confidence: 1
+              };
+            }
+          } else {
+            console.log('✅ Keyword match found:', keyword, '->', exercise);
+            return {
+              name: exercise,
+              found: true,
+              confidence: 1
+            };
+          }
+        }
+      }
+    }
 
     // Tri des clés par longueur décroissante pour vérifier les expressions longues d'abord
     const sortedKeys = Object.keys(exerciseMapping).sort((a, b) => b.length - a.length);

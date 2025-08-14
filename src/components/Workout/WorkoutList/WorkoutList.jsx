@@ -1192,10 +1192,10 @@ function WorkoutList({
       >
         <div className="flex flex-col items-center justify-center gap-6 p-6">
           <div className="text-center">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent mb-2">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text text-transparent mb-2">
               🎤 Ajouter un exercice par la voix
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-300">
               Dites le nom de l'exercice que vous souhaitez ajouter
             </p>
           </div>
@@ -1210,8 +1210,8 @@ function WorkoutList({
                   </div>
                   <div className="absolute inset-0 border-4 border-red-300 rounded-full animate-ping"></div>
                 </div>
-                <p className="text-red-600 font-medium">🔴 Écoute en cours...</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-red-400 font-medium">🔴 Écoute en cours...</p>
+                <p className="text-sm text-gray-400">
                   Exemples: "pompes", "développé couché", "squats", "tractions"
                 </p>
               </div>
@@ -1220,16 +1220,16 @@ function WorkoutList({
                 <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
                   <MicOff className="h-8 w-8 text-white" />
                 </div>
-                <p className="text-green-600 font-medium">⏸️ En attente</p>
+                <p className="text-emerald-400 font-medium">⏸️ En attente</p>
               </div>
             )}
           </div>
 
           {/* Transcript en temps réel */}
           {voiceTranscript && (
-            <div className="w-full p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-600 mb-2">Texte reconnu :</p>
-              <p className="font-semibold text-gray-900 text-base">"{voiceTranscript}"</p>
+            <div className="w-full p-4 bg-gray-800/50 rounded-xl border border-gray-700/50">
+              <p className="text-sm text-gray-300 mb-2">Texte reconnu :</p>
+              <p className="font-semibold text-gray-100 text-base">"{voiceTranscript}"</p>
             </div>
           )}
 
@@ -1237,24 +1237,24 @@ function WorkoutList({
           {parsedExercise && (
             <div className={`w-full p-4 rounded-xl ${
               parsedExercise.found 
-                ? 'bg-green-50 border border-green-200' 
-                : 'bg-yellow-50 border border-yellow-200'
+                ? 'bg-emerald-900/20 border border-emerald-500/30' 
+                : 'bg-yellow-900/20 border border-yellow-500/30'
             }`}>
               <div className="flex items-center gap-2 mb-2">
                 {parsedExercise.found ? (
                   <>
-                    <span className="text-green-600">✅</span>
-                    <p className="text-sm text-green-700 font-medium">Exercice reconnu :</p>
+                    <span className="text-emerald-400">✅</span>
+                    <p className="text-sm text-emerald-300 font-medium">Exercice reconnu :</p>
                   </>
                 ) : (
                   <>
-                    <span className="text-yellow-600">⚠️</span>
-                    <p className="text-sm text-yellow-700 font-medium">Exercice personnalisé :</p>
+                    <span className="text-yellow-400">⚠️</span>
+                    <p className="text-sm text-yellow-300 font-medium">Exercice personnalisé :</p>
                   </>
                 )}
               </div>
-              <p className="font-bold text-gray-900 text-lg">{parsedExercise.name}</p>
-              <p className="text-xs text-gray-600 mt-1">
+              <p className="font-bold text-gray-100 text-lg">{parsedExercise.name}</p>
+              <p className="text-xs text-gray-300 mt-1">
                 Groupe musculaire : {getMuscleGroupFromExercise(parsedExercise.name)}
               </p>
             </div>
@@ -1264,7 +1264,7 @@ function WorkoutList({
           <div className="flex gap-3 w-full">
             <button
               onClick={handleCancelVoiceRecognition}
-              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+              className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-200 px-6 py-3 rounded-xl font-medium transition-colors duration-200 border border-gray-600/50"
             >
               Annuler
             </button>
@@ -1272,7 +1272,7 @@ function WorkoutList({
             {isListening ? (
               <button
                 onClick={handleStopVoiceRecognition}
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 border border-red-500/50"
               >
                 <MicOff className="h-5 w-5 inline mr-2" />
                 Arrêter
@@ -1280,14 +1280,14 @@ function WorkoutList({
             ) : parsedExercise ? (
               <button
                 onClick={handleConfirmVoiceExercise}
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 border border-emerald-500/50"
               >
                 ✅ Ajouter l'exercice
               </button>
             ) : (
               <button
                 onClick={handleStartVoiceRecognition}
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 border border-emerald-500/50"
               >
                 <Mic className="h-5 w-5 inline mr-2" />
                 Commencer
@@ -1296,7 +1296,7 @@ function WorkoutList({
           </div>
 
           {/* Aide */}
-          <div className="w-full text-center text-xs text-gray-500 border-t pt-4">
+          <div className="w-full text-center text-xs text-gray-400 border-t border-gray-700/50 pt-4">
             <p>💡 <strong>Astuce :</strong> Parlez clairement et attendez quelques secondes après avoir dit le nom de l'exercice</p>
             <p className="mt-1">🔊 Assurez-vous que votre microphone est autorisé pour ce site</p>
           </div>
