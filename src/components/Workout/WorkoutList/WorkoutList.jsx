@@ -15,6 +15,8 @@ import {
   Apple,
   Bookmark,
   Star,
+  Mic,
+  MicOff,
 } from 'lucide-react';
 import { exerciseDatabase } from '../../../utils/workout/exerciseDatabase';
 import Modal from '../Modal';
@@ -26,6 +28,7 @@ import MLWeightPrediction from '../../MLWeightPrediction';
 
 import PropTypes from 'prop-types';
 import { getLastExerciseWeight } from '../../../utils/workout/workoutUtils';
+import { useSpeechRecognition } from '../../../hooks/useSpeechRecognition';
 
 function getMuscleIcon(muscle) {
   switch (muscle) {
@@ -86,6 +89,20 @@ function WorkoutList({
   const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false);
   const [templateName, setTemplateName] = useState('');
   const [templateDescription, setTemplateDescription] = useState('');
+
+  // Hook pour la reconnaissance vocale
+  const {
+    isListening,
+    isSupported,
+    startListening,
+    stopListening,
+    parseExerciseFromSpeech,
+    getMuscleGroupFromExercise
+  } = useSpeechRecognition();
+
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
+  const [voiceTranscript, setVoiceTranscript] = useState('');
+  const [parsedExercise, setParsedExercise] = useState(null);
 
 
   // Options de ressentis prédéfinis
@@ -237,6 +254,55 @@ function WorkoutList({
     [workouts, selectedDate]
   );
 
+  // Fonctions pour la reconnaissance vocale
+  const handleStartVoiceRecognition = useCallback(() => {
+    if (!isSupported) {
+      alert('La reconnaissance vocale n\'est pas supportée par votre navigateur');
+      return;
+    }
+
+    setShowVoiceModal(true);
+    setVoiceTranscript('');
+    setParsedExercise(null);
+
+    startListening(
+      (text, isFinal) => {
+        setVoiceTranscript(text);
+        if (isFinal && text.trim()) {
+          const parsed = parseExerciseFromSpeech(text);
+          setParsedExercise(parsed);
+        }
+      },
+      (finalText) => {
+        if (finalText.trim()) {
+          const parsed = parseExerciseFromSpeech(finalText);
+          setParsedExercise(parsed);
+        }
+      }
+    );
+  }, [isSupported, startListening, parseExerciseFromSpeech]);
+
+  const handleStopVoiceRecognition = useCallback(() => {
+    stopListening();
+  }, [stopListening]);
+
+  const handleConfirmVoiceExercise = useCallback(() => {
+    if (parsedExercise && parsedExercise.name) {
+      const muscleGroup = getMuscleGroupFromExercise(parsedExercise.name);
+      addExerciseToWorkout(parsedExercise.name, muscleGroup);
+      setShowVoiceModal(false);
+      setVoiceTranscript('');
+      setParsedExercise(null);
+    }
+  }, [parsedExercise, getMuscleGroupFromExercise, addExerciseToWorkout]);
+
+  const handleCancelVoiceRecognition = useCallback(() => {
+    stopListening();
+    setShowVoiceModal(false);
+    setVoiceTranscript('');
+    setParsedExercise(null);
+  }, [stopListening]);
+
 
 
   // Filtrage dynamique des exercices selon la recherche
@@ -298,6 +364,16 @@ function WorkoutList({
               {t('add_exercise')}
             </GradientButton>
             
+            {isSupported && (
+              <GradientButton
+                icon={Mic}
+                onClick={handleStartVoiceRecognition}
+                from="green-500"
+                to="green-600"
+              >
+                Ajouter par la voix
+              </GradientButton>
+            )}
 
           </div>
         </Card>
@@ -534,6 +610,15 @@ function WorkoutList({
                 {t('add_exercise')}
               </button>
               
+              {isSupported && (
+                <button
+                  onClick={handleStartVoiceRecognition}
+                  className="btn-success ripple-effect flex items-center justify-center gap-2 px-6 py-3 font-semibold flex-1 max-w-xs"
+                >
+                  <Mic className="h-5 w-5" />
+                  Ajouter par la voix
+                </button>
+              )}
 
               
               {exercises.length > 0 && (
@@ -1098,6 +1183,125 @@ function WorkoutList({
           </div>
         </div>
       )}
+
+      {/* Modal de reconnaissance vocale */}
+      <Modal
+        isOpen={showVoiceModal}
+        onClose={handleCancelVoiceRecognition}
+        maxWidth="max-w-lg"
+      >
+        <div className="flex flex-col items-center justify-center gap-6 p-6">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent mb-2">
+              🎤 Ajouter un exercice par la voix
+            </h3>
+            <p className="text-gray-600">
+              Dites le nom de l'exercice que vous souhaitez ajouter
+            </p>
+          </div>
+
+          {/* Statut de l'écoute */}
+          <div className="w-full text-center">
+            {isListening ? (
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
+                    <Mic className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="absolute inset-0 border-4 border-red-300 rounded-full animate-ping"></div>
+                </div>
+                <p className="text-red-600 font-medium">🔴 Écoute en cours...</p>
+                <p className="text-sm text-gray-500">
+                  Exemples: "pompes", "développé couché", "squats", "tractions"
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+                  <MicOff className="h-8 w-8 text-white" />
+                </div>
+                <p className="text-green-600 font-medium">⏸️ En attente</p>
+              </div>
+            )}
+          </div>
+
+          {/* Transcript en temps réel */}
+          {voiceTranscript && (
+            <div className="w-full p-4 bg-gray-50 rounded-xl">
+              <p className="text-sm text-gray-600 mb-2">Texte reconnu :</p>
+              <p className="font-semibold text-gray-900 text-base">"{voiceTranscript}"</p>
+            </div>
+          )}
+
+          {/* Exercice parsé */}
+          {parsedExercise && (
+            <div className={`w-full p-4 rounded-xl ${
+              parsedExercise.found 
+                ? 'bg-green-50 border border-green-200' 
+                : 'bg-yellow-50 border border-yellow-200'
+            }`}>
+              <div className="flex items-center gap-2 mb-2">
+                {parsedExercise.found ? (
+                  <>
+                    <span className="text-green-600">✅</span>
+                    <p className="text-sm text-green-700 font-medium">Exercice reconnu :</p>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-yellow-600">⚠️</span>
+                    <p className="text-sm text-yellow-700 font-medium">Exercice personnalisé :</p>
+                  </>
+                )}
+              </div>
+              <p className="font-bold text-gray-900 text-lg">{parsedExercise.name}</p>
+              <p className="text-xs text-gray-600 mt-1">
+                Groupe musculaire : {getMuscleGroupFromExercise(parsedExercise.name)}
+              </p>
+            </div>
+          )}
+
+          {/* Boutons d'action */}
+          <div className="flex gap-3 w-full">
+            <button
+              onClick={handleCancelVoiceRecognition}
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+            >
+              Annuler
+            </button>
+            
+            {isListening ? (
+              <button
+                onClick={handleStopVoiceRecognition}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
+              >
+                <MicOff className="h-5 w-5 inline mr-2" />
+                Arrêter
+              </button>
+            ) : parsedExercise ? (
+              <button
+                onClick={handleConfirmVoiceExercise}
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
+              >
+                ✅ Ajouter l'exercice
+              </button>
+            ) : (
+              <button
+                onClick={handleStartVoiceRecognition}
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
+              >
+                <Mic className="h-5 w-5 inline mr-2" />
+                Commencer
+              </button>
+            )}
+          </div>
+
+          {/* Aide */}
+          <div className="w-full text-center text-xs text-gray-500 border-t pt-4">
+            <p>💡 <strong>Astuce :</strong> Parlez clairement et attendez quelques secondes après avoir dit le nom de l'exercice</p>
+            <p className="mt-1">🔊 Assurez-vous que votre microphone est autorisé pour ce site</p>
+          </div>
+        </div>
+      </Modal>
 
       {/* Encart explicatif du Coach IA */}
       <div className="flex justify-center">
