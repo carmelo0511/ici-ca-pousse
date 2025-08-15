@@ -671,11 +671,126 @@ const Chatbot = ({
     }
   };
 
+  // Fonction pour analyser les ressentis des 3 dernières séances seulement
+  const analyzeLast3WorkoutsFeelings = (last3Workouts) => {
+    if (!last3Workouts || last3Workouts.length === 0) return '';
+
+    const workoutsWithFeelings = last3Workouts.filter((w) => w.feeling);
+
+    if (workoutsWithFeelings.length === 0) return '';
+
+    const feelings = workoutsWithFeelings.map((w) => w.feeling);
+    const positiveFeelings = [
+      'easy',
+      'strong',
+      'energized',
+      'motivated',
+      'great',
+      'good',
+    ];
+    const negativeFeelings = ['hard', 'weak', 'demotivated', 'bad', 'terrible'];
+
+    const positiveCount = feelings.filter((f) =>
+      positiveFeelings.includes(f)
+    ).length;
+    const negativeCount = feelings.filter((f) =>
+      negativeFeelings.includes(f)
+    ).length;
+
+    let analysis = `Analyse des ressentis (${workoutsWithFeelings.length} des 3 séances) : `;
+
+    if (positiveCount > negativeCount) {
+      analysis += `Vous vous sentez généralement bien après vos séances (${positiveCount} séances positives). Continuez sur cette lancée !`;
+    } else if (negativeCount > positiveCount) {
+      analysis += `Vous avez eu des difficultés récemment (${negativeCount} séances difficiles). Il serait bon d'ajuster l'intensité ou de prendre plus de repos.`;
+    } else {
+      analysis += `Vos ressentis sont mixtes (${positiveCount} positifs, ${negativeCount} négatifs). Essayons d'optimiser vos séances.`;
+    }
+
+    // Ajouter le dernier ressenti
+    const lastFeeling = feelings[feelings.length - 1];
+    if (lastFeeling) {
+      analysis += ` Dernier ressenti : ${lastFeeling}.`;
+    }
+
+    return analysis;
+  };
+
+  // Fonction spécifique pour analyser les 3 dernières séances
+  const analyzeLast3Workouts = () => {
+    if (!workouts || workouts.length === 0) {
+      return {
+        muscleGroups: {},
+        recentExercises: [],
+        frequency: {},
+        lastWorkoutDate: null,
+        daysSinceLastWorkout: null,
+        feelings: {},
+        feelingTrends: {},
+      };
+    }
+
+    const now = new Date();
+    // Prendre les 3 dernières séances pour être cohérent
+    const last3Workouts = workouts.slice(-3);
+    const lastWorkout = last3Workouts[last3Workouts.length - 1]; // La plus récente des 3
+    const lastWorkoutDate = new Date(lastWorkout.date);
+    const daysSinceLastWorkout = Math.floor(
+      (now - lastWorkoutDate) / (1000 * 60 * 60 * 24)
+    );
+
+    // Analyser SEULEMENT les 3 dernières séances
+    const muscleGroups = {};
+    const recentExercises = [];
+    const frequency = {};
+    const feelings = {};
+    const feelingTrends = {};
+
+    last3Workouts.forEach((workout) => {
+      // Analyser les ressentis
+      if (workout.feeling) {
+        feelings[workout.feeling] = (feelings[workout.feeling] || 0) + 1;
+
+        // Analyser les tendances de ressentis par type d'exercice
+        workout.exercises?.forEach((exercise) => {
+          const muscleGroup =
+            exercise.type || getMuscleGroupForExercise(exercise.name);
+          if (!feelingTrends[muscleGroup]) {
+            feelingTrends[muscleGroup] = [];
+          }
+          feelingTrends[muscleGroup].push(workout.feeling);
+        });
+      }
+
+      workout.exercises?.forEach((exercise) => {
+        const muscleGroup =
+          exercise.type || getMuscleGroupForExercise(exercise.name);
+        muscleGroups[muscleGroup] = (muscleGroups[muscleGroup] || 0) + 1;
+
+        if (!recentExercises.includes(exercise.name)) {
+          recentExercises.push(exercise.name);
+        }
+
+        frequency[exercise.name] = (frequency[exercise.name] || 0) + 1;
+      });
+    });
+
+    return {
+      muscleGroups,
+      recentExercises,
+      frequency,
+      lastWorkoutDate,
+      daysSinceLastWorkout,
+      feelings,
+      feelingTrends,
+    };
+  };
+
   // Fonction pour générer un récap intelligent des dernières séances
   const handleRecapLastWorkouts = () => {
     if (!workouts || workouts.length === 0) return;
 
-    const analysis = analyzeWorkoutHistory();
+    const analysis = analyzeLast3Workouts(); // Utiliser l'analyse spécifique des 3 dernières séances
     const last3 = workouts.slice(-3).reverse();
 
     const recap = last3
@@ -778,13 +893,13 @@ const Chatbot = ({
       }
     }
 
-    // Ajouter l'analyse des ressentis
-    const feelingsAnalysis = analyzeFeelings();
+    // Ajouter l'analyse des ressentis (basée sur les 3 dernières séances)
+    const feelingsAnalysis = analyzeLast3WorkoutsFeelings(last3);
     if (feelingsAnalysis) {
       recommendations.push(feelingsAnalysis);
     }
 
-    const message = `📊 **Récap des 3 dernières séances :**\n\n${recap}\n\n**Analyse et recommandations :**\n${recommendations.join('\n')}`;
+    const message = `📊 **Récap des 3 dernières séances :**\n\n${recap}\n\n**Analyse basée sur ces 3 séances :**\n${recommendations.join('\n')}`;
 
     setMessages((prev) => [...prev, { role: 'assistant', content: message }]);
   };
