@@ -35,10 +35,13 @@ export default function useWorkoutLogic({
     (exerciseName, muscleGroup = null) => {
       // S'assurer qu'on n'est pas en mode édition quand on ajoute un exercice
       setSelectedWorkout(null);
-      addExercise(exerciseName, muscleGroup);
+      const newExerciseId = addExercise(exerciseName, muscleGroup);
       setShowAddExercise(false);
       setSelectedMuscleGroup(null);
       showToastMsg(t('exercise_added'));
+      
+      // Retourner l'ID de l'exercice créé
+      return newExerciseId;
     },
     [
       addExercise,

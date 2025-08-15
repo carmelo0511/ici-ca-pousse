@@ -97,12 +97,19 @@ function WorkoutList({
     startListening,
     stopListening,
     parseExerciseFromSpeech,
+    parseWorkoutDataFromSpeech,
     getMuscleGroupFromExercise
   } = useSpeechRecognition();
 
   const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [voiceTranscript, setVoiceTranscript] = useState('');
   const [parsedExercise, setParsedExercise] = useState(null);
+  
+  // États pour la reconnaissance vocale des données d'entraînement
+  const [showVoiceDataModal, setShowVoiceDataModal] = useState(false);
+  const [voiceDataTranscript, setVoiceDataTranscript] = useState('');
+  const [parsedWorkoutData, setParsedWorkoutData] = useState(null);
+  const [selectedExerciseForVoiceData, setSelectedExerciseForVoiceData] = useState(null);
 
 
   // Options de ressentis prédéfinis
@@ -272,6 +279,16 @@ function WorkoutList({
         if (text.trim()) {
           const parsed = parseExerciseFromSpeech(text);
           setParsedExercise(parsed);
+          
+          // Vérifier aussi s'il y a des données d'entraînement dans le texte
+          const workoutData = parseWorkoutDataFromSpeech(text);
+          if (workoutData.found) {
+            // Stocker les données d'entraînement avec l'exercice parsé
+            setParsedExercise(prev => ({
+              ...prev,
+              workoutData: workoutData
+            }));
+          }
         } else {
           // Si le texte est vide, vider l'exercice parsé
           setParsedExercise(null);
@@ -280,11 +297,18 @@ function WorkoutList({
       (finalText) => {
         if (finalText.trim()) {
           const parsed = parseExerciseFromSpeech(finalText);
+          
+          // Vérifier aussi s'il y a des données d'entraînement dans le texte final
+          const workoutData = parseWorkoutDataFromSpeech(finalText);
+          if (workoutData.found) {
+            parsed.workoutData = workoutData;
+          }
+          
           setParsedExercise(parsed);
         }
       }
     );
-  }, [isSupported, startListening, parseExerciseFromSpeech]);
+  }, [isSupported, startListening, parseExerciseFromSpeech, parseWorkoutDataFromSpeech]);
 
   const handleStopVoiceRecognition = useCallback(() => {
     stopListening();
@@ -293,18 +317,171 @@ function WorkoutList({
   const handleConfirmVoiceExercise = useCallback(() => {
     if (parsedExercise && parsedExercise.name) {
       const muscleGroup = getMuscleGroupFromExercise(parsedExercise.name);
-      addExerciseToWorkout(parsedExercise.name, muscleGroup);
+      
+      // Stocker les données d'entraînement avant d'ajouter l'exercice
+      const workoutData = parsedExercise.workoutData;
+      console.log('🎯 Adding exercise with workout data:', workoutData);
+      
+      // Ajouter l'exercice
+      const newExerciseId = addExerciseToWorkout(parsedExercise.name, muscleGroup);
+      console.log('🎯 New exercise ID:', newExerciseId);
+      
+      // Si des données d'entraînement ont été détectées, les appliquer immédiatement
+      if (workoutData && workoutData.found) {
+        console.log('🎯 Applying workout data:', workoutData);
+        
+        // Utiliser plusieurs timeouts pour s'assurer que l'exercice est bien ajouté
+        setTimeout(() => {
+          if (workoutData.sets && workoutData.sets > 0) {
+            console.log('🎯 Adding', workoutData.sets, 'sets');
+            
+            // D'abord, remplir la première série (qui existe déjà)
+            setTimeout(() => {
+              if (workoutData.reps) {
+                console.log('🎯 Setting reps', workoutData.reps, 'for set 0 (existing)');
+                updateSet(newExerciseId, 0, 'reps', workoutData.reps);
+              }
+              if (workoutData.weight) {
+                console.log('🎯 Setting weight', workoutData.weight, 'for set 0 (existing)');
+                updateSet(newExerciseId, 0, 'weight', workoutData.weight);
+              }
+            }, 100);
+            
+            // Ensuite, ajouter les séries supplémentaires (workoutData.sets - 1)
+            for (let i = 1; i < workoutData.sets; i++) {
+              setTimeout(() => {
+                console.log('🎯 Adding set', i + 1);
+                addSet(newExerciseId);
+                
+                // Remplir les données de cette série
+                setTimeout(() => {
+                  if (workoutData.reps) {
+                    console.log('🎯 Setting reps', workoutData.reps, 'for set', i);
+                    updateSet(newExerciseId, i, 'reps', workoutData.reps);
+                  }
+                  if (workoutData.weight) {
+                    console.log('🎯 Setting weight', workoutData.weight, 'for set', i);
+                    updateSet(newExerciseId, i, 'weight', workoutData.weight);
+                  }
+                }, 100);
+              }, i * 100);
+            }
+          } else {
+            // Si pas de séries spécifiées, utiliser la série par défaut et remplir les données
+            console.log('🎯 Using default set with data');
+            
+            setTimeout(() => {
+              if (workoutData.reps) {
+                console.log('🎯 Setting reps', workoutData.reps, 'for default set');
+                updateSet(newExerciseId, 0, 'reps', workoutData.reps);
+              }
+              if (workoutData.weight) {
+                console.log('🎯 Setting weight', workoutData.weight, 'for default set');
+                updateSet(newExerciseId, 0, 'weight', workoutData.weight);
+              }
+            }, 200);
+          }
+        }, 300);
+      }
+      
       setShowVoiceModal(false);
       setVoiceTranscript('');
       setParsedExercise(null);
     }
-  }, [parsedExercise, getMuscleGroupFromExercise, addExerciseToWorkout]);
+  }, [parsedExercise, getMuscleGroupFromExercise, addExerciseToWorkout, addSet, updateSet]);
 
   const handleCancelVoiceRecognition = useCallback(() => {
     stopListening();
     setShowVoiceModal(false);
     setVoiceTranscript('');
     setParsedExercise(null);
+  }, [stopListening]);
+
+  // Fonctions pour la reconnaissance vocale des données d'entraînement
+  const handleStartVoiceDataRecognition = useCallback((exercise) => {
+    if (!isSupported) {
+      alert('La reconnaissance vocale n\'est pas supportée par votre navigateur');
+      return;
+    }
+
+    setSelectedExerciseForVoiceData(exercise);
+    setShowVoiceDataModal(true);
+    setVoiceDataTranscript('');
+    setParsedWorkoutData(null);
+
+    startListening(
+      (text, isFinal) => {
+        setVoiceDataTranscript(text);
+        if (text.trim()) {
+          const parsed = parseWorkoutDataFromSpeech(text);
+          setParsedWorkoutData(parsed);
+        } else {
+          setParsedWorkoutData(null);
+        }
+      },
+      (finalText) => {
+        if (finalText.trim()) {
+          const parsed = parseWorkoutDataFromSpeech(finalText);
+          setParsedWorkoutData(parsed);
+        }
+      }
+    );
+  }, [isSupported, startListening, parseWorkoutDataFromSpeech]);
+
+  const handleConfirmVoiceWorkoutData = useCallback(() => {
+    if (parsedWorkoutData && parsedWorkoutData.found && selectedExerciseForVoiceData) {
+      const exercise = selectedExerciseForVoiceData;
+      
+      // Si des séries sont spécifiées, ajouter le bon nombre de séries
+      if (parsedWorkoutData.sets && parsedWorkoutData.sets > 0) {
+        // Supprimer les séries existantes pour cet exercice
+        while (exercise.sets.length > 0) {
+          removeSet(exercise.id, 0);
+        }
+        
+        // Ajouter le nombre correct de séries
+        for (let i = 0; i < parsedWorkoutData.sets; i++) {
+          addSet(exercise.id);
+          
+          // Attendre que la série soit ajoutée avant de remplir les données
+          setTimeout(() => {
+            if (parsedWorkoutData.reps) {
+              updateSet(exercise.id, i, 'reps', parsedWorkoutData.reps);
+            }
+            if (parsedWorkoutData.weight) {
+              updateSet(exercise.id, i, 'weight', parsedWorkoutData.weight);
+            }
+          }, 50 * (i + 1));
+        }
+      } else {
+        // Si pas de séries spécifiées, modifier la première série ou en créer une
+        if (exercise.sets.length === 0) {
+          addSet(exercise.id);
+        }
+        
+        setTimeout(() => {
+          if (parsedWorkoutData.reps) {
+            updateSet(exercise.id, 0, 'reps', parsedWorkoutData.reps);
+          }
+          if (parsedWorkoutData.weight) {
+            updateSet(exercise.id, 0, 'weight', parsedWorkoutData.weight);
+          }
+        }, 100);
+      }
+      
+      setShowVoiceDataModal(false);
+      setVoiceDataTranscript('');
+      setParsedWorkoutData(null);
+      setSelectedExerciseForVoiceData(null);
+    }
+  }, [parsedWorkoutData, selectedExerciseForVoiceData, addSet, removeSet, updateSet]);
+
+  const handleCancelVoiceDataRecognition = useCallback(() => {
+    stopListening();
+    setShowVoiceDataModal(false);
+    setVoiceDataTranscript('');
+    setParsedWorkoutData(null);
+    setSelectedExerciseForVoiceData(null);
   }, [stopListening]);
 
 
@@ -434,6 +611,15 @@ function WorkoutList({
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 ml-4">
+                  {isSupported && exercise.type !== 'cardio' && (
+                    <button
+                      onClick={() => handleStartVoiceDataRecognition(exercise)}
+                      className="bg-emerald-500 hover:bg-emerald-600 text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
+                      title="Ajouter données par la voix"
+                    >
+                      <Mic className="h-3 w-3" />
+                    </button>
+                  )}
                   <button
                     onClick={() => removeExerciseFromWorkout(exercise.id)}
                     className="bg-red-500 hover:bg-red-600 text-white p-1 rounded-md transition-all duration-200 shadow-sm hover:shadow-md w-7 h-7 flex items-center justify-center"
@@ -1210,7 +1396,10 @@ function WorkoutList({
               🎤 Ajouter un exercice par la voix
             </h3>
             <p className="text-gray-300">
-              Dites le nom de l'exercice que vous souhaitez ajouter
+              Dites le nom de l'exercice (+ optionnel : séries, reps, poids)
+            </p>
+            <p className="text-sm text-gray-400">
+              Ex: "développé couché 4 séries de 12 reps à 50 kg"
             </p>
           </div>
 
@@ -1226,7 +1415,7 @@ function WorkoutList({
                 </div>
                 <p className="text-red-400 font-medium">🔴 Écoute en cours...</p>
                 <p className="text-sm text-gray-400">
-                  Exemples: "pompes", "développé couché", "squats", "tractions"
+                  Essayez: "développé couché 4 séries de 12 reps à 50 kg"
                 </p>
               </div>
             ) : (
@@ -1271,6 +1460,33 @@ function WorkoutList({
               <p className="text-xs text-gray-300 mt-1">
                 Groupe musculaire : {getMuscleGroupFromExercise(parsedExercise.name)}
               </p>
+              
+              {/* Afficher les données d'entraînement si détectées */}
+              {parsedExercise.workoutData && parsedExercise.workoutData.found && (
+                <div className="mt-3 pt-3 border-t border-emerald-500/20">
+                  <p className="text-sm text-emerald-300 font-medium mb-2">🎯 Données détectées :</p>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    {parsedExercise.workoutData.sets && (
+                      <div className="bg-blue-900/20 rounded-lg p-2 border border-blue-500/30">
+                        <p className="text-xs text-blue-300">Séries</p>
+                        <p className="text-sm font-bold text-blue-100">{parsedExercise.workoutData.sets}</p>
+                      </div>
+                    )}
+                    {parsedExercise.workoutData.reps && (
+                      <div className="bg-purple-900/20 rounded-lg p-2 border border-purple-500/30">
+                        <p className="text-xs text-purple-300">Répétitions</p>
+                        <p className="text-sm font-bold text-purple-100">{parsedExercise.workoutData.reps}</p>
+                      </div>
+                    )}
+                    {parsedExercise.workoutData.weight && (
+                      <div className="bg-orange-900/20 rounded-lg p-2 border border-orange-500/30">
+                        <p className="text-xs text-orange-300">Poids (kg)</p>
+                        <p className="text-sm font-bold text-orange-100">{parsedExercise.workoutData.weight}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -1318,6 +1534,156 @@ function WorkoutList({
           <div className="w-full text-center text-xs text-gray-400 border-t border-gray-700/50 pt-4">
             <p>💡 <strong>Astuce :</strong> Parlez clairement et attendez quelques secondes après avoir dit le nom de l'exercice</p>
             <p className="mt-1">🔊 Assurez-vous que votre microphone est autorisé pour ce site</p>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Modal de reconnaissance vocale pour les données d'entraînement */}
+      <Modal
+        isOpen={showVoiceDataModal}
+        onClose={handleCancelVoiceDataRecognition}
+        maxWidth="max-w-lg"
+      >
+        <div className="flex flex-col items-center justify-center gap-6 p-6">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text text-transparent mb-2">
+              🎤 Ajouter les données par la voix
+            </h3>
+            <p className="text-gray-300 mb-2">
+              Dites les séries, répétitions et/ou poids pour{' '}
+              <span className="font-semibold text-emerald-400">
+                {selectedExerciseForVoiceData?.name}
+              </span>
+            </p>
+            <p className="text-sm text-gray-400">
+              Dites par exemple : "3 séries de 12 répétitions à 50 kg"
+            </p>
+          </div>
+
+          {/* Statut de l'écoute */}
+          <div className="w-full text-center">
+            {isListening ? (
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
+                    <Mic className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="absolute inset-0 border-4 border-red-300 rounded-full animate-ping"></div>
+                </div>
+                <p className="text-red-400 font-medium">🔴 Écoute en cours...</p>
+                <div className="bg-red-900/20 rounded-xl p-3 border border-red-500/30 max-w-xs">
+                  <p className="text-red-300 text-sm font-medium">Essayez de dire :</p>
+                  <p className="text-red-100 text-xs mt-1">"3 séries de 12 répétitions à 50 kg"</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+                  <MicOff className="h-8 w-8 text-white" />
+                </div>
+                <p className="text-emerald-400 font-medium">⏸️ En attente</p>
+                <div className="bg-emerald-900/20 rounded-xl p-4 border border-emerald-500/30 max-w-xs">
+                  <p className="text-emerald-300 text-sm font-medium mb-2">💬 Phrases d'exemple :</p>
+                  <div className="space-y-1 text-xs">
+                    <p className="text-emerald-100 bg-emerald-800/20 rounded px-2 py-1">"4 séries de 10 répétitions à 60 kg"</p>
+                    <p className="text-emerald-100 bg-emerald-800/20 rounded px-2 py-1">"15 répétitions à 80 kilos"</p>
+                    <p className="text-emerald-100 bg-emerald-800/20 rounded px-2 py-1">"3 séries de 12 répétitions"</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Transcript en temps réel */}
+          {voiceDataTranscript && (
+            <div className="w-full p-4 bg-gray-800/50 rounded-xl border border-gray-700/50">
+              <p className="text-sm text-gray-300 mb-2">Texte reconnu :</p>
+              <p className="font-semibold text-gray-100 text-base">"{voiceDataTranscript}"</p>
+            </div>
+          )}
+
+          {/* Données parsées */}
+          {parsedWorkoutData && parsedWorkoutData.found && (
+            <div className="w-full p-4 bg-emerald-900/20 rounded-xl border border-emerald-500/30">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-emerald-400">✅</span>
+                <p className="text-sm text-emerald-300 font-medium">Données reconnues :</p>
+              </div>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                {parsedWorkoutData.sets && (
+                  <div className="bg-blue-900/20 rounded-lg p-3 border border-blue-500/30">
+                    <p className="text-xs text-blue-300 mb-1">Séries</p>
+                    <p className="text-lg font-bold text-blue-100">{parsedWorkoutData.sets}</p>
+                  </div>
+                )}
+                {parsedWorkoutData.reps && (
+                  <div className="bg-purple-900/20 rounded-lg p-3 border border-purple-500/30">
+                    <p className="text-xs text-purple-300 mb-1">Répétitions</p>
+                    <p className="text-lg font-bold text-purple-100">{parsedWorkoutData.reps}</p>
+                  </div>
+                )}
+                {parsedWorkoutData.weight && (
+                  <div className="bg-orange-900/20 rounded-lg p-3 border border-orange-500/30">
+                    <p className="text-xs text-orange-300 mb-1">Poids (kg)</p>
+                    <p className="text-lg font-bold text-orange-100">{parsedWorkoutData.weight}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Boutons d'action */}
+          <div className="flex gap-3 w-full">
+            <button
+              onClick={handleCancelVoiceDataRecognition}
+              className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-200 px-6 py-3 rounded-xl font-medium transition-colors duration-200 border border-gray-600/50"
+            >
+              Annuler
+            </button>
+            
+            {isListening ? (
+              <button
+                onClick={() => stopListening()}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 border border-red-500/50"
+              >
+                <MicOff className="h-5 w-5 inline mr-2" />
+                Arrêter
+              </button>
+            ) : parsedWorkoutData && parsedWorkoutData.found ? (
+              <button
+                onClick={handleConfirmVoiceWorkoutData}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 border border-emerald-500/50"
+              >
+                ✅ Appliquer les données
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setVoiceDataTranscript('');
+                  setParsedWorkoutData(null);
+                  handleStartVoiceDataRecognition(selectedExerciseForVoiceData);
+                }}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 border border-emerald-500/50"
+              >
+                <Mic className="h-5 w-5 inline mr-2" />
+                Commencer
+              </button>
+            )}
+          </div>
+
+          {/* Aide et exemples détaillés */}
+          <div className="w-full text-center text-xs text-gray-400 border-t border-gray-700/50 pt-4">
+            <p>💡 <strong>Exemples de phrases qui fonctionnent :</strong></p>
+            <div className="mt-2 space-y-1 text-left max-w-sm mx-auto">
+              <p className="bg-gray-800/30 rounded px-2 py-1">🗣️ "3 séries de 12 répétitions à 50 kg"</p>
+              <p className="bg-gray-800/30 rounded px-2 py-1">🗣️ "12 répétitions à 75 kilos"</p>
+              <p className="bg-gray-800/30 rounded px-2 py-1">🗣️ "4 séries de 15 répétitions"</p>
+              <p className="bg-gray-800/30 rounded px-2 py-1">🗣️ "60 kg pour 10 répétitions"</p>
+              <p className="bg-gray-800/30 rounded px-2 py-1">🗣️ "5 séries" (séries seulement)</p>
+              <p className="bg-gray-800/30 rounded px-2 py-1">🗣️ "20 répétitions" (répétitions seulement)</p>
+              <p className="bg-gray-800/30 rounded px-2 py-1">🗣️ "80 kg" (poids seulement)</p>
+            </div>
+            <p className="mt-3 text-yellow-400">⚠️ <strong>Parlez clairement et attendez 2-3 secondes</strong></p>
           </div>
         </div>
       </Modal>

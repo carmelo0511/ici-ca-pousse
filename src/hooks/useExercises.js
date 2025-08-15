@@ -30,7 +30,7 @@ export const useExercises = () => {
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState(null);
 
   const addExercise = (exerciseName, muscleGroup = null) => {
-    if (!exerciseName || exerciseName.trim() === '') return;
+    if (!exerciseName || exerciseName.trim() === '') return null;
 
     const newExercise = {
       id: Date.now(),
@@ -45,6 +45,9 @@ export const useExercises = () => {
     };
     setExercises((prev) => [...prev, newExercise]);
     setSelectedMuscleGroup(null);
+    
+    // Retourner l'ID de l'exercice créé
+    return newExercise.id;
   };
 
   const updateExercise = (exerciseId, updatedExercise) => {

@@ -533,6 +533,163 @@ export const useSpeechRecognition = () => {
     return 'pectoraux'; // Groupe par défaut
   }, []);
 
+  // Parser le texte pour extraire séries, répétitions et poids
+  const parseWorkoutDataFromSpeech = useCallback((text) => {
+    let cleanText = text.toLowerCase().trim();
+    console.log('🎤 Parsing workout data:', cleanText);
+    
+    // Convertir les nombres en lettres en chiffres
+    const numberWords = {
+      'un': '1', 'une': '1',
+      'deux': '2',
+      'trois': '3',
+      'quatre': '4',
+      'cinq': '5',
+      'six': '6',
+      'sept': '7',
+      'huit': '8',
+      'neuf': '9',
+      'dix': '10',
+      'onze': '11',
+      'douze': '12',
+      'treize': '13',
+      'quatorze': '14',
+      'quinze': '15',
+      'seize': '16',
+      'vingt': '20',
+      'trente': '30',
+      'quarante': '40',
+      'cinquante': '50',
+      'soixante': '60',
+      'soixante-dix': '70',
+      'quatre-vingt': '80',
+      'quatre-vingts': '80',
+      'quatre-vingt-dix': '90'
+    };
+    
+    // Remplacer les nombres en lettres par des chiffres
+    for (const [word, number] of Object.entries(numberWords)) {
+      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      cleanText = cleanText.replace(regex, number);
+    }
+    
+    console.log('🔄 After number conversion:', cleanText);
+    
+    const result = {
+      sets: null,
+      reps: null,
+      weight: null,
+      found: false
+    };
+
+    // Regex pour détecter les nombres suivis de mots-clés
+    const patterns = {
+      // Séries (ordre important : plus spécifique en premier)
+      sets: [
+        /(\d+)\s*(?:série|séries|serie|series|set|sets)/i,
+        /(?:série|séries|serie|series|set|sets)\s*(?:de\s*)?(\d+)/i
+      ],
+      // Répétitions (ordre important : plus spécifique en premier)
+      reps: [
+        /(\d+)\s*(?:répétition|répétitions|repetition|repetitions|rep|reps)/i,
+        /(\d+)\s*(?:mouvement|mouvements)/i,
+        /(?:répétition|répétitions|repetition|repetitions|rep|reps)\s*(?:de\s*)?(\d+)/i,
+        /(\d+)\s*(?:repet|répét)/i,
+        /(\d+)\s*fois/i  // "fois" seulement pour les répétitions, pas les séries
+      ],
+      // Poids
+      weight: [
+        /(\d+(?:[.,]\d+)?)\s*(?:kg|kilo|kilos|kilogramme|kilogrammes)/i,
+        /(\d+(?:[.,]\d+)?)\s*(?:livre|livres|lb|lbs)/i,
+        /(?:poids|weight)\s*(?:de\s*)?(\d+(?:[.,]\d+)?)/i,
+        /(\d+(?:[.,]\d+)?)\s*(?:kgs)/i
+      ]
+    };
+
+    // D'abord, vérifier les patterns complexes (ordre important : plus spécifique en premier)
+    const complexPatterns = [
+      // "3 séries de 12 répétitions à 50 kg" (pattern le plus complet)
+      /(\d+)\s*(?:série|séries|serie|series|set|sets)\s*de\s*(\d+)\s*(?:répétition|répétitions|repetition|repetitions|rep|reps|fois)?\s*(?:a|à|avec|de)?\s*(\d+(?:[.,]\d+)?)\s*(?:kg|kilo|kilos)/i,
+      // "3 séries de 12 répétitions" (sans poids)
+      /(\d+)\s*(?:série|séries|serie|series|set|sets)\s*de\s*(\d+)\s*(?:répétition|répétitions|repetition|repetitions|rep|reps|fois)/i,
+      // "12 répétitions à 50 kg"
+      /(\d+)\s*(?:répétition|répétitions|repetition|repetitions|rep|reps|fois)\s*(?:a|à|avec|de)\s*(\d+(?:[.,]\d+)?)\s*(?:kg|kilo|kilos)/i,
+      // "50 kg pour 12 répétitions"
+      /(\d+(?:[.,]\d+)?)\s*(?:kg|kilo|kilos)\s*pour\s*(\d+)\s*(?:répétition|répétitions|repetition|repetitions|rep|reps|fois)/i
+    ];
+
+    let foundComplexPattern = false;
+    for (let i = 0; i < complexPatterns.length; i++) {
+      const pattern = complexPatterns[i];
+      const match = cleanText.match(pattern);
+      if (match) {
+        if (i === 0 && match[3]) {
+          // Pattern "3 séries de 12 répétitions à 50 kg" (avec poids)
+          result.sets = parseInt(match[1]);
+          result.reps = parseInt(match[2]);
+          result.weight = parseFloat(match[3].replace(',', '.'));
+          console.log('✅ Complex pattern (sets+reps+weight):', result);
+        } else if (i === 1) {
+          // Pattern "3 séries de 12 répétitions" (sans poids)
+          result.sets = parseInt(match[1]);
+          result.reps = parseInt(match[2]);
+          console.log('✅ Complex pattern (sets+reps):', result);
+        } else if (i === 3) {
+          // Pattern "50 kg pour 12 répétitions"
+          result.weight = parseFloat(match[1].replace(',', '.'));
+          result.reps = parseInt(match[2]);
+          console.log('✅ Complex pattern (weight+reps):', result);
+        } else if (i === 2) {
+          // Pattern "12 répétitions à 50 kg"
+          result.reps = parseInt(match[1]);
+          result.weight = parseFloat(match[2].replace(',', '.'));
+          console.log('✅ Complex pattern (reps+weight):', result);
+        }
+        result.found = true;
+        foundComplexPattern = true;
+        break;
+      }
+    }
+
+    // Si aucun pattern complexe n'a été trouvé, chercher les patterns simples
+    if (!foundComplexPattern) {
+      for (const [dataType, regexList] of Object.entries(patterns)) {
+        for (const regex of regexList) {
+          const match = cleanText.match(regex);
+          if (match) {
+            let value = parseFloat(match[1].replace(',', '.'));
+            
+            // Conversion des livres en kg si nécessaire
+            if (dataType === 'weight' && /livre|lb/.test(match[0])) {
+              value = Math.round(value * 0.453592 * 4) / 4; // Conversion en kg, arrondi au quart le plus proche
+            }
+            
+            result[dataType] = value;
+            result.found = true;
+            console.log(`✅ Found ${dataType}:`, value);
+          }
+        }
+      }
+    }
+
+    // Validation des valeurs
+    if (result.sets && (result.sets < 1 || result.sets > 20)) {
+      console.warn('❌ Invalid sets value:', result.sets);
+      result.sets = null;
+    }
+    if (result.reps && (result.reps < 1 || result.reps > 100)) {
+      console.warn('❌ Invalid reps value:', result.reps);
+      result.reps = null;
+    }
+    if (result.weight && (result.weight < 0 || result.weight > 1000)) {
+      console.warn('❌ Invalid weight value:', result.weight);
+      result.weight = null;
+    }
+
+    console.log('🔍 Final parsed workout data:', result);
+    return result;
+  }, []);
+
   return {
     isListening,
     transcript,
@@ -540,6 +697,7 @@ export const useSpeechRecognition = () => {
     startListening,
     stopListening,
     parseExerciseFromSpeech,
+    parseWorkoutDataFromSpeech,
     getMuscleGroupFromExercise,
     checkSupport
   };
