@@ -37,10 +37,9 @@ export const useWorkouts = (user) => {
       const lastUpdate = lastUpdateTime.get(cacheKey);
       const now = Date.now();
 
-      // Utiliser le cache si il n'est pas trop vieux (5 minutes)
-      if (cachedData && lastUpdate && (now - lastUpdate) < 300000) {
-        setWorkouts(cachedData);
-      }
+      // Effacer le cache pour forcer le rechargement
+      workoutCache.delete(cacheKey);
+      lastUpdateTime.delete(cacheKey);
 
       const q = query(
         collection(db, 'workouts'),

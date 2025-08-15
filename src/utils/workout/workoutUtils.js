@@ -37,7 +37,7 @@ export const createWorkout = (
   }));
 
   const workout = {
-    date: date || new Date().toISOString().split('T')[0],
+    date: date || getCurrentDate(),
     exercises: validatedExercises,
     duration: parseInt(duration) || DEFAULT_WORKOUT_DURATION,
     totalSets: validatedExercises.reduce(

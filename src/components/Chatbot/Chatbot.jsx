@@ -5,6 +5,7 @@ import {
   getMuscleGroupDistribution,
   getWorkoutWeightDetails,
   getWorkoutSetRepDetails,
+  parseLocalDate,
 } from '../../utils/workout/workoutUtils';
 import { exerciseDatabase } from '../../utils/workout/exerciseDatabase';
 
@@ -370,7 +371,7 @@ const Chatbot = ({
 
     const now = new Date();
     const lastWorkout = workouts[workouts.length - 1];
-    const lastWorkoutDate = new Date(lastWorkout.date);
+    const lastWorkoutDate = parseLocalDate(lastWorkout.date);
     const daysSinceLastWorkout = Math.floor(
       (now - lastWorkoutDate) / (1000 * 60 * 60 * 24)
     );
@@ -382,7 +383,7 @@ const Chatbot = ({
     const feelings = {};
     const feelingTrends = {};
 
-    workouts.slice(-5).forEach((workout) => {
+    workouts.slice(-3).forEach((workout) => {
       // Analyser les ressentis
       if (workout.feeling) {
         feelings[workout.feeling] = (feelings[workout.feeling] || 0) + 1;
@@ -494,7 +495,7 @@ const Chatbot = ({
   const analyzeFeelings = () => {
     if (!workouts || workouts.length === 0) return '';
 
-    const recentWorkouts = workouts.slice(-5);
+    const recentWorkouts = workouts.slice(-3);
     const workoutsWithFeelings = recentWorkouts.filter((w) => w.feeling);
 
     if (workoutsWithFeelings.length === 0) return '';
@@ -734,7 +735,7 @@ const Chatbot = ({
     // Prendre les 3 dernières séances pour être cohérent
     const last3Workouts = workouts.slice(-3);
     const lastWorkout = last3Workouts[last3Workouts.length - 1]; // La plus récente des 3
-    const lastWorkoutDate = new Date(lastWorkout.date);
+    const lastWorkoutDate = parseLocalDate(lastWorkout.date);
     const daysSinceLastWorkout = Math.floor(
       (now - lastWorkoutDate) / (1000 * 60 * 60 * 24)
     );
@@ -790,12 +791,22 @@ const Chatbot = ({
   const handleRecapLastWorkouts = () => {
     if (!workouts || workouts.length === 0) return;
 
+    // Debug: Afficher les vraies données
+    console.log('🔍 DEBUG - Toutes les séances:', workouts.map(w => ({ date: w.date, exercises: w.exercises?.length || 0 })));
+    console.log('🔍 DEBUG - 3 dernières séances:', workouts.slice(-3).map(w => ({ date: w.date, exercises: w.exercises?.length || 0 })));
+    
+    // Debug détaillé des 3 dernières
+    const debugLast3 = workouts.slice(-3);
+    debugLast3.forEach((w, i) => {
+      console.log(`🔍 SÉANCE ${i+1} - Date: ${w.date}, Exercices:`, w.exercises?.map(ex => ex.name) || []);
+    });
+
     const analysis = analyzeLast3Workouts(); // Utiliser l'analyse spécifique des 3 dernières séances
     const last3 = workouts.slice(-3).reverse();
 
     const recap = last3
       .map((w) => {
-        let date = new Date(w.date).toLocaleDateString('fr-FR', {
+        let date = parseLocalDate(w.date).toLocaleDateString('fr-FR', {
           day: '2-digit',
           month: 'long',
           year: 'numeric',
