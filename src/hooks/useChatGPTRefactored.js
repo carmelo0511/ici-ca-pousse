@@ -53,7 +53,6 @@ export default function useChatGPT(apiKey) {
     user = null
   ) => {
     setIsLoading(true);
-    const startTime = Date.now();
 
     try {
       // Ajouter le message utilisateur
