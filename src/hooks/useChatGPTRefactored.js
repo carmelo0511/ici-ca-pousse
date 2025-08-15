@@ -87,8 +87,7 @@ export default function useChatGPT(apiKey) {
         // Mettre à jour les statistiques du cache
         cacheStats.current = intelligentCache.getStats();
 
-        // Log des performances
-        const duration = Date.now() - startTime;
+
   
       } else {
         // Gérer les erreurs
