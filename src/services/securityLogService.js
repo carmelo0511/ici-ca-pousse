@@ -439,7 +439,7 @@ class SecurityLogService {
       };
       
       localStorage.setItem('security_logs', JSON.stringify(data));
-      console.log(`💾 ${this.logs.length} logs de sécurité sauvegardés`);
+
     } catch (error) {
       console.error('Erreur lors de la sauvegarde des logs:', error);
     }
@@ -453,7 +453,7 @@ class SecurityLogService {
         const parsed = JSON.parse(data);
         if (parsed.logs && Array.isArray(parsed.logs)) {
           this.logs = parsed.logs;
-          console.log(`📥 ${this.logs.length} logs de sécurité chargés`);
+    
         }
       }
     } catch (error) {
@@ -515,10 +515,10 @@ class SecurityLogService {
         console.warn(message, details);
         break;
       case 'LOW':
-        console.log(message, details);
+        // Log supprimé pour production
         break;
       default:
-        console.log(message, details);
+        // Log supprimé pour production
     }
   }
 
@@ -533,7 +533,7 @@ class SecurityLogService {
     
     const removedCount = initialCount - this.logs.length;
     if (removedCount > 0) {
-      console.log(`🧹 ${removedCount} anciens logs supprimés`);
+      // Log supprimé pour production
     }
   }
 }

@@ -33,8 +33,6 @@ export const useWorkouts = (user) => {
 
       // Vérifier le cache
       const cacheKey = `workouts_${user.uid}`;
-      const cachedData = workoutCache.get(cacheKey);
-      const lastUpdate = lastUpdateTime.get(cacheKey);
       const now = Date.now();
 
       // Effacer le cache pour forcer le rechargement

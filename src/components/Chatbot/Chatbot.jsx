@@ -792,13 +792,12 @@ const Chatbot = ({
     if (!workouts || workouts.length === 0) return;
 
     // Debug: Afficher les vraies données
-    console.log('🔍 DEBUG - Toutes les séances:', workouts.map(w => ({ date: w.date, exercises: w.exercises?.length || 0 })));
-    console.log('🔍 DEBUG - 3 dernières séances:', workouts.slice(-3).map(w => ({ date: w.date, exercises: w.exercises?.length || 0 })));
+    
     
     // Debug détaillé des 3 dernières
     const debugLast3 = workouts.slice(-3);
     debugLast3.forEach((w, i) => {
-      console.log(`🔍 SÉANCE ${i+1} - Date: ${w.date}, Exercices:`, w.exercises?.map(ex => ex.name) || []);
+      
     });
 
     const analysis = analyzeLast3Workouts(); // Utiliser l'analyse spécifique des 3 dernières séances

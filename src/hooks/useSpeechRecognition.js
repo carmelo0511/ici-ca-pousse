@@ -105,7 +105,7 @@ export const useSpeechRecognition = () => {
   // Parser le texte pour extraire les exercices
   const parseExerciseFromSpeech = useCallback((text) => {
     const cleanText = text.toLowerCase().trim();
-    console.log('🎤 Parsing speech:', cleanText);
+
     
     // Mapping complet basé sur la base de données des exercices
     const exerciseMapping = {
@@ -296,12 +296,12 @@ export const useSpeechRecognition = () => {
     // Tri des clés par longueur décroissante pour vérifier les expressions longues d'abord
     const sortedKeys = Object.keys(exerciseMapping).sort((a, b) => b.length - a.length);
     
-    console.log('🔍 Checking against sorted keys:', sortedKeys.slice(0, 5));
+    
 
     // Chercher une correspondance exacte d'abord
     for (const spokenName of sortedKeys) {
       if (cleanText === spokenName) {
-        console.log('✅ Exact match found:', spokenName, '->', exerciseMapping[spokenName]);
+
         return {
           name: exerciseMapping[spokenName],
           found: true,
@@ -313,7 +313,7 @@ export const useSpeechRecognition = () => {
     // Ensuite chercher avec includes, toujours en commençant par les plus longs
     for (const spokenName of sortedKeys) {
       if (cleanText.includes(spokenName)) {
-        console.log('✅ Partial match found:', spokenName, '->', exerciseMapping[spokenName]);
+
         return {
           name: exerciseMapping[spokenName],
           found: true,
@@ -356,14 +356,14 @@ export const useSpeechRecognition = () => {
           // Vérification spéciale pour les élévations (priorité haute)
           if (exercise.includes('Élévations')) {
             if (cleanText.includes('latérale') || cleanText.includes('laterale')) {
-              console.log('✅ Keyword match found for élévations latérales:', keyword);
+      
               return {
                 name: 'Élévations latérales',
                 found: true,
                 confidence: 1
               };
             } else if (cleanText.includes('frontale') || cleanText.includes('frontale')) {
-              console.log('✅ Keyword match found for élévations frontales:', keyword);
+      
               return {
                 name: 'Élévations frontales',
                 found: true,
@@ -374,28 +374,28 @@ export const useSpeechRecognition = () => {
           // Vérification spéciale pour les développés - seulement si le mot-clé est vraiment un développé
           else if (exercise.includes('Développé') && (keyword.includes('développ') || keyword.includes('develo') || keyword.includes('devol'))) {
             if (cleanText.includes('incliné') || cleanText.includes('incline') || cleanText.includes('incliner')) {
-              console.log('✅ Keyword match found for développé incliné:', keyword);
+      
               return {
                 name: 'Développé incliné',
                 found: true,
                 confidence: 1
               };
             } else if (cleanText.includes('décliné') || cleanText.includes('decline') || cleanText.includes('decliner')) {
-              console.log('✅ Keyword match found for développé décliné:', keyword);
+      
               return {
                 name: 'Développé décliné',
                 found: true,
                 confidence: 1
               };
             } else if (cleanText.includes('haltères') || cleanText.includes('haltere')) {
-              console.log('✅ Keyword match found for développé haltères:', keyword);
+      
               return {
                 name: 'Développé haltères',
                 found: true,
                 confidence: 1
               };
             } else if (cleanText.includes('couché') || cleanText.includes('couche') || cleanText.includes('coucher')) {
-              console.log('✅ Keyword match found for développé couché:', keyword);
+      
               return {
                 name: 'Développé couché',
                 found: true,
@@ -404,14 +404,14 @@ export const useSpeechRecognition = () => {
             }
           } else if (exercise.includes('Curl') && keyword.includes('curl')) {
             if (cleanText.includes('haltères') || cleanText.includes('haltere')) {
-              console.log('✅ Keyword match found for curl haltères:', keyword);
+      
               return {
                 name: 'Curl haltères',
                 found: true,
                 confidence: 1
               };
             } else {
-              console.log('✅ Keyword match found for curl barre:', keyword);
+      
               return {
                 name: 'Curl barre',
                 found: true,
@@ -421,14 +421,14 @@ export const useSpeechRecognition = () => {
           } else if (exercise.includes('Rowing')) {
             // Logique spécifique pour distinguer rowing barre vs rowing haltères
             if (cleanText.includes('bar') || cleanText.includes('barre')) {
-              console.log('✅ Keyword match found for rowing barre:', keyword);
+      
               return {
                 name: 'Rowing barre',
                 found: true,
                 confidence: 1
               };
             } else if (cleanText.includes('haltères') || cleanText.includes('haltere')) {
-              console.log('✅ Keyword match found for rowing haltères:', keyword);
+      
               return {
                 name: 'Rowing haltères',
                 found: true,
@@ -436,7 +436,7 @@ export const useSpeechRecognition = () => {
               };
             } else {
               // Par défaut, rowing barre
-              console.log('✅ Keyword match found for rowing barre (default):', keyword);
+      
               return {
                 name: 'Rowing barre',
                 found: true,
@@ -444,7 +444,7 @@ export const useSpeechRecognition = () => {
               };
             }
           } else {
-            console.log('✅ Keyword match found:', keyword, '->', exercise);
+    
             return {
               name: exercise,
               found: true,
@@ -455,7 +455,7 @@ export const useSpeechRecognition = () => {
       }
     }
 
-    console.log('❌ No match found, returning as custom exercise');
+
     // Si aucune correspondance, retourner le texte brut
     return {
       name: text.trim(),
@@ -536,7 +536,7 @@ export const useSpeechRecognition = () => {
   // Parser le texte pour extraire séries, répétitions et poids
   const parseWorkoutDataFromSpeech = useCallback((text) => {
     let cleanText = text.toLowerCase().trim();
-    console.log('🎤 Parsing workout data:', cleanText);
+
     
     // Convertir les nombres en lettres en chiffres
     const numberWords = {
@@ -573,7 +573,7 @@ export const useSpeechRecognition = () => {
       cleanText = cleanText.replace(regex, number);
     }
     
-    console.log('🔄 After number conversion:', cleanText);
+
     
     const result = {
       sets: null,
@@ -628,22 +628,22 @@ export const useSpeechRecognition = () => {
           result.sets = parseInt(match[1]);
           result.reps = parseInt(match[2]);
           result.weight = parseFloat(match[3].replace(',', '.'));
-          console.log('✅ Complex pattern (sets+reps+weight):', result);
+  
         } else if (i === 1) {
           // Pattern "3 séries de 12 répétitions" (sans poids)
           result.sets = parseInt(match[1]);
           result.reps = parseInt(match[2]);
-          console.log('✅ Complex pattern (sets+reps):', result);
+
         } else if (i === 3) {
           // Pattern "50 kg pour 12 répétitions"
           result.weight = parseFloat(match[1].replace(',', '.'));
           result.reps = parseInt(match[2]);
-          console.log('✅ Complex pattern (weight+reps):', result);
+
         } else if (i === 2) {
           // Pattern "12 répétitions à 50 kg"
           result.reps = parseInt(match[1]);
           result.weight = parseFloat(match[2].replace(',', '.'));
-          console.log('✅ Complex pattern (reps+weight):', result);
+
         }
         result.found = true;
         foundComplexPattern = true;
@@ -666,7 +666,7 @@ export const useSpeechRecognition = () => {
             
             result[dataType] = value;
             result.found = true;
-            console.log(`✅ Found ${dataType}:`, value);
+    
           }
         }
       }
@@ -686,7 +686,7 @@ export const useSpeechRecognition = () => {
       result.weight = null;
     }
 
-    console.log('🔍 Final parsed workout data:', result);
+
     return result;
   }, []);
 

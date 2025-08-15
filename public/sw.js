@@ -46,7 +46,7 @@ const IMAGES = [
 
 // Installation optimisée
 self.addEventListener('install', (event) => {
-  console.log('🚀 Service Worker: Installation');
+  
   
   event.waitUntil(
     Promise.all([
@@ -68,7 +68,7 @@ self.addEventListener('install', (event) => {
 
 // Activation optimisée avec nettoyage intelligent
 self.addEventListener('activate', (event) => {
-  console.log('✅ Service Worker: Activation');
+  
   
   event.waitUntil(
     Promise.all([
@@ -78,7 +78,7 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (!validCacheNames.includes(cacheName)) {
-              console.log(`🗑️ Suppression cache obsolète: ${cacheName}`);
+      
               return caches.delete(cacheName);
             }
           })
@@ -204,7 +204,7 @@ async function staleWhileRevalidate(request, cacheName) {
 
 // Background Sync pour synchronisation hors ligne
 self.addEventListener('sync', (event) => {
-  console.log('🔄 Background Sync:', event.tag);
+  
   
   switch (event.tag) {
     case 'sync-workouts':
@@ -291,7 +291,7 @@ async function syncAICache() {
 
 // Gestion des notifications push optimisée
 self.addEventListener('push', (event) => {
-  console.log('📱 Push notification received');
+  
   
   let notificationData = { title: 'Ici Ca Pousse', body: "N'oubliez pas votre entraînement ! 💪" };
   
@@ -335,7 +335,7 @@ self.addEventListener('push', (event) => {
 
 // Gestion optimisée des clics sur notifications
 self.addEventListener('notificationclick', (event) => {
-  console.log('📱 Notification clicked:', event.action);
+  
   event.notification.close();
 
   if (event.action === 'dismiss') {
@@ -364,7 +364,7 @@ self.addEventListener('notificationclick', (event) => {
 
 // Gestion des messages depuis l'application principale
 self.addEventListener('message', (event) => {
-  console.log('📨 Message reçu:', event.data);
+  
   
   if (event.data && event.data.type) {
     switch (event.data.type) {

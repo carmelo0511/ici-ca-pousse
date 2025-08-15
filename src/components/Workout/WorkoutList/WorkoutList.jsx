@@ -320,29 +320,29 @@ function WorkoutList({
       
       // Stocker les données d'entraînement avant d'ajouter l'exercice
       const workoutData = parsedExercise.workoutData;
-      console.log('🎯 Adding exercise with workout data:', workoutData);
+      
       
       // Ajouter l'exercice
       const newExerciseId = addExerciseToWorkout(parsedExercise.name, muscleGroup);
-      console.log('🎯 New exercise ID:', newExerciseId);
+      
       
       // Si des données d'entraînement ont été détectées, les appliquer immédiatement
       if (workoutData && workoutData.found) {
-        console.log('🎯 Applying workout data:', workoutData);
+
         
         // Utiliser plusieurs timeouts pour s'assurer que l'exercice est bien ajouté
         setTimeout(() => {
           if (workoutData.sets && workoutData.sets > 0) {
-            console.log('🎯 Adding', workoutData.sets, 'sets');
+
             
             // D'abord, remplir la première série (qui existe déjà)
             setTimeout(() => {
               if (workoutData.reps) {
-                console.log('🎯 Setting reps', workoutData.reps, 'for set 0 (existing)');
+  
                 updateSet(newExerciseId, 0, 'reps', workoutData.reps);
               }
               if (workoutData.weight) {
-                console.log('🎯 Setting weight', workoutData.weight, 'for set 0 (existing)');
+
                 updateSet(newExerciseId, 0, 'weight', workoutData.weight);
               }
             }, 100);
@@ -350,17 +350,17 @@ function WorkoutList({
             // Ensuite, ajouter les séries supplémentaires (workoutData.sets - 1)
             for (let i = 1; i < workoutData.sets; i++) {
               setTimeout(() => {
-                console.log('🎯 Adding set', i + 1);
+  
                 addSet(newExerciseId);
                 
                 // Remplir les données de cette série
                 setTimeout(() => {
                   if (workoutData.reps) {
-                    console.log('🎯 Setting reps', workoutData.reps, 'for set', i);
+  
                     updateSet(newExerciseId, i, 'reps', workoutData.reps);
                   }
                   if (workoutData.weight) {
-                    console.log('🎯 Setting weight', workoutData.weight, 'for set', i);
+
                     updateSet(newExerciseId, i, 'weight', workoutData.weight);
                   }
                 }, 100);
@@ -368,15 +368,15 @@ function WorkoutList({
             }
           } else {
             // Si pas de séries spécifiées, utiliser la série par défaut et remplir les données
-            console.log('🎯 Using default set with data');
+
             
             setTimeout(() => {
               if (workoutData.reps) {
-                console.log('🎯 Setting reps', workoutData.reps, 'for default set');
+
                 updateSet(newExerciseId, 0, 'reps', workoutData.reps);
               }
               if (workoutData.weight) {
-                console.log('🎯 Setting weight', workoutData.weight, 'for default set');
+
                 updateSet(newExerciseId, 0, 'weight', workoutData.weight);
               }
             }, 200);

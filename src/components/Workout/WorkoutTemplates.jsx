@@ -354,12 +354,7 @@ const WorkoutTemplates = ({
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {templates.map((template) => {
-            console.log(
-              'Template affiché:',
-              template.id,
-              template.name,
-              typeof template.id
-            );
+
             return (
               <Card
                 key={template.id}
@@ -407,13 +402,7 @@ const WorkoutTemplates = ({
                     <IconButton
                       icon={Trash2}
                       onClick={() => {
-                        console.log(
-                          'Tentative suppression template:',
-                          template.id,
-                          template.name,
-                          'Type ID:',
-                          typeof template.id
-                        );
+
                         handleDeleteTemplate(template.id);
                       }}
                       className="text-red-600 hover:text-red-700"

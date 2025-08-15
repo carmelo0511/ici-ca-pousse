@@ -14,7 +14,7 @@ const checks = [
 const isMissing = checks.some((relativePath) => !existsSync(join(projectRoot, relativePath)));
 
 if (isMissing) {
-  console.log('[ensure-deps] Missing dependencies detected. Installing...');
+
   const result = spawnSync('npm', ['install', '--legacy-peer-deps'], {
     cwd: projectRoot,
     stdio: 'inherit',
@@ -23,7 +23,7 @@ if (isMissing) {
   });
   process.exit(result.status || 0);
 } else {
-  console.log('[ensure-deps] Dependencies already installed.');
+
 }
 
 

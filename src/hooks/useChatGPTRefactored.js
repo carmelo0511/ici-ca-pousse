@@ -29,13 +29,13 @@ export default function useChatGPT(apiKey) {
       const savedMessages = load(STORAGE_KEYS.CHATBOT_MEMORY, []) || [];
       if (savedMessages.length > 0) {
         setMessages(savedMessages);
-        console.log('💾 Messages du chatbot chargés:', savedMessages.length, 'messages');
+    
       }
 
       // Charger les métriques de monitoring
       const savedMetrics = aiMonitoring.loadMetrics();
       if (savedMetrics) {
-        console.log('📊 Métriques de monitoring chargées');
+  
       }
     } catch (error) {
       console.error('Erreur lors du chargement de la mémoire:', error);
@@ -89,7 +89,7 @@ export default function useChatGPT(apiKey) {
 
         // Log des performances
         const duration = Date.now() - startTime;
-        console.log(`💬 Message traité en ${duration}ms${result.fromCache ? ' (cache)' : ''}`);
+  
       } else {
         // Gérer les erreurs
         const errorMessage = { 
@@ -126,7 +126,7 @@ export default function useChatGPT(apiKey) {
   const clearMemory = () => {
     setMessages([]);
     save(STORAGE_KEYS.CHATBOT_MEMORY, []);
-    console.log('🧹 Mémoire du chatbot effacée');
+
   };
 
   const clearAll = () => {
@@ -134,7 +134,7 @@ export default function useChatGPT(apiKey) {
     intelligentCache.clear();
     apiRateLimiter.resetLimits();
     aiMonitoring.resetMetrics();
-    console.log('🧹 Toutes les données du chatbot effacées');
+
   };
 
   const exportConversation = () => {
@@ -180,7 +180,7 @@ export default function useChatGPT(apiKey) {
   const clearCache = () => {
     intelligentCache.clear();
     cacheStats.current = intelligentCache.getStats();
-    console.log('🧹 Cache effacé');
+
   };
 
   // Fonctions de gestion de la base de connaissances

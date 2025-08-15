@@ -837,9 +837,7 @@ export const useChallenges = (user, addChallengeSendXP, addChallengeWinXP) => {
               addChallengeWinXP(challengeName, xpToAdd)
                 .then((result) => {
                   // Défi gagné avec succès
-                  console.log(
-                    `Défi gagné ! XP: ${xpToAdd}, Niveau: ${rewards?.name || 'Standard'}`
-                  );
+
                 })
                 .catch((error) => {
                   console.error(

@@ -148,14 +148,10 @@ export const useWorkoutTemplates = (user) => {
         try {
           // Si l'ID est un nombre (généré par Date.now()), on ne peut pas le supprimer de Firestore
           if (typeof templateId === 'number') {
-            console.log(
-              'Template avec ID numérique détecté - suppression impossible via Firestore'
-            );
             throw new Error('Template avec ID numérique - migration requise');
           }
 
           await deleteDoc(doc(db, 'workoutTemplates', templateId));
-          console.log('Suppression Firestore réussie');
         } catch (error) {
           console.error('Erreur suppression template Firestore:', error);
           throw error;
@@ -176,10 +172,7 @@ export const useWorkoutTemplates = (user) => {
       );
 
       if (problematicTemplates.length > 0) {
-        console.log(
-          'Templates problématiques trouvés:',
-          problematicTemplates.length
-        );
+
 
         // Recréer ces templates avec de nouveaux IDs Firestore
         for (const template of problematicTemplates) {
@@ -195,15 +188,13 @@ export const useWorkoutTemplates = (user) => {
               updatedAt: new Date().toISOString(),
             });
 
-            console.log('Template migré:', template.name);
+
           } catch (error) {
             console.error('Erreur migration template:', template.name, error);
           }
         }
 
-        console.log(
-          'Migration terminée - les templates avec nouveaux IDs devraient apparaître'
-        );
+
       }
     }
   }, [user, templates]);
@@ -219,13 +210,13 @@ export const useWorkoutTemplates = (user) => {
         );
 
         const snapshot = await getDocs(q);
-        console.log('Templates à supprimer:', snapshot.size);
+
 
         // Supprimer chaque template
         const deletePromises = snapshot.docs.map((doc) => deleteDoc(doc.ref));
         await Promise.all(deletePromises);
 
-        console.log('Tous les templates supprimés de Firestore');
+
       } catch (error) {
         console.error('Erreur suppression tous templates:', error);
         throw error;
@@ -234,21 +225,21 @@ export const useWorkoutTemplates = (user) => {
       // Vider le localStorage
       setTemplates([]);
       localStorage.removeItem(STORAGE_KEYS.WORKOUT_TEMPLATES);
-      console.log('Templates supprimés du localStorage');
+
     }
   }, [user]);
 
   // Fonction pour supprimer un template spécifique par force
   const forceDeleteTemplate = useCallback(
     async (templateId) => {
-      console.log('Suppression forcée template ID:', templateId);
+
 
       if (user) {
         try {
           // Essayer de supprimer directement par ID string
           const templateRef = doc(db, 'workoutTemplates', String(templateId));
           await deleteDoc(templateRef);
-          console.log('Suppression forcée réussie');
+  
         } catch (error) {
           console.error('Erreur suppression forcée:', error);
 
@@ -269,10 +260,10 @@ export const useWorkoutTemplates = (user) => {
 
             if (templateToDelete) {
               await deleteDoc(templateToDelete.ref);
-              console.log('Template trouvé et supprimé par nom');
-            } else {
-              console.log('Template non trouvé dans Firestore');
-            }
+      
+                          } else {
+                // Template non trouvé dans Firestore
+              }
           } catch (secondError) {
             console.error('Échec suppression par nom aussi:', secondError);
           }

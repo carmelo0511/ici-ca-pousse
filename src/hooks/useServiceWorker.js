@@ -85,7 +85,7 @@ export const useServiceWorker = () => {
         localStorage.setItem(`sync_data_${tag}`, JSON.stringify(data));
       }
       
-      console.log(`📥 Background Sync enregistré: ${tag}`);
+      
       return true;
     } catch (error) {
       console.error('Erreur lors de l\'enregistrement de la sync:', error);
