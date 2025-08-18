@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: 
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_PYTHON_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - mlflow_data:/app/mlflow
+      - model_data:/app/models
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:///mlflow.db
+      - PYTHONPATH=/app
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+  mlflow:
+    build: ./backend
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri sqlite:///mlflow.db
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/app/mlflow
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:///mlflow.db
+    depends_on:
+      - backend
+
+volumes:
+  mlflow_data:
+  model_data:
+  redis_data:

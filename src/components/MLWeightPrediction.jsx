@@ -7,27 +7,70 @@ import {
   Brain, 
   Zap,
   BarChart3,
-  Lightbulb
+  Lightbulb,
+  Cpu
 } from 'lucide-react';
 import { getProgressionInsights } from '../utils/ml/weightPrediction';
+import pythonMLService from '../services/pythonMLService';
 
-const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSuggestion }) => {
+const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSuggestion, user }) => {
   const [prediction, setPrediction] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [mlSource, setMlSource] = useState('javascript'); // 'python' ou 'javascript'
 
   useEffect(() => {
     if (exerciseName && workouts && workouts.length > 0) {
       setIsLoading(true);
       
-      // Simuler un petit délai pour l'effet ML
-      setTimeout(() => {
-        const result = getProgressionInsights(exerciseName, workouts);
-        // Prédiction IA pour ${exerciseName}: ${result}
-        setPrediction(result);
-        setIsLoading(false);
-      }, 300);
+      // Essayer d'abord l'API Python ML
+      const fetchPrediction = async () => {
+        try {
+          // Préparer les données utilisateur
+          const userData = {
+            currentWeight: currentWeight || 0,
+            level: user?.level || 'beginner',
+            goals: user?.goals || []
+          };
+
+          // Appeler le service Python ML
+          const result = await pythonMLService.predictWeight(exerciseName, userData, workouts);
+          
+          if (result && result.apiSource) {
+            setMlSource(result.apiSource);
+            
+            // Adapter le format pour le composant
+            const adaptedResult = {
+              predictedWeight: result.predicted_weight || result.predictedWeight,
+              confidence: result.confidence,
+              trend: result.trend || 'stable',
+              recommendation: result.recommendations?.[0] || result.recommendation,
+              factors: result.factors || [],
+              insights: result.recommendations || [],
+              modelUsed: result.modelUsed,
+              plateauAnalysis: result.plateau_analysis
+            };
+            
+            setPrediction(adaptedResult);
+            console.log(`🎯 Prédiction ${result.apiSource} pour ${exerciseName}:`, adaptedResult);
+          } else {
+            throw new Error('Réponse invalide de l\'API');
+          }
+        } catch (error) {
+          console.error('Erreur prédiction Python, fallback JavaScript:', error);
+          
+          // Fallback vers le système JavaScript
+          setMlSource('javascript');
+          const result = getProgressionInsights(exerciseName, workouts);
+          setPrediction(result);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      // Ajouter un délai pour l'effet UX
+      setTimeout(fetchPrediction, 300);
     }
-  }, [exerciseName, workouts]);
+  }, [exerciseName, workouts, currentWeight, user]);
 
   if (!prediction && !isLoading) return null;
 
@@ -87,8 +130,19 @@ const MLWeightPrediction = ({ exerciseName, workouts, currentWeight, onWeightSug
       {/* Header avec titre et confiance */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
-          <Brain className="h-5 w-5 text-purple-600 flex-shrink-0" />
-          <h4 className="font-semibold text-gray-800 text-sm">🤖 Prédiction IA</h4>
+          {mlSource === 'python' ? (
+            <Cpu className="h-5 w-5 text-purple-600 flex-shrink-0" />
+          ) : (
+            <Brain className="h-5 w-5 text-blue-600 flex-shrink-0" />
+          )}
+          <h4 className="font-semibold text-gray-800 text-sm">
+            {mlSource === 'python' ? '🐍 Python ML' : '🤖 JavaScript ML'}
+          </h4>
+          {mlSource === 'python' && (
+            <span className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full font-medium">
+              Advanced
+            </span>
+          )}
         </div>
         <div className="flex items-center space-x-2">
           {getTrendIcon(prediction.trend)}

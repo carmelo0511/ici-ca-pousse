@@ -31,7 +31,19 @@
     "eject": "react-scripts eject",
     "format": "prettier --write .",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix"
+    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "cleanup": "./scripts/cleanup.sh",
+    "cleanup:deep": "./scripts/cleanup.sh --deep",
+    "analyze:imports": "node scripts/optimize-imports.js",
+    "backend:start": "cd backend && uvicorn app.main:app --reload",
+    "backend:test": "cd backend && pytest",
+    "backend:test:cov": "cd backend && pytest --cov",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "full:test": "npm test && npm run backend:test",
+    "full:lint": "npm run lint && cd backend && python -m flake8 .",
+    "maintenance": "npm run cleanup && npm run lint && npm audit"
   },
   "proxy": "http://localhost:3001",
   "eslintConfig": {

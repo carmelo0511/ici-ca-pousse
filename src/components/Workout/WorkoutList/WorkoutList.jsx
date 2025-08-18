@@ -637,6 +637,7 @@ function WorkoutList({
                     exerciseName={exercise.name}
                     workouts={workouts}
                     currentWeight={getLastWeightFor(exercise.name)}
+                    user={user}
                     onWeightSuggestion={(suggestedWeight) => {
                       // Appliquer le poids suggéré au premier set vide ou créer un nouveau set
                       if (exercise.sets && exercise.sets.length > 0) {

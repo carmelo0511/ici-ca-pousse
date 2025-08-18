@@ -1,17 +1,57 @@
-node_modules/
-build/
-
-.DS_Store
-
+# Dependencies
 node_modules/
 node_modules/.cache/
 
-# Ignore les fichiers d'environnement
+# Production builds
+build/
+dist/
+
+# Environment variables
 .env
 .env.local
 .env.development
 .env.production
 .env.test
 
+# System files
+.DS_Store
+Thumbs.db
 
+# Python backend
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/**/*.pyc
+backend/.pytest_cache/
+backend/mlflow.db*
+backend/artifacts/
+
+# MLflow tracking
+mlruns/
+mlflow/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage reports
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Deployment
 .vercel
