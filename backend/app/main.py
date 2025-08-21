@@ -4,12 +4,44 @@ from pydantic import BaseModel
 import uvicorn
 from typing import Dict, List, Optional
 import logging
+from contextlib import asynccontextmanager
 
 # Configuration du logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Ici Ça Pousse ML API", version="2.0.0", description="API ML avancée pour la prédiction de poids en musculation")
+# Variables globales pour les services ML (seront initialisés)
+ml_pipeline = None
+ensemble_model = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Gestion du cycle de vie de l'application"""
+    global ml_pipeline, ensemble_model
+    try:
+        # Import des services ML
+        logger.info("Initialisation des services ML...")
+        from services.ml_pipeline import MLPipeline
+        from models.ensemble_model import AdvancedEnsembleModel
+        
+        ml_pipeline = MLPipeline()
+        ensemble_model = AdvancedEnsembleModel()
+        logger.info("✅ Services ML initialisés avec succès")
+    except Exception as e:
+        logger.error(f"❌ Erreur lors de l'initialisation des services ML: {e}")
+        logger.info("🔄 Mode fallback activé")
+    
+    yield  # L'application s'exécute ici
+    
+    # Nettoyage lors de l'arrêt
+    logger.info("Arrêt de l'application")
+
+app = FastAPI(
+    title="Ici Ça Pousse ML API", 
+    version="2.0.0", 
+    description="API ML avancée pour la prédiction de poids en musculation",
+    lifespan=lifespan
+)
 
 # CORS pour React frontend
 app.add_middleware(
@@ -36,26 +68,6 @@ class AnalyticsResponse(BaseModel):
     feature_importance: Dict
     training_history: Dict
     prediction_accuracy: Dict
-
-# Variables globales pour les services ML (seront initialisés)
-ml_pipeline = None
-ensemble_model = None
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialise les services ML au démarrage"""
-    global ml_pipeline, ensemble_model
-    try:
-        # Import des services ML après le démarrage pour éviter les erreurs de dépendances
-        from app.services.ml_pipeline import MLPipeline
-        from app.models.ensemble_model import AdvancedEnsembleModel
-        
-        ml_pipeline = MLPipeline()
-        ensemble_model = AdvancedEnsembleModel()
-        logger.info("Services ML initialisés avec succès")
-    except Exception as e:
-        logger.error(f"Erreur lors de l'initialisation des services ML: {e}")
-        # Continuer sans les services ML pour permettre le fallback
 
 @app.get("/health")
 async def health_check():
@@ -203,4 +215,4 @@ async def get_ml_status():
     }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

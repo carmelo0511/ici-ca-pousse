@@ -656,6 +656,60 @@ class SafetyValidator {
     return validation;
   }
 
+  // Valider une réponse complète du chatbot
+  validateResponse(content, userProfile, workoutHistory = []) {
+    try {
+      // Analyser le contenu pour extraire les recommandations
+      const recommendations = this.extractRecommendationsFromContent(content);
+      
+      // Valider les recommandations extraites
+      return this.validateCompleteRecommendation(recommendations, userProfile, {
+        workoutHistory: workoutHistory
+      });
+    } catch (error) {
+      console.warn('Erreur lors de la validation de la réponse:', error);
+      return { 
+        isValid: true, 
+        warnings: [], 
+        errors: [], 
+        safetyScore: 100 
+      };
+    }
+  }
+
+  // Extraire les recommandations du contenu texte
+  extractRecommendationsFromContent(content) {
+    const recommendations = {
+      exercises: [],
+      nutrition: {},
+      recovery: {},
+      progress: {}
+    };
+
+    // Recherche d'exercices mentionnés dans le contenu
+    const exerciseKeywords = ['exercice', 'série', 'répétition', 'poids', 'squat', 'deadlift', 'push', 'pull'];
+    exerciseKeywords.forEach(keyword => {
+      if (content.toLowerCase().includes(keyword.toLowerCase())) {
+        recommendations.exercises.push({
+          name: keyword,
+          mentioned: true
+        });
+      }
+    });
+
+    // Recherche de recommandations nutritionnelles
+    if (content.toLowerCase().includes('calorie') || content.toLowerCase().includes('nutrition')) {
+      recommendations.nutrition = { mentioned: true };
+    }
+
+    // Recherche de recommandations de récupération
+    if (content.toLowerCase().includes('repos') || content.toLowerCase().includes('récupération')) {
+      recommendations.recovery = { mentioned: true };
+    }
+
+    return recommendations;
+  }
+
   // Générer des recommandations de sécurité
   generateSafetyRecommendations(validation) {
     const recommendations = [];

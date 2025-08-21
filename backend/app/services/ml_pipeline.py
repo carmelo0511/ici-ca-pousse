@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 from typing import Dict, List, Optional
 import logging
-from app.models.ensemble_model import AdvancedEnsembleModel
-from app.services.feature_engineering import AdvancedFeatureEngineer
-from app.services.plateau_detection import AdvancedPlateauDetector
-from app.utils.mlflow_tracker import MLflowTracker
+from models.ensemble_model import AdvancedEnsembleModel
+from services.simple_feature_engineering import SimpleFeatureEngineer
+from services.plateau_detection import AdvancedPlateauDetector
+from utils.mlflow_tracker import MLflowTracker
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ class MLPipeline:
         self.config = config or {}
         
         try:
-            self.feature_engineer = AdvancedFeatureEngineer()
+            self.feature_engineer = SimpleFeatureEngineer()
             self.ensemble_model = AdvancedEnsembleModel()
             self.plateau_detector = AdvancedPlateauDetector()
             self.mlflow_tracker = MLflowTracker("ici-ca-pousse-ml")
@@ -303,7 +303,9 @@ class MLPipeline:
             for i in range(len(weights) - 1):
                 targets.append(weights[i + 1])  # Le poids suivant comme target
             
-            return np.array(targets)
+            targets_array = np.array(targets)
+            logger.info(f"Targets préparés: {len(targets_array)} valeurs, shape: {targets_array.shape}")
+            return targets_array
             
         except Exception as e:
             logger.error(f"Erreur lors de la préparation des targets: {e}")

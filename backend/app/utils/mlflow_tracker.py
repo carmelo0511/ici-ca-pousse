@@ -1,39 +1,48 @@
-import mlflow
-import mlflow.sklearn
-import mlflow.tensorflow
 from typing import Dict, Any, Optional
 import logging
 import os
+import json
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
+
+# Try to import MLflow, but make it optional
+try:
+    import mlflow
+    import mlflow.sklearn
+    MLFLOW_AVAILABLE = True
+except ImportError:
+    MLFLOW_AVAILABLE = False
+    logger.info("MLflow non disponible - utilisation d'un tracker local")
 
 class MLflowTracker:
     def __init__(self, experiment_name: str = "ici-ca-pousse-ml"):
         self.experiment_name = experiment_name
         self.current_run = None
+        self.local_logs = []
         
-        # Configuration MLflow
-        try:
-            # Utiliser une base de données SQLite locale pour le tracking
-            mlflow_db_path = os.path.join(os.getcwd(), "mlflow.db")
-            mlflow.set_tracking_uri(f"sqlite:///{mlflow_db_path}")
-            
-            # Créer ou récupérer l'expérience
+        if MLFLOW_AVAILABLE:
+            # Configuration MLflow
             try:
-                experiment_id = mlflow.create_experiment(experiment_name)
-            except mlflow.exceptions.MlflowException:
-                experiment = mlflow.get_experiment_by_name(experiment_name)
-                experiment_id = experiment.experiment_id
-            
-            mlflow.set_experiment(experiment_name)
-            logger.info(f"MLflow configuré avec l'expérience: {experiment_name}")
-            
-        except Exception as e:
-            logger.warning(f"Impossible de configurer MLflow: {e}. Fonctionnement en mode dégradé.")
-            self.mlflow_available = False
+                # Utiliser une base de données SQLite locale pour le tracking
+                mlflow_db_path = os.path.join(os.getcwd(), "mlflow.db")
+                mlflow.set_tracking_uri(f"sqlite:///{mlflow_db_path}")
+                
+                # Créer ou récupérer l'expérience
+                try:
+                    experiment_id = mlflow.create_experiment(experiment_name)
+                except mlflow.exceptions.MlflowException:
+                    experiment = mlflow.get_experiment_by_name(experiment_name)
+                    experiment_id = experiment.experiment_id
+                
+                mlflow.set_experiment(experiment_name)
+                logger.info(f"MLflow configuré avec l'expérience: {experiment_name}")
+                self.mlflow_available = True
+            except Exception as e:
+                logger.warning(f"Impossible de configurer MLflow: {e}. Fonctionnement en mode dégradé.")
+                self.mlflow_available = False
         else:
-            self.mlflow_available = True
+            self.mlflow_available = False
     
     def start_run(self, run_name: Optional[str] = None):
         """Démarre un nouveau run MLflow"""
