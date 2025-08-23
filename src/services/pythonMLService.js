@@ -3,13 +3,16 @@
  * Fallback automatique vers le système JavaScript en cas d'erreur
  */
 
+import { getApiUrl, getApiConfig } from '../config/api.js';
+
 class PythonMLService {
   constructor() {
-    this.baseURL = process.env.REACT_APP_PYTHON_API_URL || 'http://localhost:8000';
+    // Configuration intelligente de l'URL selon l'environnement
+    this.baseURL = getApiUrl();
     this.isAvailable = false;
     this.lastHealthCheck = 0;
-    this.healthCheckInterval = 60000; // 1 minute
-    this.timeout = 5000; // 5 secondes
+    this.healthCheckInterval = getApiConfig().INTERVALS.healthCheck;
+    this.timeout = getApiConfig().TIMEOUTS.healthCheck;
     
     // Vérifier la disponibilité au démarrage
     this.checkAvailability();

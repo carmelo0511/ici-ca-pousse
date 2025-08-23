@@ -1,10 +1,25 @@
 {
   "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "framework": "create-react-app",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/favicon.ico", "dest": "/favicon.ico" },
     { "src": "/manifest.json", "dest": "/manifest.json" },
     { "src": "/sw.js", "dest": "/sw.js" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ]
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!static|favicon|.*\\.png|.*\\.svg|.*\\.ico|manifest.json|sw.js|apple-touch-icon|android-chrome|_next).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_PYTHON_API_URL": "https://ici-ca-pousse-api.vercel.app"
+  }
 }
