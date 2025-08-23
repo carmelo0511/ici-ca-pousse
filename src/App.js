@@ -252,39 +252,9 @@ function App() {
 
   // Fonction pour gérer l'envoi de message depuis la bulle
   const handleSendMessageFromBubble = (message) => {
-    showToastMsg(`Message envoyé: ${message}`);
+    // Le message est maintenant géré directement par le composant Chatbot
+    // Pas besoin de logique supplémentaire ici
   };
-
-  // Écouter l'événement pour déclencher une réponse automatique du chatbot
-  useEffect(() => {
-    const handleTriggerResponse = async (event) => {
-      const userMessage = event.detail.message;
-      const eventUser = event.detail.user;
-      const eventWorkouts = event.detail.workouts;
-      
-      // Attendre un peu pour que le message soit bien ajouté
-      setTimeout(async () => {
-        try {
-          // Déclencher un événement pour que le chatbot traite le message
-          window.dispatchEvent(new CustomEvent('processChatbotMessage', { 
-            detail: { 
-              message: userMessage,
-              user: eventUser,
-              workouts: eventWorkouts
-            } 
-          }));
-        } catch (error) {
-          console.error('❌ Erreur lors de la réponse automatique dans App.js:', error);
-        }
-      }, 500);
-    };
-
-    window.addEventListener('triggerChatbotResponse', handleTriggerResponse);
-    
-    return () => {
-      window.removeEventListener('triggerChatbotResponse', handleTriggerResponse);
-    };
-  }, []);
 
   if (!authChecked || userLoading) {
     return <LoadingScreen userLoading={userLoading} />;

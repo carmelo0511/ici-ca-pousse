@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { X } from 'lucide-react';
 import Chatbot from './Chatbot';
-import { STORAGE_KEYS } from '../../constants/storageKeys';
 
 // Props : user, workouts, setExercisesFromWorkout, setShowAddExercise, setActiveTab
 function ChatbotBubble(props) {
@@ -32,34 +31,12 @@ function ChatbotBubble(props) {
   // Fonction pour envoyer un message
   const handleSendMessage = () => {
     if (message.trim()) {
-      // Créer un message utilisateur pour le chatbot
-      const userMessage = {
-        role: 'user',
-        content: message,
-        timestamp: Date.now()
-      };
-      
-      // Stocker le message dans localStorage
-      const existingMessages = JSON.parse(localStorage.getItem(STORAGE_KEYS.CHATBOT_MEMORY) || '[]');
-      const updatedMessages = [...existingMessages, userMessage];
-      localStorage.setItem(STORAGE_KEYS.CHATBOT_MEMORY, JSON.stringify(updatedMessages));
-      
-      // Forcer le rechargement des messages dans le chatbot
-      window.dispatchEvent(new Event('storage'));
-      
-      // Déclencher une réponse automatique du chatbot
-      window.dispatchEvent(new CustomEvent('triggerChatbotResponse', { 
-        detail: { 
-          message: message,
-          user: props.user,
-          workouts: props.workouts
-        } 
-      }));
-      
-      // Envoyer le message au chatbot via les props
+      // Envoyer le message au chatbot via les props (une seule fois)
       if (props.onSendMessage) {
         props.onSendMessage(message);
       }
+      
+      // Vider le champ de saisie
       setMessage('');
       
       // Ouvrir le chatbot après avoir envoyé le message
