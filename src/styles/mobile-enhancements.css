@@ -1,254 +1,206 @@
-/* Améliorations spécifiques pour mobile */
+/* Optimisations mobiles pour améliorer les performances et réduire le CLS */
 
-/* Optimisations du scroll sur mobile */
+/* Variables CSS pour les optimisations */
+:root {
+  --mobile-animation-duration: 0.2s;
+  --mobile-transition-duration: 0.15s;
+  --mobile-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --mobile-border-radius: 8px;
+}
+
+/* Optimisations générales pour mobile */
 @media (max-width: 768px) {
-  /* Scroll momentum natif iOS */
-  .scroll-container,
-  .overflow-y-auto,
-  .overflow-x-auto {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
+  /* Réduire les animations sur mobile */
+  * {
+    animation-duration: var(--mobile-animation-duration) !important;
+    transition-duration: var(--mobile-transition-duration) !important;
   }
-
-  /* Prévenir le rubber band effect */
+  
+  /* Prévenir le layout shift */
+  .card, .button, .input, .modal {
+    min-height: 44px; /* Taille minimale pour les éléments tactiles */
+    box-sizing: border-box;
+  }
+  
+  /* Optimiser les images */
+  img {
+    aspect-ratio: attr(width) / attr(height);
+    object-fit: cover;
+  }
+  
+  /* Réduire les ombres pour de meilleures performances */
+  .shadow-lg, .shadow-xl {
+    box-shadow: var(--mobile-shadow) !important;
+  }
+  
+  /* Simplifier les backdrop-filters */
+  .backdrop-blur-lg, .backdrop-blur-md {
+    backdrop-filter: blur(4px) !important;
+  }
+  
+  /* Optimiser les transitions */
+  .hover\:scale-105:hover,
+  .hover\:scale-110:hover {
+    transform: none !important;
+  }
+  
+  /* Améliorer la réactivité des boutons */
+  button, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+  
+  /* Optimiser les inputs */
+  input, textarea, select {
+    font-size: 16px !important; /* Éviter le zoom sur iOS */
+    transform: translateZ(0); /* Force GPU acceleration */
+    -webkit-appearance: none;
+    border-radius: var(--mobile-border-radius);
+  }
+  
+  /* Améliorer le scroll */
   body {
     overscroll-behavior: contain;
-    position: fixed;
-    width: 100%;
-    height: 100%;
+    -webkit-overflow-scrolling: touch;
   }
-
-  #root {
-    overflow-y: auto;
-    height: 100vh;
+  
+  /* Réduire la complexité des animations */
+  .animate-pulse, .animate-bounce {
+    animation: none !important;
   }
-
-  /* Optimiser les interactions tactiles */
-  button, 
-  .btn, 
-  [role="button"],
-  input[type="button"],
-  input[type="submit"] {
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-    tap-highlight-color: rgba(0, 0, 0, 0.1);
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: pointer;
+  
+  /* Optimiser les gradients */
+  .bg-gradient-to-r, .bg-gradient-to-br {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   }
+}
 
-  /* Améliorer les zones tactiles */
-  .mobile-touch-target {
+/* Optimisations spécifiques pour les appareils bas de gamme */
+@media (max-width: 768px) and (max-device-memory: 2gb) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: none !important;
+  }
+  
+  .blur-effect {
+    filter: none !important;
+  }
+}
+
+/* Optimisations pour les écrans haute densité */
+@media (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Optimisations pour les appareils avec préférence de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optimisations pour les connexions lentes */
+@media (max-width: 768px) and (prefers-reduced-data: reduce) {
+  img {
+    loading: lazy;
+  }
+  
+  .background-image {
+    background-image: none !important;
+    background-color: #f3f4f6;
+  }
+}
+
+/* Classes utilitaires pour mobile */
+.mobile-optimized {
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+}
+
+.mobile-touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+.mobile-no-layout-shift {
+  contain: layout style paint;
+  will-change: auto;
+}
+
+/* Optimisations pour les composants spécifiques */
+@media (max-width: 768px) {
+  /* Navigation */
+  .nav-item {
+    padding: 12px 16px;
     min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
-
-  /* Optimiser les modals sur mobile */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1000;
+  
+  /* Cards */
+  .card {
+    border-radius: var(--mobile-border-radius);
+    box-shadow: var(--mobile-shadow);
+    margin-bottom: 16px;
   }
-
-  .modal-container {
-    height: 100vh;
+  
+  /* Modals */
+  .modal {
+    border-radius: var(--mobile-border-radius);
+    max-height: 90vh;
     overflow-y: auto;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
-
-  /* Prévenir le zoom sur les inputs iOS */
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="number"],
-  input[type="tel"],
-  input[type="url"],
-  select,
-  textarea {
-    font-size: 16px !important;
-    max-zoom: 1;
-    zoom: 1;
+  
+  /* Forms */
+  .form-group {
+    margin-bottom: 16px;
   }
-
-  /* Optimiser les animations pour la performance */
-  @keyframes mobile-fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes mobile-slide-up {
-    from {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  .mobile-fade-in {
-    animation: mobile-fade-in 0.3s ease-out;
-  }
-
-  .mobile-slide-up {
-    animation: mobile-slide-up 0.3s ease-out;
-  }
-
-  /* Optimiser les grilles sur mobile */
-  .mobile-grid {
-    display: grid;
-    gap: 0.75rem;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-
-  .mobile-grid-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .mobile-grid-1 {
-    grid-template-columns: 1fr;
-  }
-
-  /* Améliorer la navigation mobile */
-  .mobile-nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  /* Optimiser les cartes sur mobile */
-  .mobile-card {
-    margin: 0.5rem;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Améliorer la typography mobile */
-  .mobile-text-primary {
-    font-size: 1rem;
-    line-height: 1.5;
-    font-weight: 500;
-  }
-
-  .mobile-text-secondary {
-    font-size: 0.875rem;
-    line-height: 1.4;
-    color: #6b7280;
-  }
-
-  .mobile-text-small {
-    font-size: 0.75rem;
-    line-height: 1.3;
-    color: #9ca3af;
-  }
-
-  /* Optimiser les formulaires mobile */
-  .mobile-form-group {
-    margin-bottom: 1rem;
-  }
-
-  .mobile-form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #374151;
-  }
-
-  .mobile-form-input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
+  
+  .form-input {
+    height: 44px;
     font-size: 16px;
-    transition: border-color 0.2s;
   }
-
-  .mobile-form-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  
+  /* Buttons */
+  .btn {
+    height: 44px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
   }
-
-  /* Performance: Réduire la complexité des ombres */
-  .mobile-shadow-sm {
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  }
-
-  .mobile-shadow {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  }
-
-  .mobile-shadow-md {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Optimiser les espaces pour économiser l'écran */
-  .mobile-compact {
-    padding: 0.5rem !important;
-    margin: 0.25rem !important;
-  }
-
-  .mobile-spacing-sm {
-    padding: 0.75rem;
-    margin: 0.5rem 0;
-  }
-
-  .mobile-spacing-md {
-    padding: 1rem;
-    margin: 0.75rem 0;
+  
+  /* Lists */
+  .list-item {
+    padding: 12px 16px;
+    min-height: 44px;
   }
 }
 
-/* Optimisations pour appareils très petits */
-@media (max-width: 480px) {
-  .mobile-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .mobile-text-primary {
-    font-size: 0.95rem;
-  }
-
-  .mobile-form-input {
-    padding: 0.625rem;
-  }
-
-  .mobile-card {
-    margin: 0.25rem;
-    padding: 0.75rem;
-  }
-}
-
-/* Optimisations pour les appareils en mode paysage */
+/* Optimisations pour l'orientation paysage sur mobile */
 @media (max-width: 768px) and (orientation: landscape) {
-  .mobile-nav {
-    position: static;
+  .modal {
+    max-height: 80vh;
   }
-
-  .modal-container {
-    padding: 0.5rem;
+  
+  .header {
+    padding: 8px 16px;
   }
-
-  .mobile-card {
-    margin: 0.25rem;
-    padding: 0.75rem;
+  
+  .nav-item {
+    padding: 8px 12px;
   }
 }

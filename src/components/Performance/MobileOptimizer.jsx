@@ -1,171 +1,108 @@
 import React, { useEffect, useRef } from 'react';
-import useMobilePerformance from '../../hooks/useMobilePerformance';
-import useServiceWorker from '../../hooks/useServiceWorker';
 
-// Composant pour optimiser automatiquement les performances mobiles - Version corrigée
+/**
+ * Composant d'optimisation mobile pour améliorer les performances
+ * et réduire le Cumulative Layout Shift (CLS)
+ */
 const MobileOptimizer = ({ children }) => {
-  const {
-    isMobile,
-    isLowEndDevice,
-    connectionSpeed
-  } = useMobilePerformance();
-  
-  const { isOnline, registerSync } = useServiceWorker();
-  const optimizationsApplied = useRef(false);
+  const containerRef = useRef(null);
 
-  // Appliquer les optimisations CSS selon l'appareil
   useEffect(() => {
-    if (optimizationsApplied.current) return;
+    // Optimisations pour mobile
+    const optimizeForMobile = () => {
+      // Réduire les animations sur mobile
+      if (window.innerWidth <= 768) {
+        document.documentElement.style.setProperty('--animation-duration', '0.2s');
+        document.documentElement.style.setProperty('--transition-duration', '0.2s');
+      }
 
-    try {
-      const root = document.documentElement;
+      // Prévenir le zoom sur iOS
+      const viewport = document.querySelector('meta[name="viewport"]');
+      if (viewport && window.innerWidth <= 768) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+      }
+
+      // Optimiser les images
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        if (!img.complete) {
+          img.style.opacity = '0';
+          img.onload = () => {
+            img.style.opacity = '1';
+            img.style.transition = 'opacity 0.3s ease';
+          };
+        }
+      });
+
+      // Réduire la complexité des animations
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion || window.innerWidth <= 768) {
+        document.documentElement.classList.add('reduced-motion');
+      }
+    };
+
+    // Optimisations pour les interactions
+    const optimizeInteractions = () => {
+      // Améliorer la réactivité des boutons
+      const buttons = document.querySelectorAll('button, [role="button"]');
+      buttons.forEach(button => {
+        button.style.touchAction = 'manipulation';
+        button.style.webkitTapHighlightColor = 'transparent';
+      });
+
+      // Optimiser les inputs
+      const inputs = document.querySelectorAll('input, textarea, select');
+      inputs.forEach(input => {
+        input.style.fontSize = '16px'; // Éviter le zoom sur iOS
+        input.style.transform = 'translateZ(0)'; // Force GPU acceleration
+      });
+    };
+
+    // Optimisations pour le scroll
+    const optimizeScroll = () => {
+      // Améliorer le scroll sur mobile
+      document.documentElement.style.scrollBehavior = 'smooth';
       
-      // Optimisations CSS pour appareils bas de gamme
-      if (isLowEndDevice) {
-        root.style.setProperty('--animation-duration', '0s');
-        root.style.setProperty('--transition-duration', '0s');
-        root.classList.add('low-end-device');
-      } else {
-        root.style.setProperty('--animation-duration', '0.3s');
-        root.style.setProperty('--transition-duration', '0.2s');
-        root.classList.remove('low-end-device');
+      // Réduire la complexité du scroll sur mobile
+      if (window.innerWidth <= 768) {
+        document.documentElement.style.overscrollBehavior = 'contain';
       }
+    };
 
-      // Optimisations pour réseau lent
-      if (connectionSpeed === 'slow') {
-        root.classList.add('slow-network');
-      } else {
-        root.classList.remove('slow-network');
-      }
+    // Appliquer les optimisations
+    optimizeForMobile();
+    optimizeInteractions();
+    optimizeScroll();
 
-      // Optimisations pour mobile
-      if (isMobile) {
-        root.classList.add('mobile-device');
-        document.body.style.touchAction = 'manipulation';
-      }
+    // Réappliquer lors du redimensionnement
+    const handleResize = () => {
+      optimizeForMobile();
+      optimizeInteractions();
+      optimizeScroll();
+    };
 
-      optimizationsApplied.current = true;
-    } catch (error) {
-      console.warn('Erreur lors de l\'application des optimisations:', error);
-    }
-  }, [isMobile, isLowEndDevice, connectionSpeed]);
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
 
-  // Synchronisation en arrière-plan quand retour en ligne - Version simplifiée
-  useEffect(() => {
-    if (isOnline && connectionSpeed !== 'slow') {
-      try {
-        // Synchroniser les données en attente
-        registerSync('sync-user-data');
-        registerSync('sync-workouts');
-      } catch (error) {
-        console.warn('Erreur lors de la synchronisation:', error);
-      }
-    }
-  }, [isOnline, connectionSpeed, registerSync]);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);
 
   return (
-    <>
+    <div 
+      ref={containerRef}
+      className="mobile-optimizer"
+      style={{
+        minHeight: '100vh',
+        width: '100%',
+        overflowX: 'hidden',
+        position: 'relative'
+      }}
+    >
       {children}
-      {/* Styles CSS injectés pour les optimisations */}
-      <style>{`
-        .low-end-device * {
-          animation-duration: 0s !important;
-          transition-duration: 0s !important;
-        }
-        
-        .slow-network img {
-          loading: lazy;
-        }
-        
-        .mobile-device {
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          user-select: none;
-        }
-        
-        .mobile-device * {
-          -webkit-tap-highlight-color: transparent;
-        }
-        
-        /* Optimisations de scroll pour mobile */
-        @media (max-width: 768px) {
-          .mobile-device {
-            overscroll-behavior: contain;
-          }
-          
-          .mobile-device .scroll-container {
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-          }
-        }
-        
-        /* Réduire les animations sur appareils bas de gamme */
-        @media (prefers-reduced-motion: reduce) {
-          * {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
-        
-        /* Optimisations pour connexions lentes */
-        .slow-network .hero-image,
-        .slow-network .background-image {
-          background-image: none !important;
-          background-color: #f3f4f6;
-        }
-        
-        .slow-network .animation-heavy {
-          animation: none !important;
-        }
-
-        /* Optimisations de performance pour mobile */
-        .mobile-device {
-          -webkit-transform: translateZ(0);
-          transform: translateZ(0);
-        }
-
-        .mobile-device * {
-          -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-          -webkit-perspective: 1000;
-          perspective: 1000;
-        }
-
-        /* Optimiser les transitions sur mobile */
-        @media (max-width: 768px) {
-          .mobile-device * {
-            transition-duration: 0.15s !important;
-          }
-          
-          .mobile-device .card-hover:hover {
-            transform: none !important;
-          }
-          
-          .mobile-device .btn-gradient:hover {
-            transform: none !important;
-          }
-
-          /* Réduire les ombres sur mobile pour améliorer les performances */
-          .mobile-device .shadow-lg {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-          }
-
-          .mobile-device .shadow-xl {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
-          }
-
-          /* Simplifier les backdrop-filter sur mobile */
-          .mobile-device .backdrop-blur-lg {
-            backdrop-filter: blur(8px) !important;
-          }
-
-          .mobile-device .backdrop-blur-md {
-            backdrop-filter: blur(4px) !important;
-          }
-        }
-      `}</style>
-    </>
+    </div>
   );
 };
 

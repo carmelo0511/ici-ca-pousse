@@ -9,6 +9,7 @@ import './App.css';
 import './glassmorphism-theme.css';
 import './styles/fix-cards-colors.css';
 import './styles/ml-dashboard.css';
+import './styles/mobile-enhancements.css';
 import './utils/checkTailwindColors';
 
 // Core imports
@@ -443,7 +444,7 @@ function App() {
       
       {/* Composants de monitoring des performances */}
       <CoreWebVitals />
-      </MobileOptimizer>
+    </MobileOptimizer>
     </I18nextProvider>
   );
 }

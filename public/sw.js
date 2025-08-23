@@ -1,5 +1,5 @@
 // Optimized Service Worker pour Performance Mobile
-const CACHE_VERSION = 'v2.1.0';
+const CACHE_VERSION = 'v2.2.0';
 const CACHE_NAMES = {
   static: `static-${CACHE_VERSION}`,
   api: `api-${CACHE_VERSION}`,
