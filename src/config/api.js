@@ -6,7 +6,7 @@ const API_CONFIG = {
   // URL de l'API Python ML
   PYTHON_ML_API: {
     development: process.env.REACT_APP_PYTHON_API_URL || 'http://localhost:8000',
-    production: process.env.REACT_APP_PYTHON_API_URL || 'https://ici-ca-pousse-api.vercel.app',
+    production: process.env.REACT_APP_PYTHON_API_URL || 'https://ici-ca-pousse.vercel.app/api',
     test: 'http://localhost:8000'
   },
   
