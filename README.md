@@ -21,6 +21,7 @@ This project was developed using cutting-edge AI development tools, demonstratin
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Firebase](https://img.shields.io/badge/Firebase-12.0.0-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
+[![CI/CD](https://github.com/carmelo0511/ici-ca-pousse/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/carmelo0511/ici-ca-pousse/actions)
 
 **[🌐 Live Application](https://ici-ca-pousse.vercel.app)** | **[📊 API Documentation](http://localhost:8000/docs)**
 
