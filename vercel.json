@@ -17,6 +17,6 @@
     }
   ],
   "env": {
-    "REACT_APP_PYTHON_API_URL": "https://ici-ca-pousse.vercel.app/api"
+    "REACT_APP_PYTHON_API_URL": "https://ici-ca-pousse.vercel.app"
   }
 }
