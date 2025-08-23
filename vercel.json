@@ -6,14 +6,11 @@
   "framework": "create-react-app",
   "cleanUrls": true,
   "trailingSlash": false,
-  "routes": [
-    { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/favicon.ico", "dest": "/favicon.ico" },
-    { "src": "/manifest.json", "dest": "/manifest.json" },
-    { "src": "/sw.js", "dest": "/sw.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ],
   "rewrites": [
+    { "source": "/static/(.*)", "destination": "/static/$1" },
+    { "source": "/favicon.ico", "destination": "/favicon.ico" },
+    { "source": "/manifest.json", "destination": "/manifest.json" },
+    { "source": "/sw.js", "destination": "/sw.js" },
     {
       "source": "/((?!static|favicon|.*\\.png|.*\\.svg|.*\\.ico|manifest.json|sw.js|apple-touch-icon|android-chrome|_next).*)",
       "destination": "/index.html"
