@@ -6,11 +6,6 @@
   "framework": "create-react-app",
   "cleanUrls": true,
   "trailingSlash": false,
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     { "source": "/static/(.*)", "destination": "/static/$1" },
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
