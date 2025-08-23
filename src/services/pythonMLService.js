@@ -30,7 +30,7 @@ class PythonMLService {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.timeout);
       
-      const response = await fetch(`${this.baseURL}/health`, {
+      const response = await fetch(`${this.baseURL}/api/health`, {
         method: 'GET',
         signal: controller.signal,
         headers: {
